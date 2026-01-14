@@ -63,17 +63,19 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 0;
+    margin: 0;
 }
 
 .laurel-wreath {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.3rem;
 }
 
 .laurel-left, .laurel-right {
     color: var(--primary-gold);
-    font-size: 2rem;
+    font-size: 2.5rem;
     transform: rotate(-15deg);
 }
 
@@ -89,24 +91,26 @@ body {
 
 .bolder-text {
     color: var(--primary-gold);
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     font-weight: 900;
     letter-spacing: 3px;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    margin: 0;
 }
 
 .banner {
     background-color: var(--primary-gold);
-    padding: 0.2rem 1rem;
+    padding: 0.15rem 0.8rem;
     border-radius: 3px;
-    margin-top: 0.2rem;
+    margin-top: 0.1rem;
 }
 
 .electric-text {
     color: var(--primary-black);
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-weight: 700;
     letter-spacing: 2px;
+    margin: 0;
 }
 
 .logo h1 {
