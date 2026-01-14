@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bolder Electric - Professional Commercial & Residential Electrician | Licensed Electrical Contractor</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Bolder Electric provides professional electrical services for commercial and residential properties. Licensed electricians offering 24/7 emergency repairs, panel upgrades, wiring, and installation services. Call (951) 397-4025 for fast, reliable service.">
+    <meta name="keywords" content="electrician, electrical contractor, commercial electrician, residential electrician, emergency electrician, electrical repair, panel upgrade, wiring installation, licensed electrician, electrical services, commercial electrical, residential electrical, 24 hour electrician, electrical contractor near me, electrician near me">
+    <meta name="author" content="Bolder Electric">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="language" content="English">
+    <meta name="geo.region" content="US-CA">
+    <meta name="geo.placename" content="Menifee, California">
+    <meta name="ICBM" content="33.6984, -117.1654">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:locale" content="en_US">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Bolder Electric - Professional Commercial & Residential Electrician">
+    <meta property="og:description" content="Licensed electricians providing commercial and residential electrical services. 24/7 emergency repairs, panel upgrades, and professional electrical installations.">
+    <meta property="og:url" content="https://bolderelectric.com">
+    <meta property="og:site_name" content="Bolder Electric">
+    <meta property="og:image" content="https://bolderelectric.com/static/images/bolder-electric-logo.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Bolder Electric - Professional Electrician Services">
+    <meta name="twitter:description" content="Licensed electricians for commercial & residential properties. 24/7 emergency service available.">
+    <meta name="twitter:image" content="https://bolderelectric.com/static/images/bolder-electric-logo.jpg">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://bolderelectric.com">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "LocalBusiness",
+                "@id": "https://bolderelectric.com",
+                "name": "Bolder Electric",
+                "description": "Professional electrical services for commercial and residential properties",
+                "url": "https://bolderelectric.com",
+                "telephone": "(951) 397-4025",
+                "email": "info@bolderelectric.com",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressLocality": "Menifee",
+                    "addressRegion": "CA",
+                    "postalCode": "92587",
+                    "streetAddress": "30019 Buck Tail Drive",
+                    "addressCountry": "US"
+                },
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": "33.6984",
+                    "longitude": "-117.1654"
+                },
+                "openingHours": [
+                    "Mo-Fr 08:00-18:00",
+                    "Sa-Su 00:00-23:59"
+                ],
+                "priceRange": "$$",
+                "paymentAccepted": ["Cash", "Credit Card", "Check"],
+                "currenciesAccepted": "USD",
+                "image": "https://bolderelectric.com/static/images/bolder-electric-logo.jpg",
+                "logo": "https://bolderelectric.com/static/images/bolder-electric-logo.jpg"
+            },
+            {
+                "@type": "Service",
+                "@id": "https://bolderelectric.com/commercial",
+                "name": "Commercial Electrical Services",
+                "description": "Complete electrical solutions for businesses, offices, and commercial properties including new construction, system upgrades, and emergency repairs",
+                "provider": {
+                    "@id": "https://bolderelectric.com"
+                },
+                "areaServed": {
+                    "@type": "Place",
+                    "name": "Riverside County & Surrounding Areas"
+                }
+            },
+            {
+                "@type": "Service",
+                "@id": "https://bolderelectric.com/residential",
+                "name": "Residential Electrical Services",
+                "description": "Professional electrical services for homes including rewiring, panel upgrades, lighting installation, and emergency repairs",
+                "provider": {
+                    "@id": "https://bolderelectric.com"
+                },
+                "areaServed": {
+                    "@type": "Place",
+                    "name": "Riverside County & Surrounding Areas"
+                }
+            },
+            {
+                "@type": "EmergencyService",
+                "@id": "https://bolderelectric.com/emergency",
+                "name": "24/7 Emergency Electrical Services",
+                "description": "Round-the-clock emergency electrical repair services for commercial and residential properties",
+                "provider": {
+                    "@id": "https://bolderelectric.com"
+                },
+                "areaServed": {
+                    "@type": "Place",
+                    "name": "Riverside County & Surrounding Areas"
+                },
+                "availableChannel": {
+                    "@type": "ServiceChannel",
+                    "servicePhone": "(951) 397-4025",
+                    "serviceUrl": "https://bolderelectric.com"
+                }
+            },
+            {
+                "@type": "WebSite",
+                "@id": "https://bolderelectric.com#website",
+                "url": "https://bolderelectric.com",
+                "name": "Bolder Electric",
+                "description": "Professional electrical services for commercial and residential properties",
+                "publisher": {
+                    "@id": "https://bolderelectric.com"
+                },
+                "potentialAction": [
+                    {
+                        "@type": "SearchAction",
+                        "target": "https://bolderelectric.com/search?q={search_term_string}",
+                        "query-input": "required name=search_term_string"
+                    }
+                ]
+            }
+        ]
+    }
+    </script>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                    <img src="{{ url_for('static', filename='images/bolder_electric_logo.png') }}" alt="Bolder Electric Logo" class="logo-img">
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="#home" class="nav-link">Home</a></li>
+                    <li><a href="#services" class="nav-link">Services</a></li>
+                    <li><a href="#commercial" class="nav-link">Commercial</a></li>
+                    <li><a href="#residential" class="nav-link">Residential</a></li>
+                    <li><a href="#contact" class="nav-link">Contact</a></li>
+                    <li><a href="{{ url_for('schedule') }}" class="nav-link">Schedule</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home" class="hero">
+            <div class="hero-content">
+                <h1 class="hero-title">BOLDER ELECTRIC</h1>
+                <p class="hero-subtitle">Licensed Electricians Serving Menifee & Riverside County</p>
+                <div class="hero-buttons">
+                    <a href="#commercial" class="btn btn-primary">Commercial Services</a>
+                    <a href="#residential" class="btn btn-secondary">Residential Services</a>
+                    <a href="{{ url_for('schedule') }}" class="btn btn-primary" style="background: var(--primary-gold); color: var(--primary-black);">Schedule Service</a>
+                </div>
+                <div class="hero-features">
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>Licensed & Insured</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>24/7 Emergency Service</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>Free Estimates</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="services" class="services">
+            <div class="container">
+                <h2 class="section-title">Professional Electrical Services in Menifee</h2>
+                <div class="services-grid">
+                    <div class="service-card">
+                        <div class="service-icon">⚡</div>
+                        <h3>Commercial Electrical</h3>
+                        <p>Complete electrical solutions for businesses, offices, and commercial properties. Licensed commercial electricians for new construction, upgrades, and emergency repairs.</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">🏠</div>
+                        <h3>Residential Electrical</h3>
+                        <p>Professional electrical services for homes, apartments, and residential complexes. Expert residential electricians for all your home electrical needs.</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="service-icon">🔧</div>
+                        <h3>Emergency Repairs</h3>
+                        <p>24/7 emergency electrical repair services when you need us most. Fast response times for electrical emergencies in Menifee and surrounding areas.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="commercial" class="commercial">
+            <div class="container">
+                <h2 class="section-title">Commercial Electrical Services Menifee</h2>
+                <div class="services-content">
+                    <div class="services-text">
+                        <h3>Expert Commercial Electrical Solutions</h3>
+                        <p>We specialize in comprehensive electrical services for commercial properties throughout Menifee and Riverside County. Our licensed commercial electricians deliver reliable, code-compliant solutions for businesses of all sizes.</p>
+                        <ul class="services-list">
+                            <li>New Construction Wiring</li>
+                            <li>Electrical System Upgrades</li>
+                            <li>Commercial Lighting Design & Installation</li>
+                            <li>Energy Efficiency Solutions</li>
+                            <li>Panel Upgrades & Replacements</li>
+                            <li>Preventive Maintenance Programs</li>
+                            <li>Emergency Commercial Repairs</li>
+                        </ul>
+                        <a href="#contact" class="btn btn-primary">Request Free Estimate</a>
+                    <a href="{{ url_for('schedule') }}" class="btn btn-secondary">Schedule Service</a>
+                    </div>
+                    <div class="services-image">
+                        <div class="image-placeholder commercial-img"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="residential" class="residential">
+            <div class="container">
+                <h2 class="section-title">Residential Electrical Services Menifee</h2>
+                <div class="services-content">
+                    <div class="services-image">
+                        <div class="image-placeholder residential-img"></div>
+                    </div>
+                    <div class="services-text">
+                        <h3>Trusted Residential Electricians</h3>
+                        <p>Keep your home safe and powered with our professional residential electrical services throughout Menifee and Riverside County. Our experienced residential electricians handle everything from minor repairs to complete home rewiring projects.</p>
+                        <ul class="services-list">
+                            <li>Home Rewiring & Updates</li>
+                            <li>Electrical Panel Upgrades</li>
+                            <li>Indoor & Outdoor Lighting Installation</li>
+                            <li>Outlet & Switch Installation</li>
+                            <li>Electrical Safety Inspections</li>
+                            <li>Whole Home Surge Protection</li>
+                            <li>Emergency Residential Repairs</li>
+                        </ul>
+                        <a href="#contact" class="btn btn-secondary">Schedule Service</a>
+                    <a href="{{ url_for('schedule') }}" class="btn btn-primary">Book Appointment</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="contact">
+            <div class="container">
+                <h2 class="section-title">Contact Your Local Menifee Electrician</h2>
+                <div class="contact-content">
+                    <div class="contact-info">
+                        <h3>Get in Touch Today</h3>
+                        <p>Ready to discuss your electrical project? Contact Bolder Electric today for a free consultation and quote. We're your trusted local electricians serving Menifee and the surrounding areas.</p>
+                        <div class="contact-details">
+                            <div class="contact-item">
+                                <strong>Office Phone:</strong> (951) 397-4025
+                            </div>
+                            <div class="contact-item">
+                                <strong>Address:</strong> 30019 Buck Tail Drive, Menifee, CA 92587
+                            </div>
+                            <div class="contact-item">
+                                <strong>Email:</strong> info@bolderelectric.com
+                            </div>
+                            <div class="contact-item">
+                                <strong>Service Area:</strong> Riverside County & Surrounding Areas
+                            </div>
+                            <div class="contact-item">
+                                <strong>Business Hours:</strong> Mon-Fri: 8AM-6PM, Emergency: 24/7
+                            </div>
+                        </div>
+                    </div>
+                    <div class="contact-form">
+                        <form>
+                            <div class="form-group">
+                                <input type="text" placeholder="Your Name" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="email" placeholder="Your Email" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="tel" placeholder="Your Phone Number" required>
+                            </div>
+                            <div class="form-group">
+                                <select required>
+                                    <option value="">Select Service Type</option>
+                                    <option value="commercial">Commercial Electrical</option>
+                                    <option value="residential">Residential Electrical</option>
+                                    <option value="emergency">Emergency Service</option>
+                                    <option value="panel">Panel Upgrade</option>
+                                    <option value="lighting">Lighting Installation</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <textarea placeholder="Tell us about your electrical project or emergency..." rows="4" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Request Free Estimate</button>
+                            <a href="{{ url_for('schedule') }}" class="btn btn-secondary" style="display: inline-block; text-align: center; text-decoration: none; margin-left: 10px;">Schedule Online</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h3>BOLDER ELECTRIC</h3>
+                    <p>Professional Electrical Services Since 2020</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#commercial">Commercial</a></li>
+                        <li><a href="#residential">Residential</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4>Contact Info</h4>
+                    <p>(555) 123-4567</p>
+                    <p>info@bolderelectric.com</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Bolder Electric. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

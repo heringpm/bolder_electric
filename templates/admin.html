@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Bolder Electric</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        .admin-container {
+            max-width: 1200px;
+            margin: 100px auto 50px;
+            padding: 0 20px;
+        }
+        
+        .admin-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .admin-title {
+            font-size: 2.5rem;
+            color: var(--primary-black);
+            margin-bottom: 1rem;
+        }
+        
+        .admin-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--primary-gold);
+        }
+        
+        .admin-tab {
+            padding: 1rem 2rem;
+            background: none;
+            border: none;
+            color: var(--dark-gray);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .admin-tab.active {
+            color: var(--primary-gold);
+            border-bottom: 3px solid var(--primary-gold);
+        }
+        
+        .admin-tab:hover {
+            color: var(--primary-red);
+        }
+        
+        .admin-section {
+            display: none;
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .admin-section.active {
+            display: block;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--primary-black);
+        }
+        
+        .btn-add {
+            background: var(--primary-gold);
+            color: var(--primary-black);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-add:hover {
+            background: #FFC700;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+        }
+        
+        .data-table th,
+        .data-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .data-table th {
+            background: var(--light-gray);
+            font-weight: 600;
+            color: var(--primary-black);
+        }
+        
+        .data-table tr:hover {
+            background: var(--light-gray);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn-edit {
+            background: var(--primary-gold);
+            color: var(--primary-black);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        
+        .btn-delete {
+            background: var(--primary-red);
+            color: var(--white);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: var(--white);
+            margin: 10% auto;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-title {
+            font-size: 1.5rem;
+            color: var(--primary-black);
+        }
+        
+        .close {
+            color: var(--dark-gray);
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--primary-black);
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .availability-grid {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .date-picker {
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+        }
+        
+        .time-slots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+        
+        .time-slot-checkbox {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .time-slot-checkbox:hover {
+            background: var(--light-gray);
+        }
+        
+        .time-slot-checkbox input {
+            margin-right: 0.5rem;
+        }
+        
+        .bookings-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .booking-item {
+            background: var(--light-gray);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 5px;
+            border-left: 4px solid var(--primary-gold);
+        }
+        
+        .booking-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        
+        .booking-service {
+            font-weight: 600;
+            color: var(--primary-black);
+        }
+        
+        .booking-status {
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .status-pending {
+            background: #FFF3CD;
+            color: #856404;
+        }
+        
+        .status-confirmed {
+            background: #D4EDDA;
+            color: #155724;
+        }
+        
+        .status-completed {
+            background: #D1ECF1;
+            color: #0C5460;
+        }
+        
+        /* Logs Section Styles */
+        .logs-container {
+            max-height: 500px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .log-entry {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            display: grid;
+            grid-template-columns: 150px 150px 150px 100px 1fr;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .log-entry:last-child {
+            border-bottom: none;
+        }
+        
+        .log-entry:hover {
+            background: var(--light-gray);
+        }
+        
+        .log-username {
+            font-weight: 600;
+            color: var(--primary-black);
+        }
+        
+        .log-ip {
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: var(--dark-gray);
+        }
+        
+        .log-action {
+            color: var(--dark-gray);
+        }
+        
+        .log-success {
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .log-success.true {
+            background: #D4EDDA;
+            color: #155724;
+        }
+        
+        .log-success.false {
+            background: #F8D7DA;
+            color: #721C24;
+        }
+        
+        .log-timestamp {
+            font-size: 0.8rem;
+            color: var(--dark-gray);
+        }
+        
+        .log-filter {
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .log-filter select {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        
+        .log-refresh {
+            background: var(--primary-gold);
+            color: var(--primary-black);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 3px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .log-refresh:hover {
+            background: #FFC700;
+        }
+        
+        @media (max-width: 768px) {
+            .admin-tabs {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .admin-tab {
+                border-bottom: 1px solid #ddd;
+            }
+            
+            .availability-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .data-table {
+                font-size: 0.9rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                    <img src="{{ url_for('static', filename='images/bolder_electric_logo.png') }}" alt="Bolder Electric Logo" class="logo-img">
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="{{ url_for('home') }}" class="nav-link">Home</a></li>
+                    <li><a href="{{ url_for('schedule') }}" class="nav-link">Schedule</a></li>
+                    <li><a href="{{ url_for('admin') }}" class="nav-link" style="color: var(--primary-gold);">Admin</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1 class="admin-title">Admin Panel</h1>
+            <p>Manage services, prices, and availability</p>
+        </div>
+
+        <div class="admin-tabs">
+            <button class="admin-tab active" onclick="showSection('services')">Services</button>
+            <button class="admin-tab" onclick="showSection('availability')">Availability</button>
+            <button class="admin-tab" onclick="showSection('bookings')">Bookings</button>
+            <button class="admin-tab" onclick="showSection('logs')">Access Logs</button>
+        </div>
+
+        <!-- Services Section -->
+        <div id="services-section" class="admin-section active">
+            <div class="section-header">
+                <h2 class="section-title">Services Management</h2>
+                <button class="btn-add" onclick="openServiceModal()">Add Service</button>
+            </div>
+            
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Service Name</th>
+                        <th>Description</th>
+                        <th>Base Price</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="services-tbody">
+                    <!-- Services will be loaded here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Availability Section -->
+        <div id="availability-section" class="admin-section">
+            <div class="section-header">
+                <h2 class="section-title">Availability Management</h2>
+            </div>
+            
+            <div class="availability-grid">
+                <div>
+                    <label for="availability-date">Select Date:</label>
+                    <input type="date" id="availability-date" class="date-picker" onchange="loadAvailability()">
+                </div>
+                <div>
+                    <h3>Time Slots</h3>
+                    <div id="time-slots-container" class="time-slots-grid">
+                        <!-- Time slots will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bookings Section -->
+        <div id="bookings-section" class="admin-section">
+            <div class="section-header">
+                <h2 class="section-title">Recent Bookings</h2>
+            </div>
+            
+            <div class="bookings-list" id="bookings-container">
+                <!-- Bookings will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Logs Section -->
+        <div id="logs-section" class="admin-section">
+            <div class="section-header">
+                <h2 class="section-title">Access Logs</h2>
+                <div class="log-filter">
+                    <select id="log-filter">
+                        <option value="all">All Actions</option>
+                        <option value="login_success">Successful Logins</option>
+                        <option value="login_failed">Failed Logins</option>
+                        <option value="login_attempt">Login Attempts</option>
+                        <option value="logout">Logouts</option>
+                        <option value="password_changed">Password Changes</option>
+                    </select>
+                    <button class="log-refresh" onclick="loadLogs()">Refresh</button>
+                </div>
+            </div>
+            
+            <div class="logs-container" id="logs-container">
+                <!-- Logs will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Service Modal -->
+    <div id="service-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="service-modal-title">Add Service</h3>
+                <span class="close" onclick="closeServiceModal()">&times;</span>
+            </div>
+            <form id="service-form">
+                <input type="hidden" id="service-id">
+                <div class="form-group">
+                    <label for="service-name">Service Name *</label>
+                    <input type="text" id="service-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="service-description">Description</label>
+                    <textarea id="service-description" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="service-price">Base Price ($) *</label>
+                    <input type="number" id="service-price" step="0.01" required>
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <button type="button" class="btn-add" onclick="saveService()">Save</button>
+                    <button type="button" class="btn-delete" onclick="closeServiceModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let currentSection = 'services';
+        let services = [];
+        let timeSlots = [];
+        let bookings = [];
+
+        function showSection(section) {
+            // Hide all sections
+            document.querySelectorAll('.admin-section').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.admin-tab').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(`${section}-section`).classList.add('active');
+            event.target.classList.add('active');
+            
+            currentSection = section;
+            
+            // Load data for the section
+            if (section === 'services') {
+                loadServices();
+            } else if (section === 'availability') {
+                loadTimeSlots();
+            } else if (section === 'bookings') {
+                loadBookings();
+            } else if (section === 'logs') {
+                loadLogs();
+            }
+        }
+
+        function loadServices() {
+            fetch('/api/services')
+                .then(response => response.json())
+                .then(data => {
+                    services = data;
+                    renderServices();
+                });
+        }
+
+        function renderServices() {
+            const tbody = document.getElementById('services-tbody');
+            tbody.innerHTML = '';
+            
+            services.forEach(service => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${service.name}</td>
+                    <td>${service.description || ''}</td>
+                    <td>$${service.base_price.toFixed(2)}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-edit" onclick="editService(${service.id})">Edit</button>
+                            <button class="btn-delete" onclick="deleteService(${service.id})">Delete</button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function openServiceModal(serviceId = null) {
+            const modal = document.getElementById('service-modal');
+            const title = document.getElementById('service-modal-title');
+            
+            if (serviceId) {
+                const service = services.find(s => s.id === serviceId);
+                title.textContent = 'Edit Service';
+                document.getElementById('service-id').value = service.id;
+                document.getElementById('service-name').value = service.name;
+                document.getElementById('service-description').value = service.description || '';
+                document.getElementById('service-price').value = service.base_price;
+            } else {
+                title.textContent = 'Add Service';
+                document.getElementById('service-form').reset();
+                document.getElementById('service-id').value = '';
+            }
+            
+            modal.style.display = 'block';
+        }
+
+        function closeServiceModal() {
+            document.getElementById('service-modal').style.display = 'none';
+        }
+
+        function saveService() {
+            const serviceId = document.getElementById('service-id').value;
+            const name = document.getElementById('service-name').value;
+            const description = document.getElementById('service-description').value;
+            const price = parseFloat(document.getElementById('service-price').value);
+            
+            if (!name || !price) {
+                alert('Please fill in all required fields');
+                return;
+            }
+            
+            const url = serviceId ? `/api/services/${serviceId}` : '/api/services';
+            const method = serviceId ? 'PUT' : 'POST';
+            
+            fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: name,
+                    description: description,
+                    base_price: price
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    closeServiceModal();
+                    loadServices();
+                } else {
+                    alert('Error saving service');
+                }
+            });
+        }
+
+        function editService(serviceId) {
+            openServiceModal(serviceId);
+        }
+
+        function deleteService(serviceId) {
+            if (confirm('Are you sure you want to delete this service?')) {
+                fetch(`/api/services/${serviceId}`, {
+                    method: 'DELETE'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        loadServices();
+                    } else {
+                        alert('Error deleting service');
+                    }
+                });
+            }
+        }
+
+        function loadTimeSlots() {
+            fetch('/api/time-slots')
+                .then(response => response.json())
+                .then(data => {
+                    timeSlots = data;
+                    renderTimeSlots();
+                });
+        }
+
+        function renderTimeSlots() {
+            const container = document.getElementById('time-slots-container');
+            container.innerHTML = '';
+            
+            timeSlots.forEach(slot => {
+                const div = document.createElement('div');
+                div.className = 'time-slot-checkbox';
+                div.innerHTML = `
+                    <input type="checkbox" id="slot-${slot.id}" value="${slot.id}" onchange="updateAvailability(${slot.id}, this.checked)">
+                    <label for="slot-${slot.id}">${slot.time_slot}</label>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function loadAvailability() {
+            const date = document.getElementById('availability-date').value;
+            if (!date) return;
+            
+            fetch(`/api/availability/${date}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Update checkboxes based on availability
+                    data.forEach(avail => {
+                        const checkbox = document.getElementById(`slot-${avail.time_slot_id}`);
+                        if (checkbox) {
+                            checkbox.checked = avail.is_available;
+                        }
+                    });
+                });
+        }
+
+        function updateAvailability(timeSlotId, isAvailable) {
+            const date = document.getElementById('availability-date').value;
+            if (!date) {
+                alert('Please select a date first');
+                return;
+            }
+            
+            fetch('/api/availability', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    date: date,
+                    time_slot_id: timeSlotId,
+                    is_available: isAvailable
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    alert('Error updating availability');
+                }
+            });
+        }
+
+        function loadBookings() {
+            fetch('/api/bookings')
+                .then(response => response.json())
+                .then(data => {
+                    bookings = data;
+                    renderBookings();
+                });
+        }
+
+        function renderBookings() {
+            const container = document.getElementById('bookings-container');
+            container.innerHTML = '';
+            
+            bookings.forEach(booking => {
+                const div = document.createElement('div');
+                div.className = 'booking-item';
+                div.innerHTML = `
+                    <div class="booking-header">
+                        <span class="booking-service">${booking.service_name}</span>
+                        <span class="booking-status status-${booking.status}">${booking.status}</span>
+                    </div>
+                    <div><strong>Date:</strong> ${booking.service_date}</div>
+                    <div><strong>Time:</strong> ${booking.time_slot}</div>
+                    <div><strong>Customer:</strong> ${booking.customer_name}</div>
+                    <div><strong>Phone:</strong> ${booking.customer_phone}</div>
+                    <div><strong>Price:</strong> $${booking.total_price.toFixed(2)}</div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function loadLogs() {
+            const filter = document.getElementById('log-filter').value;
+            const url = filter === 'all' ? '/api/logs' : `/api/logs?action=${filter}`;
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    renderLogs(data);
+                })
+                .catch(error => {
+                    console.error('Error loading logs:', error);
+                    document.getElementById('logs-container').innerHTML = '<p>Error loading logs</p>';
+                });
+        }
+
+        function renderLogs(logs) {
+            const container = document.getElementById('logs-container');
+            container.innerHTML = '';
+            
+            if (logs.length === 0) {
+                container.innerHTML = '<p>No logs found</p>';
+                return;
+            }
+            
+            logs.forEach(log => {
+                const div = document.createElement('div');
+                div.className = 'log-entry';
+                div.innerHTML = `
+                    <div class="log-username">${log.username || 'Anonymous'}</div>
+                    <div class="log-ip">${log.ip_address}</div>
+                    <div class="log-action">${log.action}</div>
+                    <div class="log-success ${log.success}">${log.success ? 'Success' : 'Failed'}</div>
+                    <div class="log-timestamp">${new Date(log.timestamp).toLocaleString()}</div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('service-modal');
+            if (event.target === modal) {
+                closeServiceModal();
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadServices();
+        });
+    </script>
+</body>
+</html>

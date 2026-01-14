@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Management - Bolder Electric</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        .account-container {
+            max-width: 800px;
+            margin: 100px auto 50px;
+            padding: 0 20px;
+        }
+        
+        .account-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .account-title {
+            font-size: 2.5rem;
+            color: var(--primary-black);
+            margin-bottom: 1rem;
+        }
+        
+        .account-subtitle {
+            font-size: 1.2rem;
+            color: var(--dark-gray);
+        }
+        
+        .account-sections {
+            display: grid;
+            gap: 2rem;
+        }
+        
+        .account-section {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--primary-black);
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--primary-gold);
+            padding-bottom: 0.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--primary-black);
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-family: 'Montserrat', sans-serif;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary-red);
+        }
+        
+        .btn-primary {
+            background: var(--primary-red);
+            color: var(--white);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: #b91c3c;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: var(--primary-gold);
+            color: var(--primary-black);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-left: 1rem;
+        }
+        
+        .btn-secondary:hover {
+            background: #FFC700;
+        }
+        
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .password-requirements {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--dark-gray);
+        }
+        
+        .password-requirements ul {
+            margin: 0.5rem 0;
+            padding-left: 1.5rem;
+        }
+        
+        .current-user {
+            background: var(--light-gray);
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+        
+        .current-user strong {
+            color: var(--primary-black);
+        }
+        
+        .nav-buttons {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .nav-buttons a {
+            display: inline-block;
+            margin: 0 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--primary-gold);
+            color: var(--primary-black);
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-buttons a:hover {
+            background: #FFC700;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                    <img src="{{ url_for('static', filename='images/bolder_electric_logo.png') }}" alt="Bolder Electric Logo" class="logo-img">
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="{{ url_for('home') }}" class="nav-link">Home</a></li>
+                    <li><a href="{{ url_for('schedule') }}" class="nav-link">Schedule</a></li>
+                    <li><a href="{{ url_for('admin') }}" class="nav-link">Admin</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="account-container">
+        <div class="account-header">
+            <h1 class="account-title">Account Management</h1>
+            <p class="account-subtitle">Manage your admin account and security settings</p>
+        </div>
+
+        <div class="nav-buttons">
+            <a href="{{ url_for('admin') }}">← Admin Panel</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
+
+        {% if success %}
+        <div class="success-message">
+            {{ success }}
+        </div>
+        {% endif %}
+
+        {% if error %}
+        <div class="error-message">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <div class="account-sections">
+            <div class="account-section">
+                <h2 class="section-title">Change Password</h2>
+                
+                <div class="current-user">
+                    <strong>Current User:</strong> {{ current_user }}
+                </div>
+                
+                <form method="POST">
+                    <div class="form-group">
+                        <label for="current_password">Current Password *</label>
+                        <input type="password" id="current_password" name="current_password" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="new_password">New Password *</label>
+                        <input type="password" id="new_password" name="new_password" required minlength="8">
+                        
+                        <div class="password-requirements">
+                            <strong>Password Requirements:</strong>
+                            <ul>
+                                <li>At least 8 characters long</li>
+                                <li>Contains uppercase and lowercase letters</li>
+                                <li>Contains at least one number</li>
+                                <li>Contains at least one special character</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="confirm_password">Confirm New Password *</label>
+                        <input type="password" id="confirm_password" name="confirm_password" required>
+                    </div>
+                    
+                    <button type="submit" class="btn-primary">Update Password</button>
+                    <a href="{{ url_for('admin') }}" class="btn-secondary">Cancel</a>
+                </form>
+            </div>
+            
+            <div class="account-section">
+                <h2 class="section-title">Security Information</h2>
+                
+                <div class="current-user">
+                    <p><strong>Account Security Features:</strong></p>
+                    <ul>
+                        <li>Passwords are securely hashed with salt</li>
+                        <li>Failed login attempts are logged</li>
+                        <li>Account locks after 5 failed attempts (30 minutes)</li>
+                        <li>All admin actions are logged with IP addresses</li>
+                        <li>Session management for secure access</li>
+                    </ul>
+                </div>
+                
+                <div class="current-user">
+                    <p><strong>Recent Login Activity:</strong></p>
+                    {% if recent_logs %}
+                    <ul>
+                        {% for log in recent_logs %}
+                        <li>{{ log.timestamp }} - {{ log.action }} from {{ log.ip_address }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p>No recent login activity found.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Password confirmation validation
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const newPassword = document.getElementById('new_password').value;
+            const confirmPassword = document.getElementById('confirm_password').value;
+            
+            if (newPassword !== confirmPassword) {
+                e.preventDefault();
+                alert('New password and confirmation do not match');
+                return false;
+            }
+            
+            // Basic password strength validation
+            if (newPassword.length < 8) {
+                e.preventDefault();
+                alert('Password must be at least 8 characters long');
+                return false;
+            }
+            
+            if (!/[A-Z]/.test(newPassword) || !/[a-z]/.test(newPassword)) {
+                e.preventDefault();
+                alert('Password must contain both uppercase and lowercase letters');
+                return false;
+            }
+            
+            if (!/[0-9]/.test(newPassword)) {
+                e.preventDefault();
+                alert('Password must contain at least one number');
+                return false;
+            }
+            
+            if (!/[!@#$%^&*(),.?":{}|<>]/.test(newPassword)) {
+                e.preventDefault();
+                alert('Password must contain at least one special character');
+                return false;
+            }
+        });
+    </script>
+</body>
+</html>

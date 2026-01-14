@@ -1,0 +1,21 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://bolderelectric.com/static/sitemap.xml
+
+# Allow search engines to crawl all important directories
+Allow: /static/
+Allow: /templates/
+
+# Block access to sensitive files and directories
+Disallow: /venv/
+Disallow: /.git/
+Disallow: /.env
+Disallow: /__pycache__/
+Disallow: /app.py
+Disallow: /requirements.txt
+Disallow: /README.md
+
+# Crawl delay for respectful crawling
+Crawl-delay: 1

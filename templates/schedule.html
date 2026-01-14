@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule Service - Bolder Electric</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        .schedule-container {
+            max-width: 1200px;
+            margin: 100px auto 50px;
+            padding: 0 20px;
+        }
+        
+        .schedule-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .schedule-title {
+            font-size: 2.5rem;
+            color: var(--primary-black);
+            margin-bottom: 1rem;
+        }
+        
+        .schedule-subtitle {
+            font-size: 1.2rem;
+            color: var(--dark-gray);
+        }
+        
+        .schedule-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+        
+        .calendar-section {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .calendar-nav {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .calendar-btn {
+            background: var(--primary-gold);
+            color: var(--primary-black);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .calendar-btn:hover {
+            background: #FFC700;
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+        }
+        
+        .calendar-day-header {
+            text-align: center;
+            font-weight: 600;
+            color: var(--primary-black);
+            padding: 0.5rem;
+        }
+        
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .calendar-day:hover {
+            background: var(--light-gray);
+        }
+        
+        .calendar-day.selected {
+            background: var(--primary-gold);
+            color: var(--primary-black);
+            font-weight: 600;
+        }
+        
+        .calendar-day.disabled {
+            color: #ccc;
+            cursor: not-allowed;
+            background: #f9f9f9;
+        }
+        
+        .time-slots {
+            margin-top: 2rem;
+        }
+        
+        .time-slots-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary-black);
+        }
+        
+        .time-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+        }
+        
+        .time-slot {
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .time-slot:hover {
+            background: var(--light-gray);
+        }
+        
+        .time-slot.selected {
+            background: var(--primary-red);
+            color: var(--white);
+            border-color: var(--primary-red);
+        }
+        
+        .time-slot.disabled {
+            color: #ccc;
+            cursor: not-allowed;
+            background: #f9f9f9;
+        }
+        
+        .booking-section {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .service-selection {
+            margin-bottom: 2rem;
+        }
+        
+        .service-cards {
+            display: grid;
+            gap: 1rem;
+        }
+        
+        .service-card {
+            padding: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .service-card:hover {
+            border-color: var(--primary-gold);
+        }
+        
+        .service-card.selected {
+            border-color: var(--primary-gold);
+            background: #FFFAF0;
+        }
+        
+        .service-name {
+            font-weight: 600;
+            color: var(--primary-black);
+            margin-bottom: 0.5rem;
+        }
+        
+        .service-price {
+            color: var(--primary-red);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        
+        .customer-info {
+            margin-bottom: 2rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--primary-black);
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 5px;
+            font-family: 'Montserrat', sans-serif;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-red);
+        }
+        
+        .booking-summary {
+            background: var(--light-gray);
+            padding: 1.5rem;
+            border-radius: 5px;
+            margin-bottom: 2rem;
+        }
+        
+        .summary-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary-black);
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--primary-black);
+            padding-top: 1rem;
+            border-top: 2px solid var(--primary-gold);
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary-red);
+            color: var(--white);
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .submit-btn:hover {
+            background: #b91c3c;
+            transform: translateY(-2px);
+        }
+        
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        @media (max-width: 768px) {
+            .schedule-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .time-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .schedule-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                    <img src="{{ url_for('static', filename='images/bolder_electric_logo.png') }}" alt="Bolder Electric Logo" class="logo-img">
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="{{ url_for('home') }}" class="nav-link">Home</a></li>
+                    <li><a href="{{ url_for('home') }}#services" class="nav-link">Services</a></li>
+                    <li><a href="{{ url_for('home') }}#commercial" class="nav-link">Commercial</a></li>
+                    <li><a href="{{ url_for('home') }}#residential" class="nav-link">Residential</a></li>
+                    <li><a href="{{ url_for('home') }}#contact" class="nav-link">Contact</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="schedule-container">
+        <div class="schedule-header">
+            <h1 class="schedule-title">Schedule Your Electrical Service</h1>
+            <p class="schedule-subtitle">Book an appointment with our licensed electricians in Menifee, CA</p>
+        </div>
+
+        <div class="schedule-content">
+            <div class="calendar-section">
+                <div class="calendar-header">
+                    <h2>Select Date</h2>
+                    <div class="calendar-nav">
+                        <button class="calendar-btn" onclick="changeMonth(-1)">←</button>
+                        <span id="current-month">January 2024</span>
+                        <button class="calendar-btn" onclick="changeMonth(1)">→</button>
+                    </div>
+                </div>
+                
+                <div class="calendar-grid" id="calendar">
+                    <!-- Calendar will be generated by JavaScript -->
+                </div>
+                
+                <div class="time-slots">
+                    <h3 class="time-slots-title">Available Time Slots</h3>
+                    <div class="time-grid" id="time-slots">
+                        <div class="time-slot" onclick="selectTime(this)">8:00 AM</div>
+                        <div class="time-slot" onclick="selectTime(this)">9:00 AM</div>
+                        <div class="time-slot" onclick="selectTime(this)">10:00 AM</div>
+                        <div class="time-slot" onclick="selectTime(this)">11:00 AM</div>
+                        <div class="time-slot" onclick="selectTime(this)">12:00 PM</div>
+                        <div class="time-slot" onclick="selectTime(this)">1:00 PM</div>
+                        <div class="time-slot" onclick="selectTime(this)">2:00 PM</div>
+                        <div class="time-slot" onclick="selectTime(this)">3:00 PM</div>
+                        <div class="time-slot" onclick="selectTime(this)">4:00 PM</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="booking-section">
+                <div class="service-selection">
+                    <h3>Select Service Type</h3>
+                    <div class="service-cards">
+                        {% for service in services %}
+                        <div class="service-card" onclick="selectService(this, '{{ service.name|e }}', {{ service.base_price }})">
+                            <div class="service-name">{{ service.name }}</div>
+                            <div class="service-price">Starting at ${{ "%.2f"|format(service.base_price) }}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="customer-info">
+                    <h3>Customer Information</h3>
+                    <form id="booking-form">
+                        <div class="form-group">
+                            <label for="name">Full Name *</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number *</label>
+                            <input type="tel" id="phone" name="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Service Address *</label>
+                            <input type="text" id="address" name="address" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Project Description</label>
+                            <textarea id="description" name="description" rows="4" placeholder="Please describe your electrical needs..."></textarea>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="booking-summary">
+                    <h3 class="summary-title">Booking Summary</h3>
+                    <div class="summary-item">
+                        <span>Service:</span>
+                        <span id="summary-service">Not selected</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Date:</span>
+                        <span id="summary-date">Not selected</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Time:</span>
+                        <span id="summary-time">Not selected</span>
+                    </div>
+                    <div class="summary-total">
+                        <span>Estimated Cost:</span>
+                        <span id="summary-price">$0</span>
+                    </div>
+                </div>
+
+                <button class="submit-btn" onclick="submitBooking()" disabled>Complete Booking</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentDate = new Date();
+        let selectedDate = null;
+        let selectedTime = null;
+        let selectedService = null;
+        let selectedPrice = 0;
+
+        function generateCalendar() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                            'July', 'August', 'September', 'October', 'November', 'December'];
+            
+            document.getElementById('current-month').textContent = `${monthNames[month]} ${year}`;
+            
+            const calendar = document.getElementById('calendar');
+            calendar.innerHTML = '';
+            
+            // Day headers
+            const dayHeaders = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            dayHeaders.forEach(day => {
+                const dayHeader = document.createElement('div');
+                dayHeader.className = 'calendar-day-header';
+                dayHeader.textContent = day;
+                calendar.appendChild(dayHeader);
+            });
+            
+            // Empty cells for days before month starts
+            for (let i = 0; i < firstDay; i++) {
+                const emptyDay = document.createElement('div');
+                calendar.appendChild(emptyDay);
+            }
+            
+            // Days of the month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                dayElement.textContent = day;
+                
+                const date = new Date(year, month, day);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                
+                if (date < today) {
+                    dayElement.classList.add('disabled');
+                } else {
+                    dayElement.onclick = () => selectDate(date, dayElement);
+                }
+                
+                calendar.appendChild(dayElement);
+            }
+        }
+
+        function changeMonth(direction) {
+            currentDate.setMonth(currentDate.getMonth() + direction);
+            generateCalendar();
+        }
+
+        function selectDate(date, element) {
+            // Remove previous selection
+            document.querySelectorAll('.calendar-day.selected').forEach(el => {
+                el.classList.remove('selected');
+            });
+            
+            element.classList.add('selected');
+            selectedDate = date;
+            updateSummary();
+        }
+
+        function selectTime(element) {
+            // Remove previous selection
+            document.querySelectorAll('.time-slot.selected').forEach(el => {
+                el.classList.remove('selected');
+            });
+            
+            element.classList.add('selected');
+            selectedTime = element.textContent;
+            updateSummary();
+        }
+
+        function selectService(element, service, price) {
+            // Remove previous selection
+            document.querySelectorAll('.service-card.selected').forEach(el => {
+                el.classList.remove('selected');
+            });
+            
+            element.classList.add('selected');
+            selectedService = service;
+            selectedPrice = price;
+            updateSummary();
+        }
+
+        function updateSummary() {
+            document.getElementById('summary-service').textContent = selectedService || 'Not selected';
+            document.getElementById('summary-date').textContent = selectedDate ? selectedDate.toLocaleDateString() : 'Not selected';
+            document.getElementById('summary-time').textContent = selectedTime || 'Not selected';
+            document.getElementById('summary-price').textContent = selectedPrice ? `$${selectedPrice}` : '$0';
+            
+            // Enable submit button if all required fields are selected
+            const canSubmit = selectedDate && selectedTime && selectedService && 
+                           document.getElementById('name').value && 
+                           document.getElementById('phone').value && 
+                           document.getElementById('email').value && 
+                           document.getElementById('address').value;
+            
+            document.querySelector('.submit-btn').disabled = !canSubmit;
+        }
+
+        function submitBooking() {
+            const formData = {
+                service: selectedService,
+                price: selectedPrice,
+                date: selectedDate,
+                time: selectedTime,
+                name: document.getElementById('name').value,
+                phone: document.getElementById('phone').value,
+                email: document.getElementById('email').value,
+                address: document.getElementById('address').value,
+                description: document.getElementById('description').value
+            };
+            
+            // Here you would normally send this data to your server
+            alert(`Booking confirmed!\n\nService: ${formData.service}\nDate: ${formData.date.toLocaleDateString()}\nTime: ${formData.time}\nEstimated Cost: $${formData.price}\n\nWe'll contact you at ${formData.phone} to confirm your appointment.`);
+            
+            // Redirect to home page
+            window.location.href = '/';
+        }
+
+        // Initialize calendar on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            generateCalendar();
+            
+            // Add event listeners to form fields
+            ['name', 'phone', 'email', 'address'].forEach(id => {
+                document.getElementById(id).addEventListener('input', updateSummary);
+            });
+        });
+    </script>
+</body>
+</html>
