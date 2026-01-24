@@ -648,6 +648,273 @@ section {
     opacity: 0.9;
 }
 
+/* Gallery Page Styles */
+.gallery-hero {
+    background: var(--gradient-dark);
+    padding: 120px 0 80px;
+    text-align: center;
+    color: var(--white);
+    position: relative;
+    overflow: hidden;
+}
+
+.gallery-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+    opacity: 0.5;
+}
+
+.gallery-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 800;
+    color: var(--primary-gold);
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 1;
+}
+
+.gallery-subtitle {
+    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    color: rgba(255, 255, 255, 0.9);
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.local-gallery {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 80px 0;
+}
+
+.local-gallery .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+/* Instagram Section */
+.instagram-section {
+    background: var(--white);
+    padding: 80px 0;
+    text-align: center;
+}
+
+.section-subtitle {
+    font-size: 1.2rem;
+    color: var(--dark-gray);
+    margin-bottom: 3rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.instagram-feed {
+    margin: 3rem 0;
+}
+
+.instagram-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.instagram-item {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    transition: transform 0.3s ease;
+    background: var(--light-gray);
+    aspect-ratio: 1;
+}
+
+.instagram-item:hover {
+    transform: translateY(-5px);
+}
+
+.instagram-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.instagram-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.instagram-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(220, 20, 60, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.instagram-item:hover .instagram-overlay {
+    opacity: 1;
+}
+
+.instagram-overlay p {
+    color: var(--white);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.instagram-loading, .instagram-fallback {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 3rem;
+    background: var(--light-gray);
+    border-radius: 12px;
+}
+
+.instagram-cta {
+    margin-top: 2rem;
+}
+
+.instagram-cta p {
+    margin-top: 0.5rem;
+    color: var(--dark-gray);
+    font-size: 0.9rem;
+}
+
+/* Gallery CTA Section */
+.gallery-cta {
+    background: var(--gradient-primary);
+    padding: 80px 0;
+    text-align: center;
+    color: var(--white);
+}
+
+.cta-content h2 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.cta-content p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.cta-buttons .btn-secondary {
+    background-color: transparent;
+    color: var(--white);
+    border-color: var(--white);
+}
+
+.cta-buttons .btn-secondary:hover {
+    background-color: var(--white);
+    color: var(--primary-red);
+}
+
+/* Active Navigation State */
+.nav-link.active {
+    color: var(--primary-gold);
+}
+
+.nav-link.active::after {
+    width: 100%;
+}
+
+/* Gallery Preview on Home Page */
+.gallery-preview {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 80px 0;
+    text-align: center;
+    position: relative;
+}
+
+.gallery-preview::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--primary-gold), transparent);
+}
+
+.gallery-preview h3 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-black);
+    margin-bottom: 1rem;
+}
+
+.gallery-preview p {
+    font-size: 1.2rem;
+    color: var(--dark-gray);
+    margin-bottom: 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Responsive Design for Gallery */
+@media (max-width: 768px) {
+    .gallery-hero {
+        padding: 100px 0 60px;
+    }
+    
+    .local-gallery, .instagram-section, .gallery-cta {
+        padding: 60px 0;
+    }
+    
+    .local-gallery .gallery-grid,
+    .instagram-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+    }
+    
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .cta-buttons .btn {
+        width: 200px;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .local-gallery .gallery-grid,
+    .instagram-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .gallery-preview h3 {
+        font-size: 2rem;
+    }
+}
+
 /* Contact Section */
 .contact {
     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);

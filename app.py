@@ -62,6 +62,10 @@ def home():
     
     return render_template('index.html', contact=contact_data)
 
+@app.route('/gallery')
+def gallery():
+    return render_template('gallery.html')
+
 @app.route('/commercial')
 def commercial():
     return render_template('commercial.html')

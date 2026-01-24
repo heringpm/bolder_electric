@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery - Bolder Electric | Our Recent Electrical Work</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="View our portfolio of electrical projects including commercial, residential, and industrial electrical work. See our recent installations, panel upgrades, and electrical repairs.">
+    <meta name="keywords" content="electrical gallery, electrical work portfolio, electrician projects, commercial electrical, residential electrical, electrical installations">
+    <meta name="author" content="Bolder Electric">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://bolderelectric.com/gallery">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                    <img src="{{ url_for('static', filename='images/bolder_electric_logo.png') }}" alt="Bolder Electric Logo" class="logo-img">
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="{{ url_for('home') }}" class="nav-link">Home</a></li>
+                    <li><a href="{{ url_for('home') }}#services" class="nav-link">Services</a></li>
+                    <li><a href="{{ url_for('home') }}#commercial" class="nav-link">Commercial</a></li>
+                    <li><a href="{{ url_for('home') }}#residential" class="nav-link">Residential</a></li>
+                    <li><a href="{{ url_for('gallery') }}" class="nav-link active">Gallery</a></li>
+                    <li><a href="{{ url_for('home') }}#contact" class="nav-link">Contact</a></li>
+                    <li><a href="{{ url_for('schedule') }}" class="nav-link">Schedule</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="gallery-hero">
+            <div class="container">
+                <h1 class="gallery-title">Our Work Gallery</h1>
+                <p class="gallery-subtitle">Professional electrical projects and installations throughout Menifee & Riverside County</p>
+            </div>
+        </section>
+
+        <!-- Local Gallery Section -->
+        <section class="local-gallery">
+            <div class="container">
+                <h2 class="section-title">Featured Projects</h2>
+                <div class="gallery-grid">
+                    <div class="gallery-item">
+                        <img src="{{ url_for('static', filename='images/new1.jpg') }}" alt="Commercial Electrical Project" class="gallery-image">
+                        <div class="gallery-overlay">
+                            <h4>Commercial Installation</h4>
+                            <p>Complete electrical system for commercial space</p>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="{{ url_for('static', filename='images/new3.jpg') }}" alt="Electrical Panel Work" class="gallery-image">
+                        <div class="gallery-overlay">
+                            <h4>Panel Installation</h4>
+                            <p>Modern electrical panel setup</p>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="{{ url_for('static', filename='images/new4.jpg') }}" alt="Professional Electrical Work" class="gallery-image">
+                        <div class="gallery-overlay">
+                            <h4>Professional Installation</h4>
+                            <p>Complete electrical system setup</p>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="{{ url_for('static', filename='images/new5.jpg') }}" alt="Electrical Panel Upgrade" class="gallery-image">
+                        <div class="gallery-overlay">
+                            <h4>Panel Upgrades</h4>
+                            <p>Modern electrical panel installations</p>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="{{ url_for('static', filename='images/newe2.jpg') }}" alt="Commercial Electrical" class="gallery-image">
+                        <div class="gallery-overlay">
+                            <h4>Commercial Projects</h4>
+                            <p>Business electrical solutions</p>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="{{ url_for('static', filename='images/358055541_17993479952050511_6373827937251109204_n.jpg') }}" alt="Commercial Services" class="gallery-image">
+                        <div class="gallery-overlay">
+                            <h4>Commercial Services</h4>
+                            <p>Business electrical installations</p>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="{{ url_for('static', filename='images/468871509_18049372970050511_4296001976905443823_n.jpg') }}" alt="Electrical Work" class="gallery-image">
+                        <div class="gallery-overlay">
+                            <h4>Electrical Projects</h4>
+                            <p>Professional electrical work</p>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="{{ url_for('static', filename='images/468943951_18049372829050511_3332619069482254023_n.jpg') }}" alt="Residential Electrical" class="gallery-image">
+                        <div class="gallery-overlay">
+                            <h4>Residential Services</h4>
+                            <p>Home electrical expertise</p>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="{{ url_for('static', filename='images/484959035_18059740199050511_5189104763192206444_n.jpg') }}" alt="Electrical Installation" class="gallery-image">
+                        <div class="gallery-overlay">
+                            <h4>Installation Work</h4>
+                            <p>Professional electrical installations</p>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="{{ url_for('static', filename='images/487497406_18060594641050511_4855918171960797504_n.jpg') }}" alt="Panel Work" class="gallery-image">
+                        <div class="gallery-overlay">
+                            <h4>Panel Work</h4>
+                            <p>Electrical panel installations</p>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="{{ url_for('static', filename='images/552028028_18076863026050511_5467889523463153147_n.jpg') }}" alt="Commercial Wiring" class="gallery-image">
+                        <div class="gallery-overlay">
+                            <h4>Commercial Wiring</h4>
+                            <p>Business electrical solutions</p>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="{{ url_for('static', filename='images/557449550_18078063476050511_1355580283574235160_n.jpg') }}" alt="Residential Work" class="gallery-image">
+                        <div class="gallery-overlay">
+                            <h4>Residential Work</h4>
+                            <p>Home electrical projects</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Instagram Feed Section -->
+        <section class="instagram-section">
+            <div class="container">
+                <h2 class="section-title">Recent Work on Instagram</h2>
+                <p class="section-subtitle">Follow us for daily updates on our latest electrical projects</p>
+                <div class="instagram-feed">
+                    <div id="instagram-container" class="instagram-grid">
+                        <!-- Instagram feed will be loaded here -->
+                        <div class="instagram-loading">
+                            <p>Loading Instagram feed...</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="instagram-cta">
+                    <a href="https://www.instagram.com/bolderelectric/" target="_blank" class="btn btn-primary">Follow Us on Instagram</a>
+                    <p>@bolderelectric</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="gallery-cta">
+            <div class="container">
+                <div class="cta-content">
+                    <h2>Ready to Start Your Electrical Project?</h2>
+                    <p>Let us show you the same quality and professionalism you see in our gallery.</p>
+                    <div class="cta-buttons">
+                        <a href="{{ url_for('schedule') }}" class="btn btn-primary">Schedule Service</a>
+                        <a href="{{ url_for('home') }}#contact" class="btn btn-secondary">Get Free Estimate</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-main">
+                    <div class="footer-brand">
+                        <h3>BOLDER ELECTRIC</h3>
+                        <p class="footer-tagline">Professional Electrical Services</p>
+                    </div>
+                    <div class="footer-info">
+                        <div class="footer-links">
+                            <h4>Quick Links</h4>
+                            <ul>
+                                <li><a href="{{ url_for('home') }}">Home</a></li>
+                                <li><a href="{{ url_for('home') }}#services">Services</a></li>
+                                <li><a href="{{ url_for('home') }}#commercial">Commercial</a></li>
+                                <li><a href="{{ url_for('home') }}#residential">Residential</a></li>
+                                <li><a href="{{ url_for('gallery') }}">Gallery</a></li>
+                                <li><a href="{{ url_for('home') }}#contact">Contact</a></li>
+                            </ul>
+                        </div>
+                        <div class="footer-contact">
+                            <h4>Contact</h4>
+                            <p>(951) 397-4025</p>
+                            <p>info@bolderelectric.com</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2024 Bolder Electric. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        // Instagram Feed Integration
+        async function loadInstagramFeed() {
+            const container = document.getElementById('instagram-container');
+            
+            try {
+                // Using a proxy service to fetch Instagram feed (since direct API requires authentication)
+                const response = await fetch('https://nitter.net/bolderelectric/rss');
+                const text = await response.text();
+                
+                // Parse RSS feed
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(text, 'text/xml');
+                const items = xmlDoc.querySelectorAll('item');
+                
+                if (items.length > 0) {
+                    let html = '<div class="instagram-grid">';
+                    items.forEach((item, index) => {
+                        if (index < 6) { // Show first 6 posts
+                            const title = item.querySelector('title')?.textContent || '';
+                            const link = item.querySelector('link')?.textContent || '';
+                            const description = item.querySelector('description')?.textContent || '';
+                            
+                            // Extract image URL from description
+                            const imgMatch = description.match(/<img[^>]+src="([^">]+)"/);
+                            const imgSrc = imgMatch ? imgMatch[1] : '';
+                            
+                            html += `
+                                <div class="instagram-item">
+                                    <a href="${link}" target="_blank" class="instagram-link">
+                                        ${imgSrc ? `<img src="${imgSrc}" alt="${title}" class="instagram-image">` : ''}
+                                        <div class="instagram-overlay">
+                                            <p>View on Instagram</p>
+                                        </div>
+                                    </a>
+                                </div>
+                            `;
+                        }
+                    });
+                    html += '</div>';
+                    container.innerHTML = html;
+                } else {
+                    throw new Error('No items found');
+                }
+            } catch (error) {
+                // Fallback: Show Instagram follow button
+                container.innerHTML = `
+                    <div class="instagram-fallback">
+                        <p>Follow us on Instagram to see our latest work!</p>
+                        <a href="https://www.instagram.com/bolderelectric/" target="_blank" class="btn btn-primary">Follow @bolderelectric</a>
+                    </div>
+                `;
+            }
+        }
+
+        // Load Instagram feed when page loads
+        document.addEventListener('DOMContentLoaded', loadInstagramFeed);
+    </script>
+</body>
+</html>
