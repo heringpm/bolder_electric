@@ -199,82 +199,74 @@
         <section id="services" class="services">
             <div class="container">
                 <h2 class="section-title">Professional Electrical Services</h2>
-                <div class="services-intro">
-                    <p class="services-description">Bolder Electric provides comprehensive electrical solutions for both commercial and residential properties throughout Menifee and Riverside County. Our licensed electricians deliver reliable, code-compliant solutions with professional expertise.</p>
-                </div>
+                <p class="section-subtitle">Comprehensive electrical solutions for commercial and residential properties throughout Menifee & Riverside County</p>
                 
-                <!-- Service Cards Grid -->
-                <div class="services-grid">
-                    <div class="service-card">
-                        <div class="service-icon">⚡</div>
-                        <h3>Commercial Electrical</h3>
-                        <p>Complete electrical solutions for businesses, offices, and commercial properties. Licensed commercial electricians for new construction, upgrades, and emergency repairs.</p>
-                        <ul class="service-features">
-                            <li>New Construction Wiring</li>
-                            <li>Electrical System Upgrades</li>
-                            <li>Commercial Lighting Design</li>
-                            <li>Energy Efficiency Solutions</li>
-                        </ul>
-                    </div>
-                    <div class="service-card">
-                        <div class="service-icon">🏠</div>
-                        <h3>Residential Electrical</h3>
-                        <p>Professional electrical services for homes, apartments, and residential complexes. Expert residential electricians for all your home electrical needs.</p>
-                        <ul class="service-features">
-                            <li>Home Rewiring & Updates</li>
-                            <li>Electrical Panel Upgrades</li>
-                            <li>Lighting Installation</li>
-                            <li>Safety Inspections</li>
-                        </ul>
-                    </div>
-                    <div class="service-card">
-                        <div class="service-icon">🔧</div>
-                        <h3>Emergency Repairs</h3>
-                        <p>24/7 emergency electrical repair services when you need us most. Fast response times for electrical emergencies in Menifee and surrounding areas.</p>
-                        <ul class="service-features">
-                            <li>24/7 Emergency Service</li>
-                            <li>Fast Response Times</li>
-                            <li>Emergency Repairs</li>
-                            <li>Power Restoration</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Visual Showcase -->
-                <div class="services-showcase">
-                    <div class="showcase-item commercial-showcase">
-                        <div class="showcase-content">
-                            <h3>Commercial Expertise</h3>
-                            <p>We specialize in comprehensive electrical services for commercial properties throughout Menifee and Riverside County. Our licensed commercial electricians deliver reliable, code-compliant solutions for businesses of all sizes.</p>
-                            <ul class="showcase-features">
+                <!-- Main Service Categories -->
+                <div class="services-categories">
+                    <div class="service-category commercial">
+                        <div class="category-content">
+                            <div class="category-icon">⚡</div>
+                            <h3>Commercial Electrical</h3>
+                            <p>Complete electrical solutions for businesses, offices, and commercial properties with licensed commercial electricians.</p>
+                            <ul class="category-features">
+                                <li>New Construction Wiring</li>
+                                <li>Electrical System Upgrades</li>
+                                <li>Commercial Lighting Design</li>
                                 <li>Panel Upgrades & Replacements</li>
-                                <li>Preventive Maintenance Programs</li>
-                                <li>Emergency Commercial Repairs</li>
+                                <li>Preventive Maintenance</li>
+                                <li>Emergency Repairs</li>
                             </ul>
                             <a href="{{ url_for('schedule') }}" class="btn btn-primary">Schedule Commercial Service</a>
                         </div>
-                        <div class="showcase-image">
-                            <img src="{{ url_for('static', filename='images/new1.jpg') }}" alt="Commercial Electrical Services" class="service-image">
+                        <div class="category-image">
+                            <img src="{{ url_for('static', filename='images/new1.jpg') }}" alt="Commercial Electrical Services" class="service-img">
                         </div>
                     </div>
                     
-                    <div class="showcase-item residential-showcase">
-                        <div class="showcase-image">
-                            <img src="{{ url_for('static', filename='images/newerrr.jpg') }}" alt="Residential Electrical Services" class="service-image">
+                    <div class="service-category residential">
+                        <div class="category-image">
+                            <img src="{{ url_for('static', filename='images/newerrr.jpg') }}" alt="Residential Electrical Services" class="service-img">
                         </div>
-                        <div class="showcase-content">
-                            <h3>Residential Excellence</h3>
-                            <p>Keep your home safe and powered with our professional residential electrical services throughout Menifee and Riverside County. Our experienced residential electricians handle everything from minor repairs to complete home rewiring projects.</p>
-                            <ul class="showcase-features">
-                                <li>Whole Home Surge Protection</li>
+                        <div class="category-content">
+                            <div class="category-icon">🏠</div>
+                            <h3>Residential Electrical</h3>
+                            <p>Professional electrical services for homes with expert residential electricians for all your home electrical needs.</p>
+                            <ul class="category-features">
+                                <li>Home Rewiring & Updates</li>
+                                <li>Electrical Panel Upgrades</li>
+                                <li>Lighting Installation</li>
                                 <li>Outlet & Switch Installation</li>
-                                <li>Emergency Residential Repairs</li>
+                                <li>Safety Inspections</li>
+                                <li>Emergency Repairs</li>
                             </ul>
                             <a href="{{ url_for('schedule') }}" class="btn btn-primary">Schedule Residential Service</a>
                         </div>
                     </div>
                 </div>
+
+                <!-- Additional Services -->
+                <div class="additional-services">
+                    <h3>Additional Services</h3>
+                    <div class="services-grid">
+                        <div class="service-card">
+                            <div class="service-icon">🔧</div>
+                            <h4>Emergency Repairs</h4>
+                            <p>24/7 emergency electrical repair services with fast response times for electrical emergencies.</p>
+                        </div>
+                        <div class="service-card">
+                            <div class="service-icon">💡</div>
+                            <h4>Lighting Solutions</h4>
+                            <p>Indoor and outdoor lighting installation, design, and maintenance for all property types.</p>
+                        </div>
+                        <div class="service-card">
+                            <div class="service-icon">🛡️</div>
+                            <h4>Safety Inspections</h4>
+                            <p>Comprehensive electrical safety inspections to ensure your property meets all code requirements.</p>
+                        </div>
+                    </div>
+                </div>
                 
+                <!-- Services CTA -->
                 <div class="services-cta">
                     <h3>Ready to Get Started?</h3>
                     <p>Contact us today for a free consultation and quote for your electrical project.</p>
