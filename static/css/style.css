@@ -1034,6 +1034,11 @@ section {
     margin-bottom: 1.8rem;
 }
 
+.form-buttons {
+    text-align: center;
+    margin-top: 1rem;
+}
+
 .form-group label {
     display: block;
     margin-bottom: 0.5rem;

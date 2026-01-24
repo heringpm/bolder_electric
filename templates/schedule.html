@@ -19,9 +19,24 @@
         }
         
         .schedule-title {
-            font-size: 2.5rem;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
             color: var(--primary-black);
             margin-bottom: 1rem;
+            position: relative;
+            letter-spacing: -0.02em;
+        }
+        
+        .schedule-title::after {
+            content: '';
+            width: 80px;
+            height: 4px;
+            background: var(--gradient-primary);
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
         }
         
         .schedule-subtitle {
@@ -363,30 +378,16 @@
                     <h3>Select Service Type</h3>
                     <div class="service-cards">
                         {% for service in services %}
-                        <div class="service-card" onclick="selectService(this, '{{ service.name|e }}', {{ service.base_price }})">
+                        <div class="service-card" onclick="selectService(this, '{{ service.name|e }}', {{ service.base_price|tojson|safe }})">
                             <div class="service-name">{{ service.name }}</div>
                             <div class="service-price">Starting at ${{ "%.2f"|format(service.base_price) }}</div>
                         </div>
                         {% endfor %}
                     </div>
                 </div>
-
-                <div class="customer-info">
-                    <h3>Customer Information</h3>
-                    <form id="booking-form">
-                        <div class="form-group">
-                            <label for="name">Full Name *</label>
-                            <input type="text" id="name" name="name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="phone">Phone Number *</label>
-                            <input type="tel" id="phone" name="phone" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email Address *</label>
-                            <input type="email" id="email" name="email" required>
-                        </div>
-                        <div class="form-group">
+                <div class="form-group">
+                    <label for="address">Service Address *</label>
+                    <input type="text" id="address" name="address" required>
                             <label for="address">Service Address *</label>
                             <input type="text" id="address" name="address" required>
                         </div>
