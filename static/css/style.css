@@ -590,6 +590,7 @@ section {
     z-index: 1;
     min-height: 600px;
     height: auto;
+    margin-top: 40px;
 }
 
 .additional-services-section::before {
