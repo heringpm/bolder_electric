@@ -530,6 +530,7 @@ section {
 
 .service-card-content {
     padding: 20px;
+    text-align: center;
 }
 
 .service-card-content p {
@@ -537,11 +538,13 @@ section {
     line-height: 1.4;
     color: var(--dark-gray);
     margin-bottom: 1rem;
+    text-align: left;
 }
 
 .service-list {
     list-style: none;
     margin-bottom: 1rem;
+    text-align: left;
 }
 
 .service-list li {
@@ -570,8 +573,9 @@ section {
     background: linear-gradient(135deg, var(--primary-black) 0%, #34495e 100%);
 }
 
-.residential-card .service-list li::before {
-    content: '🏠';
+.service-card-content .btn-primary {
+    width: 100%;
+    display: inline-block;
 }
 
 /* ADDITIONAL SERVICES SECTION */
