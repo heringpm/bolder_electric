@@ -599,6 +599,25 @@ section {
     margin-right: 1rem;
 }
 
+.footer-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer-text h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--white);
+    margin: 0;
+    margin-bottom: 0.25rem;
+}
+
+.footer-text p {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+}
+
 .service-card:hover {
     transform: translateY(-5px);
     box-shadow: var(--shadow-lg);
