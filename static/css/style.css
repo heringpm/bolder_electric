@@ -452,7 +452,7 @@ section {
     width: 100%;
     height: 25vh;
     margin-bottom: 0;
-    background: white;
+    background: #ffffff;
     overflow: hidden;
 }
 
@@ -462,7 +462,7 @@ section {
     width: 100%;
     height: 25vh;
     margin-bottom: 0;
-    background: white;
+    background: #f8f9fa;
     overflow: hidden;
     flex-direction: row-reverse;
 }
