@@ -420,7 +420,185 @@ section {
 /* NEW SERVICES SECTION */
 .services-new {
     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    padding: 60px 0 20px 0;
+    padding: 60px 0 120px 0;
+}
+
+.services-header {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 60px;
+    padding: 0 20px;
+}
+
+.services-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-black);
+    margin-bottom: 1rem;
+}
+
+.services-subtitle {
+    font-size: 1.1rem;
+    color: var(--dark-gray);
+    line-height: 1.6;
+}
+
+.services-main-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.service-main-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.service-main-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary-gold);
+}
+
+.service-card-header {
+    background: var(--gradient-primary);
+    padding: 15px;
+    text-align: center;
+    color: white;
+    position: relative;
+}
+
+.service-card-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: var(--primary-gold);
+    border-radius: 2px;
+}
+
+.service-card-header .service-icon {
+    font-size: 1.8rem;
+    margin-bottom: 0.2rem;
+    display: block;
+}
+
+.service-card-header h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: -0.02em;
+}
+
+.service-card-image {
+    height: 280px;
+    overflow: hidden;
+    position: relative;
+}
+
+.service-card-image::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.service-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.service-main-card:hover .service-card-image img {
+    transform: scale(1.05);
+}
+
+.service-card-content {
+    padding: 20px;
+    text-align: center;
+}
+
+.service-card-content p {
+    font-size: 0.85rem;
+    line-height: 1.4;
+    color: var(--dark-gray);
+    margin-bottom: 1rem;
+    text-align: left;
+}
+
+.service-list {
+    list-style: none;
+    margin-bottom: 1rem;
+    text-align: left;
+}
+
+.service-list li {
+    padding: 0.3rem 0;
+    position: relative;
+    padding-left: 20px;
+    font-size: 0.8rem;
+    color: var(--dark-gray);
+    display: flex;
+    align-items: center;
+}
+
+.service-list li::before {
+    content: '⚡';
+    position: absolute;
+    left: 0;
+    color: var(--primary-gold);
+    font-size: 0.8rem;
+}
+
+.service-card-content .btn-primary {
+    width: 100%;
+    display: inline-block;
+}
+
+.commercial-card .service-card-header {
+    background: linear-gradient(135deg, var(--primary-black) 0%, #2c3e50 100%);
+}
+
+.residential-card .service-card-header {
+    background: linear-gradient(135deg, var(--primary-black) 0%, #34495e 100%);
+}
+
+.residential-card .service-list li::before {
+    content: '🏠';
+}
+
+/* ADDITIONAL SERVICES SECTION */
+.additional-services-section {
+    background: white;
+    padding: 80px 0 160px 0;
+    position: relative;
+    z-index: 1;
+}
+
+.additional-services-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background: white;
+    z-index: -1;
 }
 
 .services-header {
