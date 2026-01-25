@@ -188,7 +188,6 @@ body {
     justify-content: center;
     text-align: center;
     color: var(--white);
-    margin-top: 80px;
     position: relative;
     overflow: hidden;
 }
