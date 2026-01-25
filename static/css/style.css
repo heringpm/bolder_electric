@@ -584,6 +584,9 @@ section {
     padding: 80px 0 160px 0;
     position: relative;
     z-index: 1;
+    width: 100%;
+    left: 0;
+    right: 0;
 }
 
 .additional-services-container {
