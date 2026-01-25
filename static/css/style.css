@@ -420,8 +420,7 @@ section {
 /* NEW SERVICES SECTION */
 .services-new {
     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    padding: 60px 0 80px 0;
-    overflow: hidden;
+    padding: 60px 0 120px 0;
 }
 
 .services-header {
@@ -604,6 +603,9 @@ section {
     margin: 0 auto;
     padding: 0 20px;
     padding-top: 40px;
+    position: relative;
+    background: white;
+    z-index: 2;
 }
 
 .additional-services-container h2 {
