@@ -530,6 +530,9 @@ section {
 
 .service-card-content {
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .service-card-content p {
@@ -537,11 +540,13 @@ section {
     line-height: 1.4;
     color: var(--dark-gray);
     margin-bottom: 1rem;
+    flex: 1;
 }
 
 .service-list {
     list-style: none;
     margin-bottom: 1rem;
+    flex: 1;
 }
 
 .service-list li {
@@ -560,6 +565,13 @@ section {
     left: 0;
     color: var(--primary-gold);
     font-size: 0.8rem;
+}
+
+.btn-primary {
+    width: 100%;
+    text-align: center;
+    padding: 12px 20px;
+    margin: 0;
 }
 
 .commercial-card .service-card-header {
