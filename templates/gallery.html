@@ -53,91 +53,125 @@
         <section class="local-gallery">
             <div class="container">
                 <h2 class="section-title">Featured Projects</h2>
-                <div class="gallery-grid">
-                    <div class="gallery-item">
-                        <img src="{{ url_for('static', filename='images/new1.jpg') }}" alt="Commercial Electrical Project" class="gallery-image">
-                        <div class="gallery-overlay">
-                            <h4>Commercial Installation</h4>
-                            <p>Complete electrical system for commercial space</p>
+                <p class="section-subtitle">A showcase of our finest electrical work and installations</p>
+                
+                <!-- Mosaic Gallery Layout -->
+                <div class="mosaic-gallery">
+                    <!-- Large Feature Image -->
+                    <div class="mosaic-item large">
+                        <img src="{{ url_for('static', filename='images/new1.jpg') }}" alt="Commercial Electrical Project" class="mosaic-image">
+                        <div class="mosaic-overlay">
+                            <h4>Commercial Excellence</h4>
+                            <p>Large-scale electrical installations</p>
                         </div>
                     </div>
-                    <div class="gallery-item">
-                        <img src="{{ url_for('static', filename='images/new3.jpg') }}" alt="Electrical Panel Work" class="gallery-image">
-                        <div class="gallery-overlay">
-                            <h4>Panel Installation</h4>
-                            <p>Modern electrical panel setup</p>
+                    
+                    <!-- Medium Images -->
+                    <div class="mosaic-item medium">
+                        <img src="{{ url_for('static', filename='images/newerrr.jpg') }}" alt="Residential Electrical" class="mosaic-image">
+                        <div class="mosaic-overlay">
+                            <h4>Residential Work</h4>
+                            <p>Home electrical solutions</p>
                         </div>
                     </div>
-                    <div class="gallery-item">
-                        <img src="{{ url_for('static', filename='images/new4.jpg') }}" alt="Professional Electrical Work" class="gallery-image">
-                        <div class="gallery-overlay">
-                            <h4>Professional Installation</h4>
-                            <p>Complete electrical system setup</p>
-                        </div>
-                    </div>
-                    <div class="gallery-item">
-                        <img src="{{ url_for('static', filename='images/new5.jpg') }}" alt="Electrical Panel Upgrade" class="gallery-image">
-                        <div class="gallery-overlay">
+                    
+                    <div class="mosaic-item medium tall">
+                        <img src="{{ url_for('static', filename='images/new3.jpg') }}" alt="Electrical Panel" class="mosaic-image">
+                        <div class="mosaic-overlay">
                             <h4>Panel Upgrades</h4>
-                            <p>Modern electrical panel installations</p>
+                            <p>Modern electrical systems</p>
                         </div>
                     </div>
-                    <div class="gallery-item">
-                        <img src="{{ url_for('static', filename='images/newe2.jpg') }}" alt="Commercial Electrical" class="gallery-image">
-                        <div class="gallery-overlay">
+                    
+                    <!-- Small Images -->
+                    <div class="mosaic-item small">
+                        <img src="{{ url_for('static', filename='images/new4.jpg') }}" alt="Electrical Work" class="mosaic-image">
+                        <div class="mosaic-overlay">
+                            <h4>Professional Service</h4>
+                            <p>Expert installations</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mosaic-item small">
+                        <img src="{{ url_for('static', filename='images/new5.jpg') }}" alt="Panel Installation" class="mosaic-image">
+                        <div class="mosaic-overlay">
+                            <h4>Panel Work</h4>
+                            <p>Electrical panel services</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Wide Image -->
+                    <div class="mosaic-item wide">
+                        <img src="{{ url_for('static', filename='images/newe2.jpg') }}" alt="Commercial Project" class="mosaic-image">
+                        <div class="mosaic-overlay">
                             <h4>Commercial Projects</h4>
                             <p>Business electrical solutions</p>
                         </div>
                     </div>
-                    <div class="gallery-item">
-                        <img src="{{ url_for('static', filename='images/358055541_17993479952050511_6373827937251109204_n.jpg') }}" alt="Commercial Services" class="gallery-image">
-                        <div class="gallery-overlay">
+                    
+                    <!-- Additional Images -->
+                    <div class="mosaic-item medium">
+                        <img src="{{ url_for('static', filename='images/358055541_17993479952050511_6373827937251109204_n.jpg') }}" alt="Commercial Services" class="mosaic-image">
+                        <div class="mosaic-overlay">
                             <h4>Commercial Services</h4>
-                            <p>Business electrical installations</p>
+                            <p>Business electrical work</p>
                         </div>
                     </div>
-                    <div class="gallery-item">
-                        <img src="{{ url_for('static', filename='images/468871509_18049372970050511_4296001976905443823_n.jpg') }}" alt="Electrical Work" class="gallery-image">
-                        <div class="gallery-overlay">
-                            <h4>Electrical Projects</h4>
-                            <p>Professional electrical work</p>
+                    
+                    <div class="mosaic-item small">
+                        <img src="{{ url_for('static', filename='images/468871509_18049372970050511_4296001976905443823_n.jpg') }}" alt="Electrical Installation" class="mosaic-image">
+                        <div class="mosaic-overlay">
+                            <h4>Installations</h4>
+                            <p>Professional setup</p>
                         </div>
                     </div>
-                    <div class="gallery-item">
-                        <img src="{{ url_for('static', filename='images/468943951_18049372829050511_3332619069482254023_n.jpg') }}" alt="Residential Electrical" class="gallery-image">
-                        <div class="gallery-overlay">
-                            <h4>Residential Services</h4>
+                    
+                    <div class="mosaic-item medium">
+                        <img src="{{ url_for('static', filename='images/468943951_18049372829050511_3332619069482254023_n.jpg') }}" alt="Residential Service" class="mosaic-image">
+                        <div class="mosaic-overlay">
+                            <h4>Residential Service</h4>
                             <p>Home electrical expertise</p>
                         </div>
                     </div>
-                    <div class="gallery-item">
-                        <img src="{{ url_for('static', filename='images/484959035_18059740199050511_5189104763192206444_n.jpg') }}" alt="Electrical Installation" class="gallery-image">
-                        <div class="gallery-overlay">
-                            <h4>Installation Work</h4>
-                            <p>Professional electrical installations</p>
+                    
+                    <div class="mosaic-item small">
+                        <img src="{{ url_for('static', filename='images/484959035_18059740199050511_5189104763192206444_n.jpg') }}" alt="Electrical Work" class="mosaic-image">
+                        <div class="mosaic-overlay">
+                            <h4>Quality Work</h4>
+                            <p>Expert electrical services</p>
                         </div>
                     </div>
-                    <div class="gallery-item">
-                        <img src="{{ url_for('static', filename='images/487497406_18060594641050511_4855918171960797504_n.jpg') }}" alt="Panel Work" class="gallery-image">
-                        <div class="gallery-overlay">
-                            <h4>Panel Work</h4>
-                            <p>Electrical panel installations</p>
+                    
+                    <div class="mosaic-item wide">
+                        <img src="{{ url_for('static', filename='images/487497406_18060594641050511_4855918171960797504_n.jpg') }}" alt="Panel Upgrade" class="mosaic-image">
+                        <div class="mosaic-overlay">
+                            <h4>Panel Upgrades</h4>
+                            <p>Modern electrical panels</p>
                         </div>
                     </div>
-                    <div class="gallery-item">
-                        <img src="{{ url_for('static', filename='images/552028028_18076863026050511_5467889523463153147_n.jpg') }}" alt="Commercial Wiring" class="gallery-image">
-                        <div class="gallery-overlay">
+                    
+                    <div class="mosaic-item medium">
+                        <img src="{{ url_for('static', filename='images/552028028_18076863026050511_5467889523463153147_n.jpg') }}" alt="Commercial Wiring" class="mosaic-image">
+                        <div class="mosaic-overlay">
                             <h4>Commercial Wiring</h4>
                             <p>Business electrical solutions</p>
                         </div>
                     </div>
-                    <div class="gallery-item">
-                        <img src="{{ url_for('static', filename='images/557449550_18078063476050511_1355580283574235160_n.jpg') }}" alt="Residential Work" class="gallery-image">
-                        <div class="gallery-overlay">
-                            <h4>Residential Work</h4>
-                            <p>Home electrical projects</p>
+                    
+                    <div class="mosaic-item small">
+                        <img src="{{ url_for('static', filename='images/557449550_18078063476050511_1355580283574235160_n.jpg') }}" alt="Residential Work" class="mosaic-image">
+                        <div class="mosaic-overlay">
+                            <h4>Home Projects</h4>
+                            <p>Residential electrical work</p>
                         </div>
                     </div>
+                </div>
+                
+                <!-- Gallery Navigation -->
+                <div class="gallery-nav">
+                    <button class="gallery-nav-btn prev" onclick="navigateGallery(-1)">← Previous</button>
+                    <span class="gallery-counter">1 of 3</span>
+                    <button class="gallery-nav-btn next" onclick="navigateGallery(1)">Next →</button>
                 </div>
             </div>
         </section>
@@ -198,6 +232,89 @@
         hamburger.addEventListener('click', () => {
             hamburger.classList.toggle('active');
             navMenu.classList.toggle('active');
+        });
+
+        // Gallery Navigation
+        let currentGalleryPage = 1;
+        const totalGalleryPages = 3;
+
+        function navigateGallery(direction) {
+            const newPage = currentGalleryPage + direction;
+            
+            if (newPage >= 1 && newPage <= totalGalleryPages) {
+                currentGalleryPage = newPage;
+                updateGalleryDisplay();
+            }
+        }
+
+        function updateGalleryDisplay() {
+            // Update counter
+            const counter = document.querySelector('.gallery-counter');
+            if (counter) {
+                counter.textContent = `${currentGalleryPage} of ${totalGalleryPages}`;
+            }
+            
+            // Update button states
+            const prevBtn = document.querySelector('.gallery-nav-btn.prev');
+            const nextBtn = document.querySelector('.gallery-nav-btn.next');
+            
+            if (prevBtn) {
+                prevBtn.disabled = currentGalleryPage === 1;
+            }
+            
+            if (nextBtn) {
+                nextBtn.disabled = currentGalleryPage === totalGalleryPages;
+            }
+            
+            // Here you could add logic to show/hide different sets of images
+            // For now, we'll just animate the current gallery
+            const gallery = document.querySelector('.mosaic-gallery');
+            if (gallery) {
+                gallery.style.opacity = '0.5';
+                setTimeout(() => {
+                    gallery.style.opacity = '1';
+                }, 300);
+            }
+        }
+
+        // Initialize gallery display
+        document.addEventListener('DOMContentLoaded', () => {
+            updateGalleryDisplay();
+        });
+
+        // Add click handlers to mosaic items for lightbox effect
+        document.querySelectorAll('.mosaic-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // Simple lightbox effect - you could expand this
+                const img = this.querySelector('.mosaic-image');
+                if (img) {
+                    // Create lightbox overlay
+                    const lightbox = document.createElement('div');
+                    lightbox.className = 'lightbox';
+                    lightbox.innerHTML = `
+                        <div class="lightbox-content">
+                            <img src="${img.src}" alt="${img.alt}">
+                            <button class="lightbox-close">&times;</button>
+                        </div>
+                    `;
+                    
+                    document.body.appendChild(lightbox);
+                    
+                    // Close lightbox on click
+                    lightbox.addEventListener('click', () => {
+                        document.body.removeChild(lightbox);
+                    });
+                    
+                    // Close on escape key
+                    const escapeHandler = (e) => {
+                        if (e.key === 'Escape') {
+                            document.body.removeChild(lightbox);
+                            document.removeEventListener('keydown', escapeHandler);
+                        }
+                    };
+                    document.addEventListener('keydown', escapeHandler);
+                }
+            });
         });
 
         // Instagram Feed Integration
