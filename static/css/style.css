@@ -571,6 +571,7 @@ section {
     text-align: center;
     padding: 12px 20px;
     margin-top: auto;
+    display: block;
 }
 
 .commercial-card .service-card-header {
