@@ -449,23 +449,17 @@ section {
 .service-row {
     display: flex;
     align-items: center;
-    gap: 15px;
-    max-width: 1200px;
-    margin: 0 auto 15px;
-    padding: 15px 20px;
+    width: 100%;
+    height: 25vh;
+    margin-bottom: 0;
     background: white;
-    border-radius: 6px;
-    box-shadow: var(--shadow-md);
     overflow: hidden;
-    height: 20vh;
 }
 
 .service-photo {
-    flex-shrink: 0;
-    width: 80px;
-    height: 80px;
+    flex: 0 0 50%;
+    height: 100%;
     overflow: hidden;
-    border-radius: 4px;
 }
 
 .service-photo img {
@@ -475,16 +469,16 @@ section {
 }
 
 .service-info {
-    flex: 1;
-    padding: 10px;
+    flex: 0 0 50%;
+    padding: 30px;
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
 .service-icon {
-    font-size: 1.2rem;
-    margin-bottom: 0.3rem;
+    font-size: 2rem;
+    margin-bottom: 1rem;
     background: var(--gradient-primary);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -493,29 +487,29 @@ section {
 }
 
 .service-info h3 {
-    font-size: 1.1rem;
+    font-size: 1.8rem;
     font-weight: 700;
     color: var(--primary-black);
-    margin-bottom: 0.3rem;
+    margin-bottom: 1rem;
 }
 
 .service-info p {
-    font-size: 0.8rem;
-    line-height: 1.3;
+    font-size: 1rem;
+    line-height: 1.5;
     color: var(--dark-gray);
-    margin-bottom: 0.8rem;
+    margin-bottom: 1.5rem;
 }
 
 .service-list {
     list-style: none;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
 }
 
 .service-list li {
-    padding: 0.1rem 0;
+    padding: 0.4rem 0;
     position: relative;
-    padding-left: 15px;
-    font-size: 0.7rem;
+    padding-left: 25px;
+    font-size: 0.95rem;
     color: var(--dark-gray);
 }
 
@@ -528,45 +522,46 @@ section {
 
 .additional-services-new {
     text-align: center;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-    height: 20vh;
+    width: 100%;
+    height: 25vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    background: white;
 }
 
 .additional-services-new h3 {
-    font-size: 1.3rem;
+    font-size: 1.8rem;
     font-weight: 700;
     color: var(--primary-black);
-    margin-bottom: 0.8rem;
+    margin-bottom: 1.5rem;
 }
 
 .services-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 15px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
 }
 
 .service-card-new {
-    background: white;
-    padding: 15px;
-    border-radius: 6px;
-    box-shadow: var(--shadow-md);
+    background: #f8f9fa;
+    padding: 25px;
+    border-radius: 8px;
     text-align: center;
     transition: transform 0.3s ease;
 }
 
 .service-card-new:hover {
-    transform: translateY(-2px);
+    transform: translateY(-3px);
     box-shadow: var(--shadow-lg);
 }
 
 .card-icon {
-    font-size: 1.5rem;
-    margin-bottom: 0.3rem;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
     background: var(--gradient-primary);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -575,15 +570,15 @@ section {
 }
 
 .service-card-new h4 {
-    font-size: 0.9rem;
+    font-size: 1.2rem;
     font-weight: 700;
     color: var(--primary-black);
-    margin-bottom: 0.3rem;
+    margin-bottom: 1rem;
 }
 
 .service-card-new p {
-    font-size: 0.75rem;
-    line-height: 1.3;
+    font-size: 0.95rem;
+    line-height: 1.5;
     color: var(--dark-gray);
 }
 
