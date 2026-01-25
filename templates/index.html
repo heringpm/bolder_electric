@@ -202,45 +202,52 @@
                 <p class="services-subtitle">Comprehensive electrical solutions for commercial and residential properties throughout Menifee & Riverside County</p>
             </div>
             
-            <!-- Commercial Services -->
-            <div class="service-row">
-                <div class="service-photo">
-                    <img src="{{ url_for('static', filename='images/new1.jpg') }}" alt="Commercial Electrical Services">
+            <!-- Main Services Grid -->
+            <div class="services-main-grid">
+                <!-- Commercial Services Card -->
+                <div class="service-main-card commercial-card">
+                    <div class="service-card-header">
+                        <div class="service-icon">⚡</div>
+                        <h3>Commercial Electrical</h3>
+                    </div>
+                    <div class="service-card-image">
+                        <img src="{{ url_for('static', filename='images/new1.jpg') }}" alt="Commercial Electrical Services">
+                    </div>
+                    <div class="service-card-content">
+                        <p>Complete electrical solutions for businesses, offices, and commercial properties with licensed commercial electricians.</p>
+                        <ul class="service-list">
+                            <li>New Construction Wiring</li>
+                            <li>Electrical System Upgrades</li>
+                            <li>Commercial Lighting Design</li>
+                            <li>Panel Upgrades & Replacements</li>
+                            <li>Preventive Maintenance</li>
+                            <li>Emergency Repairs</li>
+                        </ul>
+                        <a href="{{ url_for('schedule') }}" class="btn btn-primary">Schedule Commercial Service</a>
+                    </div>
                 </div>
-                <div class="service-info">
-                    <div class="service-icon">⚡</div>
-                    <h3>Commercial Electrical</h3>
-                    <p>Complete electrical solutions for businesses, offices, and commercial properties with licensed commercial electricians.</p>
-                    <ul class="service-list">
-                        <li>New Construction Wiring</li>
-                        <li>Electrical System Upgrades</li>
-                        <li>Commercial Lighting Design</li>
-                        <li>Panel Upgrades & Replacements</li>
-                        <li>Preventive Maintenance</li>
-                        <li>Emergency Repairs</li>
-                    </ul>
-                    <a href="{{ url_for('schedule') }}" class="btn btn-primary">Schedule Commercial Service</a>
-                </div>
-            </div>
-            
-            <!-- Residential Services -->
-            <div class="service-row service-row-reverse">
-                <div class="service-info">
-                    <div class="service-icon">🏠</div>
-                    <h3>Residential Electrical</h3>
-                    <p>Professional electrical services for homes with expert residential electricians for all your home electrical needs.</p>
-                    <ul class="service-list">
-                        <li>Home Rewiring & Updates</li>
-                        <li>Electrical Panel Upgrades</li>
-                        <li>Lighting Installation</li>
-                        <li>Outlet & Switch Installation</li>
-                        <li>Safety Inspections</li>
-                        <li>Emergency Repairs</li>
-                    </ul>
-                    <a href="{{ url_for('schedule') }}" class="btn btn-primary">Schedule Residential Service</a>
-                </div>
-                <div class="service-photo">
-                    <img src="{{ url_for('static', filename='images/newerrr.jpg') }}" alt="Residential Electrical Services">
+                
+                <!-- Residential Services Card -->
+                <div class="service-main-card residential-card">
+                    <div class="service-card-header">
+                        <div class="service-icon">🏠</div>
+                        <h3>Residential Electrical</h3>
+                    </div>
+                    <div class="service-card-image">
+                        <img src="{{ url_for('static', filename='images/newerrr.jpg') }}" alt="Residential Electrical Services">
+                    </div>
+                    <div class="service-card-content">
+                        <p>Professional electrical services for homes with expert residential electricians for all your home electrical needs.</p>
+                        <ul class="service-list">
+                            <li>Home Rewiring & Updates</li>
+                            <li>Electrical Panel Upgrades</li>
+                            <li>Lighting Installation</li>
+                            <li>Outlet & Switch Installation</li>
+                            <li>Safety Inspections</li>
+                            <li>Emergency Repairs</li>
+                        </ul>
+                        <a href="{{ url_for('schedule') }}" class="btn btn-primary">Schedule Residential Service</a>
+                    </div>
                 </div>
             </div>
         </section>
