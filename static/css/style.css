@@ -530,10 +530,6 @@ section {
 
 .service-card-content {
     padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
 }
 
 .service-card-content p {
@@ -564,14 +560,6 @@ section {
     left: 0;
     color: var(--primary-gold);
     font-size: 0.8rem;
-}
-
-.service-card-content .btn-primary {
-    width: 100%;
-    text-align: center;
-    padding: 12px 20px;
-    margin-top: auto;
-    display: block;
 }
 
 .commercial-card .service-card-header {
