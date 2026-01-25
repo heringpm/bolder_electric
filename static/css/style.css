@@ -475,20 +475,24 @@ section {
 }
 
 .service-photo {
-    flex: 0 0 50%;
+    flex: 0 0 40%;
     height: 100%;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f0f0f0;
 }
 
 .service-photo img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     object-position: center;
 }
 
 .service-info {
-    flex: 0 0 50%;
+    flex: 0 0 60%;
     padding: 30px;
     display: flex;
     flex-direction: column;
