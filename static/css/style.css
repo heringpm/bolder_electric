@@ -440,11 +440,27 @@ section {
     line-height: 1.6;
 }
 
+/* Services Intro Container */
+.services-intro-container {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 4rem;
+    padding: 0 20px;
+}
+
+.services-intro-container .section-title {
+    margin-bottom: 1rem;
+}
+
 /* Service Categories */
 .services-categories {
     display: grid;
     gap: 0;
     margin-bottom: 4rem;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 20px;
 }
 
 .service-category {
@@ -533,7 +549,13 @@ section {
     object-fit: cover;
 }
 
-/* Additional Services */
+/* Additional Services Container */
+.additional-services-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px 4rem;
+}
+
 .additional-services {
     text-align: center;
     margin-bottom: 4rem;
@@ -591,35 +613,80 @@ section {
     color: var(--dark-gray);
 }
 
-/* Services CTA */
-.services-cta {
-    text-align: center;
-    padding: 3rem;
-    background: var(--gradient-primary);
-    border-radius: 16px;
-    color: var(--white);
+/* Responsive Design for Services */
+@media (max-width: 768px) {
+    .services-categories {
+        gap: 0;
+        padding: 0 20px;
+    }
+    
+    .service-category {
+        grid-template-columns: 1fr;
+        gap: 0;
+        min-height: auto;
+    }
+    
+    .category-content {
+        padding: 3rem 2rem;
+        max-width: none;
+    }
+    
+    .category-content h3 {
+        font-size: 1.8rem;
+    }
+    
+    .category-image {
+        min-height: 300px;
+        order: -1;
+    }
+    
+    .service-category.commercial .category-image {
+        order: -1;
+    }
+    
+    .additional-services-container {
+        padding: 0 20px 4rem;
+    }
+    
+    .additional-services h3 {
+        font-size: 1.5rem;
+    }
+    
+    .services-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
 }
 
-.services-cta h3 {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-}
-
-.services-cta p {
-    font-size: 1.1rem;
-    margin-bottom: 2rem;
-    opacity: 0.9;
-}
-
-.services-cta .btn-primary {
-    background: var(--white);
-    color: var(--primary-red);
-}
-
-.services-cta .btn-primary:hover {
-    background: var(--light-gray);
-    transform: translateY(-3px);
+@media (max-width: 480px) {
+    .services-intro-container {
+        margin-bottom: 2rem;
+        padding: 0 15px;
+    }
+    
+    .services-categories {
+        padding: 0 15px;
+    }
+    
+    .category-content {
+        padding: 2rem 1.5rem;
+    }
+    
+    .category-content h3 {
+        font-size: 1.5rem;
+    }
+    
+    .category-image {
+        min-height: 250px;
+    }
+    
+    .additional-services-container {
+        padding: 0 15px 4rem;
+    }
+    
+    .service-card {
+        padding: 1.5rem;
+    }
 }
 
 /* Commercial & Residential Sections */
