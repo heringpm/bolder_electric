@@ -588,6 +588,8 @@ section {
     padding: 80px 0 160px 0;
     position: relative;
     z-index: 1;
+    min-height: 600px;
+    height: auto;
 }
 
 .additional-services-section::before {
