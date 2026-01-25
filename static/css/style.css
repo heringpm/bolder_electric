@@ -464,7 +464,14 @@ section {
     margin-bottom: 0;
     background: #f8f9fa;
     overflow: hidden;
-    flex-direction: row-reverse;
+}
+
+.service-row-reverse .service-photo {
+    order: 2;
+}
+
+.service-row-reverse .service-info {
+    order: 1;
 }
 
 .service-photo {
