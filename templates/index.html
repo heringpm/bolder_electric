@@ -204,6 +204,9 @@
                 <!-- Main Service Categories -->
                 <div class="services-categories">
                     <div class="service-category commercial">
+                        <div class="category-image">
+                            <img src="{{ url_for('static', filename='images/new1.jpg') }}" alt="Commercial Electrical Services" class="service-img">
+                        </div>
                         <div class="category-content">
                             <div class="category-icon">⚡</div>
                             <h3>Commercial Electrical</h3>
@@ -218,15 +221,9 @@
                             </ul>
                             <a href="{{ url_for('schedule') }}" class="btn btn-primary">Schedule Commercial Service</a>
                         </div>
-                        <div class="category-image">
-                            <img src="{{ url_for('static', filename='images/new1.jpg') }}" alt="Commercial Electrical Services" class="service-img">
-                        </div>
                     </div>
                     
                     <div class="service-category residential">
-                        <div class="category-image">
-                            <img src="{{ url_for('static', filename='images/newerrr.jpg') }}" alt="Residential Electrical Services" class="service-img">
-                        </div>
                         <div class="category-content">
                             <div class="category-icon">🏠</div>
                             <h3>Residential Electrical</h3>
@@ -240,6 +237,9 @@
                                 <li>Emergency Repairs</li>
                             </ul>
                             <a href="{{ url_for('schedule') }}" class="btn btn-primary">Schedule Residential Service</a>
+                        </div>
+                        <div class="category-image">
+                            <img src="{{ url_for('static', filename='images/newerrr.jpg') }}" alt="Residential Electrical Services" class="service-img">
                         </div>
                     </div>
                 </div>
