@@ -421,7 +421,7 @@ section {
 .services {
     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
     position: relative;
-    padding: 60px 0;
+    padding: 40px 0;
 }
 
 .services::before {
@@ -447,7 +447,7 @@ section {
 .services-intro-container {
     text-align: center;
     max-width: 800px;
-    margin: 0 auto 3rem;
+    margin: 0 auto 2rem;
     padding: 0 20px;
 }
 
@@ -459,7 +459,7 @@ section {
 .services-categories {
     display: grid;
     gap: 0;
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
     max-width: 1400px;
     margin-left: auto;
     margin-right: auto;
@@ -470,7 +470,7 @@ section {
     display: grid;
     grid-template-columns: 1fr 1fr;
     align-items: center;
-    min-height: 500px;
+    min-height: 400px;
     transition: transform 0.3s ease;
 }
 
@@ -491,7 +491,7 @@ section {
 }
 
 .category-content {
-    padding: 4rem 3rem;
+    padding: 3rem 2rem;
     max-width: 600px;
 }
 
@@ -506,23 +506,23 @@ section {
 }
 
 .category-content h3 {
-    font-size: 2.2rem;
+    font-size: 2rem;
     font-weight: 700;
     color: var(--primary-black);
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     letter-spacing: -0.02em;
 }
 
 .category-content p {
-    font-size: 1.1rem;
-    line-height: 1.7;
+    font-size: 1rem;
+    line-height: 1.6;
     color: var(--dark-gray);
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
 }
 
 .category-features {
     list-style: none;
-    margin-bottom: 2.5rem;
+    margin-bottom: 2rem;
 }
 
 .category-features li {
@@ -543,7 +543,7 @@ section {
 .category-image {
     position: relative;
     height: 100%;
-    min-height: 500px;
+    min-height: 400px;
 }
 
 .service-img {
@@ -556,12 +556,12 @@ section {
 .additional-services-container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 0 20px 3rem;
+    padding: 0 20px 2rem;
 }
 
 .additional-services {
     text-align: center;
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
 }
 
 .additional-services h3 {
