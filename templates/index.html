@@ -224,10 +224,7 @@
             </div>
             
             <!-- Residential Services -->
-            <div class="service-row">
-                <div class="service-photo">
-                    <img src="{{ url_for('static', filename='images/newerrr.jpg') }}" alt="Residential Electrical Services">
-                </div>
+            <div class="service-row service-row-reverse">
                 <div class="service-info">
                     <div class="service-icon">🏠</div>
                     <h3>Residential Electrical</h3>
@@ -241,6 +238,9 @@
                         <li>Emergency Repairs</li>
                     </ul>
                     <a href="{{ url_for('schedule') }}" class="btn btn-primary">Schedule Residential Service</a>
+                </div>
+                <div class="service-photo">
+                    <img src="{{ url_for('static', filename='images/newerrr.jpg') }}" alt="Residential Electrical Services">
                 </div>
             </div>
 
