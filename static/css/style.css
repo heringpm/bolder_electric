@@ -450,7 +450,7 @@ section {
 .services-intro-container {
     text-align: center;
     max-width: 800px;
-    margin: 0 auto 0.5rem;
+    margin: 0 auto 0.3rem;
     padding: 0 20px;
 }
 
@@ -460,8 +460,9 @@ section {
 
 /* Service Categories */
 .services-categories {
-    display: grid;
-    gap: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
     margin-bottom: 0.5rem;
     max-width: 1400px;
     margin-left: auto;
@@ -473,7 +474,7 @@ section {
     display: grid;
     grid-template-columns: 1fr 1fr;
     align-items: center;
-    min-height: 200px;
+    min-height: 120px;
     transition: transform 0.3s ease;
 }
 
@@ -494,13 +495,13 @@ section {
 }
 
 .category-content {
-    padding: 1.5rem 1rem;
+    padding: 1rem 0.8rem;
     max-width: 600px;
 }
 
 .category-icon {
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
+    font-size: 1.5rem;
+    margin-bottom: 0.3rem;
     background: var(--gradient-primary);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -509,30 +510,30 @@ section {
 }
 
 .category-content h3 {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     font-weight: 700;
     color: var(--primary-black);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.3rem;
     letter-spacing: -0.02em;
 }
 
 .category-content p {
-    font-size: 0.85rem;
-    line-height: 1.4;
+    font-size: 0.75rem;
+    line-height: 1.3;
     color: var(--dark-gray);
-    margin-bottom: 0.8rem;
+    margin-bottom: 0.5rem;
 }
 
 .category-features {
     list-style: none;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 .category-features li {
-    padding: 0.2rem 0;
+    padding: 0.1rem 0;
     position: relative;
-    padding-left: 20px;
-    font-size: 0.8rem;
+    padding-left: 18px;
+    font-size: 0.7rem;
     color: var(--dark-gray);
 }
 
@@ -546,7 +547,7 @@ section {
 .category-image {
     position: relative;
     height: 100%;
-    min-height: 200px;
+    min-height: 120px;
 }
 
 .service-img {
@@ -559,31 +560,31 @@ section {
 .additional-services-container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 0 20px 0.5rem;
+    padding: 0 20px 0.3rem;
 }
 
 .additional-services {
     text-align: center;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.3rem;
 }
 
 .additional-services h3 {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     font-weight: 700;
     color: var(--primary-black);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.3rem;
 }
 
 .services-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.8rem;
 }
 
 .service-card {
     background: var(--white);
-    padding: 0.8rem;
-    border-radius: 8px;
+    padding: 0.6rem;
+    border-radius: 6px;
     text-align: center;
     box-shadow: var(--shadow-md);
     transition: all 0.3s ease;
