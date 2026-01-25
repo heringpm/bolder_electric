@@ -581,7 +581,7 @@ section {
 /* ADDITIONAL SERVICES SECTION */
 .additional-services-section {
     background: white;
-    padding: 80px 0 120px 0;
+    padding: 80px 0 160px 0;
     position: relative;
     z-index: 1;
 }
@@ -591,6 +591,7 @@ section {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
+    padding-top: 40px;
 }
 
 .additional-services-container h2 {
@@ -599,6 +600,8 @@ section {
     color: var(--primary-black);
     margin-bottom: 4rem;
     position: relative;
+    background: white;
+    padding: 20px 0;
 }
 
 .additional-services-container h2::after {
