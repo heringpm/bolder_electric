@@ -320,11 +320,11 @@
                 <div class="logo">
                     <img src="{{ url_for('static', filename='images/bolder_electric_logo.png') }}" alt="Bolder Electric Logo" class="logo-img">
                 </div>
-                <ul>
-                    <li><a href="{{ url_for('home') }}">Home</a></li>
-                    <li><a href="{{ url_for('home') }}#services">Services</a></li>
-                    <li><a href="{{ url_for('gallery') }}">Gallery</a></li>
-                    <li><a href="{{ url_for('home') }}#contact">Contact</a></li>
+                <ul class="nav-menu">
+                    <li><a href="{{ url_for('home') }}" class="nav-link">Home</a></li>
+                    <li><a href="{{ url_for('home') }}#services" class="nav-link">Services</a></li>
+                    <li><a href="{{ url_for('gallery') }}" class="nav-link">Gallery</a></li>
+                    <li><a href="{{ url_for('home') }}#contact" class="nav-link">Contact</a></li>
                     <li><a href="{{ url_for('schedule') }}" class="nav-link active">Schedule</a></li>
                 </ul>
                 <div class="hamburger">
