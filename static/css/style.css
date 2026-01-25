@@ -420,7 +420,7 @@ section {
 /* NEW SERVICES SECTION */
 .services-new {
     background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    padding: 20px 0;
+    padding: 40px 0;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -429,7 +429,7 @@ section {
 .services-header {
     text-align: center;
     max-width: 800px;
-    margin: 0 auto 20px;
+    margin: 0 auto 40px;
     padding: 0 20px;
 }
 
@@ -450,9 +450,9 @@ section {
     display: flex;
     align-items: center;
     width: 100%;
-    height: 25vh;
-    margin-bottom: 0;
-    background: #ffffff;
+    height: 40vh;
+    margin-bottom: 40px;
+    background: white;
     overflow: hidden;
 }
 
@@ -460,8 +460,8 @@ section {
     display: flex;
     align-items: center;
     width: 100%;
-    height: 25vh;
-    margin-bottom: 0;
+    height: 40vh;
+    margin-bottom: 40px;
     background: #f8f9fa;
     overflow: hidden;
 }
@@ -475,7 +475,7 @@ section {
 }
 
 .service-photo {
-    flex: 0 0 40%;
+    flex: 0 0 50%;
     height: 100%;
     overflow: hidden;
     display: flex;
@@ -492,11 +492,74 @@ section {
 }
 
 .service-info {
-    flex: 0 0 60%;
-    padding: 30px;
+    flex: 0 0 50%;
+    padding: 40px;
     display: flex;
     flex-direction: column;
     justify-content: center;
+}
+
+/* ADDITIONAL SERVICES SECTION */
+.additional-services-section {
+    background: white;
+    padding: 60px 0;
+}
+
+.additional-services-container {
+    text-align: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.additional-services-container h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-black);
+    margin-bottom: 3rem;
+}
+
+.services-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+}
+
+.service-card-new {
+    background: #f8f9fa;
+    padding: 40px;
+    border-radius: 12px;
+    text-align: center;
+    transition: transform 0.3s ease;
+    box-shadow: var(--shadow-md);
+}
+
+.service-card-new:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.card-icon {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: inline-block;
+}
+
+.service-card-new h4 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-black);
+    margin-bottom: 1rem;
+}
+
+.service-card-new p {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--dark-gray);
 }
 
 .service-icon {
