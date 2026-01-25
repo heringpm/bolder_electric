@@ -566,7 +566,7 @@ section {
     font-size: 0.8rem;
 }
 
-.btn-primary {
+.service-card-content .btn-primary {
     width: 100%;
     text-align: center;
     padding: 12px 20px;
