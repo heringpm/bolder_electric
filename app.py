@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_from_directory, jsonify, session, redirect, url_for
+from flask import Flask, render_template, request, send_from_directory, jsonify, session, redirect, url_for, make_response
 import os
 from database import DatabaseManager
 from functools import wraps
@@ -6,6 +6,13 @@ from functools import wraps
 app = Flask(__name__)
 app.secret_key = 'your-secret-key-change-this-in-production'  # Change this for production!
 db = DatabaseManager()
+
+# Add noindex headers to prevent search engine indexing during development
+@app.after_request
+def add_noindex_headers(response):
+    if not app.debug:  # Only in production
+        response.headers['X-Robots-Tag'] = 'noindex, nofollow, nosnippet, noarchive, notranslate, noimageindex'
+    return response
 
 # Initialize admin user if not exists
 def init_admin():
