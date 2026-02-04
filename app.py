@@ -50,7 +50,7 @@ def get_client_ip():
         return request.remote_addr
 
 def send_contact_email(name, email, phone, service_type, message):
-    """Send contact form submission email"""
+    """Send contact form submission email using local postfix"""
     try:
         # Get the recipient email from database
         contact_info = db.get_contact_info()
@@ -82,19 +82,8 @@ This email was sent from the Bolder Electric contact form.
         
         msg.attach(MIMEText(body, 'plain'))
         
-        # Send email (using Gmail SMTP - you'll need to configure this)
-        server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.starttls()
-        
-        # You'll need to set up environment variables for email credentials
-        email_user = os.environ.get('EMAIL_USER')
-        email_password = os.environ.get('EMAIL_PASSWORD')
-        
-        if not email_user or not email_password:
-            print("Email credentials not configured. Email not sent.")
-            return False
-            
-        server.login(email_user, email_password)
+        # Send email using local postfix (much simpler)
+        server = smtplib.SMTP('localhost')
         server.send_message(msg)
         server.quit()
         
