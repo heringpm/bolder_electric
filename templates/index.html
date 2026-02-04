@@ -316,18 +316,18 @@
                         </div>
                     </div>
                     <div class="contact-form">
-                        <form>
+                        <form id="contactForm" method="POST" action="/contact-submit">
                             <div class="form-group">
-                                <input type="text" placeholder="Your Name" required>
+                                <input type="text" name="name" placeholder="Your Name" required>
                             </div>
                             <div class="form-group">
-                                <input type="email" placeholder="Your Email" required>
+                                <input type="email" name="email" placeholder="Your Email" required>
                             </div>
                             <div class="form-group">
-                                <input type="tel" placeholder="Your Phone Number" required>
+                                <input type="tel" name="phone" placeholder="Your Phone Number" required>
                             </div>
                             <div class="form-group">
-                                <select required>
+                                <select name="service_type" required>
                                     <option value="">Select Service Type</option>
                                     <option value="commercial">Commercial Electrical</option>
                                     <option value="residential">Residential Electrical</option>
@@ -338,12 +338,14 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <textarea placeholder="Tell us about your electrical project or emergency..." rows="4" required></textarea>
+                                <textarea name="message" placeholder="Tell us about your electrical project or emergency..." rows="4" required></textarea>
                             </div>
                             <div class="form-buttons">
-                                <a href="{{ url_for('schedule') }}" class="btn btn-primary">Schedule Service Online</a>
+                                <button type="submit" class="btn btn-primary">Send Message</button>
+                                <a href="{{ url_for('schedule') }}" class="btn btn-secondary">Schedule Service Online</a>
                             </div>
                         </form>
+                        <div id="formMessage" style="margin-top: 15px; display: none;"></div>
                     </div>
                 </div>
             </div>
@@ -406,6 +408,44 @@
                         block: 'start'
                     });
                 }
+            });
+        });
+    </script>
+<script>
+        // Contact form submission
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const messageDiv = document.getElementById('formMessage');
+            
+            // Disable submit button
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+            
+            fetch('/contact-submit', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    messageDiv.innerHTML = `<div style="color: #28a745; padding: 10px; border: 1px solid #28a745; border-radius: 4px; background: #d4edda;">${data.message}</div>`;
+                    this.reset();
+                } else {
+                    messageDiv.innerHTML = `<div style="color: #dc3545; padding: 10px; border: 1px solid #dc3545; border-radius: 4px; background: #f8d7da;">${data.message}</div>`;
+                }
+                messageDiv.style.display = 'block';
+            })
+            .catch(error => {
+                messageDiv.innerHTML = `<div style="color: #dc3545; padding: 10px; border: 1px solid #dc3545; border-radius: 4px; background: #f8d7da;">An error occurred. Please try again or call us directly.</div>`;
+                messageDiv.style.display = 'block';
+            })
+            .finally(() => {
+                // Re-enable submit button
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send Message';
             });
         });
     </script>

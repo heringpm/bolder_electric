@@ -2,6 +2,9 @@ from flask import Flask, render_template, request, send_from_directory, jsonify,
 import os
 from database import DatabaseManager
 from functools import wraps
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 app = Flask(__name__)
 app.secret_key = 'your-secret-key-change-this-in-production'  # Change this for production!
@@ -46,6 +49,61 @@ def get_client_ip():
     else:
         return request.remote_addr
 
+def send_contact_email(name, email, phone, service_type, message):
+    """Send contact form submission email"""
+    try:
+        # Get the recipient email from database
+        contact_info = db.get_contact_info()
+        recipient_email = contact_info[1] if contact_info else 'info@bolderelectric.com'
+        
+        # Create email content
+        subject = f"New Contact Form Submission - {service_type}"
+        
+        body = f"""
+New Contact Form Submission from Bolder Electric Website
+
+Name: {name}
+Email: {email}
+Phone: {phone}
+Service Type: {service_type}
+
+Message:
+{message}
+
+---
+This email was sent from the Bolder Electric contact form.
+"""
+        
+        # Create message
+        msg = MIMEMultipart()
+        msg['From'] = f"Bolder Electric Website <noreply@bolderelectric.com>"
+        msg['To'] = recipient_email
+        msg['Subject'] = subject
+        
+        msg.attach(MIMEText(body, 'plain'))
+        
+        # Send email (using Gmail SMTP - you'll need to configure this)
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        
+        # You'll need to set up environment variables for email credentials
+        email_user = os.environ.get('EMAIL_USER')
+        email_password = os.environ.get('EMAIL_PASSWORD')
+        
+        if not email_user or not email_password:
+            print("Email credentials not configured. Email not sent.")
+            return False
+            
+        server.login(email_user, email_password)
+        server.send_message(msg)
+        server.quit()
+        
+        return True
+        
+    except Exception as e:
+        print(f"Error sending email: {e}")
+        return False
+
 @app.route('/')
 def home():
     # Get contact info for display
@@ -80,6 +138,44 @@ def commercial():
 @app.route('/residential')
 def residential():
     return render_template('residential.html')
+
+@app.route('/contact-submit', methods=['POST'])
+def contact_submit():
+    """Handle contact form submission"""
+    try:
+        # Get form data
+        name = request.form.get('name')
+        email = request.form.get('email')
+        phone = request.form.get('phone')
+        service_type = request.form.get('service_type')
+        message = request.form.get('message')
+        
+        # Validate required fields
+        if not all([name, email, phone, service_type, message]):
+            return jsonify({
+                'success': False,
+                'message': 'Please fill out all required fields.'
+            }), 400
+        
+        # Send email
+        email_sent = send_contact_email(name, email, phone, service_type, message)
+        
+        if email_sent:
+            return jsonify({
+                'success': True,
+                'message': 'Thank you for your inquiry! We will contact you soon.'
+            })
+        else:
+            return jsonify({
+                'success': False,
+                'message': 'There was an error sending your message. Please call us directly.'
+            }), 500
+            
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': 'An error occurred. Please try again or call us directly.'
+        }), 500
 
 @app.route('/contact')
 def contact():
