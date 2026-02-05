@@ -69,6 +69,7 @@ A professional web application for Bolder Electric, built with Flask and designe
    ```bash
    sudo apt update && sudo apt upgrade -y
    sudo apt install python3-pip python3-venv nginx -y
+   pip3 install -r requirements.txt
    ```
 
 3. **Clone Your Application**
