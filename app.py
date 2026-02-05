@@ -7,18 +7,29 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from werkzeug.utils import secure_filename
 
-# Try importing PIL, fallback to Pillow if needed
+# Handle PIL/Pillow import compatibility
 try:
     from PIL import Image
     PIL_AVAILABLE = True
 except ImportError:
     try:
-        # Fallback to Pillow package name
+        # Try importing from the Pillow package
         from PIL import Image
         PIL_AVAILABLE = True
     except ImportError:
+        # If both fail, set a flag and continue without image processing
         PIL_AVAILABLE = False
         print("Warning: PIL/Pillow not available. Image processing disabled.")
+    except Exception as e:
+        PIL_AVAILABLE = False
+        print(f"Error importing PIL: {e}")
+        # Create a dummy Image class to prevent other errors
+        class Image:
+            def __init__(self, *args, **kwargs):
+                pass
+            @staticmethod
+            def open(*args, **kwargs):
+                raise NotImplementedError("Image processing not available")
 
 import sqlite3
 
