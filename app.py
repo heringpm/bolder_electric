@@ -1,10 +1,13 @@
-from flask import Flask, render_template, request, send_from_directory, jsonify, session, redirect, url_for, make_response
+from flask import Flask, render_template, request, send_from_directory, jsonify, session, redirect, url_for
 import os
 from database import DatabaseManager
 from functools import wraps
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from werkzeug.utils import secure_filename
+from PIL import Image
+import sqlite3
 
 app = Flask(__name__)
 app.secret_key = 'your-secret-key-change-this-in-production'  # Change this for production!
@@ -166,9 +169,129 @@ def contact_submit():
             'message': 'An error occurred. Please try again or call us directly.'
         }), 500
 
-@app.route('/contact')
-def contact():
-    return render_template('contact.html')
+@app.route('/admin/gallery')
+@admin_required
+def admin_gallery():
+    """Gallery management page"""
+    photos = db.get_gallery_photos()
+    return render_template('admin_gallery.html', photos=photos)
+
+@app.route('/admin/upload-photo', methods=['POST'])
+@admin_required
+def upload_photo():
+    """Upload a new photo to gallery"""
+    try:
+        if 'photo' not in request.files:
+            return jsonify({
+                'success': False,
+                'message': 'No photo file selected'
+            }), 400
+        
+        file = request.files['photo']
+        if file.filename == '':
+            return jsonify({
+                'success': False,
+                'message': 'No photo file selected'
+            }), 400
+        
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file_path = os.path.join('static/images/gallery', filename)
+            
+            # Create directory if it doesn't exist
+            os.makedirs(os.path.dirname(file_path), exist_ok=True)
+            
+            # Save file
+            file.save(file_path)
+            
+            # Add to database
+            title = request.form.get('title', '')
+            description = request.form.get('description', '')
+            category = request.form.get('category', 'general')
+            
+            photo_id = db.add_gallery_photo(filename, title, description, category)
+            
+            return jsonify({
+                'success': True,
+                'message': 'Photo uploaded successfully',
+                'photo_id': photo_id
+            })
+        else:
+            return jsonify({
+                'success': False,
+                'message': 'File type not allowed'
+            }), 400
+            
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': f'Error uploading photo: {str(e)}'
+        }), 500
+
+@app.route('/admin/update-photo/<int:photo_id>', methods=['POST'])
+@admin_required
+def update_photo(photo_id):
+    """Update photo information"""
+    try:
+        data = request.get_json()
+        title = data.get('title', '')
+        description = data.get('description', '')
+        category = data.get('category', 'general')
+        
+        db.update_gallery_photo(photo_id, title, description, category)
+        
+        return jsonify({
+            'success': True,
+            'message': 'Photo updated successfully'
+        })
+        
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': f'Error updating photo: {str(e)}'
+        }), 500
+
+@app.route('/admin/delete-photo/<int:photo_id>', methods=['POST'])
+@admin_required
+def delete_photo(photo_id):
+    """Delete a photo from gallery"""
+    try:
+        db.delete_gallery_photo(photo_id)
+        return jsonify({
+            'success': True,
+            'message': 'Photo deleted successfully'
+        })
+        
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': f'Error deleting photo: {str(e)}'
+        }), 500
+
+@app.route('/admin/reorder-photos', methods=['POST'])
+@admin_required
+def reorder_photos():
+    """Reorder photos in gallery"""
+    try:
+        photo_orders = request.get_json()
+        db.update_photo_order(photo_orders)
+        
+        return jsonify({
+            'success': True,
+            'message': 'Photos reordered successfully'
+        })
+        
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'message': f'Error reordering photos: {str(e)}'
+        }), 500
+
+def allowed_file(filename):
+    """Check if file is allowed"""
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @app.route('/schedule')
 def schedule():

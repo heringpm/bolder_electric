@@ -115,6 +115,20 @@ class DatabaseManager:
                 )
             ''')
             
+            # Gallery photos table
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS gallery_photos (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    filename TEXT NOT NULL,
+                    title TEXT,
+                    description TEXT,
+                    category TEXT DEFAULT 'general',
+                    display_order INTEGER DEFAULT 0,
+                    is_active BOOLEAN DEFAULT 1,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+            ''')
+            
             conn.commit()
             conn.close()
             self.seed_default_data()
@@ -460,6 +474,62 @@ class DatabaseManager:
         conn.commit()
         conn.close()
         return booking_id
+    
+    def get_gallery_photos(self, category=None):
+        """Get all gallery photos"""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        if category:
+            cursor.execute('SELECT * FROM gallery_photos WHERE category = ? AND is_active = 1 ORDER BY display_order ASC', (category,))
+        else:
+            cursor.execute('SELECT * FROM gallery_photos WHERE is_active = 1 ORDER BY display_order ASC')
+        
+        photos = cursor.fetchall()
+        conn.close()
+        return photos
+    
+    def add_gallery_photo(self, filename, title, description, category='general', display_order=0):
+        """Add a new gallery photo"""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute('''
+            INSERT INTO gallery_photos (filename, title, description, category, display_order)
+            VALUES (?, ?, ?, ?, ?)
+        ''', (filename, title, description, category, display_order))
+        photo_id = cursor.lastrowid
+        conn.commit()
+        conn.close()
+        return photo_id
+    
+    def update_gallery_photo(self, photo_id, title, description, category, display_order):
+        """Update gallery photo information"""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute('''
+            UPDATE gallery_photos 
+            SET title = ?, description = ?, category = ?, display_order = ?
+            WHERE id = ?
+        ''', (title, description, category, display_order, photo_id))
+        conn.commit()
+        conn.close()
+    
+    def delete_gallery_photo(self, photo_id):
+        """Delete a gallery photo"""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        cursor.execute('UPDATE gallery_photos SET is_active = 0 WHERE id = ?', (photo_id,))
+        conn.commit()
+        conn.close()
+    
+    def update_photo_order(self, photo_orders):
+        """Update display order of multiple photos"""
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        for photo_id, order in photo_orders:
+            cursor.execute('UPDATE gallery_photos SET display_order = ? WHERE id = ?', (order, photo_id))
+        conn.commit()
+        conn.close()
     
     def get_bookings(self, date=None):
         """Get bookings, optionally filtered by date"""
