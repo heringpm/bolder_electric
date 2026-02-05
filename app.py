@@ -6,7 +6,20 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from werkzeug.utils import secure_filename
-from PIL import Image
+
+# Try importing PIL, fallback to Pillow if needed
+try:
+    from PIL import Image
+    PIL_AVAILABLE = True
+except ImportError:
+    try:
+        # Fallback to Pillow package name
+        from PIL import Image
+        PIL_AVAILABLE = True
+    except ImportError:
+        PIL_AVAILABLE = False
+        print("Warning: PIL/Pillow not available. Image processing disabled.")
+
 import sqlite3
 
 app = Flask(__name__)
@@ -181,6 +194,12 @@ def admin_gallery():
 def upload_photo():
     """Upload a new photo to gallery"""
     try:
+        if 'PIL_AVAILABLE' not in globals() or not globals()['PIL_AVAILABLE']:
+            return jsonify({
+                'success': False,
+                'message': 'Image processing not available. Please install Pillow.'
+            }), 500
+            
         if 'photo' not in request.files:
             return jsonify({
                 'success': False,
