@@ -1,32 +1,7 @@
 User-agent: *
-Disallow: /
-
-# DEVELOPMENT MODE - Block all search engines
-# This file prevents search engine indexing while site is in development
-# Remove or update this file when site is ready for launch
-
-# Previous sitemap reference (commented out during development)
-# Sitemap: https://bolderelectric.com/static/sitemap.xml
-
-# Block access to all directories and files during development
-Disallow: /static/
-Disallow: /templates/
+Allow: /
 Disallow: /venv/
 Disallow: /.git/
 Disallow: /.env
 Disallow: /__pycache__/
-Disallow: /app.py
-Disallow: /requirements.txt
-Disallow: /README.md
-
-# Crawl delay for respectful crawling
-Crawl-delay: 1
-
-# Note: When ready for launch, replace with:
-# User-agent: *
-# Allow: /
-# Disallow: /venv/
-# Disallow: /.git/
-# Disallow: /.env
-# Disallow: /__pycache__/
-# Sitemap: https://bolderelectric.com/static/sitemap.xml
+Sitemap: https://bolderelectric.com/sitemap.xml

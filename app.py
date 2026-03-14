@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, send_from_directory, jsonify, session, redirect, url_for
+from flask_compress import Compress
 import os
 from database import DatabaseManager
 from functools import wraps
@@ -6,6 +7,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from werkzeug.utils import secure_filename
+from uuid import uuid4
 
 # Handle PIL/Pillow import compatibility
 try:
@@ -31,33 +33,17 @@ except ImportError:
             def open(*args, **kwargs):
                 raise NotImplementedError("Image processing not available")
 
-import sqlite3
-
 app = Flask(__name__)
 app.secret_key = 'your-secret-key-change-this-in-production'  # Change this for production!
+Compress(app)
 db = DatabaseManager()
 
-# Add noindex headers to prevent search engine indexing during development
+# Optional noindex header (enabled only when BLOCK_INDEXING=true)
 @app.after_request
 def add_noindex_headers(response):
-    if not app.debug:  # Only in production
+    if os.environ.get('BLOCK_INDEXING', '').lower() in ('1', 'true', 'yes'):
         response.headers['X-Robots-Tag'] = 'noindex, nofollow, nosnippet, noarchive, notranslate, noimageindex'
     return response
-
-# Initialize admin user if not exists
-def init_admin():
-    try:
-        # Only create admin user if table doesn't exist
-        conn = sqlite3.connect('bolder_electric.db')
-        cursor = conn.cursor()
-        cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='admin_users'")
-        if not cursor.fetchone():
-            db.create_admin_user('admin', 'usLaG4wLCnJW1F')
-        conn.close()
-    except:
-        pass  # Admin user already exists or other error
-
-init_admin()
 
 def admin_required(f):
     @wraps(f)
@@ -120,6 +106,44 @@ This email was sent from the Bolder Electric contact form.
         print(f"Error sending email: {e}")
         return False
 
+def send_booking_notification_email(booking_data, service_name):
+    """Send booking notification email using local postfix."""
+    try:
+        recipient_email = 'info@bolderelectric.com'
+        subject = f"New Booking Request - {service_name or 'Service'}"
+        body = f"""
+New Booking Request from Bolder Electric Website
+
+Service: {service_name or booking_data.get('service_id')}
+Customer Name: {booking_data.get('customer_name')}
+Customer Email: {booking_data.get('customer_email')}
+Customer Phone: {booking_data.get('customer_phone')}
+Service Address: {booking_data.get('customer_address')}
+Service Date: {booking_data.get('service_date')}
+Time Slot: {booking_data.get('time_slot')}
+Estimated Price: ${booking_data.get('total_price')}
+
+Project Details:
+{booking_data.get('description') or 'N/A'}
+
+---
+This email was sent from the Bolder Electric booking form.
+"""
+
+        msg = MIMEMultipart()
+        msg['From'] = "Bolder Electric Website <noreply@bolderelectric.com>"
+        msg['To'] = recipient_email
+        msg['Subject'] = subject
+        msg.attach(MIMEText(body, 'plain'))
+
+        server = smtplib.SMTP('localhost')
+        server.send_message(msg)
+        server.quit()
+        return True
+    except Exception as e:
+        print(f"Error sending booking email: {e}")
+        return False
+
 @app.route('/')
 def home():
     # Get contact info for display
@@ -145,7 +169,8 @@ def home():
 
 @app.route('/gallery')
 def gallery():
-    return render_template('gallery.html')
+    photos = db.get_gallery_photos()
+    return render_template('gallery.html', photos=photos)
 
 @app.route('/commercial')
 def commercial():
@@ -172,10 +197,16 @@ def contact_submit():
                 'success': False,
                 'message': 'Please fill out all required fields.'
             }), 400
-        
-        # Send email
+
+        ip_address = get_client_ip()
+        user_agent = request.headers.get('User-Agent', '')
+
+        # Store submission in database
+        db.add_contact_submission(name, email, phone, service_type, message, ip_address, user_agent)
+
+        # Send email notification
         email_sent = send_contact_email(name, email, phone, service_type, message)
-        
+
         if email_sent:
             return jsonify({
                 'success': True,
@@ -183,9 +214,9 @@ def contact_submit():
             })
         else:
             return jsonify({
-                'success': False,
-                'message': 'There was an error sending your message. Please call us directly.'
-            }), 500
+                'success': True,
+                'message': 'Thank you. We received your inquiry and will contact you soon.'
+            })
             
     except Exception as e:
         return jsonify({
@@ -196,9 +227,8 @@ def contact_submit():
 @app.route('/admin/gallery')
 @admin_required
 def admin_gallery():
-    """Gallery management page"""
-    photos = db.get_gallery_photos()
-    return render_template('admin_gallery.html', photos=photos)
+    """Redirect legacy gallery admin route to the gallery tab in admin panel"""
+    return redirect(url_for('admin', tab='gallery'))
 
 @app.route('/admin/upload-photo', methods=['POST'])
 @admin_required
@@ -225,7 +255,9 @@ def upload_photo():
             }), 400
         
         if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
+            original_filename = secure_filename(file.filename)
+            name, ext = os.path.splitext(original_filename)
+            filename = f"{name}_{uuid4().hex[:10]}{ext.lower()}"
             file_path = os.path.join('static/images/gallery', filename)
             
             # Create directory if it doesn't exist
@@ -263,12 +295,13 @@ def upload_photo():
 def update_photo(photo_id):
     """Update photo information"""
     try:
-        data = request.get_json()
+        data = request.get_json() or {}
         title = data.get('title', '')
         description = data.get('description', '')
         category = data.get('category', 'general')
+        display_order = data.get('display_order')
         
-        db.update_gallery_photo(photo_id, title, description, category)
+        db.update_gallery_photo(photo_id, title, description, category, display_order)
         
         return jsonify({
             'success': True,
@@ -303,8 +336,22 @@ def delete_photo(photo_id):
 def reorder_photos():
     """Reorder photos in gallery"""
     try:
-        photo_orders = request.get_json()
-        db.update_photo_order(photo_orders)
+        photo_orders = request.get_json() or {}
+        normalized_orders = []
+
+        if isinstance(photo_orders, dict):
+            normalized_orders = [
+                (int(photo_id), int(order))
+                for photo_id, order in photo_orders.items()
+            ]
+        elif isinstance(photo_orders, list):
+            for item in photo_orders:
+                if isinstance(item, (list, tuple)) and len(item) == 2:
+                    normalized_orders.append((int(item[0]), int(item[1])))
+                elif isinstance(item, dict) and 'id' in item and 'order' in item:
+                    normalized_orders.append((int(item['id']), int(item['order'])))
+
+        db.update_photo_order(normalized_orders)
         
         return jsonify({
             'success': True,
@@ -490,7 +537,14 @@ def create_booking():
         data['description'],
         data['total_price']
     )
-    return jsonify({'success': True, 'booking_id': booking_id})
+    service = db.get_service_by_id(data['service_id'])
+    service_name = service[1] if service else 'Unknown Service'
+    email_sent = send_booking_notification_email(data, service_name)
+    return jsonify({
+        'success': True,
+        'booking_id': booking_id,
+        'notification_sent': email_sent
+    })
 
 @app.route('/api/bookings', methods=['GET'])
 @admin_required
@@ -557,6 +611,35 @@ def get_logs():
         'timestamp': log[4]
     } for log in logs])
 
+@app.route('/api/gallery-photos', methods=['GET'])
+@admin_required
+def get_gallery_photos():
+    photos = db.get_gallery_photos()
+    return jsonify([{
+        'id': p[0],
+        'filename': p[1],
+        'title': p[2],
+        'description': p[3],
+        'category': p[4],
+        'display_order': p[5]
+    } for p in photos])
+
+@app.route('/api/contact-submissions', methods=['GET'])
+@admin_required
+def get_contact_submissions():
+    submissions = db.get_contact_submissions(300)
+    return jsonify([{
+        'id': s[0],
+        'name': s[1],
+        'email': s[2],
+        'phone': s[3],
+        'service_type': s[4],
+        'message': s[5],
+        'ip_address': s[6],
+        'user_agent': s[7],
+        'created_at': s[8]
+    } for s in submissions])
+
 @app.route('/sitemap.xml')
 def sitemap():
     return send_from_directory('static', 'sitemap.xml')
@@ -564,6 +647,10 @@ def sitemap():
 @app.route('/robots.txt')
 def robots():
     return send_from_directory('static', 'robots.txt')
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory('static/images', 'favicon.ico')
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8080))

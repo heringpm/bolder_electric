@@ -9,8 +9,8 @@
     <meta name="description" content="Bolder Electric provides professional electrical services for commercial and residential properties. Licensed electricians offering 24/7 emergency repairs, panel upgrades, wiring, and installation services. Call (951) 397-4025 for fast, reliable service.">
     <meta name="keywords" content="electrician, electrical contractor, commercial electrician, residential electrician, emergency electrician, electrical repair, panel upgrade, wiring installation, licensed electrician, electrical services, commercial electrical, residential electrical, 24 hour electrician, electrical contractor near me, electrician near me">
     <meta name="author" content="Bolder Electric">
-    <meta name="robots" content="noindex, nofollow, nosnippet, noarchive, notranslate, noimageindex">
-    <meta name="googlebot" content="noindex, nofollow, nosnippet, noarchive, notranslate, noimageindex">
+    <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="index, follow">
     <meta name="language" content="English">
     <meta name="geo.region" content="US-CA">
     <meta name="geo.placename" content="Menifee, California">
@@ -40,8 +40,7 @@
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
     
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.min.css') }}">
     
     <!-- Structured Data (JSON-LD) -->
     <script type="application/ld+json">
@@ -170,7 +169,7 @@
     <main>
         <section id="home" class="hero">
             <div class="hero-background">
-                <img src="{{ url_for('static', filename='images/electricity-3442835_1920.jpg') }}" alt="Electrical Work Background" class="hero-bg-image">
+                <img src="{{ url_for('static', filename='images/electricity-hero.webp') }}" alt="Electrical Work Background" class="hero-bg-image" width="1600" height="1067" fetchpriority="high">
                 <div class="hero-overlay"></div>
             </div>
             <div class="hero-content">
@@ -212,7 +211,7 @@
                         <h3>Commercial Electrical</h3>
                     </div>
                     <div class="service-card-image">
-                        <img src="{{ url_for('static', filename='images/new1.jpg') }}" alt="Commercial Electrical Services">
+                        <img src="{{ url_for('static', filename='images/new1-card.webp') }}" alt="Commercial Electrical Services" width="900" height="600" loading="lazy">
                     </div>
                     <div class="service-card-content">
                         <p>Complete electrical solutions for businesses, offices, and commercial properties with licensed commercial electricians.</p>
@@ -235,7 +234,7 @@
                         <h3>Residential Electrical</h3>
                     </div>
                     <div class="service-card-image">
-                        <img src="{{ url_for('static', filename='images/newerrr.jpg') }}" alt="Residential Electrical Services">
+                        <img src="{{ url_for('static', filename='images/newerrr-card.webp') }}" alt="Residential Electrical Services" width="900" height="600" loading="lazy">
                     </div>
                     <div class="service-card-content">
                         <p>Professional electrical services for homes with expert residential electricians for all your home electrical needs.</p>

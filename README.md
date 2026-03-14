@@ -87,20 +87,18 @@ A professional web application for Bolder Electric, built with Flask and designe
 
 5. **Set Up Database**
    ```bash
-   # The application will automatically create the SQLite database
-   # Ensure the application has write permissions to the project directory
-   sudo chown -R ubuntu:www-data /var/www/bolder_electric
-   sudo chmod -R 755 /var/www/bolder_electric
+   # Recommended: use PostgreSQL in production
+   export DATABASE_URL=\"postgresql://USER:PASSWORD@HOST:5432/DB_NAME\"
    ```
 
 6. **Initialize Database and Admin User**
    ```bash
-   # Run the application once to initialize the database
+   # Run the application once to initialize database tables
    python app.py &
    sleep 5
    kill %1
    
-   # The database will be created automatically with:
+   # The database will be initialized automatically with:
    # - Default admin user: username 'admin', password 'usLaG4wLCnJW1F'
    # - Sample services and availability data
    ```
@@ -190,31 +188,51 @@ A professional web application for Bolder Electric, built with Flask and designe
 ## Database Information
 
 ### Database Type
-- **SQLite** - File-based database, no separate server required
-- **Database file**: `bolder_electric.db` (automatically created)
+- **PostgreSQL (recommended for production)** via `DATABASE_URL`
+- **SQLite fallback** for local quick-start when `DATABASE_URL` is not set
 
 ### Database Tables
 - `admin_users` - Admin authentication
 - `access_logs` - Login attempt tracking
-- `contact_info` - Contact form submissions
+- `contact_info` - Website contact details
+- `contact_submissions` - Contact form leads (name/email/phone/project details)
 - `services` - Electrical services offered
 - `time_slots` - Available booking times
 - `availability` - Service availability calendar
 - `bookings` - Customer booking records
+- `gallery_photos` - Gallery image metadata
 
 ### Default Admin Credentials
 - **Username**: `admin`
 - **Password**: `usLaG4wLCnJW1F`
 
-### Database Backup
-To backup the database:
+### PostgreSQL Setup
+1. Create a PostgreSQL database.
+2. Set `DATABASE_URL` before starting the app:
+   ```bash
+   export DATABASE_URL=\"postgresql://USER:PASSWORD@HOST:5432/DB_NAME\"
+   ```
+3. Start the app:
+   ```bash
+   python app.py
+   ```
+4. Tables are created automatically on startup.
+
+### Migrate Existing SQLite Data to PostgreSQL
 ```bash
-cp bolder_electric.db bolder_electric_backup_$(date +%Y%m%d).db
+export DATABASE_URL=\"postgresql://USER:PASSWORD@HOST:5432/DB_NAME\"
+python scripts/migrate_sqlite_to_postgres.py --sqlite bolder_electric.db
 ```
 
-To restore:
+### PostgreSQL Backup / Restore
+Backup:
 ```bash
-cp bolder_electric_backup_YYYYMMDD.db bolder_electric.db
+pg_dump \"$DATABASE_URL\" > bolder_electric_backup_$(date +%Y%m%d).sql
+```
+
+Restore:
+```bash
+psql \"$DATABASE_URL\" < bolder_electric_backup_YYYYMMDD.sql
 ```
 
 ## Application Structure

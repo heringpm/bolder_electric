@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
     <title>Gallery - Bolder Electric | Our Recent Electrical Work</title>
     
     <!-- SEO Meta Tags -->
@@ -15,8 +16,7 @@
     <link rel="canonical" href="https://bolderelectric.com/gallery">
     
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.min.css') }}">
 </head>
 <body>
     <header>
@@ -53,94 +53,29 @@
         <section class="local-gallery">
             <div class="container">
                 <h2 class="section-title">Featured Projects</h2>
-                <p class="section-subtitle">A showcase of our finest electrical work and installations</p>
-                
-                <!-- Original Grid Layout -->
-                <div class="gallery-grid">
-                    <div class="gallery-item">
-                        <img src="{{ url_for('static', filename='images/new1.jpg') }}" alt="Commercial Electrical Project" class="gallery-image">
+                <p class="section-subtitle">Browse real projects uploaded directly from our admin gallery manager.</p>
+
+                <div class="gallery-filter" style="display:flex;gap:0.6rem;flex-wrap:wrap;justify-content:center;margin:1.25rem 0 2rem;">
+                    <button class="btn btn-outline filter-btn active" data-category="all" type="button">All</button>
+                    <button class="btn btn-outline filter-btn" data-category="commercial" type="button">Commercial</button>
+                    <button class="btn btn-outline filter-btn" data-category="residential" type="button">Residential</button>
+                    <button class="btn btn-outline filter-btn" data-category="emergency" type="button">Emergency</button>
+                    <button class="btn btn-outline filter-btn" data-category="general" type="button">General</button>
+                </div>
+
+                <div class="gallery-grid" id="galleryGrid">
+                    {% for photo in photos %}
+                    <div class="gallery-item" data-category="{{ photo[4] or 'general' }}">
+                        <img src="{{ url_for('static', filename='images/gallery/' + photo[1]) }}" alt="{{ photo[2] or 'Bolder Electric Project Photo' }}" class="gallery-image" loading="lazy">
                         <div class="gallery-overlay">
-                            <h4>Commercial Excellence</h4>
-                            <p>Large-scale electrical installations</p>
+                            <h4>{{ photo[2] or 'Bolder Electric Project' }}</h4>
+                            <p>{{ photo[3] or ((photo[4] or 'general')|title ~ ' electrical work') }}</p>
                         </div>
                     </div>
-                    <div class="gallery-item">
-                        <img src="{{ url_for('static', filename='images/new3.jpg') }}" alt="Electrical Panel Work" class="gallery-image">
-                        <div class="gallery-overlay">
-                            <h4>Panel Installation</h4>
-                            <p>Modern electrical panel setup</p>
-                        </div>
-                    </div>
-                    <div class="gallery-item">
-                        <img src="{{ url_for('static', filename='images/new4.jpg') }}" alt="Professional Electrical Work" class="gallery-image">
-                        <div class="gallery-overlay">
-                            <h4>Professional Installation</h4>
-                            <p>Complete electrical system setup</p>
-                        </div>
-                    </div>
-                    <div class="gallery-item">
-                        <img src="{{ url_for('static', filename='images/new5.jpg') }}" alt="Electrical Panel Upgrade" class="gallery-image">
-                        <div class="gallery-overlay">
-                            <h4>Panel Upgrades</h4>
-                            <p>Modern electrical panel installations</p>
-                        </div>
-                    </div>
-                    <div class="gallery-item">
-                        <img src="{{ url_for('static', filename='images/newe2.jpg') }}" alt="Commercial Electrical" class="gallery-image">
-                        <div class="gallery-overlay">
-                            <h4>Commercial Projects</h4>
-                            <p>Business electrical solutions</p>
-                        </div>
-                    </div>
-                    <div class="gallery-item">
-                        <img src="{{ url_for('static', filename='images/358055541_17993479952050511_6373827937251109204_n.jpg') }}" alt="Commercial Services" class="gallery-image">
-                        <div class="gallery-overlay">
-                            <h4>Commercial Services</h4>
-                            <p>Business electrical installations</p>
-                        </div>
-                    </div>
-                    <div class="gallery-item">
-                        <img src="{{ url_for('static', filename='images/468871509_18049372970050511_4296001976905443823_n.jpg') }}" alt="Electrical Work" class="gallery-image">
-                        <div class="gallery-overlay">
-                            <h4>Electrical Projects</h4>
-                            <p>Professional electrical work</p>
-                        </div>
-                    </div>
-                    <div class="gallery-item">
-                        <img src="{{ url_for('static', filename='images/468943951_18049372829050511_3332619069482254023_n.jpg') }}" alt="Residential Electrical" class="gallery-image">
-                        <div class="gallery-overlay">
-                            <h4>Residential Services</h4>
-                            <p>Home electrical expertise</p>
-                        </div>
-                    </div>
-                    <div class="gallery-item">
-                        <img src="{{ url_for('static', filename='images/484959035_18059740199050511_5189104763192206444_n.jpg') }}" alt="Electrical Installation" class="gallery-image">
-                        <div class="gallery-overlay">
-                            <h4>Installation Work</h4>
-                            <p>Professional electrical installations</p>
-                        </div>
-                    </div>
-                    <div class="gallery-item">
-                        <img src="{{ url_for('static', filename='images/487497406_18060594641050511_4855918171960797504_n.jpg') }}" alt="Panel Work" class="gallery-image">
-                        <div class="gallery-overlay">
-                            <h4>Panel Work</h4>
-                            <p>Electrical panel installations</p>
-                        </div>
-                    </div>
-                    <div class="gallery-item">
-                        <img src="{{ url_for('static', filename='images/552028028_18076863026050511_5467889523463153147_n.jpg') }}" alt="Commercial Wiring" class="gallery-image">
-                        <div class="gallery-overlay">
-                            <h4>Commercial Wiring</h4>
-                            <p>Business electrical solutions</p>
-                        </div>
-                    </div>
-                    <div class="gallery-item">
-                        <img src="{{ url_for('static', filename='images/557449550_18078063476050511_1355580283574235160_n.jpg') }}" alt="Residential Work" class="gallery-image">
-                        <div class="gallery-overlay">
-                            <h4>Residential Work</h4>
-                            <p>Home electrical projects</p>
-                        </div>
-                    </div>
+                    {% endfor %}
+                    {% if not photos %}
+                    <p style="text-align:center;grid-column:1 / -1;">No gallery photos are live yet. Please check back soon.</p>
+                    {% endif %}
                 </div>
             </div>
         </section>
@@ -235,6 +170,21 @@
                     };
                     document.addEventListener('keydown', escapeHandler);
                 }
+            });
+        });
+
+        // Category filtering
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const category = button.dataset.category;
+                document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                document.querySelectorAll('.gallery-item').forEach(item => {
+                    const itemCategory = item.dataset.category || 'general';
+                    item.style.display = (category === 'all' || itemCategory === category) ? '' : 'none';
+                });
             });
         });
     </script>

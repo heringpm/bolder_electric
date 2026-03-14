@@ -1,173 +1,327 @@
+import os
 import sqlite3
-import json
 from datetime import datetime, timedelta
 import hashlib
 import secrets
 
+try:
+    import psycopg2
+except Exception:
+    psycopg2 = None
+
+
 class DatabaseManager:
     def __init__(self, db_path='bolder_electric.db'):
         self.db_path = db_path
+        self.database_url = os.environ.get('DATABASE_URL', '').strip()
+        self.use_postgres = self.database_url.startswith('postgres://') or self.database_url.startswith('postgresql://')
+
+        if self.use_postgres and psycopg2 is None:
+            raise RuntimeError('DATABASE_URL points to PostgreSQL but psycopg2 is not installed. Add psycopg2-binary to requirements.')
+
         self.init_database()
-    
+
+    def _prepare_query(self, query):
+        if self.use_postgres:
+            return query.replace('?', '%s')
+        return query
+
     def get_connection(self):
-        """Get database connection"""
-        conn = sqlite3.connect(self.db_path, timeout=10.0)
-        return conn
-    
+        if self.use_postgres:
+            return psycopg2.connect(self.database_url)
+        return sqlite3.connect(self.db_path, timeout=10.0)
+
+    def _fetchone_value(self, cursor):
+        row = cursor.fetchone()
+        return row[0] if row else None
+
+    def _parse_datetime(self, value):
+        if not value:
+            return None
+        if isinstance(value, datetime):
+            return value
+        try:
+            return datetime.fromisoformat(str(value).replace(' ', 'T'))
+        except Exception:
+            return None
+
     def init_database(self):
-        """Initialize the database with required tables"""
+        conn = None
         try:
             conn = self.get_connection()
             cursor = conn.cursor()
-            
-            # Admin users table
-            cursor.execute('''
-                CREATE TABLE IF NOT EXISTS admin_users (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    username TEXT UNIQUE NOT NULL,
-                    password_hash TEXT NOT NULL,
-                    salt TEXT NOT NULL,
-                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    last_login TIMESTAMP,
-                    failed_attempts INTEGER DEFAULT 0,
-                    locked_until TIMESTAMP,
-                    is_active BOOLEAN DEFAULT 1
-                )
-            ''')
-            
-            # Access logs table
-            cursor.execute('''
-                CREATE TABLE IF NOT EXISTS access_logs (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    username TEXT,
-                    ip_address TEXT,
-                    user_agent TEXT,
-                    action TEXT,
-                    success BOOLEAN,
-                    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-                )
-            ''')
-            
-            # Contact info table
-            cursor.execute('''
-                CREATE TABLE IF NOT EXISTS contact_info (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    phone TEXT NOT NULL,
-                    email TEXT NOT NULL,
-                    address TEXT NOT NULL,
-                    service_area TEXT NOT NULL,
-                    business_hours TEXT NOT NULL,
-                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-                )
-            ''')
-            
-            # Services table
-            cursor.execute('''
-                CREATE TABLE IF NOT EXISTS services (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    name TEXT NOT NULL,
-                    description TEXT,
-                    base_price REAL NOT NULL,
-                    is_active BOOLEAN DEFAULT 1,
-                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-                )
-            ''')
-            
-            # Time slots table
-            cursor.execute('''
-                CREATE TABLE IF NOT EXISTS time_slots (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    time_slot TEXT NOT NULL,
-                    is_active BOOLEAN DEFAULT 1,
-                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-                )
-            ''')
-            
-            # Availability table
-            cursor.execute('''
-                CREATE TABLE IF NOT EXISTS availability (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    date DATE NOT NULL,
-                    time_slot_id INTEGER,
-                    is_available BOOLEAN DEFAULT 1,
-                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    FOREIGN KEY (time_slot_id) REFERENCES time_slots (id)
-                )
-            ''')
-            
-            # Bookings table
-            cursor.execute('''
-                CREATE TABLE IF NOT EXISTS bookings (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    service_id INTEGER,
-                    customer_name TEXT NOT NULL,
-                    customer_phone TEXT NOT NULL,
-                    customer_email TEXT NOT NULL,
-                    customer_address TEXT NOT NULL,
-                    service_date DATE NOT NULL,
-                    time_slot TEXT NOT NULL,
-                    description TEXT,
-                    total_price REAL NOT NULL,
-                    status TEXT DEFAULT 'pending',
-                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    FOREIGN KEY (service_id) REFERENCES services (id)
-                )
-            ''')
-            
-            # Gallery photos table
-            cursor.execute('''
-                CREATE TABLE IF NOT EXISTS gallery_photos (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    filename TEXT NOT NULL,
-                    title TEXT,
-                    description TEXT,
-                    category TEXT DEFAULT 'general',
-                    display_order INTEGER DEFAULT 0,
-                    is_active BOOLEAN DEFAULT 1,
-                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-                )
-            ''')
-            
-            conn.commit()
-            conn.close()
-            self.seed_default_data()
-        except Exception as e:
-            print(f"Database initialization error: {e}")
-            raise
-    
-    def seed_default_data(self):
-        """Seed default services and time slots"""
-        try:
-            conn = self.get_connection()
-            cursor = conn.cursor()
-            
-            # Only seed if tables are empty
-            cursor.execute("SELECT COUNT(*) FROM admin_users")
-            admin_count = cursor.fetchone()[0]
-            
-            if admin_count == 0:
-                # Create default admin user
-                self.create_admin_user('admin', 'usLaG4wLCnJW1F')
-                print("Created admin user")
-            
-            # Check if contact info exists
-            cursor.execute("SELECT COUNT(*) FROM contact_info")
-            if cursor.fetchone()[0] == 0:
-                # Insert default contact info
+
+            if self.use_postgres:
                 cursor.execute('''
-                    INSERT INTO contact_info (phone, email, address, service_area, business_hours)
-                    VALUES (?, ?, ?, ?, ?)
-                ''', ('(951) 397-4025', 'info@bolderelectric.com', 
-                      '30019 Buck Tail Drive, Menifee, CA 92587', 
-                      'Riverside County & Surrounding Areas', 
-                      'Mon-Fri: 8AM-6PM, Emergency: 24/7'))
-                print("Created contact info")
-            
-            # Check if services already exist
-            cursor.execute("SELECT COUNT(*) FROM services")
-            if cursor.fetchone()[0] == 0:
-                # Insert default services
+                    CREATE TABLE IF NOT EXISTS admin_users (
+                        id SERIAL PRIMARY KEY,
+                        username TEXT UNIQUE NOT NULL,
+                        password_hash TEXT NOT NULL,
+                        salt TEXT NOT NULL,
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        last_login TIMESTAMP,
+                        failed_attempts INTEGER DEFAULT 0,
+                        locked_until TIMESTAMP,
+                        is_active BOOLEAN DEFAULT TRUE
+                    )
+                ''')
+
+                cursor.execute('''
+                    CREATE TABLE IF NOT EXISTS access_logs (
+                        id SERIAL PRIMARY KEY,
+                        username TEXT,
+                        ip_address TEXT,
+                        user_agent TEXT,
+                        action TEXT,
+                        success BOOLEAN,
+                        timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    )
+                ''')
+
+                cursor.execute('''
+                    CREATE TABLE IF NOT EXISTS contact_info (
+                        id INTEGER PRIMARY KEY,
+                        phone TEXT NOT NULL,
+                        email TEXT NOT NULL,
+                        address TEXT NOT NULL,
+                        service_area TEXT NOT NULL,
+                        business_hours TEXT NOT NULL,
+                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    )
+                ''')
+
+                cursor.execute('''
+                    CREATE TABLE IF NOT EXISTS contact_submissions (
+                        id SERIAL PRIMARY KEY,
+                        name TEXT NOT NULL,
+                        email TEXT NOT NULL,
+                        phone TEXT NOT NULL,
+                        service_type TEXT NOT NULL,
+                        message TEXT NOT NULL,
+                        ip_address TEXT,
+                        user_agent TEXT,
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    )
+                ''')
+
+                cursor.execute('''
+                    CREATE TABLE IF NOT EXISTS services (
+                        id SERIAL PRIMARY KEY,
+                        name TEXT NOT NULL,
+                        description TEXT,
+                        base_price REAL NOT NULL,
+                        is_active BOOLEAN DEFAULT TRUE,
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    )
+                ''')
+
+                cursor.execute('''
+                    CREATE TABLE IF NOT EXISTS time_slots (
+                        id SERIAL PRIMARY KEY,
+                        time_slot TEXT NOT NULL,
+                        is_active BOOLEAN DEFAULT TRUE,
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    )
+                ''')
+
+                cursor.execute('''
+                    CREATE TABLE IF NOT EXISTS availability (
+                        id SERIAL PRIMARY KEY,
+                        date DATE NOT NULL,
+                        time_slot_id INTEGER REFERENCES time_slots (id),
+                        is_available BOOLEAN DEFAULT TRUE,
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        UNIQUE(date, time_slot_id)
+                    )
+                ''')
+
+                cursor.execute('''
+                    CREATE TABLE IF NOT EXISTS bookings (
+                        id SERIAL PRIMARY KEY,
+                        service_id INTEGER REFERENCES services (id),
+                        customer_name TEXT NOT NULL,
+                        customer_phone TEXT NOT NULL,
+                        customer_email TEXT NOT NULL,
+                        customer_address TEXT NOT NULL,
+                        service_date DATE NOT NULL,
+                        time_slot TEXT NOT NULL,
+                        description TEXT,
+                        total_price REAL NOT NULL,
+                        status TEXT DEFAULT 'pending',
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    )
+                ''')
+
+                cursor.execute('''
+                    CREATE TABLE IF NOT EXISTS gallery_photos (
+                        id SERIAL PRIMARY KEY,
+                        filename TEXT NOT NULL,
+                        title TEXT,
+                        description TEXT,
+                        category TEXT DEFAULT 'general',
+                        display_order INTEGER DEFAULT 0,
+                        is_active BOOLEAN DEFAULT TRUE,
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    )
+                ''')
+
+            else:
+                cursor.execute('''
+                    CREATE TABLE IF NOT EXISTS admin_users (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        username TEXT UNIQUE NOT NULL,
+                        password_hash TEXT NOT NULL,
+                        salt TEXT NOT NULL,
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        last_login TIMESTAMP,
+                        failed_attempts INTEGER DEFAULT 0,
+                        locked_until TIMESTAMP,
+                        is_active BOOLEAN DEFAULT 1
+                    )
+                ''')
+
+                cursor.execute('''
+                    CREATE TABLE IF NOT EXISTS access_logs (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        username TEXT,
+                        ip_address TEXT,
+                        user_agent TEXT,
+                        action TEXT,
+                        success BOOLEAN,
+                        timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    )
+                ''')
+
+                cursor.execute('''
+                    CREATE TABLE IF NOT EXISTS contact_info (
+                        id INTEGER PRIMARY KEY,
+                        phone TEXT NOT NULL,
+                        email TEXT NOT NULL,
+                        address TEXT NOT NULL,
+                        service_area TEXT NOT NULL,
+                        business_hours TEXT NOT NULL,
+                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    )
+                ''')
+
+                cursor.execute('''
+                    CREATE TABLE IF NOT EXISTS contact_submissions (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        name TEXT NOT NULL,
+                        email TEXT NOT NULL,
+                        phone TEXT NOT NULL,
+                        service_type TEXT NOT NULL,
+                        message TEXT NOT NULL,
+                        ip_address TEXT,
+                        user_agent TEXT,
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    )
+                ''')
+
+                cursor.execute('''
+                    CREATE TABLE IF NOT EXISTS services (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        name TEXT NOT NULL,
+                        description TEXT,
+                        base_price REAL NOT NULL,
+                        is_active BOOLEAN DEFAULT 1,
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    )
+                ''')
+
+                cursor.execute('''
+                    CREATE TABLE IF NOT EXISTS time_slots (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        time_slot TEXT NOT NULL,
+                        is_active BOOLEAN DEFAULT 1,
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    )
+                ''')
+
+                cursor.execute('''
+                    CREATE TABLE IF NOT EXISTS availability (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        date DATE NOT NULL,
+                        time_slot_id INTEGER,
+                        is_available BOOLEAN DEFAULT 1,
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        FOREIGN KEY (time_slot_id) REFERENCES time_slots (id)
+                    )
+                ''')
+                cursor.execute('CREATE UNIQUE INDEX IF NOT EXISTS idx_availability_date_slot ON availability(date, time_slot_id)')
+
+                cursor.execute('''
+                    CREATE TABLE IF NOT EXISTS bookings (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        service_id INTEGER,
+                        customer_name TEXT NOT NULL,
+                        customer_phone TEXT NOT NULL,
+                        customer_email TEXT NOT NULL,
+                        customer_address TEXT NOT NULL,
+                        service_date DATE NOT NULL,
+                        time_slot TEXT NOT NULL,
+                        description TEXT,
+                        total_price REAL NOT NULL,
+                        status TEXT DEFAULT 'pending',
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        FOREIGN KEY (service_id) REFERENCES services (id)
+                    )
+                ''')
+
+                cursor.execute('''
+                    CREATE TABLE IF NOT EXISTS gallery_photos (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        filename TEXT NOT NULL,
+                        title TEXT,
+                        description TEXT,
+                        category TEXT DEFAULT 'general',
+                        display_order INTEGER DEFAULT 0,
+                        is_active BOOLEAN DEFAULT 1,
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    )
+                ''')
+
+            conn.commit()
+        except Exception as e:
+            if conn:
+                conn.rollback()
+            print(f'Database initialization error: {e}')
+            raise
+        finally:
+            if conn:
+                conn.close()
+
+        self.seed_default_data()
+
+    def seed_default_data(self):
+        conn = None
+        try:
+            conn = self.get_connection()
+            cursor = conn.cursor()
+
+            cursor.execute(self._prepare_query('SELECT COUNT(*) FROM admin_users'))
+            if self._fetchone_value(cursor) == 0:
+                self.create_admin_user('admin', 'usLaG4wLCnJW1F')
+                print('Created admin user')
+
+            cursor.execute(self._prepare_query('SELECT COUNT(*) FROM contact_info'))
+            if self._fetchone_value(cursor) == 0:
+                cursor.execute(self._prepare_query('''
+                    INSERT INTO contact_info (id, phone, email, address, service_area, business_hours)
+                    VALUES (1, ?, ?, ?, ?, ?)
+                '''), (
+                    '(951) 397-4025',
+                    'info@bolderelectric.com',
+                    '30019 Buck Tail Drive, Menifee, CA 92587',
+                    'Riverside County & Surrounding Areas',
+                    'Mon-Fri: 8AM-6PM, Emergency: 24/7'
+                ))
+                print('Created contact info')
+
+            cursor.execute(self._prepare_query('SELECT COUNT(*) FROM services'))
+            if self._fetchone_value(cursor) == 0:
                 default_services = [
                     ('Commercial Electrical', 'Complete electrical solutions for businesses, offices, and commercial properties', 150.0),
                     ('Residential Electrical', 'Professional electrical services for homes, apartments, and residential complexes', 100.0),
@@ -175,383 +329,455 @@ class DatabaseManager:
                     ('Panel Upgrade', 'Electrical panel upgrades and replacements', 300.0),
                     ('Lighting Installation', 'Indoor and outdoor lighting installation services', 125.0)
                 ]
-                
-                cursor.executemany('''
-                    INSERT INTO services (name, description, base_price) 
+                cursor.executemany(self._prepare_query('''
+                    INSERT INTO services (name, description, base_price)
                     VALUES (?, ?, ?)
-                ''', default_services)
-                print("Created default services")
-            
-            # Check if time slots already exist
-            cursor.execute("SELECT COUNT(*) FROM time_slots")
-            if cursor.fetchone()[0] == 0:
-                # Insert default time slots
+                '''), default_services)
+                print('Created default services')
+
+            cursor.execute(self._prepare_query('SELECT COUNT(*) FROM time_slots'))
+            if self._fetchone_value(cursor) == 0:
                 default_time_slots = [
                     ('8:00 AM',), ('9:00 AM',), ('10:00 AM',), ('11:00 AM',),
                     ('12:00 PM',), ('1:00 PM',), ('2:00 PM',), ('3:00 PM',), ('4:00 PM',)
                 ]
-                
-                cursor.executemany('''
-                    INSERT INTO time_slots (time_slot) VALUES (?)
-                ''', default_time_slots)
-                print("Created time slots")
-            
+                cursor.executemany(self._prepare_query('INSERT INTO time_slots (time_slot) VALUES (?)'), default_time_slots)
+                print('Created time slots')
+
             conn.commit()
-            conn.close()
         except Exception as e:
-            print(f"Seeding error: {e}")
+            if conn:
+                conn.rollback()
+            print(f'Seeding error: {e}')
+        finally:
             if conn:
                 conn.close()
-    
+
     def hash_password(self, password, salt=None):
-        """Hash password with salt using SHA-256"""
         if salt is None:
             salt = secrets.token_hex(32)
-        
         password_hash = hashlib.sha256((password + salt).encode()).hexdigest()
         return password_hash, salt
-    
+
     def create_admin_user(self, username, password):
-        """Create admin user with hashed password"""
         password_hash, salt = self.hash_password(password)
-        
-        conn = sqlite3.connect(self.db_path)
+        conn = self.get_connection()
         cursor = conn.cursor()
-        cursor.execute('''
-            INSERT INTO admin_users (username, password_hash, salt)
-            VALUES (?, ?, ?)
-        ''', (username, password_hash, salt))
-        conn.commit()
-        conn.close()
-    
+        try:
+            if self.use_postgres:
+                cursor.execute(self._prepare_query('''
+                    INSERT INTO admin_users (username, password_hash, salt)
+                    VALUES (?, ?, ?)
+                    ON CONFLICT (username) DO NOTHING
+                '''), (username, password_hash, salt))
+            else:
+                cursor.execute(self._prepare_query('''
+                    INSERT OR IGNORE INTO admin_users (username, password_hash, salt)
+                    VALUES (?, ?, ?)
+                '''), (username, password_hash, salt))
+            conn.commit()
+        finally:
+            conn.close()
+
     def verify_admin_login(self, username, password, ip_address, user_agent):
-        """Verify admin login credentials with security checks"""
         conn = None
         try:
             conn = self.get_connection()
             cursor = conn.cursor()
-            
-            # Log the attempt
-            success = False
-            
-            cursor.execute('''
+            cursor.execute(self._prepare_query('''
                 SELECT id, password_hash, salt, failed_attempts, locked_until, is_active
-                FROM admin_users 
+                FROM admin_users
                 WHERE username = ?
-            ''', (username,))
-            
+            '''), (username,))
+
             user = cursor.fetchone()
-            
             if not user:
                 self.log_access(username, ip_address, user_agent, 'login_attempt', False)
-                return False, "Invalid credentials"
-            
+                return False, 'Invalid credentials'
+
             user_id, stored_hash, salt, failed_attempts, locked_until, is_active = user
-            
-            # Check if account is locked
-            if locked_until and datetime.fromisoformat(locked_until) > datetime.now():
+            locked_until_dt = self._parse_datetime(locked_until)
+
+            if locked_until_dt and locked_until_dt > datetime.now():
                 self.log_access(username, ip_address, user_agent, 'login_attempt_locked', False)
-                return False, "Account locked due to too many failed attempts"
-            
-            # Check if account is active
+                return False, 'Account locked due to too many failed attempts'
+
             if not is_active:
                 self.log_access(username, ip_address, user_agent, 'login_attempt_inactive', False)
-                return False, "Account is disabled"
-            
-            # Verify password
+                return False, 'Account is disabled'
+
             password_hash, _ = self.hash_password(password, salt)
-            
             if password_hash == stored_hash:
-                # Successful login - reset failed attempts
-                cursor.execute('''
-                    UPDATE admin_users 
+                cursor.execute(self._prepare_query('''
+                    UPDATE admin_users
                     SET failed_attempts = 0, last_login = CURRENT_TIMESTAMP, locked_until = NULL
                     WHERE id = ?
-                ''', (user_id,))
-                success = True
+                '''), (user_id,))
                 self.log_access(username, ip_address, user_agent, 'login_success', True)
-            else:
-                # Failed login - increment failed attempts
-                failed_attempts += 1
-                cursor.execute('''
-                    UPDATE admin_users 
-                    SET failed_attempts = ?
+                conn.commit()
+                return True, 'Login successful'
+
+            failed_attempts += 1
+            cursor.execute(self._prepare_query('''
+                UPDATE admin_users
+                SET failed_attempts = ?
+                WHERE id = ?
+            '''), (failed_attempts, user_id))
+
+            if failed_attempts >= 5:
+                lock_until = (datetime.now() + timedelta(minutes=30)).isoformat()
+                cursor.execute(self._prepare_query('''
+                    UPDATE admin_users
+                    SET locked_until = ?
                     WHERE id = ?
-                ''', (failed_attempts, user_id))
-                
-                # Lock account after 5 failed attempts for 30 minutes
-                if failed_attempts >= 5:
-                    lock_until = (datetime.now() + timedelta(minutes=30)).isoformat()
-                    cursor.execute('''
-                        UPDATE admin_users 
-                        SET locked_until = ?
-                        WHERE id = ?
-                    ''', (lock_until, user_id))
-                
-                self.log_access(username, ip_address, user_agent, 'login_failed', False)
-            
+                '''), (lock_until, user_id))
+
+            self.log_access(username, ip_address, user_agent, 'login_failed', False)
             conn.commit()
-            
-            if success:
-                return True, "Login successful"
-            else:
-                return False, "Invalid credentials"
-                
-        except sqlite3.Error as e:
+            return False, 'Invalid credentials'
+
+        except Exception as e:
             if conn:
                 conn.rollback()
-            return False, f"Database error: {str(e)}"
+            return False, f'Database error: {str(e)}'
         finally:
             if conn:
                 conn.close()
-    
+
     def log_access(self, username, ip_address, user_agent, action, success):
-        """Log access attempts - simplified to avoid blocking"""
         try:
             conn = self.get_connection()
             cursor = conn.cursor()
-            cursor.execute('''
+            cursor.execute(self._prepare_query('''
                 INSERT INTO access_logs (username, ip_address, user_agent, action, success)
                 VALUES (?, ?, ?, ?, ?)
-            ''', (username, ip_address, user_agent, action, success))
+            '''), (username, ip_address, user_agent, action, success))
             conn.commit()
             conn.close()
-        except sqlite3.Error:
-            pass  # Don't fail if logging fails
-    
+        except Exception:
+            pass
+
     def get_access_logs(self, limit=100):
-        """Get access logs"""
-        conn = sqlite3.connect(self.db_path)
+        conn = self.get_connection()
         cursor = conn.cursor()
-        cursor.execute('''
+        cursor.execute(self._prepare_query('''
             SELECT username, ip_address, action, success, timestamp
-            FROM access_logs 
-            ORDER BY timestamp DESC 
+            FROM access_logs
+            ORDER BY timestamp DESC
             LIMIT ?
-        ''', (limit,))
+        '''), (limit,))
         logs = cursor.fetchall()
         conn.close()
         return logs
-    
+
     def update_admin_password(self, username, new_password):
-        """Update admin password"""
         password_hash, salt = self.hash_password(new_password)
-        
-        conn = sqlite3.connect(self.db_path)
+        conn = self.get_connection()
         cursor = conn.cursor()
-        cursor.execute('''
-            UPDATE admin_users 
+        cursor.execute(self._prepare_query('''
+            UPDATE admin_users
             SET password_hash = ?, salt = ?, failed_attempts = 0, locked_until = NULL
             WHERE username = ?
-        ''', (password_hash, salt, username))
+        '''), (password_hash, salt, username))
         conn.commit()
         conn.close()
-    
+
     def get_contact_info(self):
-        """Get contact information"""
-        conn = sqlite3.connect(self.db_path)
+        conn = self.get_connection()
         cursor = conn.cursor()
-        cursor.execute('SELECT phone, email, address, service_area, business_hours FROM contact_info LIMIT 1')
+        cursor.execute(self._prepare_query('SELECT phone, email, address, service_area, business_hours FROM contact_info LIMIT 1'))
         contact = cursor.fetchone()
         conn.close()
         return contact
-    
+
     def update_contact_info(self, phone, email, address, service_area, business_hours):
-        """Update contact information"""
-        conn = sqlite3.connect(self.db_path)
+        conn = self.get_connection()
         cursor = conn.cursor()
-        cursor.execute('''
-            INSERT OR REPLACE INTO contact_info (id, phone, email, address, service_area, business_hours)
-            VALUES (1, ?, ?, ?, ?, ?)
-        ''', (phone, email, address, service_area, business_hours))
+        if self.use_postgres:
+            cursor.execute(self._prepare_query('''
+                INSERT INTO contact_info (id, phone, email, address, service_area, business_hours, updated_at)
+                VALUES (1, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+                ON CONFLICT (id) DO UPDATE SET
+                    phone = EXCLUDED.phone,
+                    email = EXCLUDED.email,
+                    address = EXCLUDED.address,
+                    service_area = EXCLUDED.service_area,
+                    business_hours = EXCLUDED.business_hours,
+                    updated_at = CURRENT_TIMESTAMP
+            '''), (phone, email, address, service_area, business_hours))
+        else:
+            cursor.execute(self._prepare_query('''
+                INSERT INTO contact_info (id, phone, email, address, service_area, business_hours, updated_at)
+                VALUES (1, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+                ON CONFLICT(id) DO UPDATE SET
+                    phone = excluded.phone,
+                    email = excluded.email,
+                    address = excluded.address,
+                    service_area = excluded.service_area,
+                    business_hours = excluded.business_hours,
+                    updated_at = CURRENT_TIMESTAMP
+            '''), (phone, email, address, service_area, business_hours))
         conn.commit()
         conn.close()
-    
-    def get_services(self):
-        """Get all active services"""
-        conn = sqlite3.connect(self.db_path)
+
+    def add_contact_submission(self, name, email, phone, service_type, message, ip_address=None, user_agent=None):
+        conn = self.get_connection()
         cursor = conn.cursor()
-        cursor.execute('''
-            SELECT id, name, description, base_price 
-            FROM services 
-            WHERE is_active = 1 
+        if self.use_postgres:
+            cursor.execute(self._prepare_query('''
+                INSERT INTO contact_submissions (name, email, phone, service_type, message, ip_address, user_agent)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+                RETURNING id
+            '''), (name, email, phone, service_type, message, ip_address, user_agent))
+            submission_id = cursor.fetchone()[0]
+        else:
+            cursor.execute(self._prepare_query('''
+                INSERT INTO contact_submissions (name, email, phone, service_type, message, ip_address, user_agent)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            '''), (name, email, phone, service_type, message, ip_address, user_agent))
+            submission_id = cursor.lastrowid
+        conn.commit()
+        conn.close()
+        return submission_id
+
+    def get_contact_submissions(self, limit=200):
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        cursor.execute(self._prepare_query('''
+            SELECT id, name, email, phone, service_type, message, ip_address, user_agent, created_at
+            FROM contact_submissions
+            ORDER BY created_at DESC
+            LIMIT ?
+        '''), (limit,))
+        rows = cursor.fetchall()
+        conn.close()
+        return rows
+
+    def get_services(self):
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        active_filter = 'TRUE' if self.use_postgres else '1'
+        cursor.execute(self._prepare_query('''
+            SELECT id, name, description, base_price
+            FROM services
+            WHERE is_active = ''' + active_filter + '''
             ORDER BY name
-        ''')
+        '''))
         services = cursor.fetchall()
         conn.close()
         return services
-    
-    def get_time_slots(self):
-        """Get all active time slots"""
-        conn = sqlite3.connect(self.db_path)
+
+    def get_service_by_id(self, service_id):
+        conn = self.get_connection()
         cursor = conn.cursor()
-        cursor.execute('''
-            SELECT id, time_slot 
-            FROM time_slots 
-            WHERE is_active = 1 
+        cursor.execute(self._prepare_query('SELECT id, name, description, base_price FROM services WHERE id = ?'), (service_id,))
+        service = cursor.fetchone()
+        conn.close()
+        return service
+
+    def get_time_slots(self):
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        active_filter = 'TRUE' if self.use_postgres else '1'
+        cursor.execute(self._prepare_query('''
+            SELECT id, time_slot
+            FROM time_slots
+            WHERE is_active = ''' + active_filter + '''
             ORDER BY time_slot
-        ''')
+        '''))
         time_slots = cursor.fetchall()
         conn.close()
         return time_slots
-    
+
     def get_availability(self, date):
-        """Get availability for a specific date"""
-        conn = sqlite3.connect(self.db_path)
+        conn = self.get_connection()
         cursor = conn.cursor()
-        cursor.execute('''
+        active_filter = 'TRUE' if self.use_postgres else '1'
+        cursor.execute(self._prepare_query('''
             SELECT ts.id, ts.time_slot, a.is_available
             FROM time_slots ts
             LEFT JOIN availability a ON ts.id = a.time_slot_id AND a.date = ?
-            WHERE ts.is_active = 1
+            WHERE ts.is_active = ''' + active_filter + '''
             ORDER BY ts.time_slot
-        ''', (date,))
+        '''), (date,))
         availability = cursor.fetchall()
         conn.close()
         return availability
-    
+
     def set_availability(self, date, time_slot_id, is_available):
-        """Set availability for a specific date and time slot"""
-        conn = sqlite3.connect(self.db_path)
+        conn = self.get_connection()
         cursor = conn.cursor()
-        cursor.execute('''
-            INSERT OR REPLACE INTO availability (date, time_slot_id, is_available)
+        cursor.execute(self._prepare_query('''
+            INSERT INTO availability (date, time_slot_id, is_available)
             VALUES (?, ?, ?)
-        ''', (date, time_slot_id, is_available))
+            ON CONFLICT (date, time_slot_id) DO UPDATE SET
+                is_available = EXCLUDED.is_available
+        '''), (date, time_slot_id, is_available))
         conn.commit()
         conn.close()
-    
+
     def add_service(self, name, description, base_price):
-        """Add a new service"""
-        conn = sqlite3.connect(self.db_path)
+        conn = self.get_connection()
         cursor = conn.cursor()
-        cursor.execute('''
-            INSERT INTO services (name, description, base_price)
-            VALUES (?, ?, ?)
-        ''', (name, description, base_price))
-        service_id = cursor.lastrowid
+        if self.use_postgres:
+            cursor.execute(self._prepare_query('''
+                INSERT INTO services (name, description, base_price)
+                VALUES (?, ?, ?)
+                RETURNING id
+            '''), (name, description, base_price))
+            service_id = cursor.fetchone()[0]
+        else:
+            cursor.execute(self._prepare_query('''
+                INSERT INTO services (name, description, base_price)
+                VALUES (?, ?, ?)
+            '''), (name, description, base_price))
+            service_id = cursor.lastrowid
         conn.commit()
         conn.close()
         return service_id
-    
+
     def update_service(self, service_id, name, description, base_price):
-        """Update an existing service"""
-        conn = sqlite3.connect(self.db_path)
+        conn = self.get_connection()
         cursor = conn.cursor()
-        cursor.execute('''
-            UPDATE services 
+        cursor.execute(self._prepare_query('''
+            UPDATE services
             SET name = ?, description = ?, base_price = ?, updated_at = CURRENT_TIMESTAMP
             WHERE id = ?
-        ''', (name, description, base_price, service_id))
+        '''), (name, description, base_price, service_id))
         conn.commit()
         conn.close()
-    
+
     def delete_service(self, service_id):
-        """Delete a service (soft delete by setting is_active to 0)"""
-        conn = sqlite3.connect(self.db_path)
+        conn = self.get_connection()
         cursor = conn.cursor()
-        cursor.execute('''
-            UPDATE services 
-            SET is_active = 0, updated_at = CURRENT_TIMESTAMP
+        inactive_value = 'FALSE' if self.use_postgres else '0'
+        cursor.execute(self._prepare_query('''
+            UPDATE services
+            SET is_active = ''' + inactive_value + ''', updated_at = CURRENT_TIMESTAMP
             WHERE id = ?
-        ''', (service_id,))
+        '''), (service_id,))
         conn.commit()
         conn.close()
-    
-    def add_booking(self, service_id, customer_name, customer_phone, customer_email, 
-                  customer_address, service_date, time_slot, description, total_price):
-        """Add a new booking"""
-        conn = sqlite3.connect(self.db_path)
+
+    def add_booking(self, service_id, customer_name, customer_phone, customer_email,
+                    customer_address, service_date, time_slot, description, total_price):
+        conn = self.get_connection()
         cursor = conn.cursor()
-        cursor.execute('''
-            INSERT INTO bookings 
-            (service_id, customer_name, customer_phone, customer_email, 
-             customer_address, service_date, time_slot, description, total_price)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        ''', (service_id, customer_name, customer_phone, customer_email,
-               customer_address, service_date, time_slot, description, total_price))
-        booking_id = cursor.lastrowid
+        if self.use_postgres:
+            cursor.execute(self._prepare_query('''
+                INSERT INTO bookings
+                (service_id, customer_name, customer_phone, customer_email,
+                 customer_address, service_date, time_slot, description, total_price)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                RETURNING id
+            '''), (service_id, customer_name, customer_phone, customer_email,
+                   customer_address, service_date, time_slot, description, total_price))
+            booking_id = cursor.fetchone()[0]
+        else:
+            cursor.execute(self._prepare_query('''
+                INSERT INTO bookings
+                (service_id, customer_name, customer_phone, customer_email,
+                 customer_address, service_date, time_slot, description, total_price)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            '''), (service_id, customer_name, customer_phone, customer_email,
+                   customer_address, service_date, time_slot, description, total_price))
+            booking_id = cursor.lastrowid
         conn.commit()
         conn.close()
         return booking_id
-    
+
     def get_gallery_photos(self, category=None):
-        """Get all gallery photos"""
-        conn = sqlite3.connect(self.db_path)
+        conn = self.get_connection()
         cursor = conn.cursor()
-        
+        active_filter = 'TRUE' if self.use_postgres else '1'
         if category:
-            cursor.execute('SELECT * FROM gallery_photos WHERE category = ? AND is_active = 1 ORDER BY display_order ASC', (category,))
+            cursor.execute(self._prepare_query(
+                'SELECT * FROM gallery_photos WHERE category = ? AND is_active = ' + active_filter + ' ORDER BY display_order ASC'
+            ), (category,))
         else:
-            cursor.execute('SELECT * FROM gallery_photos WHERE is_active = 1 ORDER BY display_order ASC')
-        
+            cursor.execute(self._prepare_query(
+                'SELECT * FROM gallery_photos WHERE is_active = ' + active_filter + ' ORDER BY display_order ASC'
+            ))
         photos = cursor.fetchall()
         conn.close()
         return photos
-    
+
     def add_gallery_photo(self, filename, title, description, category='general', display_order=0):
-        """Add a new gallery photo"""
-        conn = sqlite3.connect(self.db_path)
+        conn = self.get_connection()
         cursor = conn.cursor()
-        cursor.execute('''
-            INSERT INTO gallery_photos (filename, title, description, category, display_order)
-            VALUES (?, ?, ?, ?, ?)
-        ''', (filename, title, description, category, display_order))
-        photo_id = cursor.lastrowid
+        if self.use_postgres:
+            cursor.execute(self._prepare_query('''
+                INSERT INTO gallery_photos (filename, title, description, category, display_order)
+                VALUES (?, ?, ?, ?, ?)
+                RETURNING id
+            '''), (filename, title, description, category, display_order))
+            photo_id = cursor.fetchone()[0]
+        else:
+            cursor.execute(self._prepare_query('''
+                INSERT INTO gallery_photos (filename, title, description, category, display_order)
+                VALUES (?, ?, ?, ?, ?)
+            '''), (filename, title, description, category, display_order))
+            photo_id = cursor.lastrowid
         conn.commit()
         conn.close()
         return photo_id
-    
-    def update_gallery_photo(self, photo_id, title, description, category, display_order):
-        """Update gallery photo information"""
-        conn = sqlite3.connect(self.db_path)
+
+    def update_gallery_photo(self, photo_id, title, description, category, display_order=None):
+        conn = self.get_connection()
         cursor = conn.cursor()
-        cursor.execute('''
-            UPDATE gallery_photos 
-            SET title = ?, description = ?, category = ?, display_order = ?
-            WHERE id = ?
-        ''', (title, description, category, display_order, photo_id))
+        if display_order is None:
+            cursor.execute(self._prepare_query('''
+                UPDATE gallery_photos
+                SET title = ?, description = ?, category = ?
+                WHERE id = ?
+            '''), (title, description, category, photo_id))
+        else:
+            cursor.execute(self._prepare_query('''
+                UPDATE gallery_photos
+                SET title = ?, description = ?, category = ?, display_order = ?
+                WHERE id = ?
+            '''), (title, description, category, display_order, photo_id))
         conn.commit()
         conn.close()
-    
+
     def delete_gallery_photo(self, photo_id):
-        """Delete a gallery photo"""
-        conn = sqlite3.connect(self.db_path)
+        conn = self.get_connection()
         cursor = conn.cursor()
-        cursor.execute('UPDATE gallery_photos SET is_active = 0 WHERE id = ?', (photo_id,))
+        inactive_value = 'FALSE' if self.use_postgres else '0'
+        cursor.execute(self._prepare_query('UPDATE gallery_photos SET is_active = ' + inactive_value + ' WHERE id = ?'), (photo_id,))
         conn.commit()
         conn.close()
-    
+
     def update_photo_order(self, photo_orders):
-        """Update display order of multiple photos"""
-        conn = sqlite3.connect(self.db_path)
+        conn = self.get_connection()
         cursor = conn.cursor()
         for photo_id, order in photo_orders:
-            cursor.execute('UPDATE gallery_photos SET display_order = ? WHERE id = ?', (order, photo_id))
+            cursor.execute(self._prepare_query(
+                'UPDATE gallery_photos SET display_order = ? WHERE id = ?'
+            ), (int(order), int(photo_id)))
         conn.commit()
         conn.close()
-    
+
     def get_bookings(self, date=None):
-        """Get bookings, optionally filtered by date"""
-        conn = sqlite3.connect(self.db_path)
+        conn = self.get_connection()
         cursor = conn.cursor()
-        
+
         if date:
-            cursor.execute('''
+            cursor.execute(self._prepare_query('''
                 SELECT b.*, s.name as service_name
                 FROM bookings b
                 JOIN services s ON b.service_id = s.id
                 WHERE b.service_date = ?
                 ORDER BY b.service_date, b.time_slot
-            ''', (date,))
+            '''), (date,))
         else:
-            cursor.execute('''
+            cursor.execute(self._prepare_query('''
                 SELECT b.*, s.name as service_name
                 FROM bookings b
                 JOIN services s ON b.service_id = s.id
                 ORDER BY b.service_date DESC, b.time_slot
-            ''')
-        
+            '''))
+
         bookings = cursor.fetchall()
         conn.close()
         return bookings

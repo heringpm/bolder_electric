@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
     <title>Gallery Management - Bolder Electric</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.min.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
@@ -14,10 +15,9 @@
                 <a href="{{ url_for('home') }}">Bolder Electric</a>
             </div>
             <ul class="nav-menu">
-                <li><a href="{{ url_for('admin_dashboard') }}">Dashboard</a></li>
-                <li><a href="{{ url_for('admin_bookings') }}">Bookings</a></li>
+                <li><a href="{{ url_for('admin') }}">Admin Panel</a></li>
                 <li><a href="{{ url_for('admin_gallery') }}" class="active">Gallery</a></li>
-                <li><a href="{{ url_for('admin_contact') }}">Contact</a></li>
+                <li><a href="{{ url_for('account') }}">Account</a></li>
                 <li><a href="{{ url_for('logout') }}">Logout</a></li>
             </ul>
         </div>
@@ -65,7 +65,7 @@
                     <h2>Current Gallery Photos</h2>
                     <div class="photos-grid" id="photosGrid">
                         {% for photo in photos %}
-                        <div class="photo-item" data-id="{{ photo[0] }}">
+                        <div class="photo-item" data-id="{{ photo[0] }}" draggable="true">
                             <div class="photo-preview">
                                 <img src="{{ url_for('static', filename='images/gallery/' + photo[1]) }}" alt="{{ photo[2] or photo[1] }}">
                             </div>
@@ -87,6 +87,9 @@
                             </div>
                         </div>
                         {% endfor %}
+                        {% if not photos %}
+                        <p>No gallery photos yet. Upload your first photo using the form.</p>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -311,9 +314,11 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
+                        e.target.disabled = true;
                         e.target.textContent = 'Saved!';
                         setTimeout(() => {
                             e.target.textContent = 'Save';
+                            e.target.disabled = false;
                         }, 2000);
                     } else {
                         alert(data.message);
@@ -353,20 +358,23 @@
         document.addEventListener('dragstart', function(e) {
             if (e.target.classList.contains('photo-item')) {
                 draggedItem = e.target;
+                e.target.classList.add('dragging');
                 e.target.style.opacity = '0.5';
             }
         });
 
         document.addEventListener('dragend', function(e) {
             if (e.target.classList.contains('photo-item')) {
+                e.target.classList.remove('dragging');
                 e.target.style.opacity = '';
             }
         });
 
         document.addEventListener('dragover', function(e) {
+            if (!draggedItem) return;
             e.preventDefault();
             const container = document.getElementById('photosGrid');
-            const afterElement = getDragAfterElement(container, e.clientX);
+            const afterElement = getDragAfterElement(container, e.clientY);
             if (afterElement == null) {
                 container.appendChild(draggedItem);
             } else {
@@ -374,16 +382,20 @@
             }
         });
 
-        function getDragAfterElement(container, x) {
+        function getDragAfterElement(container, y) {
             const draggableElements = [...container.querySelectorAll('.photo-item:not(.dragging)')];
             return draggableElements.reduce((closest, child) => {
                 const box = child.getBoundingClientRect();
-                const offset = x - box.left - box.width / 2;
-                return offset < 0 && offset > closest.offset ? child : closest;
-            }, null);
+                const offset = y - box.top - box.height / 2;
+                if (offset < 0 && offset > closest.offset) {
+                    return { offset: offset, element: child };
+                }
+                return closest;
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
         }
 
         document.addEventListener('drop', function(e) {
+            if (!draggedItem) return;
             e.preventDefault();
             const container = document.getElementById('photosGrid');
             
@@ -410,6 +422,8 @@
             .catch(error => {
                 console.error('Error reordering photos:', error);
             });
+
+            draggedItem = null;
         });
     </script>
 </body>
