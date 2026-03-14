@@ -113,6 +113,27 @@
             border: 1px solid #ffeaa7;
             font-size: 0.85rem;
         }
+
+        .otp-hint {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: var(--dark-gray);
+        }
+
+        .setup-key {
+            font-family: monospace;
+            font-size: 0.95rem;
+            background: #f1f1f1;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 0.6rem;
+            word-break: break-all;
+            margin-top: 0.4rem;
+        }
         
         .back-link {
             text-align: center;
@@ -169,10 +190,39 @@
             </div>
             {% endif %}
             
-            <form method="POST">
+            {% if two_factor_required %}
+            <form method="POST" autocomplete="off">
+                <input type="hidden" name="step" value="verify_2fa">
+                <input type="hidden" name="username" value="{{ username }}">
+
+                {% if two_factor_setup %}
+                <div class="otp-hint">
+                    <strong>Set up two-factor authentication</strong><br>
+                    Add this account to your authenticator app using the key below, then enter the 6-digit code.
+                    <div class="setup-key">{{ setup_secret }}</div>
+                    <div style="margin-top: 0.5rem;">
+                        <a href="{{ setup_uri }}" style="color: var(--primary-red);">Open setup link on this device</a>
+                    </div>
+                </div>
+                {% else %}
+                <div class="otp-hint">
+                    Enter the 6-digit authentication code for <strong>{{ username }}</strong>.
+                </div>
+                {% endif %}
+
+                <div class="form-group">
+                    <label for="two_factor_code">Authentication Code</label>
+                    <input type="text" id="two_factor_code" name="two_factor_code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" required autofocus>
+                </div>
+
+                <button type="submit" class="login-btn">{{ 'Enable 2FA & Sign In' if two_factor_setup else 'Verify & Sign In' }}</button>
+            </form>
+            {% else %}
+            <form method="POST" autocomplete="off">
+                <input type="hidden" name="step" value="password">
                 <div class="form-group">
                     <label for="username">Username</label>
-                    <input type="text" id="username" name="username" required>
+                    <input type="text" id="username" name="username" value="{{ username or '' }}" required>
                 </div>
                 
                 <div class="form-group">
@@ -180,11 +230,12 @@
                     <input type="password" id="password" name="password" required>
                 </div>
                 
-                <button type="submit" class="login-btn">Login</button>
+                <button type="submit" class="login-btn">Continue</button>
             </form>
+            {% endif %}
             
             <div class="security-notice">
-                <strong>Security Notice:</strong> This system logs all access attempts including IP addresses and timestamps. Multiple failed login attempts will result in temporary account lockout.
+                <strong>Security Notice:</strong> This system logs access attempts, requires two-factor authentication, and temporarily locks accounts after repeated failed password attempts.
             </div>
         </div>
         

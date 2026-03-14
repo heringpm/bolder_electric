@@ -511,14 +511,20 @@
         </div>
 
         <div class="admin-tabs">
+            {% if current_role == 'admin' %}
             <button class="admin-tab active" data-section="services" onclick="showSection('services', this)">Services</button>
             <button class="admin-tab" data-section="availability" onclick="showSection('availability', this)">Availability</button>
-            <button class="admin-tab" data-section="bookings" onclick="showSection('bookings', this)">Bookings</button>
+            {% endif %}
+            <button class="admin-tab {% if current_role != 'admin' %}active{% endif %}" data-section="bookings" onclick="showSection('bookings', this)">Bookings</button>
             <button class="admin-tab" data-section="contacts" onclick="showSection('contacts', this)">Contact Leads</button>
+            {% if current_role == 'admin' %}
             <button class="admin-tab" data-section="gallery" onclick="showSection('gallery', this)">Gallery</button>
+            <button class="admin-tab" data-section="users" onclick="showSection('users', this)">Users</button>
             <button class="admin-tab" data-section="logs" onclick="showSection('logs', this)">Access Logs</button>
+            {% endif %}
         </div>
 
+        {% if current_role == 'admin' %}
         <!-- Services Section -->
         <div id="services-section" class="admin-section active">
             <div class="section-header">
@@ -560,6 +566,7 @@
                 </div>
             </div>
         </div>
+        {% endif %}
 
         <!-- Bookings Section -->
         <div id="bookings-section" class="admin-section">
@@ -582,6 +589,7 @@
             </div>
         </div>
 
+        {% if current_role == 'admin' %}
         <!-- Gallery Section -->
         <div id="gallery-section" class="admin-section">
             <div class="section-header">
@@ -624,6 +632,53 @@
             </div>
         </div>
 
+        <!-- Users Section -->
+        <div id="users-section" class="admin-section">
+            <div class="section-header">
+                <h2 class="section-title">User Management</h2>
+            </div>
+            <div style="display: grid; grid-template-columns: 320px 1fr; gap: 1.5rem;">
+                <div style="background: var(--white); border: 1px solid #ddd; border-radius: 8px; padding: 1rem;">
+                    <h3 style="margin-bottom: 1rem;">Add User</h3>
+                    <form id="new-user-form">
+                        <div class="form-group">
+                            <label for="new-username">Username</label>
+                            <input type="text" id="new-username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="new-password">Password</label>
+                            <input type="password" id="new-password" minlength="8" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="new-role">Role</label>
+                            <select id="new-role" required>
+                                <option value="viewer">View Only</option>
+                                <option value="editor">Editor</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn-add">Create User</button>
+                    </form>
+                </div>
+                <div style="background: var(--white); border: 1px solid #ddd; border-radius: 8px; padding: 1rem;">
+                    <h3 style="margin-bottom: 1rem;">Existing Users</h3>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Role</th>
+                                <th>2FA</th>
+                                <th>Status</th>
+                                <th>Last Login</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
         <!-- Logs Section -->
         <div id="logs-section" class="admin-section">
             <div class="section-header">
@@ -645,6 +700,7 @@
                 <!-- Logs will be loaded here -->
             </div>
         </div>
+        {% endif %}
     </div>
 
     <!-- Service Modal -->
@@ -677,11 +733,13 @@
     </div>
 
     <script>
-        let currentSection = 'services';
+        const currentUserRole = "{{ current_role }}";
+        let currentSection = currentUserRole === 'admin' ? 'services' : 'bookings';
         let services = [];
         let timeSlots = [];
         let bookings = [];
         let contactSubmissions = [];
+        let users = [];
         let galleryPhotos = [];
         let draggedGalleryItem = null;
 
@@ -703,6 +761,7 @@
             if (section === 'bookings') loadBookings();
             if (section === 'contacts') loadContactSubmissions();
             if (section === 'gallery') loadGalleryPhotos();
+            if (section === 'users') loadUsers();
             if (section === 'logs') loadLogs();
         }
 
@@ -921,6 +980,51 @@
             });
         }
 
+        function loadUsers() {
+            fetch('/api/users')
+                .then(response => response.json())
+                .then(data => {
+                    users = data;
+                    renderUsers();
+                })
+                .catch(() => {
+                    const tbody = document.getElementById('users-tbody');
+                    if (tbody) tbody.innerHTML = '<tr><td colspan="6">Error loading users</td></tr>';
+                });
+        }
+
+        function renderUsers() {
+            const tbody = document.getElementById('users-tbody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+            users.forEach(user => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${escapeHtml(user.username)}</td>
+                    <td>
+                        <select data-action="role" data-id="${user.id}">
+                            <option value="viewer" ${user.role === 'viewer' ? 'selected' : ''}>View Only</option>
+                            <option value="editor" ${user.role === 'editor' ? 'selected' : ''}>Editor</option>
+                            <option value="admin" ${user.role === 'admin' ? 'selected' : ''}>Admin</option>
+                        </select>
+                    </td>
+                    <td>${user.two_factor_enabled ? 'Enabled' : 'Not Set'}</td>
+                    <td>${user.is_active ? 'Active' : 'Disabled'}</td>
+                    <td>${user.last_login ? new Date(user.last_login).toLocaleString() : 'Never'}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-edit" data-action="reset-password" data-id="${user.id}">Reset Password</button>
+                            <button class="btn-edit" data-action="reset-2fa" data-id="${user.id}">Reset 2FA</button>
+                            <button class="btn-delete" data-action="toggle-active" data-id="${user.id}" data-active="${user.is_active}">
+                                ${user.is_active ? 'Disable' : 'Enable'}
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
         function loadLogs() {
             const filter = document.getElementById('log-filter').value;
             const url = filter === 'all' ? '/api/logs' : `/api/logs?action=${filter}`;
@@ -1023,6 +1127,7 @@
             const uploadForm = document.getElementById('gallery-upload-form');
             const uploadBtn = document.getElementById('gallery-upload-btn');
             const photosGrid = document.getElementById('gallery-photos-grid');
+            if (!uploadForm || !uploadBtn || !photosGrid) return;
 
             uploadForm.addEventListener('submit', function(e) {
                 e.preventDefault();
@@ -1131,6 +1236,108 @@
             });
         }
 
+        function setupUserHandlers() {
+            const userForm = document.getElementById('new-user-form');
+            const usersTable = document.getElementById('users-tbody');
+            if (!userForm || !usersTable) return;
+
+            userForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const username = document.getElementById('new-username').value.trim();
+                const password = document.getElementById('new-password').value;
+                const role = document.getElementById('new-role').value;
+
+                fetch('/api/users', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password, role })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.success) {
+                        alert(data.message || 'Failed to create user');
+                        return;
+                    }
+                    userForm.reset();
+                    loadUsers();
+                })
+                .catch(() => alert('Failed to create user'));
+            });
+
+            usersTable.addEventListener('change', function(e) {
+                if (e.target.dataset.action !== 'role') return;
+                const userId = e.target.dataset.id;
+                const role = e.target.value;
+                fetch(`/api/users/${userId}/role`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ role })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.success) alert(data.message || 'Failed to update role');
+                })
+                .catch(() => alert('Failed to update role'));
+            });
+
+            usersTable.addEventListener('click', function(e) {
+                const action = e.target.dataset.action;
+                const userId = e.target.dataset.id;
+                if (!action || !userId) return;
+
+                if (action === 'reset-password') {
+                    const newPassword = prompt('Enter new password (min 8 characters):');
+                    if (!newPassword) return;
+                    fetch(`/api/users/${userId}/password`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ password: newPassword })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) alert('Password updated');
+                        else alert(data.message || 'Failed to reset password');
+                    })
+                    .catch(() => alert('Failed to reset password'));
+                }
+
+                if (action === 'toggle-active') {
+                    const currentlyActive = e.target.dataset.active === 'true';
+                    fetch(`/api/users/${userId}/active`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ is_active: !currentlyActive })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.success) {
+                            alert(data.message || 'Failed to update user');
+                            return;
+                        }
+                        loadUsers();
+                    })
+                    .catch(() => alert('Failed to update user'));
+                }
+
+                if (action === 'reset-2fa') {
+                    if (!confirm('Reset 2FA for this user? They will be prompted to set it up again at next login.')) return;
+                    fetch(`/api/users/${userId}/reset-2fa`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (!data.success) {
+                            alert(data.message || 'Failed to reset 2FA');
+                            return;
+                        }
+                        loadUsers();
+                    })
+                    .catch(() => alert('Failed to reset 2FA'));
+                }
+            });
+        }
+
         window.onclick = function(event) {
             const modal = document.getElementById('service-modal');
             if (event.target === modal) closeServiceModal();
@@ -1138,12 +1345,15 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             setupGalleryHandlers();
+            setupUserHandlers();
             const tab = new URLSearchParams(window.location.search).get('tab');
-            const validTabs = ['services', 'availability', 'bookings', 'contacts', 'gallery', 'logs'];
+            const adminTabs = ['services', 'availability', 'bookings', 'contacts', 'gallery', 'users', 'logs'];
+            const limitedTabs = ['bookings', 'contacts'];
+            const validTabs = currentUserRole === 'admin' ? adminTabs : limitedTabs;
             if (tab && validTabs.includes(tab)) {
                 showSection(tab);
             } else {
-                loadServices();
+                showSection(currentSection);
             }
         });
     </script>

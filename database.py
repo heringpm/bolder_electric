@@ -58,6 +58,9 @@ class DatabaseManager:
                         username TEXT UNIQUE NOT NULL,
                         password_hash TEXT NOT NULL,
                         salt TEXT NOT NULL,
+                        role TEXT NOT NULL DEFAULT 'admin',
+                        two_factor_secret TEXT,
+                        two_factor_enabled BOOLEAN DEFAULT FALSE,
                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         last_login TIMESTAMP,
                         failed_attempts INTEGER DEFAULT 0,
@@ -173,6 +176,9 @@ class DatabaseManager:
                         username TEXT UNIQUE NOT NULL,
                         password_hash TEXT NOT NULL,
                         salt TEXT NOT NULL,
+                        role TEXT NOT NULL DEFAULT 'admin',
+                        two_factor_secret TEXT,
+                        two_factor_enabled BOOLEAN DEFAULT 0,
                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                         last_login TIMESTAMP,
                         failed_attempts INTEGER DEFAULT 0,
@@ -283,6 +289,7 @@ class DatabaseManager:
                     )
                 ''')
 
+            self._ensure_admin_user_security_columns(cursor)
             conn.commit()
         except Exception as e:
             if conn:
@@ -294,6 +301,30 @@ class DatabaseManager:
                 conn.close()
 
         self.seed_default_data()
+
+    def _ensure_admin_user_security_columns(self, cursor):
+        """Ensure admin_users columns exist for older installations."""
+        if self.use_postgres:
+            cursor.execute('ALTER TABLE admin_users ADD COLUMN IF NOT EXISTS role TEXT NOT NULL DEFAULT \'admin\'')
+            cursor.execute('ALTER TABLE admin_users ADD COLUMN IF NOT EXISTS two_factor_secret TEXT')
+            cursor.execute('ALTER TABLE admin_users ADD COLUMN IF NOT EXISTS two_factor_enabled BOOLEAN DEFAULT FALSE')
+        else:
+            cursor.execute('PRAGMA table_info(admin_users)')
+            columns = [row[1] for row in cursor.fetchall()]
+            if 'role' not in columns:
+                cursor.execute('ALTER TABLE admin_users ADD COLUMN role TEXT NOT NULL DEFAULT \'admin\'')
+            if 'two_factor_secret' not in columns:
+                try:
+                    cursor.execute('ALTER TABLE admin_users ADD COLUMN two_factor_secret TEXT')
+                except sqlite3.OperationalError as e:
+                    if 'duplicate column name' not in str(e).lower():
+                        raise
+            if 'two_factor_enabled' not in columns:
+                try:
+                    cursor.execute('ALTER TABLE admin_users ADD COLUMN two_factor_enabled BOOLEAN DEFAULT 0')
+                except sqlite3.OperationalError as e:
+                    if 'duplicate column name' not in str(e).lower():
+                        raise
 
     def seed_default_data(self):
         conn = None
@@ -359,22 +390,22 @@ class DatabaseManager:
         password_hash = hashlib.sha256((password + salt).encode()).hexdigest()
         return password_hash, salt
 
-    def create_admin_user(self, username, password):
+    def create_admin_user(self, username, password, role='admin'):
         password_hash, salt = self.hash_password(password)
         conn = self.get_connection()
         cursor = conn.cursor()
         try:
             if self.use_postgres:
                 cursor.execute(self._prepare_query('''
-                    INSERT INTO admin_users (username, password_hash, salt)
-                    VALUES (?, ?, ?)
+                    INSERT INTO admin_users (username, password_hash, salt, role)
+                    VALUES (?, ?, ?, ?)
                     ON CONFLICT (username) DO NOTHING
-                '''), (username, password_hash, salt))
+                '''), (username, password_hash, salt, role))
             else:
                 cursor.execute(self._prepare_query('''
-                    INSERT OR IGNORE INTO admin_users (username, password_hash, salt)
-                    VALUES (?, ?, ?)
-                '''), (username, password_hash, salt))
+                    INSERT OR IGNORE INTO admin_users (username, password_hash, salt, role)
+                    VALUES (?, ?, ?, ?)
+                '''), (username, password_hash, salt, role))
             conn.commit()
         finally:
             conn.close()
@@ -385,7 +416,7 @@ class DatabaseManager:
             conn = self.get_connection()
             cursor = conn.cursor()
             cursor.execute(self._prepare_query('''
-                SELECT id, password_hash, salt, failed_attempts, locked_until, is_active
+                SELECT id, password_hash, salt, failed_attempts, locked_until, is_active, role
                 FROM admin_users
                 WHERE username = ?
             '''), (username,))
@@ -393,18 +424,18 @@ class DatabaseManager:
             user = cursor.fetchone()
             if not user:
                 self.log_access(username, ip_address, user_agent, 'login_attempt', False)
-                return False, 'Invalid credentials'
+                return False, 'Invalid credentials', None
 
-            user_id, stored_hash, salt, failed_attempts, locked_until, is_active = user
+            user_id, stored_hash, salt, failed_attempts, locked_until, is_active, role = user
             locked_until_dt = self._parse_datetime(locked_until)
 
             if locked_until_dt and locked_until_dt > datetime.now():
                 self.log_access(username, ip_address, user_agent, 'login_attempt_locked', False)
-                return False, 'Account locked due to too many failed attempts'
+                return False, 'Account locked due to too many failed attempts', None
 
             if not is_active:
                 self.log_access(username, ip_address, user_agent, 'login_attempt_inactive', False)
-                return False, 'Account is disabled'
+                return False, 'Account is disabled', None
 
             password_hash, _ = self.hash_password(password, salt)
             if password_hash == stored_hash:
@@ -415,7 +446,7 @@ class DatabaseManager:
                 '''), (user_id,))
                 self.log_access(username, ip_address, user_agent, 'login_success', True)
                 conn.commit()
-                return True, 'Login successful'
+                return True, 'Login successful', role or 'admin'
 
             failed_attempts += 1
             cursor.execute(self._prepare_query('''
@@ -434,15 +465,98 @@ class DatabaseManager:
 
             self.log_access(username, ip_address, user_agent, 'login_failed', False)
             conn.commit()
-            return False, 'Invalid credentials'
+            return False, 'Invalid credentials', None
 
         except Exception as e:
             if conn:
                 conn.rollback()
-            return False, f'Database error: {str(e)}'
+            return False, f'Database error: {str(e)}', None
         finally:
             if conn:
                 conn.close()
+
+    def verify_login_password(self, username, password, ip_address, user_agent):
+        """Verify username/password and return 2FA metadata for step-up auth."""
+        conn = None
+        try:
+            conn = self.get_connection()
+            cursor = conn.cursor()
+            cursor.execute(self._prepare_query('''
+                SELECT id, password_hash, salt, failed_attempts, locked_until, is_active, role, two_factor_enabled, two_factor_secret
+                FROM admin_users
+                WHERE username = ?
+            '''), (username,))
+
+            user = cursor.fetchone()
+            if not user:
+                self.log_access(username, ip_address, user_agent, 'login_attempt', False)
+                return False, 'Invalid credentials', None
+
+            user_id, stored_hash, salt, failed_attempts, locked_until, is_active, role, two_factor_enabled, two_factor_secret = user
+            locked_until_dt = self._parse_datetime(locked_until)
+
+            if locked_until_dt and locked_until_dt > datetime.now():
+                self.log_access(username, ip_address, user_agent, 'login_attempt_locked', False)
+                return False, 'Account locked due to too many failed attempts', None
+
+            if not is_active:
+                self.log_access(username, ip_address, user_agent, 'login_attempt_inactive', False)
+                return False, 'Account is disabled', None
+
+            password_hash, _ = self.hash_password(password, salt)
+            if password_hash == stored_hash:
+                cursor.execute(self._prepare_query('''
+                    UPDATE admin_users
+                    SET failed_attempts = 0, locked_until = NULL
+                    WHERE id = ?
+                '''), (user_id,))
+                self.log_access(username, ip_address, user_agent, 'login_password_ok', True)
+                conn.commit()
+                return True, 'Password verified', {
+                    'id': user_id,
+                    'username': username,
+                    'role': role or 'admin',
+                    'two_factor_enabled': bool(two_factor_enabled),
+                    'two_factor_secret': two_factor_secret
+                }
+
+            failed_attempts += 1
+            cursor.execute(self._prepare_query('''
+                UPDATE admin_users
+                SET failed_attempts = ?
+                WHERE id = ?
+            '''), (failed_attempts, user_id))
+
+            if failed_attempts >= 5:
+                lock_until = (datetime.now() + timedelta(minutes=30)).isoformat()
+                cursor.execute(self._prepare_query('''
+                    UPDATE admin_users
+                    SET locked_until = ?
+                    WHERE id = ?
+                '''), (lock_until, user_id))
+
+            self.log_access(username, ip_address, user_agent, 'login_failed', False)
+            conn.commit()
+            return False, 'Invalid credentials', None
+        except Exception as e:
+            if conn:
+                conn.rollback()
+            return False, f'Database error: {str(e)}', None
+        finally:
+            if conn:
+                conn.close()
+
+    def record_login_success(self, user_id, username, ip_address, user_agent):
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        cursor.execute(self._prepare_query('''
+            UPDATE admin_users
+            SET failed_attempts = 0, last_login = CURRENT_TIMESTAMP, locked_until = NULL
+            WHERE id = ?
+        '''), (user_id,))
+        self.log_access(username, ip_address, user_agent, 'login_success', True)
+        conn.commit()
+        conn.close()
 
     def log_access(self, username, ip_address, user_agent, action, success):
         try:
@@ -481,6 +595,106 @@ class DatabaseManager:
         '''), (password_hash, salt, username))
         conn.commit()
         conn.close()
+
+    def get_users(self):
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        cursor.execute(self._prepare_query('''
+            SELECT id, username, role, is_active, created_at, last_login, two_factor_enabled
+            FROM admin_users
+            ORDER BY username
+        '''))
+        rows = cursor.fetchall()
+        conn.close()
+        return rows
+
+    def get_user_by_username(self, username):
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        cursor.execute(self._prepare_query('''
+            SELECT id, username, role, is_active
+            FROM admin_users
+            WHERE username = ?
+            LIMIT 1
+        '''), (username,))
+        row = cursor.fetchone()
+        conn.close()
+        return row
+
+    def create_user(self, username, password, role):
+        self.create_admin_user(username, password, role)
+
+    def update_user_role(self, user_id, role):
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        cursor.execute(self._prepare_query('''
+            UPDATE admin_users
+            SET role = ?
+            WHERE id = ?
+        '''), (role, user_id))
+        conn.commit()
+        conn.close()
+
+    def update_user_password(self, user_id, new_password):
+        password_hash, salt = self.hash_password(new_password)
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        cursor.execute(self._prepare_query('''
+            UPDATE admin_users
+            SET password_hash = ?, salt = ?, failed_attempts = 0, locked_until = NULL
+            WHERE id = ?
+        '''), (password_hash, salt, user_id))
+        conn.commit()
+        conn.close()
+
+    def set_user_active(self, user_id, is_active):
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        cursor.execute(self._prepare_query('''
+            UPDATE admin_users
+            SET is_active = ?
+            WHERE id = ?
+        '''), (bool(is_active), user_id))
+        conn.commit()
+        conn.close()
+
+    def set_user_two_factor(self, user_id, secret, enabled=True):
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        cursor.execute(self._prepare_query('''
+            UPDATE admin_users
+            SET two_factor_secret = ?, two_factor_enabled = ?
+            WHERE id = ?
+        '''), (secret, bool(enabled), user_id))
+        conn.commit()
+        conn.close()
+
+    def clear_user_two_factor(self, user_id):
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        disabled_value = 'FALSE' if self.use_postgres else '0'
+        cursor.execute(self._prepare_query('''
+            UPDATE admin_users
+            SET two_factor_secret = NULL, two_factor_enabled = ''' + disabled_value + '''
+            WHERE id = ?
+        '''), (user_id,))
+        conn.commit()
+        conn.close()
+
+    def get_user_two_factor(self, user_id):
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        cursor.execute(self._prepare_query('''
+            SELECT two_factor_enabled, two_factor_secret
+            FROM admin_users
+            WHERE id = ?
+            LIMIT 1
+        '''), (user_id,))
+        row = cursor.fetchone()
+        conn.close()
+        if not row:
+            return False, None
+        return bool(row[0]), row[1]
 
     def get_contact_info(self):
         conn = self.get_connection()
