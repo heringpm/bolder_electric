@@ -47,6 +47,16 @@ db = DatabaseManager()
 # Optional noindex header (enabled only when BLOCK_INDEXING=true)
 @app.after_request
 def add_noindex_headers(response):
+    sensitive_paths = (
+        '/admin',
+        '/login',
+        '/account',
+        '/api/'
+    )
+    if request.path.startswith(sensitive_paths):
+        response.headers['X-Robots-Tag'] = 'noindex, nofollow, noarchive, nosnippet'
+        return response
+
     if os.environ.get('BLOCK_INDEXING', '').lower() in ('1', 'true', 'yes'):
         response.headers['X-Robots-Tag'] = 'noindex, nofollow, nosnippet, noarchive, notranslate, noimageindex'
     return response

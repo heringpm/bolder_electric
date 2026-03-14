@@ -1,5 +1,9 @@
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /login
+Disallow: /account
+Disallow: /api/
 Disallow: /venv/
 Disallow: /.git/
 Disallow: /.env
