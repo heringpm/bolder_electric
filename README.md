@@ -58,130 +58,138 @@ A professional web application for Bolder Electric, built with Flask and designe
 - EC2 instance (Ubuntu 20.04+ recommended)
 - Domain name (optional)
 
-### Step-by-Step Deployment
+### Production Port Plan (No Overlap)
+- `Nginx`: `80` (and `443` after SSL)
+- `Gunicorn`: `127.0.0.1:8000` (local only)
+- `PostgreSQL`: `127.0.0.1:5432` (or RDS endpoint)
+- `Flask dev server` (`python app.py`): use only for local testing, not production
 
-1. **Connect to EC2 Instance**
+Do not run `python app.py` and Gunicorn at the same time in production.
+
+### Step-by-Step Deployment (Known-Good)
+
+1. **Connect to EC2**
    ```bash
    ssh -i your-key.pem ubuntu@your-ec2-ip
    ```
 
-2. **Update System and Install Dependencies**
+2. **Install OS packages**
    ```bash
    sudo apt update && sudo apt upgrade -y
-   sudo apt install python3-pip python3-venv nginx -y
-   pip3 install -r requirements.txt
+   sudo apt install -y python3-pip python3-venv nginx postgresql postgresql-contrib
+   sudo systemctl enable --now nginx postgresql
    ```
 
-3. **Clone Your Application**
+3. **Clone app**
    ```bash
-   git clone <your-repository-url> /var/www/bolder_electric
+   sudo mkdir -p /var/www
+   sudo chown -R ubuntu:ubuntu /var/www
+   git clone https://github.com/heringpm/bolder_electric.git /var/www/bolder_electric
    cd /var/www/bolder_electric
    ```
 
-4. **Set Up Python Environment**
+4. **Create Python env + install deps**
    ```bash
    python3 -m venv venv
    source venv/bin/activate
+   pip install --upgrade pip
    pip install -r requirements.txt
    ```
 
-5. **Set Up Database**
+5. **Create PostgreSQL DB + user**
    ```bash
-   # Recommended: use PostgreSQL in production
-   export DATABASE_URL=\"postgresql://USER:PASSWORD@HOST:5432/DB_NAME\"
+   sudo -u postgres psql -c "CREATE USER bolder_app WITH PASSWORD 'change_this_password';"
+   sudo -u postgres psql -c "CREATE DATABASE bolder_electric OWNER bolder_app;"
+   sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE bolder_electric TO bolder_app;"
    ```
 
-6. **Initialize Database and Admin User**
+6. **Create environment file for systemd**
    ```bash
-   # Run the application once to initialize database tables
-   python app.py &
-   sleep 5
-   kill %1
-   
-   # The database will be initialized automatically with:
-   # - Default admin user: username 'admin', password 'usLaG4wLCnJW1F'
-   # - Sample services and availability data
+   sudo tee /etc/bolder_electric.env >/dev/null <<'EOF'
+   DATABASE_URL=postgresql://bolder_app:change_this_password@127.0.0.1:5432/bolder_electric
+   FLASK_ENV=production
+   EOF
    ```
 
-7. **Test the Application**
+7. **Create systemd service (Gunicorn on 127.0.0.1:8000)**
    ```bash
-   python app.py
-   ```
-   Verify it runs on port 8080, then stop with Ctrl+C
-
-8. **Install and Configure Gunicorn**
-   ```bash
-   pip install gunicorn
-   ```
-
-9. **Create Gunicorn Service File**
-   ```bash
-   sudo nano /etc/systemd/system/bolder_electric.service
-   ```
-   
-   Add the following content:
-   ```ini
+   sudo tee /etc/systemd/system/bolder_electric.service >/dev/null <<'EOF'
    [Unit]
-   Description=Bolder Electric Flask App
+   Description=Bolder Electric Gunicorn
    After=network.target
 
    [Service]
    User=ubuntu
    Group=www-data
    WorkingDirectory=/var/www/bolder_electric
-   ExecStart=/var/www/bolder_electric/venv/bin/gunicorn --workers 3 --bind unix:bolder_electric.sock -m 007 app:app
+   EnvironmentFile=/etc/bolder_electric.env
+   ExecStart=/var/www/bolder_electric/venv/bin/gunicorn --workers 3 --bind 127.0.0.1:8000 app:app
    Restart=always
+   RestartSec=3
 
    [Install]
    WantedBy=multi-user.target
+   EOF
    ```
 
-10. **Start and Enable Gunicorn Service**
+8. **Start app service**
    ```bash
-   sudo systemctl start bolder_electric
-   sudo systemctl enable bolder_electric
-   sudo systemctl status bolder_electric
+   sudo systemctl daemon-reload
+   sudo systemctl enable --now bolder_electric
+   sudo systemctl status bolder_electric --no-pager
    ```
 
-11. **Configure Nginx**
+9. **Configure Nginx reverse proxy**
    ```bash
-   sudo nano /etc/nginx/sites-available/bolder_electric
-   ```
-   
-   Add the following configuration:
-   ```nginx
+   sudo tee /etc/nginx/sites-available/bolder_electric >/dev/null <<'EOF'
    server {
        listen 80;
        server_name your-domain.com your-ec2-ip;
 
+       location /static/ {
+           alias /var/www/bolder_electric/static/;
+       }
+
        location / {
            include proxy_params;
-           proxy_pass http://unix:/var/www/bolder_electric/bolder_electric.sock;
-       }
-
-       location /static {
-           alias /var/www/bolder_electric/static;
+           proxy_pass http://127.0.0.1:8000;
        }
    }
+   EOF
    ```
 
-12. **Enable the Site**
+10. **Enable Nginx site**
     ```bash
-    sudo ln -s /etc/nginx/sites-available/bolder_electric /etc/nginx/sites-enabled
+    sudo rm -f /etc/nginx/sites-enabled/default
+    sudo ln -sf /etc/nginx/sites-available/bolder_electric /etc/nginx/sites-enabled/bolder_electric
     sudo nginx -t
     sudo systemctl restart nginx
     ```
 
-13. **Configure Firewall**
+11. **Open firewall/security group**
     ```bash
+    # EC2 Security Group: allow inbound TCP 80 and 443 from 0.0.0.0/0
+    # Optional UFW on host:
+    sudo ufw allow OpenSSH
     sudo ufw allow 'Nginx Full'
-    sudo ufw allow ssh
-    sudo ufw enable
+    sudo ufw --force enable
     ```
 
-14. **Optional: Set up SSL with Let's Encrypt**
+12. **Validate each layer**
     ```bash
-    sudo apt install certbot python3-certbot-nginx -y
+    # Ports that should be listening
+    sudo ss -ltnp | egrep ':80|:8000|:5432'
+
+    # App through gunicorn (local)
+    curl -I http://127.0.0.1:8000/
+
+    # App through nginx (public path on instance)
+    curl -I http://127.0.0.1/
+    ```
+
+13. **Optional SSL**
+    ```bash
+    sudo apt install -y certbot python3-certbot-nginx
     sudo certbot --nginx -d your-domain.com
     ```
 
@@ -207,16 +215,54 @@ A professional web application for Bolder Electric, built with Flask and designe
 - **Password**: `usLaG4wLCnJW1F`
 
 ### PostgreSQL Setup
-1. Create a PostgreSQL database.
-2. Set `DATABASE_URL` before starting the app:
+Use these steps to install PostgreSQL and run this app on Postgres instead of SQLite.
+
+1. Install PostgreSQL
+   - macOS (Homebrew):
+     ```bash
+     brew install postgresql@16
+     brew services start postgresql@16
+     ```
+   - Ubuntu/Debian:
+     ```bash
+     sudo apt update
+     sudo apt install -y postgresql postgresql-contrib
+     sudo systemctl enable --now postgresql
+     ```
+
+2. Create application database and user
+   - Open the Postgres shell as the `postgres` superuser:
+     ```bash
+     sudo -u postgres psql
+     ```
+   - Run:
+     ```sql
+     CREATE USER bolder_app WITH PASSWORD 'change_this_password';
+     CREATE DATABASE bolder_electric OWNER bolder_app;
+     GRANT ALL PRIVILEGES ON DATABASE bolder_electric TO bolder_app;
+     \q
+     ```
+
+3. Set `DATABASE_URL`
    ```bash
-   export DATABASE_URL=\"postgresql://USER:PASSWORD@HOST:5432/DB_NAME\"
+   export DATABASE_URL="postgresql://bolder_app:change_this_password@localhost:5432/bolder_electric"
    ```
-3. Start the app:
+
+4. (Optional) persist `DATABASE_URL` for future shells
+   ```bash
+   echo 'export DATABASE_URL="postgresql://bolder_app:change_this_password@localhost:5432/bolder_electric"' >> ~/.zshrc
+   source ~/.zshrc
+   ```
+
+5. Verify database connection
+   ```bash
+   psql "$DATABASE_URL" -c "\conninfo"
+   ```
+
+6. Start the app (tables auto-create on first run)
    ```bash
    python app.py
    ```
-4. Tables are created automatically on startup.
 
 ### Migrate Existing SQLite Data to PostgreSQL
 ```bash
@@ -278,7 +324,7 @@ Update the services section in `templates/index.html` to match your specific off
 
 ## Security Considerations
 
-- The application runs on port 8080 internally
+- In production, Gunicorn should run on `127.0.0.1:8000` only
 - Admin panel is protected with secure login
 - Access logging tracks all login attempts
 - Database uses password hashing for admin users
@@ -296,21 +342,35 @@ Update the services section in `templates/index.html` to match your specific off
    - Check system logs: `sudo journalctl -u bolder_electric`
    - Ensure database permissions are correct
 
-2. **Database errors**
+2. **Port overlap / address already in use**
+   - Check active listeners:
+     ```bash
+     sudo ss -ltnp | egrep ':80|:8000|:8080|:5432'
+     ```
+   - Stop Flask dev server if running:
+     ```bash
+     pkill -f "python app.py" || true
+     ```
+   - Restart production services:
+     ```bash
+     sudo systemctl restart bolder_electric nginx
+     ```
+
+3. **Database errors**
    - Check write permissions: `ls -la bolder_electric.db`
    - Ensure proper ownership: `sudo chown ubuntu:www-data bolder_electric.db`
    - Check for database lock: `lsof bolder_electric.db`
 
-3. **Admin login issues**
+4. **Admin login issues**
    - Verify admin user exists in database
    - Check access logs for failed attempts
    - Reset admin password if needed
 
-4. **Nginx errors**
+5. **Nginx errors**
    - Test Nginx configuration: `sudo nginx -t`
    - Check Nginx logs: `sudo tail -f /var/log/nginx/error.log`
 
-5. **Permission issues**
+6. **Permission issues**
    - Ensure proper ownership: `sudo chown -R ubuntu:www-data /var/www/bolder_electric`
    - Check file permissions
 
