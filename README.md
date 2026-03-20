@@ -55,7 +55,7 @@ A professional web application for Bolder Electric, built with Flask and designe
 
 ### Prerequisites
 - AWS account
-- EC2 instance (Ubuntu 20.04+ recommended)
+- EC2 instance (Fedora 39+ recommended)
 - Domain name (optional)
 
 ### Production Port Plan (No Overlap)
@@ -70,20 +70,21 @@ Do not run `python app.py` and Gunicorn at the same time in production.
 
 1. **Connect to EC2**
    ```bash
-   ssh -i your-key.pem ubuntu@your-ec2-ip
+   ssh -i your-key.pem ec2-user@your-ec2-ip
    ```
 
 2. **Install OS packages**
    ```bash
-   sudo apt update && sudo apt upgrade -y
-   sudo apt install -y python3-pip python3-venv nginx postgresql postgresql-contrib
+   sudo dnf -y update
+   sudo dnf -y install python3 python3-pip python3-virtualenv nginx postgresql-server postgresql policycoreutils-python-utils
+   sudo postgresql-setup --initdb
    sudo systemctl enable --now nginx postgresql
    ```
 
 3. **Clone app**
    ```bash
    sudo mkdir -p /var/www
-   sudo chown -R ubuntu:ubuntu /var/www
+   sudo chown -R ec2-user:ec2-user /var/www
    git clone https://github.com/heringpm/bolder_electric.git /var/www/bolder_electric
    cd /var/www/bolder_electric
    ```
@@ -119,8 +120,8 @@ Do not run `python app.py` and Gunicorn at the same time in production.
    After=network.target
 
    [Service]
-   User=ubuntu
-   Group=www-data
+   User=ec2-user
+   Group=nginx
    WorkingDirectory=/var/www/bolder_electric
    EnvironmentFile=/etc/bolder_electric.env
    ExecStart=/var/www/bolder_electric/venv/bin/gunicorn --workers 3 --bind 127.0.0.1:8000 app:app
@@ -141,7 +142,7 @@ Do not run `python app.py` and Gunicorn at the same time in production.
 
 9. **Configure Nginx reverse proxy**
    ```bash
-   sudo tee /etc/nginx/sites-available/bolder_electric >/dev/null <<'EOF'
+   sudo tee /etc/nginx/conf.d/bolder_electric.conf >/dev/null <<'EOF'
    server {
        listen 80;
        server_name your-domain.com your-ec2-ip;
@@ -158,24 +159,29 @@ Do not run `python app.py` and Gunicorn at the same time in production.
    EOF
    ```
 
-10. **Enable Nginx site**
+10. **Allow Nginx proxy under SELinux**
     ```bash
-    sudo rm -f /etc/nginx/sites-enabled/default
-    sudo ln -sf /etc/nginx/sites-available/bolder_electric /etc/nginx/sites-enabled/bolder_electric
+    sudo setsebool -P httpd_can_network_connect 1
+    sudo semanage fcontext -a -t httpd_sys_content_t "/var/www/bolder_electric/static(/.*)?"
+    sudo restorecon -Rv /var/www/bolder_electric/static
+    ```
+
+11. **Reload Nginx**
+    ```bash
     sudo nginx -t
     sudo systemctl restart nginx
     ```
 
-11. **Open firewall/security group**
+12. **Open firewall/security group**
     ```bash
     # EC2 Security Group: allow inbound TCP 80 and 443 from 0.0.0.0/0
-    # Optional UFW on host:
-    sudo ufw allow OpenSSH
-    sudo ufw allow 'Nginx Full'
-    sudo ufw --force enable
+    # Fedora host firewall (firewalld):
+    sudo firewall-cmd --permanent --add-service=http
+    sudo firewall-cmd --permanent --add-service=https
+    sudo firewall-cmd --reload
     ```
 
-12. **Validate each layer**
+13. **Validate each layer**
     ```bash
     # Ports that should be listening
     sudo ss -ltnp | egrep ':80|:8000|:5432'
@@ -187,9 +193,9 @@ Do not run `python app.py` and Gunicorn at the same time in production.
     curl -I http://127.0.0.1/
     ```
 
-13. **Optional SSL**
+14. **Optional SSL**
     ```bash
-    sudo apt install -y certbot python3-certbot-nginx
+    sudo dnf -y install certbot python3-certbot-nginx
     sudo certbot --nginx -d your-domain.com
     ```
 
@@ -223,10 +229,10 @@ Use these steps to install PostgreSQL and run this app on Postgres instead of SQ
      brew install postgresql@16
      brew services start postgresql@16
      ```
-   - Ubuntu/Debian:
+   - Fedora:
      ```bash
-     sudo apt update
-     sudo apt install -y postgresql postgresql-contrib
+     sudo dnf -y install postgresql-server postgresql
+     sudo postgresql-setup --initdb
      sudo systemctl enable --now postgresql
      ```
 
@@ -358,7 +364,7 @@ Update the services section in `templates/index.html` to match your specific off
 
 3. **Database errors**
    - Check write permissions: `ls -la bolder_electric.db`
-   - Ensure proper ownership: `sudo chown ubuntu:www-data bolder_electric.db`
+   - Ensure proper ownership: `sudo chown ec2-user:nginx bolder_electric.db`
    - Check for database lock: `lsof bolder_electric.db`
 
 4. **Admin login issues**
@@ -371,7 +377,7 @@ Update the services section in `templates/index.html` to match your specific off
    - Check Nginx logs: `sudo tail -f /var/log/nginx/error.log`
 
 6. **Permission issues**
-   - Ensure proper ownership: `sudo chown -R ubuntu:www-data /var/www/bolder_electric`
+   - Ensure proper ownership: `sudo chown -R ec2-user:nginx /var/www/bolder_electric`
    - Check file permissions
 
 ## Performance Optimization
@@ -386,4 +392,4 @@ Update the services section in `templates/index.html` to match your specific off
 For issues related to:
 - AWS EC2: Contact AWS Support
 - Application code: Check the Flask documentation
-- Server configuration: Refer to Ubuntu and Nginx documentation
+- Server configuration: Refer to Fedora and Nginx documentation
