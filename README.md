@@ -55,7 +55,7 @@ A professional web application for Bolder Electric, built with Flask and designe
 
 ### Prerequisites
 - AWS account
-- EC2 instance (Fedora 39+ recommended)
+- EC2 instance (Amazon Linux 2023 recommended)
 - Domain name (optional)
 
 ### Production Port Plan (No Overlap)
@@ -76,9 +76,13 @@ Do not run `python app.py` and Gunicorn at the same time in production.
 2. **Install OS packages**
    ```bash
    sudo dnf -y update
-   sudo dnf -y install python3 python3-pip python3-virtualenv nginx postgresql-server postgresql policycoreutils-python-utils
-   sudo postgresql-setup --initdb
+   sudo dnf -y install python3 python3-pip python3-virtualenv nginx postgresql15 postgresql15-server policycoreutils-python-utils
+   sudo /usr/bin/postgresql-setup --initdb
    sudo systemctl enable --now nginx postgresql
+   ```
+   If your AMI exposes a different PostgreSQL version, list available packages first:
+   ```bash
+   sudo dnf search postgresql | head -n 40
    ```
 
 3. **Clone app**
@@ -175,7 +179,7 @@ Do not run `python app.py` and Gunicorn at the same time in production.
 12. **Open firewall/security group**
     ```bash
     # EC2 Security Group: allow inbound TCP 80 and 443 from 0.0.0.0/0
-    # Fedora host firewall (firewalld):
+    # Amazon Linux host firewall (firewalld):
     sudo firewall-cmd --permanent --add-service=http
     sudo firewall-cmd --permanent --add-service=https
     sudo firewall-cmd --reload
@@ -229,11 +233,15 @@ Use these steps to install PostgreSQL and run this app on Postgres instead of SQ
      brew install postgresql@16
      brew services start postgresql@16
      ```
-   - Fedora:
+   - Amazon Linux 2023:
      ```bash
-     sudo dnf -y install postgresql-server postgresql
-     sudo postgresql-setup --initdb
+     sudo dnf -y install postgresql15 postgresql15-server
+     sudo /usr/bin/postgresql-setup --initdb
      sudo systemctl enable --now postgresql
+     ```
+     If `postgresql15*` is unavailable, use the version shown by:
+     ```bash
+     sudo dnf search postgresql | head -n 40
      ```
 
 2. Create application database and user
@@ -392,4 +400,4 @@ Update the services section in `templates/index.html` to match your specific off
 For issues related to:
 - AWS EC2: Contact AWS Support
 - Application code: Check the Flask documentation
-- Server configuration: Refer to Fedora and Nginx documentation
+- Server configuration: Refer to Amazon Linux 2023 and Nginx documentation
