@@ -57,28 +57,38 @@
         }
 
         .about-section {
-            background: linear-gradient(180deg, #ffffff 0%, #f7f9fc 100%);
-            padding: 78px 0 96px;
-            border-top: 1px solid #eceff3;
+            background: linear-gradient(180deg, #f9fbfe 0%, #ffffff 100%);
+            padding: 88px 0 120px !important;
+            border-top: 14px solid #e6ecf2;
+            margin-top: 24px;
+            height: auto !important;
+            min-height: 0 !important;
+            display: block !important;
         }
 
-        .about-section .additional-services-container {
+        .about-section .additional-services-container,
+        .crew-section .additional-services-container {
             max-width: 1080px;
+            height: auto !important;
+            min-height: 0 !important;
+            display: block !important;
         }
 
         .about-layout {
             display: grid;
-            grid-template-columns: 1.2fr 1fr;
-            gap: 1.25rem;
-            margin-top: 1.2rem;
+            grid-template-columns: 1.25fr 1fr;
+            gap: 1.1rem;
+            margin-top: 1.25rem;
         }
 
         .about-main {
             background: #ffffff;
-            border: 1px solid #e8edf3;
-            border-radius: 12px;
-            padding: 1.45rem 1.5rem;
-            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.05);
+            border: 1px solid #dde6f0;
+            border-radius: 14px;
+            padding: 1.75rem 1.8rem;
+            box-shadow: 0 10px 26px rgba(24, 39, 75, 0.08);
+            border-left: 6px solid var(--primary-gold);
+            margin-bottom: 0;
         }
 
         .about-main p {
@@ -92,15 +102,16 @@
 
         .about-panels {
             display: grid;
-            gap: 0.8rem;
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
         }
 
         .about-panel {
             background: #ffffff;
-            border: 1px solid #e8edf3;
-            border-left: 4px solid var(--primary-gold);
+            border: 1px solid #dde6f0;
+            border-left: 4px solid var(--primary-red);
             border-radius: 10px;
-            padding: 0.9rem 1rem;
+            padding: 1rem 1.05rem;
             text-align: left;
         }
 
@@ -119,8 +130,12 @@
 
         .crew-section {
             background: #ffffff;
-            padding: 84px 0 72px;
+            padding: 92px 0 132px !important;
             border-top: 10px solid #eef1f5;
+            border-bottom: 12px solid #f4f6f8;
+            height: auto !important;
+            min-height: 0 !important;
+            display: block !important;
         }
 
         .crew-section .services-cards {
@@ -134,6 +149,9 @@
 
         @media (max-width: 900px) {
             .about-layout {
+                grid-template-columns: 1fr;
+            }
+            .about-panels {
                 grid-template-columns: 1fr;
             }
         }
@@ -380,6 +398,7 @@
                     <div class="about-main">
                         <p>At Bolder Electric, we believe electrical work should be done one way: safely, professionally, and built to last. We provide reliable service for large-scale commercial projects and residential clients with clean workmanship, clear communication, and dependable results.</p>
                         <p>Whether the project is a school district upgrade, a utility site buildout, or a residential service call, our team brings planning, precision, and accountability to every phase.</p>
+                        <p>We do not just complete jobs. We build long-term trust through reliable execution, transparent communication, and workmanship that holds up over time.</p>
                     </div>
                     <div class="about-panels">
                         <div class="about-panel">
