@@ -58,7 +58,7 @@
 
         .about-section {
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            padding: 88px 0 120px !important;
+            padding: 96px 0 120px !important;
             border-top: 14px solid #e6ecf2;
             margin-top: 24px;
             height: auto !important;
@@ -76,24 +76,42 @@
 
         .about-layout {
             display: grid;
-            grid-template-columns: 1.25fr 1fr;
-            gap: 1.1rem;
-            margin-top: 1.25rem;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 1.3rem;
+            margin-top: 1.5rem;
         }
 
         .about-main {
             background: #ffffff;
             border: 1px solid #dde6f0;
-            border-radius: 14px;
-            padding: 1.75rem 1.8rem;
-            box-shadow: 0 10px 26px rgba(24, 39, 75, 0.08);
-            border-left: 6px solid var(--primary-gold);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 12px 30px rgba(24, 39, 75, 0.08);
+            border-top: 5px solid var(--primary-red);
             margin-bottom: 0;
+        }
+
+        .about-main .eyebrow {
+            display: inline-block;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--primary-red);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+        }
+
+        .about-main h3 {
+            color: var(--primary-black);
+            font-size: 1.6rem;
+            margin-bottom: 0.9rem;
+            line-height: 1.2;
         }
 
         .about-main p {
             margin-bottom: 1rem;
             text-align: left;
+            color: #2e3f54;
         }
 
         .about-main p:last-child {
@@ -103,34 +121,45 @@
         .about-panels {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 0.75rem;
+            gap: 0.9rem;
         }
 
         .about-panel {
-            background: #ffffff;
-            border: 1px solid #dde6f0;
-            border-left: 4px solid var(--primary-red);
-            border-radius: 10px;
-            padding: 1rem 1.05rem;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
+            border: 1px solid #d7e2ee;
+            border-radius: 12px;
+            padding: 1.1rem 1.15rem;
             text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary-gold);
         }
 
         .about-panel h4 {
             color: var(--primary-black);
-            margin-bottom: 0.25rem;
-            font-size: 1rem;
+            margin-bottom: 0.35rem;
+            font-size: 1.03rem;
             font-weight: 700;
         }
 
         .about-panel p {
             margin: 0;
-            color: var(--dark-gray);
+            color: #34495e;
             font-size: 0.95rem;
         }
 
         .crew-section {
             background: #ffffff;
-            padding: 92px 0 132px !important;
+            padding: 96px 0 165px !important;
             border-top: 10px solid #eef1f5;
             border-bottom: 12px solid #f4f6f8;
             height: auto !important;
@@ -139,16 +168,74 @@
             overflow: visible !important;
         }
 
-        .crew-section .services-cards {
-            margin-top: 1.1rem;
+        .crew-grid {
+            margin-top: 1.4rem;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1rem;
             height: auto !important;
             min-height: 0 !important;
-            align-items: stretch;
+            margin-bottom: 2rem;
         }
 
-        .crew-section .service-card-new {
-            border: 1px solid #eceff3;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+        .crew-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 1.25rem 1.15rem 1.2rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+            text-align: center;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .crew-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.09);
+        }
+
+        .crew-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            margin: 0 auto 0.8rem;
+            background: var(--gradient-dark);
+            color: var(--white);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            letter-spacing: 0.02em;
+            font-size: 0.95rem;
+        }
+
+        .crew-card h4 {
+            margin-bottom: 0.35rem;
+            color: var(--primary-black);
+            font-size: 1.7rem;
+            line-height: 1;
+        }
+
+        .crew-role {
+            display: inline-block;
+            margin: 0 auto 0.75rem;
+            padding: 0.2rem 0.55rem;
+            border-radius: 999px;
+            font-size: 0.76rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            background: #f1f5f9;
+            color: #334155;
+        }
+
+        .crew-card p {
+            margin: 0;
+            color: #334155;
+            font-size: 0.98rem;
         }
 
         @media (max-width: 900px) {
@@ -156,6 +243,9 @@
                 grid-template-columns: 1fr;
             }
             .about-panels {
+                grid-template-columns: 1fr;
+            }
+            .crew-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -400,6 +490,8 @@
                 <h2>About Bolder Electric</h2>
                 <div class="about-layout">
                     <div class="about-main">
+                        <span class="eyebrow">Built for Large-Scale Reliability</span>
+                        <h3>Electrical Work Done Safely, Professionally, and Built to Last</h3>
                         <p>At Bolder Electric, we believe electrical work should be done one way: safely, professionally, and built to last. We provide reliable service for large-scale commercial projects and residential clients with clean workmanship, clear communication, and dependable results.</p>
                         <p>Whether the project is a school district upgrade, a utility site buildout, or a residential service call, our team brings planning, precision, and accountability to every phase.</p>
                         <p>We do not just complete jobs. We build long-term trust through reliable execution, transparent communication, and workmanship that holds up over time.</p>
@@ -425,27 +517,37 @@
         <section id="crew" class="additional-services-section crew-section">
             <div class="additional-services-container">
                 <h2>Meet the Crew</h2>
-                <div class="services-cards">
-                    <div class="service-card-new">
+                <div class="crew-grid">
+                    <article class="crew-card">
+                        <div class="crew-avatar">NE</div>
                         <h4>Nick</h4>
+                        <span class="crew-role">Founder</span>
                         <p>Founder and lead electrician. Bio and interview video slot ready.</p>
-                    </div>
-                    <div class="service-card-new">
+                    </article>
+                    <article class="crew-card">
+                        <div class="crew-avatar">ER</div>
                         <h4>Eric</h4>
+                        <span class="crew-role">Electrician</span>
                         <p>Crew bio placeholder: experience, safety focus, and quality standards.</p>
-                    </div>
-                    <div class="service-card-new">
+                    </article>
+                    <article class="crew-card">
+                        <div class="crew-avatar">FR</div>
                         <h4>Frank</h4>
+                        <span class="crew-role">Electrician</span>
                         <p>Crew bio placeholder: field experience, troubleshooting, and project execution.</p>
-                    </div>
-                    <div class="service-card-new">
+                    </article>
+                    <article class="crew-card">
+                        <div class="crew-avatar">BR</div>
                         <h4>Brayden</h4>
+                        <span class="crew-role">Electrician</span>
                         <p>Crew bio placeholder: reliable installs and strong safety mindset.</p>
-                    </div>
-                    <div class="service-card-new">
+                    </article>
+                    <article class="crew-card">
+                        <div class="crew-avatar">AL</div>
                         <h4>Allie</h4>
+                        <span class="crew-role">Operations</span>
                         <p>Operations/support bio placeholder: scheduling, communication, and client support.</p>
-                    </div>
+                    </article>
                 </div>
             </div>
         </section>
