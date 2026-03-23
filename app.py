@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, send_from_directory, jsonify,
 from flask_compress import Compress
 import os
 import base64
+import io
 import hashlib
 import hmac
 import struct
@@ -14,6 +15,12 @@ from email.mime.multipart import MIMEMultipart
 from werkzeug.utils import secure_filename
 from uuid import uuid4
 from urllib.parse import quote
+try:
+    import qrcode
+    QRCODE_AVAILABLE = True
+except Exception:
+    qrcode = None
+    QRCODE_AVAILABLE = False
 
 # Handle PIL/Pillow import compatibility
 try:
@@ -134,6 +141,19 @@ def get_totp_uri(username, secret):
     label = quote(f'{issuer}:{username}')
     return f'otpauth://totp/{label}?secret={secret}&issuer={quote(issuer)}&digits=6&period=30'
 
+def build_qr_data_uri(text):
+    """Build PNG QR code as a data URI for inline rendering."""
+    if not QRCODE_AVAILABLE or not text:
+        return ''
+    qr = qrcode.QRCode(version=1, box_size=8, border=2)
+    qr.add_data(text)
+    qr.make(fit=True)
+    image = qr.make_image(fill_color='black', back_color='white')
+    output = io.BytesIO()
+    image.save(output, format='PNG')
+    encoded = base64.b64encode(output.getvalue()).decode('ascii')
+    return f'data:image/png;base64,{encoded}'
+
 def render_login(**kwargs):
     return render_template(
         'login.html',
@@ -143,7 +163,8 @@ def render_login(**kwargs):
         two_factor_setup=kwargs.get('two_factor_setup', False),
         username=kwargs.get('username', ''),
         setup_secret=kwargs.get('setup_secret', ''),
-        setup_uri=kwargs.get('setup_uri', '')
+        setup_uri=kwargs.get('setup_uri', ''),
+        setup_qr=kwargs.get('setup_qr', '')
     )
 
 def send_contact_email(name, email, phone, service_type, message):
@@ -496,7 +517,8 @@ def login():
                     two_factor_setup=setup_mode,
                     username=username,
                     setup_secret=session.get('pending_2fa_secret', ''),
-                    setup_uri=get_totp_uri(username, session.get('pending_2fa_secret', '')) if setup_mode else ''
+                    setup_uri=get_totp_uri(username, session.get('pending_2fa_secret', '')) if setup_mode else '',
+                    setup_qr=build_qr_data_uri(get_totp_uri(username, session.get('pending_2fa_secret', ''))) if setup_mode else ''
                 )
 
             user_id = pending.get('id')
@@ -546,7 +568,8 @@ def login():
             two_factor_setup=True,
             username=username,
             setup_secret=setup_secret,
-            setup_uri=get_totp_uri(username, setup_secret)
+            setup_uri=get_totp_uri(username, setup_secret),
+            setup_qr=build_qr_data_uri(get_totp_uri(username, setup_secret))
         )
 
     session.pop('pending_2fa', None)

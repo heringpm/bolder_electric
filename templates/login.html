@@ -134,6 +134,21 @@
             word-break: break-all;
             margin-top: 0.4rem;
         }
+
+        .setup-qr {
+            margin-top: 0.8rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .setup-qr img {
+            width: 180px;
+            height: 180px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: #fff;
+            padding: 0.4rem;
+        }
         
         .back-link {
             text-align: center;
@@ -198,7 +213,13 @@
                 {% if two_factor_setup %}
                 <div class="otp-hint">
                     <strong>Set up two-factor authentication</strong><br>
-                    Add this account to your authenticator app using the key below, then enter the 6-digit code.
+                    Scan this QR code in your authenticator app, then enter the 6-digit code.
+                    {% if setup_qr %}
+                    <div class="setup-qr">
+                        <img src="{{ setup_qr }}" alt="2FA QR Code">
+                    </div>
+                    {% endif %}
+                    If scanning is unavailable, use the setup key below.
                     <div class="setup-key">{{ setup_secret }}</div>
                     <div style="margin-top: 0.5rem;">
                         <a href="{{ setup_uri }}" style="color: var(--primary-red);">Open setup link on this device</a>
