@@ -43,12 +43,12 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.min.css') }}">
     <style>
         .section-title::after {
-            display: none !important;
+            content: none !important;
         }
 
         .about-section {
-            background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
-            padding: 70px 0 55px;
+            background: linear-gradient(180deg, #ffffff 0%, #f7f9fc 100%);
+            padding: 78px 0 96px;
             border-top: 1px solid #eceff3;
         }
 
@@ -56,24 +56,61 @@
             max-width: 1080px;
         }
 
-        .about-copy {
-            background: #ffffff;
-            border: 1px solid #eceff3;
-            border-left: 5px solid var(--primary-gold);
-            border-radius: 10px;
-            padding: 1.4rem 1.5rem;
-            margin-bottom: 0.9rem;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
+        .about-layout {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 1.25rem;
+            margin-top: 1.2rem;
         }
 
-        .about-copy:last-child {
+        .about-main {
+            background: #ffffff;
+            border: 1px solid #e8edf3;
+            border-radius: 12px;
+            padding: 1.45rem 1.5rem;
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.05);
+        }
+
+        .about-main p {
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+
+        .about-main p:last-child {
             margin-bottom: 0;
+        }
+
+        .about-panels {
+            display: grid;
+            gap: 0.8rem;
+        }
+
+        .about-panel {
+            background: #ffffff;
+            border: 1px solid #e8edf3;
+            border-left: 4px solid var(--primary-gold);
+            border-radius: 10px;
+            padding: 0.9rem 1rem;
+            text-align: left;
+        }
+
+        .about-panel h4 {
+            color: var(--primary-black);
+            margin-bottom: 0.25rem;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .about-panel p {
+            margin: 0;
+            color: var(--dark-gray);
+            font-size: 0.95rem;
         }
 
         .crew-section {
             background: #ffffff;
-            padding: 75px 0 65px;
-            border-top: 8px solid #f1f3f5;
+            padding: 84px 0 72px;
+            border-top: 10px solid #eef1f5;
         }
 
         .crew-section .services-cards {
@@ -83,6 +120,12 @@
         .crew-section .service-card-new {
             border: 1px solid #eceff3;
             box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+        }
+
+        @media (max-width: 900px) {
+            .about-layout {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
     
@@ -323,10 +366,26 @@
         <section id="about" class="additional-services-section about-section">
             <div class="additional-services-container">
                 <h2>About Bolder Electric</h2>
-                <p class="about-copy">At Bolder Electric, we believe electrical work should be done one way: safely, professionally, and built to last. We provide reliable service for large-scale commercial projects and residential clients with clean workmanship, clear communication, and dependable results.</p>
-                <p class="about-copy"><strong>Our Approach:</strong> show up prepared and on time, communicate clearly from start to finish, deliver quality workmanship without cutting corners, and prioritize safety in every detail.</p>
-                <p class="about-copy"><strong>What We Do:</strong> commercial and industrial projects, utility and Edison site coordination, panel upgrades and system modernization, lighting and energy solutions, and rapid troubleshooting/emergency response.</p>
-                <p class="about-copy"><strong>Why Choose Bolder:</strong> honest communication, transparent pricing, clean professional installations, and dependable scheduling with follow-through.</p>
+                <div class="about-layout">
+                    <div class="about-main">
+                        <p>At Bolder Electric, we believe electrical work should be done one way: safely, professionally, and built to last. We provide reliable service for large-scale commercial projects and residential clients with clean workmanship, clear communication, and dependable results.</p>
+                        <p>Whether the project is a school district upgrade, a utility site buildout, or a residential service call, our team brings planning, precision, and accountability to every phase.</p>
+                    </div>
+                    <div class="about-panels">
+                        <div class="about-panel">
+                            <h4>Our Approach</h4>
+                            <p>Prepared, on-time crews, clear communication, and safety-first execution from start to finish.</p>
+                        </div>
+                        <div class="about-panel">
+                            <h4>What We Do</h4>
+                            <p>Commercial and industrial projects, utility/Edison site work, panel upgrades, lighting solutions, and emergency troubleshooting.</p>
+                        </div>
+                        <div class="about-panel">
+                            <h4>Why Choose Bolder</h4>
+                            <p>Honest communication, transparent pricing, clean installations, and dependable follow-through.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
