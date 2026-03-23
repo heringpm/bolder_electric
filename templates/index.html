@@ -182,44 +182,24 @@
 
         .crew-shell {
             margin-top: 1.3rem;
-            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-            border-radius: 16px;
-            border: 1px solid #dbe2ea;
-            box-shadow: 0 16px 30px rgba(24, 39, 75, 0.08);
-            padding: 1.4rem;
+            background: transparent;
+            border-radius: 0;
+            border: none;
+            box-shadow: none;
+            padding: 0;
         }
 
         .crew-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 1rem;
+            display: block;
+            text-align: center;
             margin-bottom: 1rem;
-        }
-
-        .crew-kicker {
-            color: var(--primary-red);
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            letter-spacing: 0.12em;
-            font-weight: 700;
-            margin-bottom: 0.25rem;
         }
 
         .crew-headline {
             color: var(--primary-black);
             font-size: clamp(2rem, 3.5vw, 3.2rem);
             line-height: 1;
-            margin: 0;
-        }
-
-        .crew-intro {
-            color: #2c3e50;
-            max-width: 290px;
-            text-align: right;
-            font-size: 1rem;
-            line-height: 1.35;
-            margin-top: 0.35rem;
+            margin: 0 0 0.8rem;
         }
 
         .crew-layout {
@@ -356,13 +336,6 @@
             }
             .about-panels {
                 grid-template-columns: 1fr;
-            }
-            .crew-top {
-                flex-direction: column;
-            }
-            .crew-intro {
-                text-align: left;
-                max-width: none;
             }
             .crew-layout {
                 grid-template-columns: 1fr;
@@ -643,11 +616,7 @@
             <div class="additional-services-container">
                 <div class="crew-shell">
                     <div class="crew-top">
-                        <div>
-                            <p class="crew-kicker">The Crew</p>
-                            <h2 class="crew-headline">Meet The Team</h2>
-                        </div>
-                        <p class="crew-intro">The people who show up and get it done right.</p>
+                        <h2 class="crew-headline">Meet the Team</h2>
                     </div>
 
                     <div class="crew-layout">
