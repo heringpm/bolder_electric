@@ -58,7 +58,7 @@
 
         .about-section {
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
-            padding: 96px 0 120px !important;
+            padding: 48px 0 60px !important;
             border-top: 14px solid #e6ecf2;
             margin-top: 24px;
             height: auto !important;
@@ -171,7 +171,7 @@
 
         .crew-section {
             background: linear-gradient(180deg, #ffffff 0%, #f6f8fa 100%);
-            padding: 96px 0 150px !important;
+            padding: 84px 0 120px !important;
             border-top: 10px solid #eef1f5;
             border-bottom: 12px solid #f4f6f8;
             height: auto !important;
@@ -182,10 +182,10 @@
 
         .crew-shell {
             margin-top: 1.3rem;
-            background: linear-gradient(135deg, #121417 0%, #0d0f12 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
             border-radius: 16px;
-            border: 1px solid #2a2d31;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+            border: 1px solid #dbe2ea;
+            box-shadow: 0 16px 30px rgba(24, 39, 75, 0.08);
             padding: 1.4rem;
         }
 
@@ -207,14 +207,14 @@
         }
 
         .crew-headline {
-            color: var(--white);
+            color: var(--primary-black);
             font-size: clamp(2rem, 3.5vw, 3.2rem);
             line-height: 1;
             margin: 0;
         }
 
         .crew-intro {
-            color: #d2d8e0;
+            color: #2c3e50;
             max-width: 290px;
             text-align: right;
             font-size: 1rem;
@@ -230,8 +230,8 @@
         }
 
         .crew-feature {
-            background: rgba(0, 0, 0, 0.35);
-            border: 1px solid #2b3138;
+            background: linear-gradient(135deg, #ffffff 0%, #f3f6fa 100%);
+            border: 1px solid #d7e0ea;
             border-radius: 12px;
             min-height: 560px;
             padding: 1.4rem;
@@ -240,20 +240,15 @@
             justify-content: flex-end;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 12px 26px rgba(24, 39, 75, 0.08);
         }
 
         .crew-feature::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(180deg, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.65) 62%, rgba(0, 0, 0, 0.9) 100%);
-            pointer-events: none;
+            content: none;
         }
 
         .crew-feature-content {
-            position: relative;
-            z-index: 1;
-            color: #e5ebf3;
+            color: #2c3e50;
         }
 
         .crew-feature-tag {
@@ -270,7 +265,7 @@
         }
 
         .crew-feature-role {
-            color: var(--primary-gold);
+            color: #8b0000;
             font-size: 0.85rem;
             letter-spacing: 0.12em;
             text-transform: uppercase;
@@ -279,7 +274,7 @@
         }
 
         .crew-feature-name {
-            color: var(--white);
+            color: var(--primary-black);
             font-size: 2.7rem;
             line-height: 1;
             margin-bottom: 0.6rem;
@@ -289,7 +284,7 @@
             margin: 0;
             font-size: 1.12rem;
             line-height: 1.45;
-            color: #d2d8e0;
+            color: #334155;
             max-width: 440px;
         }
 
@@ -300,26 +295,27 @@
         }
 
         .crew-card {
-            background: linear-gradient(135deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.06) 100%);
-            border: 1px solid #3b4047;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid #dbe3ec;
             border-radius: 10px;
             padding: 1rem 1rem 1.05rem;
             min-height: 270px;
             display: flex;
             flex-direction: column;
             transition: transform 0.25s ease, border-color 0.25s ease;
+            box-shadow: 0 8px 18px rgba(24, 39, 75, 0.07);
         }
 
         .crew-card:hover {
             transform: translateY(-3px);
-            border-color: #6d7682;
+            border-color: #bfcad7;
         }
 
         .crew-avatar {
             width: 52px;
             height: 52px;
             border-radius: 50%;
-            background: #20242a;
+            background: var(--gradient-dark);
             color: #f3f6fb;
             font-weight: 700;
             display: flex;
@@ -342,14 +338,14 @@
 
         .crew-card h4 {
             margin-bottom: 0.55rem;
-            color: var(--white);
+            color: var(--primary-black);
             font-size: 2.3rem;
             line-height: 1;
         }
 
         .crew-card p {
             margin: 0;
-            color: #d1d7df;
+            color: #334155;
             font-size: 1.03rem;
             line-height: 1.45;
         }
