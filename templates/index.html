@@ -41,6 +41,50 @@
     
     <!-- Stylesheets -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.min.css') }}">
+    <style>
+        .section-title::after {
+            display: none !important;
+        }
+
+        .about-section {
+            background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+            padding: 70px 0 55px;
+            border-top: 1px solid #eceff3;
+        }
+
+        .about-section .additional-services-container {
+            max-width: 1080px;
+        }
+
+        .about-copy {
+            background: #ffffff;
+            border: 1px solid #eceff3;
+            border-left: 5px solid var(--primary-gold);
+            border-radius: 10px;
+            padding: 1.4rem 1.5rem;
+            margin-bottom: 0.9rem;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
+        }
+
+        .about-copy:last-child {
+            margin-bottom: 0;
+        }
+
+        .crew-section {
+            background: #ffffff;
+            padding: 75px 0 65px;
+            border-top: 8px solid #f1f3f5;
+        }
+
+        .crew-section .services-cards {
+            margin-top: 1.1rem;
+        }
+
+        .crew-section .service-card-new {
+            border: 1px solid #eceff3;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+        }
+    </style>
     
     <!-- Structured Data (JSON-LD) -->
     <script type="application/ld+json">
@@ -276,17 +320,17 @@
             </div>
         </section>
 
-        <section id="about" class="additional-services-section">
+        <section id="about" class="additional-services-section about-section">
             <div class="additional-services-container">
                 <h2>About Bolder Electric</h2>
-                <p style="max-width: 1000px; margin: 0 auto 1rem; text-align: left;">At Bolder Electric, we believe electrical work should be done one way: safely, professionally, and built to last. We provide reliable service for large-scale commercial projects and residential clients with clean workmanship, clear communication, and dependable results.</p>
-                <p style="max-width: 1000px; margin: 0 auto 1rem; text-align: left;"><strong>Our Approach:</strong> show up prepared and on time, communicate clearly from start to finish, deliver quality workmanship without cutting corners, and prioritize safety in every detail.</p>
-                <p style="max-width: 1000px; margin: 0 auto 1rem; text-align: left;"><strong>What We Do:</strong> commercial and industrial projects, utility and Edison site coordination, panel upgrades and system modernization, lighting and energy solutions, and rapid troubleshooting/emergency response.</p>
-                <p style="max-width: 1000px; margin: 0 auto 0; text-align: left;"><strong>Why Choose Bolder:</strong> honest communication, transparent pricing, clean professional installations, and dependable scheduling with follow-through.</p>
+                <p class="about-copy">At Bolder Electric, we believe electrical work should be done one way: safely, professionally, and built to last. We provide reliable service for large-scale commercial projects and residential clients with clean workmanship, clear communication, and dependable results.</p>
+                <p class="about-copy"><strong>Our Approach:</strong> show up prepared and on time, communicate clearly from start to finish, deliver quality workmanship without cutting corners, and prioritize safety in every detail.</p>
+                <p class="about-copy"><strong>What We Do:</strong> commercial and industrial projects, utility and Edison site coordination, panel upgrades and system modernization, lighting and energy solutions, and rapid troubleshooting/emergency response.</p>
+                <p class="about-copy"><strong>Why Choose Bolder:</strong> honest communication, transparent pricing, clean professional installations, and dependable scheduling with follow-through.</p>
             </div>
         </section>
 
-        <section id="crew" class="additional-services-section">
+        <section id="crew" class="additional-services-section crew-section">
             <div class="additional-services-container">
                 <h2>Meet the Crew</h2>
                 <div class="services-cards">
