@@ -172,7 +172,7 @@ def send_contact_email(name, email, phone, service_type, message):
     try:
         # Get the recipient email from database
         contact_info = db.get_contact_info()
-        recipient_email = contact_info[1] if contact_info else 'info@bolderelectric.com'
+        recipient_email = contact_info[1] if contact_info else 'support@bolderelectric.com'
         
         # Create email content
         subject = f"New Contact Form Submission - {service_type}"
@@ -256,8 +256,8 @@ def home():
     contact_data = {
         'phone': '(951) 397-4025',
         'address': '30019 Buck Tail Drive, Menifee, CA 92587',
-        'email': 'info@bolderelectric.com',
-        'service_area': 'Riverside County & Surrounding Areas',
+        'email': 'support@bolderelectric.com',
+        'service_area': 'Riverside County & Southern California',
         'business_hours': 'Mon-Fri: 8AM-6PM, Emergency: 24/7'
     }
     
@@ -279,11 +279,15 @@ def gallery():
 
 @app.route('/commercial')
 def commercial():
-    return render_template('commercial.html')
+    return redirect(url_for('home') + '#services')
 
 @app.route('/residential')
 def residential():
-    return render_template('residential.html')
+    return redirect(url_for('home') + '#services')
+
+@app.route('/about')
+def about():
+    return redirect(url_for('home') + '#about')
 
 @app.route('/contact-submit', methods=['POST'])
 def contact_submit():
@@ -750,9 +754,9 @@ def get_contact():
     else:
         return jsonify({
             'phone': '(951) 397-4025',
-            'email': 'info@bolderelectric.com',
+            'email': 'support@bolderelectric.com',
             'address': '30019 Buck Tail Drive, Menifee, CA 92587',
-            'service_area': 'Riverside County & Surrounding Areas',
+            'service_area': 'Riverside County & Southern California',
             'business_hours': 'Mon-Fri: 8AM-6PM, Emergency: 24/7'
         })
 

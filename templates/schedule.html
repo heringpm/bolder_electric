@@ -5,315 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
     <title>Schedule Service - Bolder Electric</title>
-    <meta name="description" content="Book electrical service with Bolder Electric in Menifee and Riverside County. Choose your date, service type, and contact details for fast scheduling.">
+    <meta name="description" content="Book residential and emergency electrical service with Bolder Electric throughout Riverside County and Southern California.">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://bolderelectric.com/schedule">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.min.css') }}">
     <style>
-        .schedule-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 100px 20px;
-        }
-        
-        .schedule-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-        
-        .schedule-title {
-            font-size: clamp(2rem, 4vw, 3rem);
-            font-weight: 700;
-            color: var(--primary-black);
-            margin-bottom: 1rem;
-            position: relative;
-            letter-spacing: -0.02em;
-        }
-        
-        .schedule-title::after {
-            content: '';
-            width: 80px;
-            height: 4px;
-            background: var(--gradient-primary);
-            position: absolute;
-            bottom: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-radius: 2px;
-        }
-        
-        .schedule-subtitle {
-            font-size: 1.2rem;
-            color: var(--dark-gray);
-        }
-        
-        .schedule-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            margin-bottom: 3rem;
-        }
-        
-        .calendar-section {
-            background: var(--white);
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .calendar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-        
-        .calendar-nav {
-            display: flex;
-            gap: 1rem;
-        }
-        
-        .calendar-btn {
-            background: var(--primary-gold);
-            color: var(--primary-black);
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-        
-        .calendar-btn:hover {
-            background: #FFC700;
-        }
-        
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 0.5rem;
-        }
-        
-        .calendar-day-header {
-            text-align: center;
-            font-weight: 600;
-            color: var(--primary-black);
-            padding: 0.5rem;
-        }
-        
-        .calendar-day {
-            aspect-ratio: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .calendar-day:hover {
-            background: var(--light-gray);
-        }
-        
-        .calendar-day.selected {
-            background: var(--primary-gold);
-            color: var(--primary-black);
-            font-weight: 600;
-        }
-        
-        .calendar-day.disabled {
-            color: #ccc;
-            cursor: not-allowed;
-            background: #f9f9f9;
-        }
-        
-        .time-slots {
-            margin-top: 2rem;
-        }
-        
-        .time-slots-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--primary-black);
-        }
-        
-        .time-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 0.5rem;
-        }
-        
-        .time-slot {
-            padding: 0.8rem;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .time-slot:hover {
-            background: var(--light-gray);
-        }
-        
-        .time-slot.selected {
-            background: var(--primary-red);
-            color: var(--white);
-            border-color: var(--primary-red);
-        }
-        
-        .time-slot.disabled {
-            color: #ccc;
-            cursor: not-allowed;
-            background: #f9f9f9;
-        }
-        
-        .booking-section {
-            background: var(--white);
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .service-selection {
-            margin-bottom: 2rem;
-        }
-        
-        .service-cards {
-            display: grid;
-            gap: 1rem;
-        }
-        
-        .service-card {
-            padding: 1rem;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .service-card:hover {
-            border-color: var(--primary-gold);
-        }
-        
-        .service-card.selected {
-            border-color: var(--primary-gold);
-            background: #FFFAF0;
-        }
-        
-        .service-name {
-            font-weight: 600;
-            color: var(--primary-black);
-            margin-bottom: 0.5rem;
-        }
-        
-        .service-price {
-            color: var(--primary-red);
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-        
-        .customer-info {
-            margin-bottom: 2rem;
-        }
-        
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: var(--primary-black);
-        }
-        
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 0.8rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 5px;
-            font-family: 'Montserrat', sans-serif;
-            transition: border-color 0.3s ease;
-        }
-        
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--primary-red);
-        }
-        
-        .booking-summary {
-            background: var(--light-gray);
-            padding: 1.5rem;
-            border-radius: 5px;
-            margin-bottom: 2rem;
-        }
-        
-        .summary-title {
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--primary-black);
-        }
-        
-        .summary-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-        }
-        
-        .summary-total {
-            display: flex;
-            justify-content: space-between;
-            font-weight: 700;
-            font-size: 1.2rem;
-            color: var(--primary-black);
-            padding-top: 1rem;
-            border-top: 2px solid var(--primary-gold);
-        }
-        
-        .submit-btn {
-            width: 100%;
-            padding: 1rem;
-            background: var(--primary-red);
-            color: var(--white);
-            border: none;
-            border-radius: 5px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .submit-btn:hover {
-            background: #b91c3c;
-            transform: translateY(-2px);
-        }
-        
-        .submit-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        @media (max-width: 768px) {
-            .schedule-content {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-            
-            .time-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .schedule-title {
-                font-size: 2rem;
-            }
-        }
+        .schedule-container { max-width: 1200px; margin: 0 auto; padding: 100px 20px; }
+        .schedule-header { text-align: center; margin-bottom: 2rem; }
+        .schedule-content { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        .card { background: var(--white); padding: 1.5rem; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.4rem; }
+        .calendar-day-header { text-align: center; font-weight: 600; color: var(--primary-black); padding: 0.5rem; }
+        .calendar-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border: 1px solid #ddd; border-radius: 5px; cursor: pointer; }
+        .calendar-day.disabled { color: #bbb; cursor: not-allowed; background: #fafafa; }
+        .calendar-day.selected { background: var(--primary-gold); border-color: var(--primary-gold); font-weight: 700; }
+        .calendar-nav { display: flex; gap: 0.6rem; align-items: center; }
+        .calendar-btn { background: var(--primary-gold); color: var(--primary-black); border: none; padding: 0.45rem 0.8rem; border-radius: 4px; cursor: pointer; }
+        .time-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-top: 1rem; }
+        .time-slot { padding: 0.7rem; border: 1px solid #ddd; border-radius: 5px; text-align: center; cursor: pointer; }
+        .time-slot.selected { background: var(--primary-red); color: var(--white); border-color: var(--primary-red); }
+        .service-cards { display: grid; gap: 0.8rem; margin-top: 1rem; }
+        .service-card { border: 2px solid #ddd; border-radius: 6px; padding: 0.9rem; cursor: pointer; }
+        .service-card.selected { border-color: var(--primary-gold); background: #fffaf0; }
+        .service-name { font-weight: 700; color: var(--primary-black); }
+        .service-price { color: var(--primary-red); font-weight: 700; margin-top: 0.25rem; }
+        .service-note { color: var(--dark-gray); font-size: 0.92rem; margin-top: 0.35rem; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.4rem; font-weight: 600; }
+        .form-group input, .form-group textarea { width: 100%; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 5px; font-family: 'Montserrat', sans-serif; }
+        .summary { background: var(--light-gray); border-radius: 6px; padding: 1rem; margin: 1rem 0; }
+        .summary-item { display: flex; justify-content: space-between; margin-bottom: 0.4rem; }
+        .summary-total { display: flex; justify-content: space-between; border-top: 2px solid var(--primary-gold); padding-top: 0.7rem; font-weight: 700; }
+        .schedule-note { background: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 0.8rem; border-radius: 6px; margin-top: 0.9rem; display: none; }
+        .submit-btn { width: 100%; padding: 1rem; background: var(--primary-red); color: var(--white); border: none; border-radius: 6px; font-weight: 700; cursor: pointer; }
+        .submit-btn:disabled { background: #c7c7c7; cursor: not-allowed; }
+        @media (max-width: 900px) { .schedule-content { grid-template-columns: 1fr; } .time-grid { grid-template-columns: repeat(2, 1fr); } }
     </style>
 </head>
 <body>
@@ -330,11 +56,7 @@
                     <li><a href="{{ url_for('home') }}#contact" class="nav-link">Contact</a></li>
                     <li><a href="{{ url_for('schedule') }}" class="nav-link active">Schedule</a></li>
                 </ul>
-                <div class="hamburger">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
+                <div class="hamburger"><span></span><span></span><span></span></div>
             </div>
         </nav>
     </header>
@@ -342,241 +64,94 @@
     <div class="schedule-container">
         <div class="schedule-header">
             <h2 class="section-title">Schedule Your Electrical Service</h2>
-            <p class="schedule-subtitle">Book an appointment with our licensed electricians in Menifee, CA</p>
+            <p class="schedule-subtitle">Residential and emergency scheduling available online. Commercial projects are contact-to-schedule for proper planning.</p>
         </div>
 
         <div class="schedule-content">
-            <div class="calendar-section">
-                <div class="calendar-header">
-                    <h2>Select Date</h2>
+            <div class="card">
+                <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <h3>Select Date</h3>
                     <div class="calendar-nav">
-                        <button class="calendar-btn" onclick="changeMonth(-1)">←</button>
-                        <span id="current-month">January 2024</span>
-                        <button class="calendar-btn" onclick="changeMonth(1)">→</button>
+                        <button class="calendar-btn" type="button" onclick="changeMonth(-1)">←</button>
+                        <span id="current-month">Month</span>
+                        <button class="calendar-btn" type="button" onclick="changeMonth(1)">→</button>
                     </div>
                 </div>
-                
-                <div class="calendar-grid" id="calendar">
-                    <!-- Calendar will be generated by JavaScript -->
-                </div>
-                
-                <div class="time-slots">
-                    <h3 class="time-slots-title">Available Time Slots</h3>
-                    <div class="time-grid" id="time-slots">
-                        <div class="time-slot" onclick="selectTime(this)">8:00 AM</div>
-                        <div class="time-slot" onclick="selectTime(this)">9:00 AM</div>
-                        <div class="time-slot" onclick="selectTime(this)">10:00 AM</div>
-                        <div class="time-slot" onclick="selectTime(this)">11:00 AM</div>
-                        <div class="time-slot" onclick="selectTime(this)">12:00 PM</div>
-                        <div class="time-slot" onclick="selectTime(this)">1:00 PM</div>
-                        <div class="time-slot" onclick="selectTime(this)">2:00 PM</div>
-                        <div class="time-slot" onclick="selectTime(this)">3:00 PM</div>
-                        <div class="time-slot" onclick="selectTime(this)">4:00 PM</div>
-                    </div>
+                <div class="calendar-grid" id="calendar"></div>
+
+                <h3 style="margin-top:1rem;">Available Time Slots</h3>
+                <div class="time-grid" id="time-slots">
+                    {% for ts in time_slots %}
+                    <div class="time-slot" onclick="selectTime(this)">{{ ts.time_slot }}</div>
+                    {% endfor %}
                 </div>
             </div>
 
-            <div class="booking-section">
-                <div class="service-selection">
-                    <h3>Select Service Type</h3>
-                    <div class="service-cards">
-                        {% for service in services %}
-                        <div class="service-card" onclick="selectService(this, '{{ service.name|e }}', {{ service.base_price|tojson|safe }})">
-                            <div class="service-name">{{ service.name }}</div>
-                            <div class="service-price">Starting at ${{ "%.2f"|format(service.base_price) }}</div>
-                        </div>
-                        {% endfor %}
+            <div class="card">
+                <h3>Select Service Type</h3>
+                <div class="service-cards">
+                    {% for service in services %}
+                    {% set lname = service.name|lower %}
+                    {% set service_type = 'standard' %}
+                    {% set display_price = service.base_price %}
+                    {% set note = '' %}
+                    {% if 'commercial' in lname %}
+                        {% set service_type = 'commercial' %}
+                        {% set note = 'Contact to schedule. Commercial projects require scope review before calendar booking.' %}
+                    {% elif 'emergency' in lname %}
+                        {% set service_type = 'emergency' %}
+                        {% set display_price = 250 %}
+                        {% set note = 'Service Call Fee: $250 for travel and initial assessment. Fee may be applied to repair total if work moves forward.' %}
+                    {% elif 'panel' in lname %}
+                        {% set service_type = 'panel' %}
+                        {% set display_price = 1250 %}
+                        {% set note = 'Starting range estimate: $1,000-$1,500 depending on equipment and scope.' %}
+                    {% elif 'residential' in lname %}
+                        {% set service_type = 'residential' %}
+                        {% set display_price = 150 %}
+                        {% set note = 'Consultation starts at $150 and can be applied toward the project total.' %}
+                    {% endif %}
+                    <div class="service-card"
+                        data-id="{{ service.id }}"
+                        data-name="{{ service.name|e }}"
+                        data-type="{{ service_type }}"
+                        data-price="{{ display_price }}"
+                        data-note="{{ note|e }}"
+                        onclick="selectService(this)">
+                        <div class="service-name">{{ service.name }}</div>
+                        <div class="service-price">{% if service_type == 'commercial' %}Contact to Schedule{% else %}Starting at ${{ '%.2f'|format(display_price) }}{% endif %}</div>
+                        {% if note %}<div class="service-note">{{ note }}</div>{% endif %}
                     </div>
-                </div>
-                <div class="form-group">
-                    <label for="address">Service Address *</label>
-                    <input type="text" id="address" name="address" required>
-                            <label for="address">Service Address *</label>
-                            <input type="text" id="address" name="address" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="description">Project Description</label>
-                            <textarea id="description" name="description" rows="4" placeholder="Please describe your electrical needs..."></textarea>
-                        </div>
-                    </form>
-                </div>
-
-                <div class="booking-summary">
-                    <h3 class="summary-title">Booking Summary</h3>
-                    <div class="summary-item">
-                        <span>Service:</span>
-                        <span id="summary-service">Not selected</span>
-                    </div>
-                    <div class="summary-item">
-                        <span>Date:</span>
-                        <span id="summary-date">Not selected</span>
-                    </div>
-                    <div class="summary-item">
-                        <span>Time:</span>
-                        <span id="summary-time">Not selected</span>
-                    </div>
-                    <div class="summary-total">
-                        <span>Estimated Cost:</span>
-                        <span id="summary-price">$0</span>
-                    </div>
+                    {% endfor %}
                 </div>
 
-                <button class="submit-btn" onclick="submitBooking()" disabled>Complete Booking</button>
+                <div id="schedule-note" class="schedule-note"></div>
+
+                <div class="form-group" style="margin-top:1rem;"><label for="name">Full Name *</label><input id="name" type="text" required></div>
+                <div class="form-group"><label for="phone">Phone *</label><input id="phone" type="tel" required></div>
+                <div class="form-group"><label for="email">Email *</label><input id="email" type="email" required></div>
+                <div class="form-group"><label for="address">Service Address *</label><input id="address" type="text" required></div>
+                <div class="form-group"><label for="description">Project Details</label><textarea id="description" rows="4" placeholder="Tell us about your project..."></textarea></div>
+
+                <div class="summary">
+                    <div class="summary-item"><span>Service:</span><span id="summary-service">Not selected</span></div>
+                    <div class="summary-item"><span>Date:</span><span id="summary-date">Not selected</span></div>
+                    <div class="summary-item"><span>Time:</span><span id="summary-time">Not selected</span></div>
+                    <div class="summary-total"><span>Estimated Cost:</span><span id="summary-price">$0</span></div>
+                </div>
+
+                <button class="submit-btn" id="submit-btn" type="button" onclick="submitBooking()" disabled>Complete Booking</button>
             </div>
         </div>
     </div>
 
-    <script>
-        let currentDate = new Date();
-        let selectedDate = null;
-        let selectedTime = null;
-        let selectedService = null;
-        let selectedPrice = 0;
-
-        function generateCalendar() {
-            const year = currentDate.getFullYear();
-            const month = currentDate.getMonth();
-            const firstDay = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            
-            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-                            'July', 'August', 'September', 'October', 'November', 'December'];
-            
-            document.getElementById('current-month').textContent = `${monthNames[month]} ${year}`;
-            
-            const calendar = document.getElementById('calendar');
-            calendar.innerHTML = '';
-            
-            // Day headers
-            const dayHeaders = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-            dayHeaders.forEach(day => {
-                const dayHeader = document.createElement('div');
-                dayHeader.className = 'calendar-day-header';
-                dayHeader.textContent = day;
-                calendar.appendChild(dayHeader);
-            });
-            
-            // Empty cells for days before month starts
-            for (let i = 0; i < firstDay; i++) {
-                const emptyDay = document.createElement('div');
-                calendar.appendChild(emptyDay);
-            }
-            
-            // Days of the month
-            for (let day = 1; day <= daysInMonth; day++) {
-                const dayElement = document.createElement('div');
-                dayElement.className = 'calendar-day';
-                dayElement.textContent = day;
-                
-                const date = new Date(year, month, day);
-                const today = new Date();
-                today.setHours(0, 0, 0, 0);
-                
-                if (date < today) {
-                    dayElement.classList.add('disabled');
-                } else {
-                    dayElement.onclick = () => selectDate(date, dayElement);
-                }
-                
-                calendar.appendChild(dayElement);
-            }
-        }
-
-        function changeMonth(direction) {
-            currentDate.setMonth(currentDate.getMonth() + direction);
-            generateCalendar();
-        }
-
-        function selectDate(date, element) {
-            // Remove previous selection
-            document.querySelectorAll('.calendar-day.selected').forEach(el => {
-                el.classList.remove('selected');
-            });
-            
-            element.classList.add('selected');
-            selectedDate = date;
-            updateSummary();
-        }
-
-        function selectTime(element) {
-            // Remove previous selection
-            document.querySelectorAll('.time-slot.selected').forEach(el => {
-                el.classList.remove('selected');
-            });
-            
-            element.classList.add('selected');
-            selectedTime = element.textContent;
-            updateSummary();
-        }
-
-        function selectService(element, service, price) {
-            // Remove previous selection
-            document.querySelectorAll('.service-card.selected').forEach(el => {
-                el.classList.remove('selected');
-            });
-            
-            element.classList.add('selected');
-            selectedService = service;
-            selectedPrice = price;
-            updateSummary();
-        }
-
-        function updateSummary() {
-            document.getElementById('summary-service').textContent = selectedService || 'Not selected';
-            document.getElementById('summary-date').textContent = selectedDate ? selectedDate.toLocaleDateString() : 'Not selected';
-            document.getElementById('summary-time').textContent = selectedTime || 'Not selected';
-            document.getElementById('summary-price').textContent = selectedPrice ? `$${selectedPrice}` : '$0';
-            
-            // Enable submit button if all required fields are selected
-            const canSubmit = selectedDate && selectedTime && selectedService && 
-                           document.getElementById('name').value && 
-                           document.getElementById('phone').value && 
-                           document.getElementById('email').value && 
-                           document.getElementById('address').value;
-            
-            document.querySelector('.submit-btn').disabled = !canSubmit;
-        }
-
-        function submitBooking() {
-            const formData = {
-                service: selectedService,
-                price: selectedPrice,
-                date: selectedDate,
-                time: selectedTime,
-                name: document.getElementById('name').value,
-                phone: document.getElementById('phone').value,
-                email: document.getElementById('email').value,
-                address: document.getElementById('address').value,
-                description: document.getElementById('description').value
-            };
-            
-            // Here you would normally send this data to your server
-            alert(`Booking confirmed!\n\nService: ${formData.service}\nDate: ${formData.date.toLocaleDateString()}\nTime: ${formData.time}\nEstimated Cost: $${formData.price}\n\nWe'll contact you at ${formData.phone} to confirm your appointment.`);
-            
-            // Redirect to home page
-            window.location.href = '/';
-        }
-
-        // Initialize calendar on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            generateCalendar();
-            
-            // Add event listeners to form fields
-            ['name', 'phone', 'email', 'address'].forEach(id => {
-                document.getElementById(id).addEventListener('input', updateSummary);
-            });
-        });
-    </script>
-    
     <footer>
         <div class="container">
             <div class="footer-content">
                 <div class="footer-main">
                     <div class="footer-brand">
                         <img src="{{ url_for('static', filename='images/bolder_electric_logo.png') }}" alt="Bolder Electric Logo" class="footer-logo">
-                        <div class="footer-text">
-                            <p class="footer-tagline">Professional Electrical Services</p>
-                        </div>
+                        <div class="footer-text"><p class="footer-tagline">Professional Electrical Services</p></div>
                     </div>
                     <div class="footer-info">
                         <div class="footer-links">
@@ -586,21 +161,174 @@
                                 <li><a href="{{ url_for('home') }}#services">Services</a></li>
                                 <li><a href="{{ url_for('gallery') }}">Gallery</a></li>
                                 <li><a href="{{ url_for('home') }}#contact">Contact</a></li>
-                                <li><a href="{{ url_for('schedule') }}" class="nav-link active">Schedule</a></li>
+                                <li><a href="{{ url_for('schedule') }}">Schedule</a></li>
                             </ul>
                         </div>
                         <div class="footer-contact">
                             <h4>Contact</h4>
                             <p>(951) 397-4025</p>
-                            <p>info@bolderelectric.com</p>
+                            <p>support@bolderelectric.com</p>
                         </div>
                     </div>
                 </div>
-                <div class="footer-bottom">
-                    <p>&copy; 2024 Bolder Electric. All rights reserved.</p>
-                </div>
+                <div class="footer-bottom"><p>&copy; 2026 Bolder Electric. All rights reserved.</p></div>
             </div>
         </div>
     </footer>
+
+    <script>
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+        if (hamburger && navMenu) {
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                navMenu.classList.toggle('active');
+            });
+        }
+
+        let currentDate = new Date();
+        let selectedDate = null;
+        let selectedTime = null;
+        let selectedService = null;
+
+        function generateCalendar() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June','July', 'August', 'September', 'October', 'November', 'December'];
+            document.getElementById('current-month').textContent = `${monthNames[month]} ${year}`;
+
+            const calendar = document.getElementById('calendar');
+            calendar.innerHTML = '';
+            ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].forEach(day => {
+                const d = document.createElement('div');
+                d.className = 'calendar-day-header';
+                d.textContent = day;
+                calendar.appendChild(d);
+            });
+            for (let i = 0; i < firstDay; i++) calendar.appendChild(document.createElement('div'));
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                const el = document.createElement('div');
+                el.className = 'calendar-day';
+                el.textContent = day;
+                const date = new Date(year, month, day);
+                const today = new Date();
+                today.setHours(0,0,0,0);
+                if (date < today) {
+                    el.classList.add('disabled');
+                } else {
+                    el.onclick = () => selectDate(date, el);
+                }
+                calendar.appendChild(el);
+            }
+        }
+
+        function changeMonth(direction) {
+            currentDate.setMonth(currentDate.getMonth() + direction);
+            generateCalendar();
+        }
+
+        function selectDate(date, element) {
+            document.querySelectorAll('.calendar-day.selected').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedDate = date;
+            updateSummary();
+        }
+
+        function selectTime(element) {
+            document.querySelectorAll('.time-slot.selected').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedTime = element.textContent;
+            updateSummary();
+        }
+
+        function selectService(element) {
+            document.querySelectorAll('.service-card.selected').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedService = {
+                id: Number(element.dataset.id),
+                name: element.dataset.name,
+                type: element.dataset.type,
+                price: Number(element.dataset.price),
+                note: element.dataset.note || ''
+            };
+            updateSummary();
+        }
+
+        function requiredFieldsFilled() {
+            return ['name', 'phone', 'email', 'address'].every(id => document.getElementById(id).value.trim());
+        }
+
+        function updateSummary() {
+            const isCommercial = selectedService && selectedService.type === 'commercial';
+            document.getElementById('summary-service').textContent = selectedService ? selectedService.name : 'Not selected';
+            document.getElementById('summary-date').textContent = isCommercial ? 'Contact scheduling' : (selectedDate ? selectedDate.toLocaleDateString() : 'Not selected');
+            document.getElementById('summary-time').textContent = isCommercial ? 'Contact scheduling' : (selectedTime || 'Not selected');
+            document.getElementById('summary-price').textContent = !selectedService ? '$0' : (isCommercial ? 'Contact for Quote' : `$${selectedService.price.toFixed(2)}`);
+
+            const noteBox = document.getElementById('schedule-note');
+            if (selectedService && selectedService.note) {
+                noteBox.textContent = selectedService.note;
+                noteBox.style.display = 'block';
+            } else {
+                noteBox.style.display = 'none';
+            }
+
+            const canSubmit = selectedService && requiredFieldsFilled() && (isCommercial || (selectedDate && selectedTime));
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.disabled = !canSubmit;
+            submitBtn.textContent = isCommercial ? 'Contact Us to Schedule Commercial Service' : 'Complete Booking';
+        }
+
+        async function submitBooking() {
+            if (!selectedService) return;
+            const isCommercial = selectedService.type === 'commercial';
+            if (isCommercial) {
+                window.location.href = '{{ url_for("home") }}#contact';
+                return;
+            }
+
+            const payload = {
+                service_id: selectedService.id,
+                customer_name: document.getElementById('name').value.trim(),
+                customer_phone: document.getElementById('phone').value.trim(),
+                customer_email: document.getElementById('email').value.trim(),
+                customer_address: document.getElementById('address').value.trim(),
+                service_date: selectedDate.toISOString().slice(0, 10),
+                time_slot: selectedTime,
+                description: document.getElementById('description').value.trim(),
+                total_price: selectedService.price
+            };
+
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+            try {
+                const res = await fetch('/api/bookings', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (!res.ok || !data.success) throw new Error(data.message || 'Unable to submit booking');
+
+                alert('Booking received. Our team will contact you shortly to confirm the appointment.');
+                window.location.href = '{{ url_for("home") }}';
+            } catch (err) {
+                alert(err.message || 'Booking failed. Please call us at (951) 397-4025.');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Complete Booking';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            generateCalendar();
+            ['name', 'phone', 'email', 'address'].forEach(id => {
+                document.getElementById(id).addEventListener('input', updateSummary);
+            });
+        });
+    </script>
 </body>
 </html>

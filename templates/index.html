@@ -173,11 +173,11 @@
                 <div class="hero-overlay"></div>
             </div>
             <div class="hero-content">
-                <h1 class="hero-title">BOLDER ELECTRIC</h1>
-                <p class="hero-subtitle">Licensed Electricians Serving Menifee & Riverside County</p>
+                <img src="{{ url_for('static', filename='images/bolder_electric_logo.png') }}" alt="Bolder Electric" style="max-width: 340px; width: 80%; margin-bottom: 1rem;">
+                <p class="hero-subtitle">Built on Trust. Powered by Experience. Serving Riverside County & the greater Southern California Region.</p>
                 <div class="hero-buttons">
                     <a href="#services" class="btn btn-primary">Our Services</a>
-                    <a href="{{ url_for('schedule') }}" class="btn btn-primary" style="background: var(--primary-gold); color: var(--primary-black);">Schedule Service</a>
+                    <a href="#contact" class="btn btn-primary" style="background: var(--primary-gold); color: var(--primary-black);">Contact Us</a>
                 </div>
                 <div class="hero-features">
                     <div class="feature-item">
@@ -199,7 +199,7 @@
         <section id="services" class="services-new">
             <div class="services-header">
                 <h2 class="services-title">Professional Electrical Services</h2>
-                <p class="services-subtitle">Comprehensive electrical solutions for commercial and residential properties throughout Menifee & Riverside County</p>
+                <p class="services-subtitle">High-Performance Electrical Solutions for Residential and Commercial Properties throughout Riverside County & Southern California</p>
             </div>
             
             <!-- Main Services Grid -->
@@ -208,22 +208,22 @@
                 <div class="service-main-card commercial-card">
                     <div class="service-card-header">
                         <div class="service-icon">⚡</div>
-                        <h3>Commercial Electrical</h3>
+                        <h3>Commercial Electrical Services</h3>
                     </div>
                     <div class="service-card-image">
                         <img src="{{ url_for('static', filename='images/new1-card.webp') }}" alt="Commercial Electrical Services" width="900" height="600" loading="lazy">
                     </div>
                     <div class="service-card-content">
-                        <p>Complete electrical solutions for businesses, offices, and commercial properties with licensed commercial electricians.</p>
+                        <p>At Bolder Electric, we deliver dependable, high-performance electrical solutions for commercial and industrial environments. From ground-up construction to complex upgrades and ongoing maintenance, every project is completed safely, efficiently, and to code.</p>
                         <ul class="service-list">
-                            <li>New Construction Wiring</li>
-                            <li>Electrical System Upgrades</li>
-                            <li>Commercial Lighting Design</li>
-                            <li>Panel Upgrades & Replacements</li>
-                            <li>Preventive Maintenance</li>
-                            <li>Emergency Repairs</li>
+                            <li>New Construction & Tenant Improvement Systems</li>
+                            <li>Service Upgrades, Power Distribution & Infrastructure Improvements</li>
+                            <li>Interior & Exterior Commercial Lighting Design and Installation</li>
+                            <li>Panel Upgrades, Switchgear & Equipment Replacement</li>
+                            <li>Preventive Maintenance Programs & System Evaluations</li>
+                            <li>Emergency Service, Diagnostics & Rapid Repairs</li>
                         </ul>
-                        <a href="#contact" class="btn btn-primary">Schedule Commercial Service</a>
+                        <a href="#contact" class="btn btn-primary">Contact to Schedule</a>
                     </div>
                 </div>
                 
@@ -231,22 +231,56 @@
                 <div class="service-main-card residential-card">
                     <div class="service-card-header">
                         <div class="service-icon">🏠</div>
-                        <h3>Residential Electrical</h3>
+                        <h3>Residential Electrical Services</h3>
                     </div>
                     <div class="service-card-image">
                         <img src="{{ url_for('static', filename='images/newerrr-card.webp') }}" alt="Residential Electrical Services" width="900" height="600" loading="lazy">
                     </div>
                     <div class="service-card-content">
-                        <p>Professional electrical services for homes with expert residential electricians for all your home electrical needs.</p>
+                        <p>At Bolder Electric, we provide safe, reliable, and high-quality electrical solutions for homes of all sizes. Whether you are upgrading, remodeling, or troubleshooting a repair, our licensed electricians focus on safety, efficiency, and long-term performance.</p>
                         <ul class="service-list">
-                            <li>Home Rewiring & Updates</li>
-                            <li>Electrical Panel Upgrades</li>
-                            <li>Lighting Installation</li>
-                            <li>Outlet & Switch Installation</li>
-                            <li>Safety Inspections</li>
-                            <li>Emergency Repairs</li>
+                            <li>Home Rewiring & Electrical System Upgrades</li>
+                            <li>Electrical Panel Upgrades & Service Changes</li>
+                            <li>Interior & Exterior Lighting Installation</li>
+                            <li>Outlet, Switch & Dedicated Circuit Installation</li>
+                            <li>Electrical Safety Inspections & Code Corrections</li>
+                            <li>Troubleshooting, Repairs & Emergency Service</li>
                         </ul>
                         <a href="{{ url_for('schedule') }}" class="btn btn-primary">Schedule Residential Service</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="additional-services-section">
+            <div class="additional-services-container">
+                <h2>About Bolder Electric</h2>
+                <p style="max-width: 1000px; margin: 0 auto 1rem; text-align: left;">At Bolder Electric, we believe electrical work should be done one way: safely, professionally, and built to last. We provide reliable service for large-scale commercial projects and residential clients with clean workmanship, clear communication, and dependable results.</p>
+                <p style="max-width: 1000px; margin: 0 auto 1rem; text-align: left;"><strong>Our Approach:</strong> show up prepared and on time, communicate clearly from start to finish, deliver quality workmanship without cutting corners, and prioritize safety in every detail.</p>
+                <p style="max-width: 1000px; margin: 0 auto 1rem; text-align: left;"><strong>What We Do:</strong> commercial and industrial projects, utility and Edison site coordination, panel upgrades and system modernization, lighting and energy solutions, and rapid troubleshooting/emergency response.</p>
+                <p style="max-width: 1000px; margin: 0 auto 2rem; text-align: left;"><strong>Why Choose Bolder:</strong> honest communication, transparent pricing, clean professional installations, and dependable scheduling with follow-through.</p>
+
+                <h3 style="text-align:center; margin-bottom: 1rem;">Meet the Crew</h3>
+                <div class="services-cards">
+                    <div class="service-card-new">
+                        <h4>Nick</h4>
+                        <p>Founder and lead electrician. Bio and interview video slot ready.</p>
+                    </div>
+                    <div class="service-card-new">
+                        <h4>Eric</h4>
+                        <p>Crew bio placeholder: experience, safety focus, and quality standards.</p>
+                    </div>
+                    <div class="service-card-new">
+                        <h4>Frank</h4>
+                        <p>Crew bio placeholder: field experience, troubleshooting, and project execution.</p>
+                    </div>
+                    <div class="service-card-new">
+                        <h4>Brayden</h4>
+                        <p>Crew bio placeholder: reliable installs and strong safety mindset.</p>
+                    </div>
+                    <div class="service-card-new">
+                        <h4>Allie</h4>
+                        <p>Operations/support bio placeholder: scheduling, communication, and client support.</p>
                     </div>
                 </div>
             </div>
@@ -291,26 +325,26 @@
 
         <section id="contact" class="contact">
             <div class="container">
-                <h2 class="section-title">Contact Your Local Menifee Electrician</h2>
+                <h2 class="section-title">Contact Bolder Electric Across Riverside County & Southern California</h2>
                 <div class="contact-content">
                     <div class="contact-info">
                         <h3>Get in Touch Today</h3>
-                        <p>Ready to discuss your electrical project? Contact Bolder Electric today for a free consultation and quote. We're your trusted local electricians serving Menifee and the surrounding areas.</p>
+                        <p>Ready to discuss your electrical project? Contact Bolder Electric today for a consultation and quote. We support residential and commercial clients across Riverside County and the greater Southern California region.</p>
                         <div class="contact-details">
                             <div class="contact-item">
-                                <strong>Office Phone:</strong> (951) 397-4025
+                                <strong>Office Phone:</strong> {{ contact.phone }}
                             </div>
                             <div class="contact-item">
-                                <strong>Address:</strong> 30019 Buck Tail Drive, Menifee, CA 92587
+                                <strong>Address:</strong> {{ contact.address }}
                             </div>
                             <div class="contact-item">
-                                <strong>Email:</strong> info@bolderelectric.com
+                                <strong>Email:</strong> support@bolderelectric.com
                             </div>
                             <div class="contact-item">
-                                <strong>Service Area:</strong> Riverside County & Surrounding Areas
+                                <strong>Service Area:</strong> {{ contact.service_area }}
                             </div>
                             <div class="contact-item">
-                                <strong>Business Hours:</strong> Mon-Fri: 8AM-6PM, Emergency: 24/7
+                                <strong>Business Hours:</strong> {{ contact.business_hours }}
                             </div>
                         </div>
                     </div>
@@ -374,8 +408,8 @@
                         </div>
                         <div class="footer-contact">
                             <h4>Contact</h4>
-                            <p>(951) 397-4025</p>
-                            <p>info@bolderelectric.com</p>
+                            <p>{{ contact.phone }}</p>
+                            <p>support@bolderelectric.com</p>
                         </div>
                     </div>
                 </div>
