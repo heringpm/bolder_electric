@@ -170,8 +170,8 @@
         }
 
         .crew-section {
-            background: #ffffff;
-            padding: 96px 0 165px !important;
+            background: linear-gradient(180deg, #ffffff 0%, #f6f8fa 100%);
+            padding: 96px 0 150px !important;
             border-top: 10px solid #eef1f5;
             border-bottom: 12px solid #f4f6f8;
             height: auto !important;
@@ -180,74 +180,178 @@
             overflow: visible !important;
         }
 
-        .crew-grid {
-            margin-top: 1.4rem;
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
+        .crew-shell {
+            margin-top: 1.3rem;
+            background: linear-gradient(135deg, #121417 0%, #0d0f12 100%);
+            border-radius: 16px;
+            border: 1px solid #2a2d31;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+            padding: 1.4rem;
+        }
+
+        .crew-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
             gap: 1rem;
-            height: auto !important;
-            min-height: 0 !important;
-            margin-bottom: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .crew-kicker {
+            color: var(--primary-red);
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.12em;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .crew-headline {
+            color: var(--white);
+            font-size: clamp(2rem, 3.5vw, 3.2rem);
+            line-height: 1;
+            margin: 0;
+        }
+
+        .crew-intro {
+            color: #d2d8e0;
+            max-width: 290px;
+            text-align: right;
+            font-size: 1rem;
+            line-height: 1.35;
+            margin-top: 0.35rem;
+        }
+
+        .crew-layout {
+            display: grid;
+            grid-template-columns: 1.1fr 1fr;
+            gap: 1rem;
+            align-items: stretch;
+        }
+
+        .crew-feature {
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid #2b3138;
+            border-radius: 12px;
+            min-height: 560px;
+            padding: 1.4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .crew-feature::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.65) 62%, rgba(0, 0, 0, 0.9) 100%);
+            pointer-events: none;
+        }
+
+        .crew-feature-content {
+            position: relative;
+            z-index: 1;
+            color: #e5ebf3;
+        }
+
+        .crew-feature-tag {
+            display: inline-block;
+            background: var(--primary-red);
+            color: var(--white);
+            border-radius: 3px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 0.2rem 0.55rem;
+            letter-spacing: 0.09em;
+            text-transform: uppercase;
+            margin-bottom: 0.65rem;
+        }
+
+        .crew-feature-role {
+            color: var(--primary-gold);
+            font-size: 0.85rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+        }
+
+        .crew-feature-name {
+            color: var(--white);
+            font-size: 2.7rem;
+            line-height: 1;
+            margin-bottom: 0.6rem;
+        }
+
+        .crew-feature p {
+            margin: 0;
+            font-size: 1.12rem;
+            line-height: 1.45;
+            color: #d2d8e0;
+            max-width: 440px;
+        }
+
+        .crew-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.85rem;
         }
 
         .crew-card {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 14px;
-            padding: 1.25rem 1.15rem 1.2rem;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
-            text-align: center;
-            min-height: 250px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.14) 0%, rgba(255,255,255,0.06) 100%);
+            border: 1px solid #3b4047;
+            border-radius: 10px;
+            padding: 1rem 1rem 1.05rem;
+            min-height: 270px;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
-            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            transition: transform 0.25s ease, border-color 0.25s ease;
         }
 
         .crew-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.09);
+            transform: translateY(-3px);
+            border-color: #6d7682;
         }
 
         .crew-avatar {
-            width: 56px;
-            height: 56px;
+            width: 52px;
+            height: 52px;
             border-radius: 50%;
-            margin: 0 auto 0.8rem;
-            background: var(--gradient-dark);
-            color: var(--white);
+            background: #20242a;
+            color: #f3f6fb;
             font-weight: 700;
             display: flex;
             align-items: center;
             justify-content: center;
-            letter-spacing: 0.02em;
-            font-size: 0.95rem;
-        }
-
-        .crew-card h4 {
-            margin-bottom: 0.35rem;
-            color: var(--primary-black);
-            font-size: 1.7rem;
-            line-height: 1;
+            letter-spacing: 0.03em;
+            font-size: 1.05rem;
+            margin-bottom: 0.8rem;
         }
 
         .crew-role {
             display: inline-block;
-            margin: 0 auto 0.75rem;
-            padding: 0.2rem 0.55rem;
-            border-radius: 999px;
-            font-size: 0.76rem;
+            font-size: 0.77rem;
             font-weight: 700;
-            letter-spacing: 0.04em;
+            letter-spacing: 0.09em;
             text-transform: uppercase;
-            background: #f1f5f9;
-            color: #334155;
+            color: var(--primary-red);
+            margin-bottom: 0.28rem;
+        }
+
+        .crew-card h4 {
+            margin-bottom: 0.55rem;
+            color: var(--white);
+            font-size: 2.3rem;
+            line-height: 1;
         }
 
         .crew-card p {
             margin: 0;
-            color: #334155;
-            font-size: 0.98rem;
+            color: #d1d7df;
+            font-size: 1.03rem;
+            line-height: 1.45;
         }
 
         @media (max-width: 900px) {
@@ -257,8 +361,21 @@
             .about-panels {
                 grid-template-columns: 1fr;
             }
+            .crew-top {
+                flex-direction: column;
+            }
+            .crew-intro {
+                text-align: left;
+                max-width: none;
+            }
+            .crew-layout {
+                grid-template-columns: 1fr;
+            }
             .crew-grid {
                 grid-template-columns: 1fr;
+            }
+            .crew-feature {
+                min-height: 420px;
             }
         }
     </style>
@@ -528,38 +645,52 @@
 
         <section id="crew" class="additional-services-section crew-section">
             <div class="additional-services-container">
-                <h2>Meet the Crew</h2>
-                <div class="crew-grid">
-                    <article class="crew-card">
-                        <div class="crew-avatar">NE</div>
-                        <h4>Nick</h4>
-                        <span class="crew-role">Founder</span>
-                        <p>Founder and lead electrician. Bio and interview video slot ready.</p>
-                    </article>
-                    <article class="crew-card">
-                        <div class="crew-avatar">ER</div>
-                        <h4>Eric</h4>
-                        <span class="crew-role">Electrician</span>
-                        <p>Crew bio placeholder: experience, safety focus, and quality standards.</p>
-                    </article>
-                    <article class="crew-card">
-                        <div class="crew-avatar">FR</div>
-                        <h4>Frank</h4>
-                        <span class="crew-role">Electrician</span>
-                        <p>Crew bio placeholder: field experience, troubleshooting, and project execution.</p>
-                    </article>
-                    <article class="crew-card">
-                        <div class="crew-avatar">BR</div>
-                        <h4>Brayden</h4>
-                        <span class="crew-role">Electrician</span>
-                        <p>Crew bio placeholder: reliable installs and strong safety mindset.</p>
-                    </article>
-                    <article class="crew-card">
-                        <div class="crew-avatar">AL</div>
-                        <h4>Allie</h4>
-                        <span class="crew-role">Operations</span>
-                        <p>Operations/support bio placeholder: scheduling, communication, and client support.</p>
-                    </article>
+                <div class="crew-shell">
+                    <div class="crew-top">
+                        <div>
+                            <p class="crew-kicker">The Crew</p>
+                            <h2 class="crew-headline">Meet The Team</h2>
+                        </div>
+                        <p class="crew-intro">The people who show up and get it done right.</p>
+                    </div>
+
+                    <div class="crew-layout">
+                        <article class="crew-feature">
+                            <div class="crew-feature-content">
+                                <span class="crew-feature-tag">Founder</span>
+                                <p class="crew-feature-role">Lead Electrician</p>
+                                <h3 class="crew-feature-name">Nick</h3>
+                                <p>Founder and lead electrician. Bio and interview video slot ready to go here.</p>
+                            </div>
+                        </article>
+
+                        <div class="crew-grid">
+                            <article class="crew-card">
+                                <div class="crew-avatar">ER</div>
+                                <span class="crew-role">Electrician</span>
+                                <h4>Eric</h4>
+                                <p>Crew bio placeholder: experience, safety focus, and quality standards.</p>
+                            </article>
+                            <article class="crew-card">
+                                <div class="crew-avatar">FR</div>
+                                <span class="crew-role">Electrician</span>
+                                <h4>Frank</h4>
+                                <p>Crew bio placeholder: field experience, troubleshooting, and project execution.</p>
+                            </article>
+                            <article class="crew-card">
+                                <div class="crew-avatar">BR</div>
+                                <span class="crew-role">Electrician</span>
+                                <h4>Brayden</h4>
+                                <p>Crew bio placeholder: reliable installs and strong safety mindset.</p>
+                            </article>
+                            <article class="crew-card">
+                                <div class="crew-avatar">AL</div>
+                                <span class="crew-role">Operations</span>
+                                <h4>Allie</h4>
+                                <p>Operations/support bio placeholder: scheduling, communication, and client support.</p>
+                            </article>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
