@@ -13,6 +13,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from werkzeug.utils import secure_filename
+from werkzeug.exceptions import RequestEntityTooLarge
 from uuid import uuid4
 from urllib.parse import quote
 try:
@@ -48,6 +49,11 @@ except ImportError:
 
 app = Flask(__name__)
 app.secret_key = 'your-secret-key-change-this-in-production'  # Change this for production!
+try:
+    MAX_UPLOAD_MB = max(1, int(os.environ.get('MAX_UPLOAD_MB', '25')))
+except ValueError:
+    MAX_UPLOAD_MB = 25
+app.config['MAX_CONTENT_LENGTH'] = MAX_UPLOAD_MB * 1024 * 1024
 Compress(app)
 db = DatabaseManager()
 
@@ -67,6 +73,13 @@ def add_noindex_headers(response):
     if os.environ.get('BLOCK_INDEXING', '').lower() in ('1', 'true', 'yes'):
         response.headers['X-Robots-Tag'] = 'noindex, nofollow, nosnippet, noarchive, notranslate, noimageindex'
     return response
+
+@app.errorhandler(RequestEntityTooLarge)
+def handle_request_entity_too_large(_error):
+    message = f'File is too large. Maximum upload size is {MAX_UPLOAD_MB}MB.'
+    if request.path.startswith('/admin/upload-photo'):
+        return jsonify({'success': False, 'message': message}), 413
+    return jsonify({'success': False, 'message': message}), 413
 
 def admin_required(f):
     @wraps(f)

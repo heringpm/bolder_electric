@@ -113,6 +113,7 @@ Do not run `python app.py` and Gunicorn at the same time in production.
    sudo tee /etc/bolder_electric.env >/dev/null <<'EOF'
    DATABASE_URL=postgresql://bolder_app:change_this_password@127.0.0.1:5432/bolder_electric
    FLASK_ENV=production
+   MAX_UPLOAD_MB=25
    EOF
    ```
 
@@ -150,6 +151,7 @@ Do not run `python app.py` and Gunicorn at the same time in production.
    server {
        listen 80;
        server_name your-domain.com your-ec2-ip;
+       client_max_body_size 25M;
 
        location /static/ {
            alias /var/www/bolder_electric/static/;
@@ -166,6 +168,8 @@ Do not run `python app.py` and Gunicorn at the same time in production.
    }
    EOF
    ```
+
+   `MAX_UPLOAD_MB` and `client_max_body_size` should match.
 
 10. **Allow Nginx proxy under SELinux**
     ```bash
@@ -190,7 +194,7 @@ Do not run `python app.py` and Gunicorn at the same time in production.
     ```
 
 13. **Validate each layer**
-    ```bash
+   ```bash
     # Ports that should be listening
     sudo ss -ltnp | egrep ':80|:8000|:5432'
 
@@ -198,10 +202,22 @@ Do not run `python app.py` and Gunicorn at the same time in production.
     curl -I http://127.0.0.1:8000/
 
     # App through nginx (public path on instance)
-    curl -I http://127.0.0.1/
-    ```
+   curl -I http://127.0.0.1/
+   ```
 
-14. **Optional SSL**
+14. **If gallery upload returns `413 Request Entity Too Large`**
+   ```bash
+   # 1) Confirm nginx limit
+   sudo nginx -T | grep -n client_max_body_size
+
+   # 2) Confirm app limit
+   sudo grep -n MAX_UPLOAD_MB /etc/bolder_electric.env
+
+   # 3) Reload both services after changes
+   sudo systemctl restart bolder_electric
+   sudo systemctl restart nginx
+   ```
+15. **Optional SSL**
     ```bash
     sudo dnf -y install certbot python3-certbot-nginx
     sudo certbot --nginx -d your-domain.com

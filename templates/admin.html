@@ -1136,16 +1136,25 @@
                 uploadBtn.textContent = 'Uploading...';
 
                 fetch('/admin/upload-photo', { method: 'POST', body: formData })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            uploadForm.reset();
-                            loadGalleryPhotos();
-                        } else {
-                            alert(data.message || 'Error uploading photo');
+                    .then(async response => {
+                        let data = {};
+                        try {
+                            data = await response.json();
+                        } catch (_) {
+                            data = {};
                         }
+
+                        if (!response.ok || data.success === false) {
+                            if (response.status === 413) {
+                                throw new Error(data.message || 'File is too large. Please choose a smaller image.');
+                            }
+                            throw new Error(data.message || 'Error uploading photo');
+                        }
+
+                        uploadForm.reset();
+                        loadGalleryPhotos();
                     })
-                    .catch(() => alert('Error uploading photo'))
+                    .catch((error) => alert(error.message || 'Error uploading photo'))
                     .finally(() => {
                         uploadBtn.disabled = false;
                         uploadBtn.textContent = 'Upload Photo';

@@ -273,13 +273,22 @@
                 method: 'POST',
                 body: formData
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    location.reload();
-                } else {
-                    alert(data.message);
+            .then(async response => {
+                let data = {};
+                try {
+                    data = await response.json();
+                } catch (_) {
+                    data = {};
                 }
+
+                if (!response.ok || data.success === false) {
+                    if (response.status === 413) {
+                        throw new Error(data.message || 'File is too large. Please choose a smaller image.');
+                    }
+                    throw new Error(data.message || 'Error uploading photo');
+                }
+
+                location.reload();
             })
             .catch(error => {
                 alert('Error uploading photo: ' + error.message);
