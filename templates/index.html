@@ -46,6 +46,16 @@
             content: none !important;
         }
 
+        .hero::before {
+            content: none !important;
+            display: none !important;
+            background: none !important;
+        }
+
+        .hero-content {
+            transform: translateY(-38px);
+        }
+
         .additional-services-container h2::after,
         .services-header h2::after,
         .services-title::after {
@@ -334,6 +344,9 @@
         }
 
         @media (max-width: 900px) {
+            .hero-content {
+                transform: translateY(-20px);
+            }
             .about-layout {
                 grid-template-columns: 1fr;
             }
