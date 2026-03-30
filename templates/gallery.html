@@ -17,6 +17,21 @@
     
     <!-- Stylesheets -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.min.css') }}">
+    <style>
+        .gallery-hero .container {
+            max-width: 1320px;
+        }
+
+        .gallery-subtitle {
+            max-width: 1120px;
+        }
+
+        @media (max-width: 768px) {
+            .gallery-subtitle {
+                max-width: 94%;
+            }
+        }
+    </style>
 </head>
 <body>
     <header>
