@@ -97,23 +97,24 @@
         }
 
         .about-layout {
-            display: grid;
+            display: flex;
+            flex-direction: column;
             gap: 1rem;
             margin-top: 1.5rem;
         }
 
         .about-primary {
             display: grid;
-            grid-template-columns: 1.2fr 1fr;
+            grid-template-columns: 1fr;
             gap: 1rem;
-            align-items: start;
+            align-items: stretch;
         }
 
         .about-main {
             background: #ffffff;
             border: 1px solid #dde6f0;
             border-radius: 16px;
-            padding: 1.8rem 1.9rem;
+            padding: 1.5rem 1.6rem;
             box-shadow: 0 12px 30px rgba(24, 39, 75, 0.08);
             border-top: 5px solid var(--primary-red);
             margin-bottom: 0;
@@ -150,9 +151,9 @@
             background: #ffffff;
             border: 1px solid #dde6f0;
             border-radius: 16px;
-            padding: 0.9rem;
+            padding: 0.75rem;
             box-shadow: 0 12px 30px rgba(24, 39, 75, 0.08);
-            align-self: start;
+            align-self: stretch;
         }
 
         .about-video-wrapper {
@@ -396,9 +397,6 @@
         @media (max-width: 900px) {
             .hero-content {
                 transform: translateY(-20px);
-            }
-            .about-primary {
-                grid-template-columns: 1fr;
             }
             .about-panels {
                 grid-template-columns: 1fr;
