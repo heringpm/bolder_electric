@@ -98,16 +98,22 @@
 
         .about-layout {
             display: grid;
-            grid-template-columns: 1.4fr 1fr;
-            gap: 1.3rem;
+            gap: 1rem;
             margin-top: 1.5rem;
+        }
+
+        .about-primary {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 1rem;
+            align-items: stretch;
         }
 
         .about-main {
             background: #ffffff;
             border: 1px solid #dde6f0;
             border-radius: 16px;
-            padding: 2rem;
+            padding: 1.8rem 1.9rem;
             box-shadow: 0 12px 30px rgba(24, 39, 75, 0.08);
             border-top: 5px solid var(--primary-red);
             margin-bottom: 0;
@@ -140,8 +146,19 @@
             margin-bottom: 0;
         }
 
+        .about-video-card {
+            background: #ffffff;
+            border: 1px solid #dde6f0;
+            border-radius: 16px;
+            padding: 0.9rem;
+            box-shadow: 0 12px 30px rgba(24, 39, 75, 0.08);
+            display: flex;
+            align-items: center;
+        }
+
         .about-video-wrapper {
-            margin: 0.25rem 0 1.1rem;
+            width: 100%;
+            margin: 0;
             border-radius: 12px;
             overflow: hidden;
             border: 1px solid #d5e0ec;
@@ -159,7 +176,7 @@
 
         .about-panels {
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 0.9rem;
         }
 
@@ -381,7 +398,7 @@
             .hero-content {
                 transform: translateY(-20px);
             }
-            .about-layout {
+            .about-primary {
                 grid-template-columns: 1fr;
             }
             .about-panels {
@@ -638,18 +655,22 @@
             <div class="additional-services-container">
                 <h2>About Bolder Electric</h2>
                 <div class="about-layout">
-                    <div class="about-main">
-                        <span class="eyebrow">Built for Large-Scale Reliability</span>
-                        <h3>Electrical Work Done Safely, Professionally, and Built to Last</h3>
-                        <div class="about-video-wrapper">
-                            <video class="about-video" controls preload="metadata">
-                                <source src="{{ url_for('static', filename='videos/BE-about-video.mp4') }}" type="video/mp4">
-                                Your browser does not support the video tag.
-                            </video>
+                    <div class="about-primary">
+                        <div class="about-main">
+                            <span class="eyebrow">Built for Large-Scale Reliability</span>
+                            <h3>Electrical Work Done Safely, Professionally, and Built to Last</h3>
+                            <p>At Bolder Electric, we believe electrical work should be done one way: safely, professionally, and built to last. We provide reliable service for large-scale commercial projects and residential clients with clean workmanship, clear communication, and dependable results.</p>
+                            <p>Whether the project is a school district upgrade, a utility site buildout, or a residential service call, our team brings planning, precision, and accountability to every phase.</p>
+                            <p>We do not just complete jobs. We build long-term trust through reliable execution, transparent communication, and workmanship that holds up over time.</p>
                         </div>
-                        <p>At Bolder Electric, we believe electrical work should be done one way: safely, professionally, and built to last. We provide reliable service for large-scale commercial projects and residential clients with clean workmanship, clear communication, and dependable results.</p>
-                        <p>Whether the project is a school district upgrade, a utility site buildout, or a residential service call, our team brings planning, precision, and accountability to every phase.</p>
-                        <p>We do not just complete jobs. We build long-term trust through reliable execution, transparent communication, and workmanship that holds up over time.</p>
+                        <div class="about-video-card">
+                            <div class="about-video-wrapper">
+                                <video class="about-video" controls preload="metadata">
+                                    <source src="{{ url_for('static', filename='videos/BE-about-video.mp4') }}" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                            </div>
+                        </div>
                     </div>
                     <div class="about-panels">
                         <div class="about-panel">
