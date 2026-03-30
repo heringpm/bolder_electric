@@ -140,6 +140,23 @@
             margin-bottom: 0;
         }
 
+        .about-video-wrapper {
+            margin: 0.25rem 0 1.1rem;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #d5e0ec;
+            box-shadow: 0 10px 24px rgba(24, 39, 75, 0.12);
+            background: #000;
+        }
+
+        .about-video {
+            width: 100%;
+            height: auto;
+            display: block;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+        }
+
         .about-panels {
             display: grid;
             grid-template-columns: 1fr;
@@ -624,6 +641,12 @@
                     <div class="about-main">
                         <span class="eyebrow">Built for Large-Scale Reliability</span>
                         <h3>Electrical Work Done Safely, Professionally, and Built to Last</h3>
+                        <div class="about-video-wrapper">
+                            <video class="about-video" controls preload="metadata">
+                                <source src="{{ url_for('static', filename='videos/BE-about-video.mp4') }}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
                         <p>At Bolder Electric, we believe electrical work should be done one way: safely, professionally, and built to last. We provide reliable service for large-scale commercial projects and residential clients with clean workmanship, clear communication, and dependable results.</p>
                         <p>Whether the project is a school district upgrade, a utility site buildout, or a residential service call, our team brings planning, precision, and accountability to every phase.</p>
                         <p>We do not just complete jobs. We build long-term trust through reliable execution, transparent communication, and workmanship that holds up over time.</p>
