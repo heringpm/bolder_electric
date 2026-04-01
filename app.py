@@ -283,7 +283,26 @@ def home():
             'business_hours': contact_info[4]
         }
     
-    return render_template('index.html', contact=contact_data)
+    services = db.get_services()
+    service_descriptions = {}
+    for service in services:
+        name = (service[1] or '').strip().lower()
+        description = (service[2] or '').strip()
+        if not description:
+            continue
+
+        if 'commercial' in name:
+            service_descriptions['commercial'] = description
+        elif 'residential' in name:
+            service_descriptions['residential'] = description
+        elif 'emergency' in name:
+            service_descriptions['emergency'] = description
+        elif 'lighting' in name:
+            service_descriptions['lighting'] = description
+        elif 'safety' in name or 'inspection' in name:
+            service_descriptions['safety'] = description
+    
+    return render_template('index.html', contact=contact_data, service_descriptions=service_descriptions)
 
 @app.route('/gallery')
 def gallery():
