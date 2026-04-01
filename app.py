@@ -284,7 +284,32 @@ def home():
         }
     
     services = db.get_services()
-    service_descriptions = {}
+    service_descriptions = {
+        'commercial': '',
+        'residential': '',
+        'emergency': '',
+        'lighting': '',
+        'panel': '',
+        'safety': ''
+    }
+
+    # Stable defaults for seeded records, if IDs are still aligned.
+    id_map = {
+        1: 'commercial',
+        2: 'residential',
+        3: 'emergency',
+        4: 'panel',
+        5: 'lighting'
+    }
+
+    for service in services:
+        service_id = service[0]
+        description = (service[2] or '').strip()
+        key = id_map.get(service_id)
+        if key and description and not service_descriptions.get(key):
+            service_descriptions[key] = description
+
+    # Name-based fallback so edited/reordered services still map correctly.
     for service in services:
         name = (service[1] or '').strip().lower()
         description = (service[2] or '').strip()
@@ -299,6 +324,8 @@ def home():
             service_descriptions['emergency'] = description
         elif 'lighting' in name:
             service_descriptions['lighting'] = description
+        elif 'panel' in name:
+            service_descriptions['panel'] = description
         elif 'safety' in name or 'inspection' in name:
             service_descriptions['safety'] = description
     
