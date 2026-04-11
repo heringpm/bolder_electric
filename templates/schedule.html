@@ -103,16 +103,13 @@
                         {% set note = 'Contact to schedule. Commercial projects require scope review before calendar booking.' %}
                     {% elif 'emergency' in lname %}
                         {% set service_type = 'emergency' %}
-                        {% set display_price = 250 %}
-                        {% set note = 'Service Call Fee: $250 for travel and initial assessment. Fee may be applied to repair total if work moves forward.' %}
+                        {% set note = 'Service call and scope details are confirmed before work begins.' %}
                     {% elif 'panel' in lname %}
                         {% set service_type = 'panel' %}
-                        {% set display_price = 1250 %}
-                        {% set note = 'Starting range estimate: $1,000-$1,500 depending on equipment and scope.' %}
+                        {% set note = 'Panel upgrade pricing depends on equipment and project scope.' %}
                     {% elif 'residential' in lname %}
                         {% set service_type = 'residential' %}
-                        {% set display_price = 150 %}
-                        {% set note = 'Consultation starts at $150 and can be applied toward the project total.' %}
+                        {% set note = 'Residential consultation and project details are confirmed during scheduling.' %}
                     {% endif %}
                     <div class="service-card"
                         data-id="{{ service.id }}"
@@ -122,7 +119,7 @@
                         data-note="{{ note|e }}"
                         onclick="selectService(this)">
                         <div class="service-name">{{ service.name }}</div>
-                        <div class="service-price">{% if service_type == 'commercial' %}Contact to Schedule{% else %}Starting at ${{ '%.2f'|format(display_price) }}{% endif %}</div>
+                        <div class="service-price">Starting at ${{ '%.2f'|format(display_price) }}</div>
                         {% if service.description %}<div class="service-description">{{ service.description }}</div>{% endif %}
                         {% if note %}<div class="service-note">{{ note }}</div>{% endif %}
                     </div>

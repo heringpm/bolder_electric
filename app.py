@@ -292,6 +292,14 @@ def home():
         'panel': '',
         'safety': ''
     }
+    service_prices = {
+        'commercial': None,
+        'residential': None,
+        'emergency': None,
+        'lighting': None,
+        'panel': None,
+        'safety': None
+    }
 
     # Stable defaults for seeded records, if IDs are still aligned.
     id_map = {
@@ -305,31 +313,52 @@ def home():
     for service in services:
         service_id = service[0]
         description = (service[2] or '').strip()
+        base_price = service[3]
         key = id_map.get(service_id)
         if key and description and not service_descriptions.get(key):
             service_descriptions[key] = description
+        if key and base_price is not None and service_prices.get(key) is None:
+            service_prices[key] = float(base_price)
 
     # Name-based fallback so edited/reordered services still map correctly.
     for service in services:
         name = (service[1] or '').strip().lower()
         description = (service[2] or '').strip()
+        base_price = service[3]
         if not description:
-            continue
+            description = ''
 
         if 'commercial' in name:
-            service_descriptions['commercial'] = description
+            if description:
+                service_descriptions['commercial'] = description
+            service_prices['commercial'] = float(base_price) if base_price is not None else service_prices['commercial']
         elif 'residential' in name:
-            service_descriptions['residential'] = description
+            if description:
+                service_descriptions['residential'] = description
+            service_prices['residential'] = float(base_price) if base_price is not None else service_prices['residential']
         elif 'emergency' in name:
-            service_descriptions['emergency'] = description
+            if description:
+                service_descriptions['emergency'] = description
+            service_prices['emergency'] = float(base_price) if base_price is not None else service_prices['emergency']
         elif 'lighting' in name:
-            service_descriptions['lighting'] = description
+            if description:
+                service_descriptions['lighting'] = description
+            service_prices['lighting'] = float(base_price) if base_price is not None else service_prices['lighting']
         elif 'panel' in name:
-            service_descriptions['panel'] = description
+            if description:
+                service_descriptions['panel'] = description
+            service_prices['panel'] = float(base_price) if base_price is not None else service_prices['panel']
         elif 'safety' in name or 'inspection' in name:
-            service_descriptions['safety'] = description
+            if description:
+                service_descriptions['safety'] = description
+            service_prices['safety'] = float(base_price) if base_price is not None else service_prices['safety']
     
-    return render_template('index.html', contact=contact_data, service_descriptions=service_descriptions)
+    return render_template(
+        'index.html',
+        contact=contact_data,
+        service_descriptions=service_descriptions,
+        service_prices=service_prices
+    )
 
 @app.route('/gallery')
 def gallery():
