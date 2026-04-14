@@ -114,6 +114,16 @@ Do not run `python app.py` and Gunicorn at the same time in production.
    DATABASE_URL=postgresql://bolder_app:change_this_password@127.0.0.1:5432/bolder_electric
    FLASK_ENV=production
    MAX_UPLOAD_MB=25
+   # SMTP provider settings (required for contact/booking emails)
+   SMTP_HOST=smtp.sendgrid.net
+   SMTP_PORT=587
+   SMTP_USERNAME=apikey
+   SMTP_PASSWORD=your_smtp_password_or_api_key
+   SMTP_USE_TLS=true
+   SMTP_USE_SSL=false
+   SMTP_FROM_EMAIL=noreply@bolderelectric.com
+   SMTP_FROM_NAME=Bolder Electric Website
+   BOOKING_NOTIFICATION_EMAIL=info@bolderelectric.com
    EOF
    ```
 
@@ -217,7 +227,18 @@ Do not run `python app.py` and Gunicorn at the same time in production.
    sudo systemctl restart bolder_electric
    sudo systemctl restart nginx
    ```
-15. **Optional SSL**
+15. **If emails are not sending**
+   ```bash
+   # 1) Verify SMTP env vars loaded
+   sudo systemctl show bolder_electric --property=Environment | tr ' ' '\n' | egrep 'SMTP_|BOOKING_NOTIFICATION_EMAIL'
+
+   # 2) Restart app after env updates
+   sudo systemctl restart bolder_electric
+
+   # 3) Check app logs for SMTP errors
+   sudo journalctl -u bolder_electric -n 120 --no-pager
+   ```
+16. **Optional SSL**
     ```bash
     sudo dnf -y install certbot python3-certbot-nginx
     sudo certbot --nginx -d your-domain.com

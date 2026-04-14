@@ -114,6 +114,56 @@ def get_client_ip():
     else:
         return request.remote_addr
 
+def _env_bool(name, default=False):
+    value = os.environ.get(name)
+    if value is None:
+        return default
+    return value.strip().lower() in ('1', 'true', 'yes', 'on')
+
+def _send_email(to_email, subject, body):
+    """Send email via configured SMTP provider, with localhost fallback."""
+    try:
+        smtp_host = os.environ.get('SMTP_HOST', '').strip()
+        smtp_port = int(os.environ.get('SMTP_PORT', '587'))
+        smtp_username = os.environ.get('SMTP_USERNAME', '').strip()
+        smtp_password = os.environ.get('SMTP_PASSWORD', '')
+        smtp_use_tls = _env_bool('SMTP_USE_TLS', True)
+        smtp_use_ssl = _env_bool('SMTP_USE_SSL', False)
+        smtp_timeout = int(os.environ.get('SMTP_TIMEOUT', '15'))
+
+        from_email = os.environ.get('SMTP_FROM_EMAIL', '').strip() or smtp_username or 'noreply@bolderelectric.com'
+        from_name = os.environ.get('SMTP_FROM_NAME', 'Bolder Electric Website').strip()
+        from_header = f"{from_name} <{from_email}>"
+
+        msg = MIMEMultipart()
+        msg['From'] = from_header
+        msg['To'] = to_email
+        msg['Subject'] = subject
+        msg.attach(MIMEText(body, 'plain'))
+
+        if smtp_host:
+            if smtp_use_ssl:
+                server = smtplib.SMTP_SSL(smtp_host, smtp_port, timeout=smtp_timeout)
+            else:
+                server = smtplib.SMTP(smtp_host, smtp_port, timeout=smtp_timeout)
+                server.ehlo()
+                if smtp_use_tls:
+                    server.starttls()
+                    server.ehlo()
+
+            if smtp_username and smtp_password:
+                server.login(smtp_username, smtp_password)
+        else:
+            # Backward-compatible fallback for environments with local postfix.
+            server = smtplib.SMTP('localhost')
+
+        server.send_message(msg)
+        server.quit()
+        return True
+    except Exception as e:
+        print(f"Error sending email: {e}")
+        return False
+
 def generate_totp_secret():
     """Create a base32 TOTP secret."""
     return base64.b32encode(os.urandom(20)).decode('utf-8').rstrip('=')
@@ -184,7 +234,7 @@ def render_login(**kwargs):
     )
 
 def send_contact_email(name, email, phone, service_type, message):
-    """Send contact form submission email using local postfix"""
+    """Send contact form submission email."""
     try:
         # Get the recipient email from database
         contact_info = db.get_contact_info()
@@ -208,29 +258,16 @@ Message:
 This email was sent from the Bolder Electric contact form.
 """
         
-        # Create message
-        msg = MIMEMultipart()
-        msg['From'] = f"Bolder Electric Website <noreply@bolderelectric.com>"
-        msg['To'] = recipient_email
-        msg['Subject'] = subject
-        
-        msg.attach(MIMEText(body, 'plain'))
-        
-        # Send email using local postfix (much simpler)
-        server = smtplib.SMTP('localhost')
-        server.send_message(msg)
-        server.quit()
-        
-        return True
+        return _send_email(recipient_email, subject, body)
         
     except Exception as e:
         print(f"Error sending email: {e}")
         return False
 
 def send_booking_notification_email(booking_data, service_name):
-    """Send booking notification email using local postfix."""
+    """Send booking notification email."""
     try:
-        recipient_email = 'info@bolderelectric.com'
+        recipient_email = os.environ.get('BOOKING_NOTIFICATION_EMAIL', 'info@bolderelectric.com')
         subject = f"New Booking Request - {service_name or 'Service'}"
         body = f"""
 New Booking Request from Bolder Electric Website
@@ -251,16 +288,7 @@ Project Details:
 This email was sent from the Bolder Electric booking form.
 """
 
-        msg = MIMEMultipart()
-        msg['From'] = "Bolder Electric Website <noreply@bolderelectric.com>"
-        msg['To'] = recipient_email
-        msg['Subject'] = subject
-        msg.attach(MIMEText(body, 'plain'))
-
-        server = smtplib.SMTP('localhost')
-        server.send_message(msg)
-        server.quit()
-        return True
+        return _send_email(recipient_email, subject, body)
     except Exception as e:
         print(f"Error sending booking email: {e}")
         return False
@@ -303,16 +331,7 @@ Thank you,
 Bolder Electric
 """
 
-        msg = MIMEMultipart()
-        msg['From'] = "Bolder Electric Website <noreply@bolderelectric.com>"
-        msg['To'] = recipient_email
-        msg['Subject'] = subject
-        msg.attach(MIMEText(body, 'plain'))
-
-        server = smtplib.SMTP('localhost')
-        server.send_message(msg)
-        server.quit()
-        return True
+        return _send_email(recipient_email, subject, body)
     except Exception as e:
         print(f"Error sending booking status email: {e}")
         return False

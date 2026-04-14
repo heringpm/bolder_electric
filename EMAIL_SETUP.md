@@ -1,87 +1,66 @@
-# Email Setup for Bolder Electric Contact Form
+# Email Setup (SMTP Provider)
 
-The contact form now sends submissions to `info@bolderelectric.com` using a local postfix SMTP server - no external email account required!
+The app now sends all contact/booking emails through a configurable SMTP provider.
+This is production-safe and works on EC2 without relying on local postfix.
 
-## Option 1: Local Postfix (Recommended - Simplest)
+## Required Environment Variables
 
-### Install and Configure Postfix
-
-**On Ubuntu/Debian:**
-```bash
-sudo apt update
-sudo apt install postfix mailutils
-```
-
-**During installation:**
-- Choose "Internet Site" 
-- System mail name: `bolderelectric.com` (or your domain)
-
-**Configure postfix to send from your domain:**
-```bash
-sudo nano /etc/postfix/main.cf
-```
-
-Add/update these lines:
-```
-myhostname = bolderelectric.com
-mydomain = bolderelectric.com
-myorigin = $mydomain
-mydestination = $myhostname, localhost.$mydomain, localhost
-relayhost = 
-mynetworks = 127.0.0.0/8 [::ffff:127.0.0.0]/104 [::1]/128
-```
-
-**Restart postfix:**
-```bash
-sudo systemctl restart postfix
-```
-
-### Test Postfix
-```bash
-echo "Test email" | mail -s "Test" info@bolderelectric.com
-```
-
-## Option 2: Gmail SMTP (If you prefer external service)
-
-See the original setup instructions if you want to use Gmail instead.
-
-## AWS Elastic Beanstalk Setup
-
-If using AWS, you may need to configure postfix:
+Set these in `/etc/bolder_electric.env`:
 
 ```bash
-# Install postfix on EC2 instances
-sudo yum install postfix  # Amazon Linux
-# or
-sudo apt install postfix  # Ubuntu
-
-# Configure and start
-sudo systemctl enable postfix
-sudo systemctl start postfix
+SMTP_HOST=smtp.sendgrid.net
+SMTP_PORT=587
+SMTP_USERNAME=apikey
+SMTP_PASSWORD=your_smtp_password_or_api_key
+SMTP_USE_TLS=true
+SMTP_USE_SSL=false
+SMTP_FROM_EMAIL=noreply@bolderelectric.com
+SMTP_FROM_NAME=Bolder Electric Website
+BOOKING_NOTIFICATION_EMAIL=info@bolderelectric.com
 ```
 
-## Email Content
+## Common Providers
 
-The email will include:
-- Customer name, email, phone
-- Service type requested  
-- Message details
-- Professional formatting
+### SendGrid SMTP
 
-## Troubleshooting
+```bash
+SMTP_HOST=smtp.sendgrid.net
+SMTP_PORT=587
+SMTP_USERNAME=apikey
+SMTP_PASSWORD=<SENDGRID_API_KEY>
+SMTP_USE_TLS=true
+SMTP_USE_SSL=false
+```
 
-**Email not sending?**
-1. Check postfix is running: `sudo systemctl status postfix`
-2. Check mail queue: `mailq`
-3. Check logs: `sudo tail -f /var/log/mail.log`
+### Google Workspace / Gmail SMTP
 
-**Spam issues?**
-1. Set up proper DNS records (SPF, DKIM)
-2. Configure reverse DNS for your server IP
-3. Consider using a dedicated email service for better deliverability
+```bash
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USERNAME=your-address@yourdomain.com
+SMTP_PASSWORD=<APP_PASSWORD>
+SMTP_USE_TLS=true
+SMTP_USE_SSL=false
+```
 
-## Security Notes
+## Apply Changes
 
-- Local postfix doesn't require external credentials
-- Ensure your server IP has proper reverse DNS
-- Monitor for abuse to prevent being blacklisted
+```bash
+sudo systemctl restart bolder_electric
+```
+
+## Verify on Server
+
+```bash
+# Ensure env vars are present
+sudo systemctl show bolder_electric --property=Environment | tr ' ' '\n' | egrep 'SMTP_|BOOKING_NOTIFICATION_EMAIL'
+
+# Watch app logs for mail errors
+sudo journalctl -u bolder_electric -f
+```
+
+## Notes
+
+- If `SMTP_HOST` is not set, the app falls back to local `localhost` SMTP.
+- Contact form notifications go to the contact email stored in admin settings.
+- New booking request notifications go to `BOOKING_NOTIFICATION_EMAIL` (defaults to `info@bolderelectric.com`).
