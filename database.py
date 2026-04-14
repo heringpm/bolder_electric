@@ -995,3 +995,27 @@ class DatabaseManager:
         bookings = cursor.fetchall()
         conn.close()
         return bookings
+
+    def get_booking_by_id(self, booking_id):
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        cursor.execute(self._prepare_query('''
+            SELECT b.*, s.name as service_name
+            FROM bookings b
+            JOIN services s ON b.service_id = s.id
+            WHERE b.id = ?
+        '''), (booking_id,))
+        booking = cursor.fetchone()
+        conn.close()
+        return booking
+
+    def update_booking_status(self, booking_id, status):
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        cursor.execute(self._prepare_query('''
+            UPDATE bookings
+            SET status = ?, updated_at = CURRENT_TIMESTAMP
+            WHERE id = ?
+        '''), (status, booking_id))
+        conn.commit()
+        conn.close()

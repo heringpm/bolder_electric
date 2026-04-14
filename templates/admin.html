@@ -277,6 +277,25 @@
             background: #D1ECF1;
             color: #0C5460;
         }
+
+        .status-rejected {
+            background: #F8D7DA;
+            color: #721C24;
+        }
+
+        .booking-detail {
+            margin-top: 0.25rem;
+            font-size: 0.95rem;
+            color: var(--dark-gray);
+            word-break: break-word;
+        }
+
+        .booking-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 0.85rem;
+        }
         
         /* Logs Section Styles */
         .logs-container {
@@ -924,22 +943,61 @@
         function renderBookings() {
             const container = document.getElementById('bookings-container');
             container.innerHTML = '';
+            if (!bookings.length) {
+                container.innerHTML = '<p>No bookings found.</p>';
+                return;
+            }
+
+            const canManage = currentUserRole === 'admin' || currentUserRole === 'editor';
             bookings.forEach(booking => {
+                const amount = Number(booking.total_price || 0);
                 const div = document.createElement('div');
                 div.className = 'booking-item';
                 div.innerHTML = `
                     <div class="booking-header">
-                        <span class="booking-service">${booking.service_name}</span>
-                        <span class="booking-status status-${booking.status}">${booking.status}</span>
+                        <span class="booking-service">${escapeHtml(booking.service_name || 'Service')}</span>
+                        <span class="booking-status status-${escapeHtml(booking.status || 'pending')}">${escapeHtml((booking.status || 'pending').toUpperCase())}</span>
                     </div>
-                    <div><strong>Date:</strong> ${booking.service_date}</div>
-                    <div><strong>Time:</strong> ${booking.time_slot}</div>
-                    <div><strong>Customer:</strong> ${booking.customer_name}</div>
-                    <div><strong>Phone:</strong> ${booking.customer_phone}</div>
-                    <div><strong>Price:</strong> $${booking.total_price.toFixed(2)}</div>
+                    <div class="booking-detail"><strong>Date:</strong> ${escapeHtml(booking.service_date || 'N/A')}</div>
+                    <div class="booking-detail"><strong>Time:</strong> ${escapeHtml(booking.time_slot || 'N/A')}</div>
+                    <div class="booking-detail"><strong>Customer:</strong> ${escapeHtml(booking.customer_name || 'N/A')}</div>
+                    <div class="booking-detail"><strong>Email:</strong> ${escapeHtml(booking.customer_email || 'N/A')}</div>
+                    <div class="booking-detail"><strong>Phone:</strong> ${escapeHtml(booking.customer_phone || 'N/A')}</div>
+                    <div class="booking-detail"><strong>Address:</strong> ${escapeHtml(booking.customer_address || 'N/A')}</div>
+                    <div class="booking-detail"><strong>Project Details:</strong> ${escapeHtml(booking.description || 'N/A')}</div>
+                    <div class="booking-detail"><strong>Price:</strong> $${amount.toFixed(2)}</div>
+                    ${canManage ? `
+                        <div class="booking-actions">
+                            <button class="btn-edit" onclick="updateBookingStatus(${booking.id}, 'confirmed')">Confirm</button>
+                            <button class="btn-delete" onclick="updateBookingStatus(${booking.id}, 'rejected')">Reject</button>
+                            <button class="btn-edit" onclick="updateBookingStatus(${booking.id}, 'pending')">Mark Pending</button>
+                        </div>
+                    ` : ''}
                 `;
                 container.appendChild(div);
             });
+        }
+
+        function updateBookingStatus(bookingId, status) {
+            const actionLabel = status.charAt(0).toUpperCase() + status.slice(1);
+            const note = prompt(`${actionLabel} this booking and send customer notification email.\nOptional note to include in email:`, '') || '';
+            fetch(`/api/bookings/${bookingId}/status`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: status, note: note })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    alert(data.message || 'Unable to update booking status');
+                    return;
+                }
+                if (!data.email_sent) {
+                    alert('Status updated, but customer email could not be sent.');
+                }
+                loadBookings();
+            })
+            .catch(() => alert('Unable to update booking status'));
         }
 
         function loadContactSubmissions() {

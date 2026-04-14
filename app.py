@@ -102,6 +102,9 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+def can_manage_bookings():
+    return session.get('admin_logged_in') and session.get('user_role') in ('admin', 'editor')
+
 def get_client_ip():
     """Get client IP address"""
     if request.headers.get('X-Forwarded-For'):
@@ -260,6 +263,58 @@ This email was sent from the Bolder Electric booking form.
         return True
     except Exception as e:
         print(f"Error sending booking email: {e}")
+        return False
+
+def send_booking_status_email(booking, status, admin_note=''):
+    """Notify customer when booking is confirmed/rejected."""
+    try:
+        recipient_email = booking.get('customer_email')
+        if not recipient_email:
+            return False
+
+        status_label = (status or '').strip().lower()
+        if status_label == 'confirmed':
+            subject = "Booking Confirmed - Bolder Electric"
+            intro = "Good news - your booking has been confirmed."
+        elif status_label == 'rejected':
+            subject = "Booking Update - Bolder Electric"
+            intro = "Thank you for your request. We are unable to confirm the selected slot."
+        else:
+            subject = "Booking Status Update - Bolder Electric"
+            intro = f"Your booking status has been updated to: {status_label}."
+
+        body = f"""
+{intro}
+
+Service: {booking.get('service_name') or 'Service'}
+Date: {booking.get('service_date')}
+Time: {booking.get('time_slot')}
+Name: {booking.get('customer_name')}
+Phone: {booking.get('customer_phone')}
+Address: {booking.get('customer_address')}
+
+"""
+        if admin_note:
+            body += f"Note from our team:\n{admin_note}\n\n"
+
+        body += """If you have any questions, please reply to this email or call us at (951) 397-4025.
+
+Thank you,
+Bolder Electric
+"""
+
+        msg = MIMEMultipart()
+        msg['From'] = "Bolder Electric Website <noreply@bolderelectric.com>"
+        msg['To'] = recipient_email
+        msg['Subject'] = subject
+        msg.attach(MIMEText(body, 'plain'))
+
+        server = smtplib.SMTP('localhost')
+        server.send_message(msg)
+        server.quit()
+        return True
+    except Exception as e:
+        print(f"Error sending booking status email: {e}")
         return False
 
 @app.route('/')
@@ -584,6 +639,10 @@ def schedule():
     } for ts in time_slots]
     return render_template('schedule.html', services=services_dict, time_slots=time_slots_dict)
 
+@app.route('/booking-confirmation')
+def booking_confirmation():
+    return render_template('booking_confirmation.html')
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -826,6 +885,45 @@ def get_bookings():
         'status': b[10],
         'service_name': b[11]
     } for b in bookings])
+
+@app.route('/api/bookings/<int:booking_id>/status', methods=['PUT'])
+@login_required
+def update_booking_status(booking_id):
+    if not can_manage_bookings():
+        return jsonify({'success': False, 'message': 'Insufficient permissions'}), 403
+
+    data = request.get_json() or {}
+    status = (data.get('status') or '').strip().lower()
+    admin_note = (data.get('note') or '').strip()
+    if status not in ('pending', 'confirmed', 'rejected', 'completed'):
+        return jsonify({'success': False, 'message': 'Invalid status'}), 400
+
+    booking_row = db.get_booking_by_id(booking_id)
+    if not booking_row:
+        return jsonify({'success': False, 'message': 'Booking not found'}), 404
+
+    db.update_booking_status(booking_id, status)
+
+    booking_dict = {
+        'id': booking_row[0],
+        'service_id': booking_row[1],
+        'customer_name': booking_row[2],
+        'customer_phone': booking_row[3],
+        'customer_email': booking_row[4],
+        'customer_address': booking_row[5],
+        'service_date': booking_row[6],
+        'time_slot': booking_row[7],
+        'description': booking_row[8],
+        'total_price': booking_row[9],
+        'status': status,
+        'service_name': booking_row[11]
+    }
+    email_sent = send_booking_status_email(booking_dict, status, admin_note)
+
+    return jsonify({
+        'success': True,
+        'email_sent': email_sent
+    })
 
 @app.route('/api/contact', methods=['GET'])
 @admin_required

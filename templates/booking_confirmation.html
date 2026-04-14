@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <title>Booking Received - Bolder Electric</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.min.css') }}">
+    <style>
+        .confirmation-wrap { max-width: 900px; margin: 0 auto; padding: 110px 20px 80px; }
+        .confirmation-card { background: #fff; border-radius: 14px; padding: 2rem; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border-top: 6px solid var(--primary-red); text-align: center; }
+        .confirmation-card h1 { color: var(--primary-black); margin-bottom: 0.75rem; }
+        .confirmation-card p { color: var(--dark-gray); margin-bottom: 1rem; }
+        .confirmation-actions { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; margin-top: 1.2rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                    <img src="{{ url_for('static', filename='images/bolder_electric_logo.png') }}" alt="Bolder Electric Logo" class="logo-img">
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="{{ url_for('home') }}" class="nav-link">Home</a></li>
+                    <li><a href="{{ url_for('home') }}#services" class="nav-link">Services</a></li>
+                    <li><a href="{{ url_for('home') }}#about" class="nav-link">About</a></li>
+                    <li><a href="{{ url_for('home') }}#crew" class="nav-link">Team</a></li>
+                    <li><a href="{{ url_for('gallery') }}" class="nav-link">Gallery</a></li>
+                    <li><a href="{{ url_for('home') }}#contact" class="nav-link">Contact</a></li>
+                    <li><a href="{{ url_for('schedule') }}" class="nav-link">Schedule</a></li>
+                </ul>
+                <div class="hamburger"><span></span><span></span><span></span></div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="confirmation-wrap">
+        <section class="confirmation-card">
+            <h1>Thanks, your booking was submitted.</h1>
+            <p>Our team will be in contact soon to confirm your appointment details.</p>
+            <p>If you need immediate assistance, please call <strong>(951) 397-4025</strong>.</p>
+            <div class="confirmation-actions">
+                <a href="{{ url_for('home') }}" class="btn btn-primary">Back to Home</a>
+                <a href="{{ url_for('gallery') }}" class="btn btn-primary" style="background: var(--primary-gold); color: var(--primary-black);">View Gallery</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-main">
+                    <div class="footer-brand">
+                        <img src="{{ url_for('static', filename='images/bolder_electric_logo.png') }}" alt="Bolder Electric Logo" class="footer-logo">
+                        <div class="footer-text"><p class="footer-tagline">Professional Electrical Services</p></div>
+                    </div>
+                    <div class="footer-info">
+                        <div class="footer-links">
+                            <h4>Quick Links</h4>
+                            <ul>
+                                <li><a href="{{ url_for('home') }}">Home</a></li>
+                                <li><a href="{{ url_for('home') }}#services">Services</a></li>
+                                <li><a href="{{ url_for('gallery') }}">Gallery</a></li>
+                                <li><a href="{{ url_for('home') }}#contact">Contact</a></li>
+                                <li><a href="{{ url_for('schedule') }}">Schedule</a></li>
+                            </ul>
+                        </div>
+                        <div class="footer-contact">
+                            <h4>Contact</h4>
+                            <p>(951) 397-4025</p>
+                            <p>support@bolderelectric.com</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer-bottom"><p>&copy; 2026 Bolder Electric. All rights reserved.</p></div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+        if (hamburger && navMenu) {
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                navMenu.classList.toggle('active');
+            });
+        }
+    </script>
+</body>
+</html>

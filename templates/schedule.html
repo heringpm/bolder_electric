@@ -314,9 +314,7 @@
                 });
                 const data = await res.json();
                 if (!res.ok || !data.success) throw new Error(data.message || 'Unable to submit booking');
-
-                alert('Booking received. Our team will contact you shortly to confirm the appointment.');
-                window.location.href = '{{ url_for("home") }}';
+                window.location.href = '{{ url_for("booking_confirmation") }}';
             } catch (err) {
                 alert(err.message || 'Booking failed. Please call us at (951) 397-4025.');
                 submitBtn.disabled = false;
