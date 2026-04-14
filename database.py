@@ -1014,7 +1014,7 @@ class DatabaseManager:
         cursor = conn.cursor()
         cursor.execute(self._prepare_query('''
             UPDATE bookings
-            SET status = ?, updated_at = CURRENT_TIMESTAMP
+            SET status = ?
             WHERE id = ?
         '''), (status, booking_id))
         conn.commit()
