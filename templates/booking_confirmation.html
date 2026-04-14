@@ -8,8 +8,24 @@
     <meta name="robots" content="noindex, nofollow">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.min.css') }}">
     <style>
-        .confirmation-wrap { max-width: 900px; margin: 0 auto; padding: 110px 20px 80px; }
-        .confirmation-card { background: #fff; border-radius: 14px; padding: 2rem; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border-top: 6px solid var(--primary-red); text-align: center; }
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .confirmation-wrap {
+            flex: 1;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .confirmation-card { background: #fff; border-radius: 14px; padding: 2rem; box-shadow: 0 10px 30px rgba(0,0,0,0.08); border-top: 6px solid var(--primary-red); text-align: center; width: 100%; }
         .confirmation-card h1 { color: var(--primary-black); margin-bottom: 0.75rem; }
         .confirmation-card p { color: var(--dark-gray); margin-bottom: 1rem; }
         .confirmation-actions { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; margin-top: 1.2rem; }
