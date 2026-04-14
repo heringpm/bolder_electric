@@ -528,7 +528,9 @@
         <nav class="navbar">
             <div class="nav-container">
                 <div class="logo">
-                    <img src="{{ url_for('static', filename='images/bolder_electric_logo.png') }}" alt="Bolder Electric Logo" class="logo-img">
+                    <a href="{{ url_for('home') }}" aria-label="Bolder Electric Home">
+                        <img src="{{ url_for('static', filename='images/bolder_electric_logo.png') }}" alt="Bolder Electric Logo" class="logo-img">
+                    </a>
                 </div>
                 <ul class="nav-menu">
                     <li><a href="{{ url_for('home') }}" class="nav-link">Home</a></li>
