@@ -66,8 +66,8 @@
 
     <div class="schedule-container">
         <div class="schedule-header">
-            <h2 class="section-title">Schedule Your Electrical Service</h2>
-            <p class="schedule-subtitle">Residential and emergency scheduling available online. Commercial projects are contact-to-schedule for proper planning.</p>
+            <h2 class="section-title">Request Electrical Service</h2>
+            <p class="schedule-subtitle">Submitting this form creates a scheduling request only. Your appointment is not booked until our team contacts you and confirms your date/time.</p>
         </div>
 
         <div class="schedule-content">
@@ -100,16 +100,16 @@
                     {% set note = '' %}
                     {% if 'commercial' in lname %}
                         {% set service_type = 'commercial' %}
-                        {% set note = 'Contact to schedule. Commercial projects require scope review before calendar booking.' %}
+                        {% set note = 'Commercial projects are contact-to-schedule and require scope review before confirmation.' %}
                     {% elif 'emergency' in lname %}
                         {% set service_type = 'emergency' %}
-                        {% set note = 'Service call and scope details are confirmed before work begins.' %}
+                        {% set note = 'Emergency requests are reviewed immediately, and your service time is confirmed by our team.' %}
                     {% elif 'panel' in lname %}
                         {% set service_type = 'panel' %}
-                        {% set note = 'Panel upgrade pricing depends on equipment and project scope.' %}
+                        {% set note = 'Panel upgrade requests require confirmation after equipment and project scope review.' %}
                     {% elif 'residential' in lname %}
                         {% set service_type = 'residential' %}
-                        {% set note = 'Residential consultation and project details are confirmed during scheduling.' %}
+                        {% set note = 'Residential requests are reviewed and confirmed by our team before the appointment is finalized.' %}
                     {% endif %}
                     <div class="service-card"
                         data-id="{{ service.id }}"
@@ -141,7 +141,7 @@
                     <div class="summary-total"><span>Estimated Cost:</span><span id="summary-price">$0</span></div>
                 </div>
 
-                <button class="submit-btn" id="submit-btn" type="button" onclick="submitBooking()" disabled>Complete Booking</button>
+                <button class="submit-btn" id="submit-btn" type="button" onclick="submitBooking()" disabled>Submit Scheduling Request</button>
             </div>
         </div>
     </div>
@@ -280,7 +280,7 @@
             const canSubmit = selectedService && requiredFieldsFilled() && (isCommercial || (selectedDate && selectedTime));
             const submitBtn = document.getElementById('submit-btn');
             submitBtn.disabled = !canSubmit;
-            submitBtn.textContent = isCommercial ? 'Contact Us to Schedule Commercial Service' : 'Complete Booking';
+            submitBtn.textContent = isCommercial ? 'Contact Us for Commercial Scheduling' : 'Submit Scheduling Request';
         }
 
         async function submitBooking() {
@@ -318,7 +318,7 @@
             } catch (err) {
                 alert(err.message || 'Booking failed. Please call us at (951) 397-4025.');
                 submitBtn.disabled = false;
-                submitBtn.textContent = 'Complete Booking';
+                submitBtn.textContent = 'Submit Scheduling Request';
             }
         }
 
