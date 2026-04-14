@@ -751,6 +751,59 @@
         </div>
     </div>
 
+    <!-- Booking Edit Modal -->
+    <div id="booking-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Booking</h3>
+                <span class="close" onclick="closeBookingModal()">&times;</span>
+            </div>
+            <form id="booking-form">
+                <input type="hidden" id="booking-id">
+                <div class="form-group">
+                    <label for="booking-service-name">Service</label>
+                    <input type="text" id="booking-service-name" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="booking-customer-name">Customer Name *</label>
+                    <input type="text" id="booking-customer-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="booking-customer-email">Customer Email *</label>
+                    <input type="email" id="booking-customer-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="booking-customer-phone">Customer Phone *</label>
+                    <input type="text" id="booking-customer-phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="booking-customer-address">Service Address *</label>
+                    <input type="text" id="booking-customer-address" required>
+                </div>
+                <div class="form-group">
+                    <label for="booking-service-date">Service Date (YYYY-MM-DD) *</label>
+                    <input type="date" id="booking-service-date" required>
+                </div>
+                <div class="form-group">
+                    <label for="booking-time-slot">Time Slot *</label>
+                    <input type="text" id="booking-time-slot" required>
+                </div>
+                <div class="form-group">
+                    <label for="booking-total-price">Price *</label>
+                    <input type="number" id="booking-total-price" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="booking-description">Project Details</label>
+                    <textarea id="booking-description" rows="4"></textarea>
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <button type="button" class="btn-add" onclick="saveBookingEdit()">Save Changes</button>
+                    <button type="button" class="btn-delete" onclick="closeBookingModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
         const currentUserRole = "{{ current_role }}";
         let currentSection = currentUserRole === 'admin' ? 'services' : 'bookings';
@@ -761,6 +814,7 @@
         let users = [];
         let galleryPhotos = [];
         let draggedGalleryItem = null;
+        let editingBookingId = null;
 
         function showSection(section, tabElement = null) {
             document.querySelectorAll('.admin-section').forEach(el => el.classList.remove('active'));
@@ -971,7 +1025,7 @@
                             <button class="btn-edit" onclick="updateBookingStatus(${booking.id}, 'confirmed')">Confirm</button>
                             <button class="btn-delete" onclick="updateBookingStatus(${booking.id}, 'rejected')">Reject</button>
                             <button class="btn-edit" onclick="updateBookingStatus(${booking.id}, 'pending')">Mark Pending</button>
-                            <button class="btn-edit" onclick="editBooking(${booking.id})">Edit</button>
+                            <button class="btn-edit" onclick="openBookingModal(${booking.id})">Edit</button>
                             <button class="btn-delete" onclick="deleteBooking(${booking.id})">Delete</button>
                         </div>
                     ` : ''}
@@ -1002,49 +1056,57 @@
             .catch(() => alert('Unable to update booking status'));
         }
 
-        function editBooking(bookingId) {
+        function openBookingModal(bookingId) {
             const booking = bookings.find(b => Number(b.id) === Number(bookingId));
             if (!booking) {
                 alert('Booking not found.');
                 return;
             }
+            editingBookingId = booking.id;
+            document.getElementById('booking-id').value = booking.id;
+            document.getElementById('booking-service-name').value = booking.service_name || '';
+            document.getElementById('booking-customer-name').value = booking.customer_name || '';
+            document.getElementById('booking-customer-email').value = booking.customer_email || '';
+            document.getElementById('booking-customer-phone').value = booking.customer_phone || '';
+            document.getElementById('booking-customer-address').value = booking.customer_address || '';
+            document.getElementById('booking-service-date').value = booking.service_date || '';
+            document.getElementById('booking-time-slot').value = booking.time_slot || '';
+            document.getElementById('booking-total-price').value = Number(booking.total_price || 0).toFixed(2);
+            document.getElementById('booking-description').value = booking.description || '';
+            document.getElementById('booking-modal').style.display = 'block';
+        }
 
-            const customer_name = prompt('Customer name:', booking.customer_name || '');
-            if (customer_name === null) return;
-            const customer_email = prompt('Customer email:', booking.customer_email || '');
-            if (customer_email === null) return;
-            const customer_phone = prompt('Customer phone:', booking.customer_phone || '');
-            if (customer_phone === null) return;
-            const customer_address = prompt('Service address:', booking.customer_address || '');
-            if (customer_address === null) return;
-            const service_date = prompt('Service date (YYYY-MM-DD):', booking.service_date || '');
-            if (service_date === null) return;
-            const time_slot = prompt('Time slot (e.g. 10:00 AM):', booking.time_slot || '');
-            if (time_slot === null) return;
-            const total_price_raw = prompt('Total price:', String(booking.total_price ?? '0'));
-            if (total_price_raw === null) return;
-            const description = prompt('Project details:', booking.description || '');
-            if (description === null) return;
+        function closeBookingModal() {
+            editingBookingId = null;
+            const form = document.getElementById('booking-form');
+            if (form) form.reset();
+            const modal = document.getElementById('booking-modal');
+            if (modal) modal.style.display = 'none';
+        }
 
-            const total_price = Number(total_price_raw);
-            if (!Number.isFinite(total_price)) {
-                alert('Please enter a valid number for price.');
+        function saveBookingEdit() {
+            if (!editingBookingId) return;
+
+            const payload = {
+                customer_name: document.getElementById('booking-customer-name').value.trim(),
+                customer_email: document.getElementById('booking-customer-email').value.trim(),
+                customer_phone: document.getElementById('booking-customer-phone').value.trim(),
+                customer_address: document.getElementById('booking-customer-address').value.trim(),
+                service_date: document.getElementById('booking-service-date').value.trim(),
+                time_slot: document.getElementById('booking-time-slot').value.trim(),
+                description: document.getElementById('booking-description').value.trim(),
+                total_price: Number(document.getElementById('booking-total-price').value)
+            };
+
+            if (!payload.customer_name || !payload.customer_email || !payload.customer_phone || !payload.customer_address || !payload.service_date || !payload.time_slot || !Number.isFinite(payload.total_price)) {
+                alert('Please complete all required fields with valid values.');
                 return;
             }
 
-            fetch(`/api/bookings/${bookingId}`, {
+            fetch(`/api/bookings/${editingBookingId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    customer_name: customer_name.trim(),
-                    customer_email: customer_email.trim(),
-                    customer_phone: customer_phone.trim(),
-                    customer_address: customer_address.trim(),
-                    service_date: service_date.trim(),
-                    time_slot: time_slot.trim(),
-                    description: description.trim(),
-                    total_price: total_price
-                })
+                body: JSON.stringify(payload)
             })
             .then(response => response.json())
             .then(data => {
@@ -1052,6 +1114,7 @@
                     alert(data.message || 'Unable to update booking');
                     return;
                 }
+                closeBookingModal();
                 loadBookings();
             })
             .catch(() => alert('Unable to update booking'));
@@ -1479,8 +1542,10 @@
         }
 
         window.onclick = function(event) {
-            const modal = document.getElementById('service-modal');
-            if (event.target === modal) closeServiceModal();
+            const serviceModal = document.getElementById('service-modal');
+            const bookingModal = document.getElementById('booking-modal');
+            if (event.target === serviceModal) closeServiceModal();
+            if (event.target === bookingModal) closeBookingModal();
         }
 
         document.addEventListener('DOMContentLoaded', function() {
