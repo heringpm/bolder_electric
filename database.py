@@ -1019,3 +1019,27 @@ class DatabaseManager:
         '''), (status, booking_id))
         conn.commit()
         conn.close()
+
+    def update_booking(self, booking_id, customer_name, customer_phone, customer_email,
+                       customer_address, service_date, time_slot, description, total_price):
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        cursor.execute(self._prepare_query('''
+            UPDATE bookings
+            SET customer_name = ?, customer_phone = ?, customer_email = ?,
+                customer_address = ?, service_date = ?, time_slot = ?,
+                description = ?, total_price = ?
+            WHERE id = ?
+        '''), (
+            customer_name, customer_phone, customer_email, customer_address,
+            service_date, time_slot, description, total_price, booking_id
+        ))
+        conn.commit()
+        conn.close()
+
+    def delete_booking(self, booking_id):
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        cursor.execute(self._prepare_query('DELETE FROM bookings WHERE id = ?'), (booking_id,))
+        conn.commit()
+        conn.close()

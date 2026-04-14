@@ -971,6 +971,8 @@
                             <button class="btn-edit" onclick="updateBookingStatus(${booking.id}, 'confirmed')">Confirm</button>
                             <button class="btn-delete" onclick="updateBookingStatus(${booking.id}, 'rejected')">Reject</button>
                             <button class="btn-edit" onclick="updateBookingStatus(${booking.id}, 'pending')">Mark Pending</button>
+                            <button class="btn-edit" onclick="editBooking(${booking.id})">Edit</button>
+                            <button class="btn-delete" onclick="deleteBooking(${booking.id})">Delete</button>
                         </div>
                     ` : ''}
                 `;
@@ -998,6 +1000,77 @@
                 loadBookings();
             })
             .catch(() => alert('Unable to update booking status'));
+        }
+
+        function editBooking(bookingId) {
+            const booking = bookings.find(b => Number(b.id) === Number(bookingId));
+            if (!booking) {
+                alert('Booking not found.');
+                return;
+            }
+
+            const customer_name = prompt('Customer name:', booking.customer_name || '');
+            if (customer_name === null) return;
+            const customer_email = prompt('Customer email:', booking.customer_email || '');
+            if (customer_email === null) return;
+            const customer_phone = prompt('Customer phone:', booking.customer_phone || '');
+            if (customer_phone === null) return;
+            const customer_address = prompt('Service address:', booking.customer_address || '');
+            if (customer_address === null) return;
+            const service_date = prompt('Service date (YYYY-MM-DD):', booking.service_date || '');
+            if (service_date === null) return;
+            const time_slot = prompt('Time slot (e.g. 10:00 AM):', booking.time_slot || '');
+            if (time_slot === null) return;
+            const total_price_raw = prompt('Total price:', String(booking.total_price ?? '0'));
+            if (total_price_raw === null) return;
+            const description = prompt('Project details:', booking.description || '');
+            if (description === null) return;
+
+            const total_price = Number(total_price_raw);
+            if (!Number.isFinite(total_price)) {
+                alert('Please enter a valid number for price.');
+                return;
+            }
+
+            fetch(`/api/bookings/${bookingId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    customer_name: customer_name.trim(),
+                    customer_email: customer_email.trim(),
+                    customer_phone: customer_phone.trim(),
+                    customer_address: customer_address.trim(),
+                    service_date: service_date.trim(),
+                    time_slot: time_slot.trim(),
+                    description: description.trim(),
+                    total_price: total_price
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    alert(data.message || 'Unable to update booking');
+                    return;
+                }
+                loadBookings();
+            })
+            .catch(() => alert('Unable to update booking'));
+        }
+
+        function deleteBooking(bookingId) {
+            if (!confirm('Delete this booking permanently?')) return;
+            fetch(`/api/bookings/${bookingId}`, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    alert(data.message || 'Unable to delete booking');
+                    return;
+                }
+                loadBookings();
+            })
+            .catch(() => alert('Unable to delete booking'));
         }
 
         function loadContactSubmissions() {

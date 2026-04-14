@@ -944,6 +944,60 @@ def update_booking_status(booking_id):
         'email_sent': email_sent
     })
 
+@app.route('/api/bookings/<int:booking_id>', methods=['PUT'])
+@login_required
+def update_booking(booking_id):
+    if not can_manage_bookings():
+        return jsonify({'success': False, 'message': 'Insufficient permissions'}), 403
+
+    booking_row = db.get_booking_by_id(booking_id)
+    if not booking_row:
+        return jsonify({'success': False, 'message': 'Booking not found'}), 404
+
+    data = request.get_json() or {}
+    customer_name = (data.get('customer_name') or '').strip()
+    customer_phone = (data.get('customer_phone') or '').strip()
+    customer_email = (data.get('customer_email') or '').strip()
+    customer_address = (data.get('customer_address') or '').strip()
+    service_date = (data.get('service_date') or '').strip()
+    time_slot = (data.get('time_slot') or '').strip()
+    description = (data.get('description') or '').strip()
+    total_price = data.get('total_price')
+
+    if not all([customer_name, customer_phone, customer_email, customer_address, service_date, time_slot]):
+        return jsonify({'success': False, 'message': 'Missing required booking fields'}), 400
+
+    try:
+        total_price = float(total_price)
+    except (TypeError, ValueError):
+        return jsonify({'success': False, 'message': 'Invalid price value'}), 400
+
+    db.update_booking(
+        booking_id,
+        customer_name,
+        customer_phone,
+        customer_email,
+        customer_address,
+        service_date,
+        time_slot,
+        description,
+        total_price
+    )
+    return jsonify({'success': True})
+
+@app.route('/api/bookings/<int:booking_id>', methods=['DELETE'])
+@login_required
+def delete_booking(booking_id):
+    if not can_manage_bookings():
+        return jsonify({'success': False, 'message': 'Insufficient permissions'}), 403
+
+    booking_row = db.get_booking_by_id(booking_id)
+    if not booking_row:
+        return jsonify({'success': False, 'message': 'Booking not found'}), 404
+
+    db.delete_booking(booking_id)
+    return jsonify({'success': True})
+
 @app.route('/api/contact', methods=['GET'])
 @admin_required
 def get_contact():
