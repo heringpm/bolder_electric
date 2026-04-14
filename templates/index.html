@@ -553,7 +553,7 @@
     <main>
         <section id="home" class="hero">
             <div class="hero-background">
-                <img src="{{ url_for('static', filename='images/hero.jpg') }}" alt="Bolder Electric Team and Fleet" class="hero-bg-image" width="1600" height="1067" fetchpriority="high">
+                <img src="{{ url_for('static', filename='images/hero-optimized.jpg') }}" alt="Bolder Electric Team and Fleet" class="hero-bg-image" width="1920" height="1280" fetchpriority="high" decoding="async">
                 <div class="hero-overlay"></div>
             </div>
             <div class="hero-content">
@@ -678,7 +678,7 @@
                         </div>
                         <div class="about-video-card">
                             <div class="about-video-wrapper">
-                                <video class="about-video" controls preload="metadata">
+                                <video class="about-video" controls preload="none" poster="{{ url_for('static', filename='images/hero-optimized.jpg') }}">
                                     <source src="{{ url_for('static', filename='videos/BE-about-video.mp4') }}" type="video/mp4">
                                     Your browser does not support the video tag.
                                 </video>
@@ -713,7 +713,7 @@
                     <div class="crew-layout">
                         <article class="crew-feature">
                             <div class="crew-feature-photo">
-                                <img src="{{ url_for('static', filename='images/nick-optimized.jpg') }}" alt="Nick - Founder and Lead Electrician" loading="lazy">
+                                <img src="{{ url_for('static', filename='images/nick-team.jpg') }}" alt="Nick - Founder and Lead Electrician" loading="lazy" decoding="async">
                             </div>
                             <div class="crew-feature-content">
                                 <span class="crew-feature-tag">Founder</span>

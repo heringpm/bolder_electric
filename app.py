@@ -534,8 +534,51 @@ def upload_photo():
             # Create directory if it doesn't exist
             os.makedirs(os.path.dirname(file_path), exist_ok=True)
             
-            # Save file
-            file.save(file_path)
+            # Save optimized image when possible to keep gallery fast.
+            try:
+                max_dim = int(os.environ.get('MAX_GALLERY_IMAGE_DIM', '2200'))
+            except ValueError:
+                max_dim = 2200
+            try:
+                jpg_quality = int(os.environ.get('GALLERY_JPEG_QUALITY', '82'))
+            except ValueError:
+                jpg_quality = 82
+            jpg_quality = max(60, min(90, jpg_quality))
+
+            saved = False
+            try:
+                image = Image.open(file.stream)
+                resampling = Image.Resampling.LANCZOS if hasattr(Image, 'Resampling') else Image.LANCZOS
+                image.thumbnail((max_dim, max_dim), resampling)
+
+                if ext.lower() in ('.jpg', '.jpeg'):
+                    if image.mode not in ('RGB', 'L'):
+                        image = image.convert('RGB')
+                    image.save(file_path, format='JPEG', quality=jpg_quality, optimize=True, progressive=True)
+                elif ext.lower() == '.webp':
+                    if image.mode not in ('RGB', 'L'):
+                        image = image.convert('RGB')
+                    image.save(file_path, format='WEBP', quality=80, method=6)
+                elif ext.lower() == '.png':
+                    image.save(file_path, format='PNG', optimize=True)
+                else:
+                    file.stream.seek(0)
+                    file.save(file_path)
+                saved = True
+            except Exception:
+                # Fallback to original upload if optimization fails.
+                try:
+                    file.stream.seek(0)
+                except Exception:
+                    pass
+                file.save(file_path)
+                saved = True
+
+            if not saved:
+                return jsonify({
+                    'success': False,
+                    'message': 'Unable to save uploaded image'
+                }), 500
             
             # Add to database
             title = request.form.get('title', '')
