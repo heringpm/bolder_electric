@@ -377,6 +377,22 @@
             justify-content: center;
         }
 
+        .crew-card-photo-btn {
+            border: none;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            background: transparent;
+            text-align: left;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+
+        .crew-card-photo-btn:focus-visible {
+            outline: 3px solid #8b0000;
+            outline-offset: 2px;
+        }
+
         .crew-card-photo img {
             width: 100%;
             height: 100%;
@@ -417,6 +433,106 @@
             line-height: 1.45;
         }
 
+        .crew-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2500;
+            padding: 1.25rem;
+        }
+
+        .crew-modal-overlay.is-open {
+            display: flex;
+        }
+
+        .crew-modal-card {
+            width: min(760px, 100%);
+            background: #ffffff;
+            border-radius: 14px;
+            border: 1px solid #d8e1ec;
+            box-shadow: 0 20px 60px rgba(15, 23, 42, 0.34);
+            overflow: hidden;
+        }
+
+        .crew-modal-close {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            border: none;
+            background: rgba(15, 23, 42, 0.82);
+            color: #fff;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            font-size: 1.25rem;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        .crew-modal-body {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 360px;
+            position: relative;
+        }
+
+        .crew-modal-photo {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #eef3f8 0%, #dbe5f0 100%);
+        }
+
+        .crew-modal-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center 24%;
+            display: block;
+        }
+
+        .crew-modal-photo-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            font-weight: 700;
+            color: #2c3e50;
+            letter-spacing: 0.04em;
+        }
+
+        .crew-modal-content {
+            padding: 2rem 1.75rem 1.75rem;
+        }
+
+        .crew-modal-role {
+            display: inline-block;
+            color: var(--primary-red);
+            text-transform: uppercase;
+            letter-spacing: 0.09em;
+            font-size: 0.76rem;
+            font-weight: 700;
+            margin-bottom: 0.35rem;
+        }
+
+        .crew-modal-name {
+            font-size: 2rem;
+            line-height: 1.05;
+            margin-bottom: 0.85rem;
+            color: var(--primary-black);
+        }
+
+        .crew-modal-bio {
+            margin: 0;
+            color: #334155;
+            font-size: 1.08rem;
+            line-height: 1.55;
+        }
+
         @media (max-width: 900px) {
             .hero-content {
                 transform: translateY(-20px);
@@ -432,6 +548,12 @@
             }
             .crew-feature {
                 min-height: 420px;
+            }
+            .crew-modal-body {
+                grid-template-columns: 1fr;
+            }
+            .crew-modal-photo {
+                min-height: 260px;
             }
         }
     </style>
@@ -742,42 +864,92 @@
 
                         <div class="crew-grid">
                             <article class="crew-card">
-                                <div class="crew-card-photo">
-                                    <img src="{{ url_for('static', filename='images/eric.jpg') }}" alt="Eric" loading="lazy" decoding="async">
-                                </div>
+                                <button
+                                    type="button"
+                                    class="crew-card-photo-btn"
+                                    data-crew-name="Eric"
+                                    data-crew-role="Electrician"
+                                    data-crew-bio="With 7 years at Bolder, Eric specializes in commercial electrical work, consistently delivering high-quality results while maintaining strict safety standards on every project."
+                                    data-crew-image="{{ url_for('static', filename='images/eric.jpg') }}"
+                                >
+                                    <div class="crew-card-photo">
+                                        <img src="{{ url_for('static', filename='images/eric.jpg') }}" alt="Eric" loading="lazy" decoding="async">
+                                    </div>
+                                </button>
                                 <span class="crew-role">Electrician</span>
                                 <h4>Eric</h4>
-                                <p>Crew bio placeholder: experience, safety focus, and quality standards.</p>
+                                <p>7 years at Bolder focused on commercial electrical projects, quality, and safety.</p>
                             </article>
                             <article class="crew-card">
-                                <div class="crew-card-photo">
-                                    <img src="{{ url_for('static', filename='images/frank.jpg') }}" alt="Frank" loading="lazy" decoding="async">
-                                </div>
+                                <button
+                                    type="button"
+                                    class="crew-card-photo-btn"
+                                    data-crew-name="Frank"
+                                    data-crew-role="Electrician"
+                                    data-crew-bio="Bringing 5 years of experience with Bolder, Frank focuses on solar and residential electrical work, with a strong commitment to quality craftsmanship and safety."
+                                    data-crew-image="{{ url_for('static', filename='images/frank.jpg') }}"
+                                >
+                                    <div class="crew-card-photo">
+                                        <img src="{{ url_for('static', filename='images/frank.jpg') }}" alt="Frank" loading="lazy" decoding="async">
+                                    </div>
+                                </button>
                                 <span class="crew-role">Electrician</span>
                                 <h4>Frank</h4>
-                                <p>Crew bio placeholder: field experience, troubleshooting, and project execution.</p>
+                                <p>5 years with Bolder specializing in solar and residential electrical work.</p>
                             </article>
                             <article class="crew-card">
-                                <div class="crew-card-photo">
-                                    <img src="{{ url_for('static', filename='images/brayden.jpg') }}" alt="Brayden" loading="lazy" decoding="async">
-                                </div>
+                                <button
+                                    type="button"
+                                    class="crew-card-photo-btn"
+                                    data-crew-name="Brayden"
+                                    data-crew-role="Electrician"
+                                    data-crew-bio="Over his 3 years with Bolder, Brayden serves as the team’s technical and research specialist, developing effective troubleshooting solutions while maintaining a strong focus on quality and safety."
+                                    data-crew-image="{{ url_for('static', filename='images/brayden.jpg') }}"
+                                >
+                                    <div class="crew-card-photo">
+                                        <img src="{{ url_for('static', filename='images/brayden.jpg') }}" alt="Brayden" loading="lazy" decoding="async">
+                                    </div>
+                                </button>
                                 <span class="crew-role">Electrician</span>
                                 <h4>Brayden</h4>
-                                <p>Crew bio placeholder: reliable installs and strong safety mindset.</p>
+                                <p>Technical and research specialist focused on troubleshooting, quality, and safety.</p>
                             </article>
                             <article class="crew-card">
-                                <div class="crew-card-photo">
-                                    <div class="crew-card-photo-placeholder">AL</div>
-                                </div>
+                                <button
+                                    type="button"
+                                    class="crew-card-photo-btn"
+                                    data-crew-name="Allie"
+                                    data-crew-role="Operations"
+                                    data-crew-bio="Allie provides administrative and operations support, while also leading marketing efforts to keep Bolder running efficiently and growing its presence."
+                                    data-crew-image=""
+                                >
+                                    <div class="crew-card-photo">
+                                        <div class="crew-card-photo-placeholder">AL</div>
+                                    </div>
+                                </button>
                                 <span class="crew-role">Operations</span>
                                 <h4>Allie</h4>
-                                <p>Operations/support bio placeholder: scheduling, communication, and client support.</p>
+                                <p>Administrative and operations support with leadership across marketing efforts.</p>
                             </article>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
+
+        <div id="crewBioModal" class="crew-modal-overlay" aria-hidden="true">
+            <div class="crew-modal-card" role="dialog" aria-modal="true" aria-labelledby="crewModalName">
+                <div class="crew-modal-body">
+                    <button type="button" class="crew-modal-close" id="crewModalClose" aria-label="Close bio dialog">&times;</button>
+                    <div class="crew-modal-photo" id="crewModalPhoto"></div>
+                    <div class="crew-modal-content">
+                        <span class="crew-modal-role" id="crewModalRole"></span>
+                        <h3 class="crew-modal-name" id="crewModalName"></h3>
+                        <p class="crew-modal-bio" id="crewModalBio"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- CTA Section -->
         <section class="gallery-cta">
@@ -911,6 +1083,73 @@
                     });
                 }
             });
+        });
+    </script>
+<script>
+        // Crew bio modal
+        const crewBioModal = document.getElementById('crewBioModal');
+        const crewModalPhoto = document.getElementById('crewModalPhoto');
+        const crewModalRole = document.getElementById('crewModalRole');
+        const crewModalName = document.getElementById('crewModalName');
+        const crewModalBio = document.getElementById('crewModalBio');
+        const crewModalClose = document.getElementById('crewModalClose');
+        const crewPhotoButtons = document.querySelectorAll('.crew-card-photo-btn');
+        let lastCrewTrigger = null;
+
+        function openCrewModal(button) {
+            const name = button.dataset.crewName || '';
+            const role = button.dataset.crewRole || '';
+            const bio = button.dataset.crewBio || '';
+            const image = button.dataset.crewImage || '';
+
+            crewModalName.textContent = name;
+            crewModalRole.textContent = role;
+            crewModalBio.textContent = bio;
+
+            if (image) {
+                crewModalPhoto.innerHTML = `<img src="${image}" alt="${name}" loading="lazy" decoding="async">`;
+            } else {
+                const initials = name
+                    .split(' ')
+                    .map(part => part[0])
+                    .join('')
+                    .slice(0, 2)
+                    .toUpperCase();
+                crewModalPhoto.innerHTML = `<div class="crew-modal-photo-placeholder">${initials}</div>`;
+            }
+
+            crewBioModal.classList.add('is-open');
+            crewBioModal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+            lastCrewTrigger = button;
+        }
+
+        function closeCrewModal() {
+            crewBioModal.classList.remove('is-open');
+            crewBioModal.setAttribute('aria-hidden', 'true');
+            crewModalPhoto.innerHTML = '';
+            document.body.style.overflow = '';
+            if (lastCrewTrigger) {
+                lastCrewTrigger.focus();
+            }
+        }
+
+        crewPhotoButtons.forEach(button => {
+            button.addEventListener('click', () => openCrewModal(button));
+        });
+
+        crewModalClose.addEventListener('click', closeCrewModal);
+
+        crewBioModal.addEventListener('click', event => {
+            if (event.target === crewBioModal) {
+                closeCrewModal();
+            }
+        });
+
+        document.addEventListener('keydown', event => {
+            if (event.key === 'Escape' && crewBioModal.classList.contains('is-open')) {
+                closeCrewModal();
+            }
         });
     </script>
 <script>
