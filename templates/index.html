@@ -377,6 +377,15 @@
             letter-spacing: 0.03em;
             font-size: 1.05rem;
             margin-bottom: 0.8rem;
+            overflow: hidden;
+            border: 1px solid #d3dce7;
+        }
+
+        .crew-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
 
         .crew-role {
@@ -728,19 +737,25 @@
 
                         <div class="crew-grid">
                             <article class="crew-card">
-                                <div class="crew-avatar">ER</div>
+                                <div class="crew-avatar">
+                                    <img src="{{ url_for('static', filename='images/eric.jpg') }}" alt="Eric" loading="lazy" decoding="async">
+                                </div>
                                 <span class="crew-role">Electrician</span>
                                 <h4>Eric</h4>
                                 <p>Crew bio placeholder: experience, safety focus, and quality standards.</p>
                             </article>
                             <article class="crew-card">
-                                <div class="crew-avatar">FR</div>
+                                <div class="crew-avatar">
+                                    <img src="{{ url_for('static', filename='images/frank.jpg') }}" alt="Frank" loading="lazy" decoding="async">
+                                </div>
                                 <span class="crew-role">Electrician</span>
                                 <h4>Frank</h4>
                                 <p>Crew bio placeholder: field experience, troubleshooting, and project execution.</p>
                             </article>
                             <article class="crew-card">
-                                <div class="crew-avatar">BR</div>
+                                <div class="crew-avatar">
+                                    <img src="{{ url_for('static', filename='images/brayden.jpg') }}" alt="Brayden" loading="lazy" decoding="async">
+                                </div>
                                 <span class="crew-role">Electrician</span>
                                 <h4>Brayden</h4>
                                 <p>Crew bio placeholder: reliable installs and strong safety mindset.</p>
