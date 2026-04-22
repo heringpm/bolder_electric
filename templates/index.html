@@ -364,28 +364,31 @@
             border-color: #bfcad7;
         }
 
-        .crew-avatar {
-            width: 52px;
-            height: 52px;
-            border-radius: 50%;
-            background: var(--gradient-dark);
-            color: #f3f6fb;
-            font-weight: 700;
+        .crew-card-photo {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #d3dce7;
+            margin-bottom: 0.8rem;
+            background: linear-gradient(135deg, #eef3f8 0%, #dbe5f0 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            letter-spacing: 0.03em;
-            font-size: 1.05rem;
-            margin-bottom: 0.8rem;
-            overflow: hidden;
-            border: 1px solid #d3dce7;
         }
 
-        .crew-avatar img {
+        .crew-card-photo img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: block;
+        }
+
+        .crew-card-photo-placeholder {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2c3e50;
+            letter-spacing: 0.04em;
         }
 
         .crew-role {
@@ -737,7 +740,7 @@
 
                         <div class="crew-grid">
                             <article class="crew-card">
-                                <div class="crew-avatar">
+                                <div class="crew-card-photo">
                                     <img src="{{ url_for('static', filename='images/eric.jpg') }}" alt="Eric" loading="lazy" decoding="async">
                                 </div>
                                 <span class="crew-role">Electrician</span>
@@ -745,7 +748,7 @@
                                 <p>Crew bio placeholder: experience, safety focus, and quality standards.</p>
                             </article>
                             <article class="crew-card">
-                                <div class="crew-avatar">
+                                <div class="crew-card-photo">
                                     <img src="{{ url_for('static', filename='images/frank.jpg') }}" alt="Frank" loading="lazy" decoding="async">
                                 </div>
                                 <span class="crew-role">Electrician</span>
@@ -753,7 +756,7 @@
                                 <p>Crew bio placeholder: field experience, troubleshooting, and project execution.</p>
                             </article>
                             <article class="crew-card">
-                                <div class="crew-avatar">
+                                <div class="crew-card-photo">
                                     <img src="{{ url_for('static', filename='images/brayden.jpg') }}" alt="Brayden" loading="lazy" decoding="async">
                                 </div>
                                 <span class="crew-role">Electrician</span>
@@ -761,7 +764,9 @@
                                 <p>Crew bio placeholder: reliable installs and strong safety mindset.</p>
                             </article>
                             <article class="crew-card">
-                                <div class="crew-avatar">AL</div>
+                                <div class="crew-card-photo">
+                                    <div class="crew-card-photo-placeholder">AL</div>
+                                </div>
                                 <span class="crew-role">Operations</span>
                                 <h4>Allie</h4>
                                 <p>Operations/support bio placeholder: scheduling, communication, and client support.</p>
