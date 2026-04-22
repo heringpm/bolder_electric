@@ -352,7 +352,7 @@
             border: 1px solid #dbe3ec;
             border-radius: 10px;
             padding: 1rem 1rem 1.05rem;
-            min-height: 270px;
+            min-height: 0;
             display: flex;
             flex-direction: column;
             transition: transform 0.25s ease, border-color 0.25s ease;
@@ -375,6 +375,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            position: relative;
         }
 
         .crew-card-photo-btn {
@@ -397,9 +398,32 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            object-position: center 24%;
+            object-position: center 18%;
             display: block;
             transform: translateZ(0);
+        }
+
+        .crew-photo-hint {
+            position: absolute;
+            left: 50%;
+            bottom: 10px;
+            transform: translateX(-50%) translateY(4px);
+            background: rgba(15, 23, 42, 0.8);
+            color: #fff;
+            border-radius: 999px;
+            padding: 0.2rem 0.7rem;
+            font-size: 0.72rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            opacity: 0;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            pointer-events: none;
+        }
+
+        .crew-card-photo-btn:hover .crew-photo-hint,
+        .crew-card-photo-btn:focus-visible .crew-photo-hint {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
         }
 
         .crew-card-photo-placeholder {
@@ -410,20 +434,22 @@
         }
 
         .crew-role {
-            display: inline-block;
+            display: block;
             font-size: 0.77rem;
             font-weight: 700;
             letter-spacing: 0.09em;
             text-transform: uppercase;
             color: var(--primary-red);
-            margin-bottom: 0.28rem;
+            margin-bottom: 0;
+            text-align: center;
         }
 
         .crew-card h4 {
-            margin-bottom: 0.55rem;
+            margin-bottom: 0.2rem;
             color: var(--primary-black);
-            font-size: 2.3rem;
+            font-size: 1.8rem;
             line-height: 1;
+            text-align: center;
         }
 
         .crew-card p {
@@ -488,8 +514,8 @@
         .crew-modal-photo img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            object-position: center 24%;
+            object-fit: contain;
+            object-position: center center;
             display: block;
         }
 
@@ -507,6 +533,10 @@
 
         .crew-modal-content {
             padding: 2rem 1.75rem 1.75rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
         }
 
         .crew-modal-role {
@@ -874,11 +904,11 @@
                                 >
                                     <div class="crew-card-photo">
                                         <img src="{{ url_for('static', filename='images/eric.jpg') }}" alt="Eric" loading="lazy" decoding="async">
+                                        <span class="crew-photo-hint">View Bio</span>
                                     </div>
                                 </button>
-                                <span class="crew-role">Electrician</span>
                                 <h4>Eric</h4>
-                                <p>7 years at Bolder focused on commercial electrical projects, quality, and safety.</p>
+                                <span class="crew-role">Electrician</span>
                             </article>
                             <article class="crew-card">
                                 <button
@@ -891,11 +921,11 @@
                                 >
                                     <div class="crew-card-photo">
                                         <img src="{{ url_for('static', filename='images/frank.jpg') }}" alt="Frank" loading="lazy" decoding="async">
+                                        <span class="crew-photo-hint">View Bio</span>
                                     </div>
                                 </button>
-                                <span class="crew-role">Electrician</span>
                                 <h4>Frank</h4>
-                                <p>5 years with Bolder specializing in solar and residential electrical work.</p>
+                                <span class="crew-role">Electrician</span>
                             </article>
                             <article class="crew-card">
                                 <button
@@ -908,11 +938,11 @@
                                 >
                                     <div class="crew-card-photo">
                                         <img src="{{ url_for('static', filename='images/brayden.jpg') }}" alt="Brayden" loading="lazy" decoding="async">
+                                        <span class="crew-photo-hint">View Bio</span>
                                     </div>
                                 </button>
-                                <span class="crew-role">Electrician</span>
                                 <h4>Brayden</h4>
-                                <p>Technical and research specialist focused on troubleshooting, quality, and safety.</p>
+                                <span class="crew-role">Electrician</span>
                             </article>
                             <article class="crew-card">
                                 <button
@@ -925,11 +955,11 @@
                                 >
                                     <div class="crew-card-photo">
                                         <div class="crew-card-photo-placeholder">AL</div>
+                                        <span class="crew-photo-hint">View Bio</span>
                                     </div>
                                 </button>
-                                <span class="crew-role">Operations</span>
                                 <h4>Allie</h4>
-                                <p>Administrative and operations support with leadership across marketing efforts.</p>
+                                <span class="crew-role">Operations</span>
                             </article>
                         </div>
                     </div>
