@@ -70,7 +70,7 @@ app = Flask(__name__)
 app.secret_key = _build_secret_key()
 flask_env = (os.environ.get('FLASK_ENV') or '').strip().lower()
 is_production = flask_env in ('production', 'prod')
-force_https = _env_bool('FORCE_HTTPS', is_production)
+force_https = _env_bool('FORCE_HTTPS', False)
 app.config.update(
     SESSION_COOKIE_HTTPONLY=True,
     SESSION_COOKIE_SAMESITE='Lax',
