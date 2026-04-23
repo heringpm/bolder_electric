@@ -35,6 +35,7 @@
     
     <!-- Canonical URL -->
     <link rel="canonical" href="https://bolderelectric.com">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
@@ -1030,6 +1031,7 @@
                     </div>
                     <div class="contact-form">
                         <form id="contactForm" method="POST" action="/contact-submit">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                             <div class="form-group">
                                 <input type="text" name="name" placeholder="Your Name" required>
                             </div>
@@ -1101,6 +1103,23 @@
     </footer>
 
     <script>
+        // Attach CSRF token to same-origin non-GET fetch requests.
+        (function () {
+            const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+            if (!token || typeof window.fetch !== 'function') return;
+            const originalFetch = window.fetch.bind(window);
+            window.fetch = (input, init = {}) => {
+                const options = { ...init };
+                const method = (options.method || 'GET').toUpperCase();
+                if (!['GET', 'HEAD', 'OPTIONS', 'TRACE'].includes(method)) {
+                    const headers = new Headers(options.headers || {});
+                    if (!headers.has('X-CSRF-Token')) headers.set('X-CSRF-Token', token);
+                    options.headers = headers;
+                }
+                return originalFetch(input, options);
+            };
+        })();
+
         // Mobile menu toggle
         const hamburger = document.querySelector('.hamburger');
         const navMenu = document.querySelector('.nav-menu');

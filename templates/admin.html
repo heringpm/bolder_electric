@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Admin Panel - Bolder Electric</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.min.css') }}">
     <style>
@@ -625,6 +626,7 @@
                 <div class="gallery-upload-card">
                     <h3>Upload New Photo</h3>
                     <form id="gallery-upload-form" enctype="multipart/form-data">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                         <div class="form-group">
                             <label for="gallery-photo">Photo File *</label>
                             <input type="file" id="gallery-photo" name="photo" accept="image/*" required>
@@ -666,6 +668,7 @@
                 <div style="background: var(--white); border: 1px solid #ddd; border-radius: 8px; padding: 1rem;">
                     <h3 style="margin-bottom: 1rem;">Add User</h3>
                     <form id="new-user-form">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                         <div class="form-group">
                             <label for="new-username">Username</label>
                             <input type="text" id="new-username" required>
@@ -811,6 +814,22 @@
     </div>
 
     <script>
+        (function () {
+            const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+            if (!token || typeof window.fetch !== 'function') return;
+            const originalFetch = window.fetch.bind(window);
+            window.fetch = (input, init = {}) => {
+                const options = { ...init };
+                const method = (options.method || 'GET').toUpperCase();
+                if (!['GET', 'HEAD', 'OPTIONS', 'TRACE'].includes(method)) {
+                    const headers = new Headers(options.headers || {});
+                    if (!headers.has('X-CSRF-Token')) headers.set('X-CSRF-Token', token);
+                    options.headers = headers;
+                }
+                return originalFetch(input, options);
+            };
+        })();
+
         const currentUserRole = "{{ current_role }}";
         let currentSection = currentUserRole === 'admin' ? 'services' : 'bookings';
         let services = [];

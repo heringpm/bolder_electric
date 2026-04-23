@@ -8,6 +8,16 @@
     <meta name="description" content="Book residential and emergency electrical service with Bolder Electric throughout Riverside County and Southern California.">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://bolderelectric.com/schedule">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Schedule Service - Bolder Electric">
+    <meta property="og:description" content="Submit a service scheduling request for residential and emergency electrical work. Our team confirms all appointments directly.">
+    <meta property="og:url" content="https://bolderelectric.com/schedule">
+    <meta property="og:image" content="https://bolderelectric.com/static/images/hero-1024.webp">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Schedule Service - Bolder Electric">
+    <meta name="twitter:description" content="Request residential or emergency electrical service in Riverside County and Southern California.">
+    <meta name="twitter:image" content="https://bolderelectric.com/static/images/hero-1024.webp">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.min.css') }}">
     <style>
         .schedule-container { max-width: 1200px; margin: 0 auto; padding: 100px 20px; }
@@ -180,6 +190,22 @@
     </footer>
 
     <script>
+        (function () {
+            const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+            if (!token || typeof window.fetch !== 'function') return;
+            const originalFetch = window.fetch.bind(window);
+            window.fetch = (input, init = {}) => {
+                const options = { ...init };
+                const method = (options.method || 'GET').toUpperCase();
+                if (!['GET', 'HEAD', 'OPTIONS', 'TRACE'].includes(method)) {
+                    const headers = new Headers(options.headers || {});
+                    if (!headers.has('X-CSRF-Token')) headers.set('X-CSRF-Token', token);
+                    options.headers = headers;
+                }
+                return originalFetch(input, options);
+            };
+        })();
+
         const hamburger = document.querySelector('.hamburger');
         const navMenu = document.querySelector('.nav-menu');
         if (hamburger && navMenu) {

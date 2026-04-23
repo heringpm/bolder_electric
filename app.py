@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_from_directory, jsonify, session, redirect, url_for
+from flask import Flask, render_template, request, send_from_directory, jsonify, session, redirect, url_for, Response
 from flask_compress import Compress
 import os
 import base64
@@ -7,6 +7,9 @@ import hashlib
 import hmac
 import struct
 import time
+import secrets
+from datetime import datetime, timedelta
+from collections import defaultdict, deque
 from database import DatabaseManager
 from functools import wraps
 import smtplib
@@ -47,8 +50,34 @@ except ImportError:
             def open(*args, **kwargs):
                 raise NotImplementedError("Image processing not available")
 
+def _env_bool(name, default=False):
+    value = os.environ.get(name)
+    if value is None:
+        return default
+    return value.strip().lower() in ('1', 'true', 'yes', 'on')
+
+
+def _build_secret_key():
+    configured = (os.environ.get('SECRET_KEY') or '').strip()
+    if configured:
+        return configured
+    fallback = base64.urlsafe_b64encode(os.urandom(48)).decode('ascii')
+    print('WARNING: SECRET_KEY is not set. Using a temporary runtime key; sessions will reset on restart.')
+    return fallback
+
+
 app = Flask(__name__)
-app.secret_key = 'your-secret-key-change-this-in-production'  # Change this for production!
+app.secret_key = _build_secret_key()
+flask_env = (os.environ.get('FLASK_ENV') or '').strip().lower()
+is_production = flask_env in ('production', 'prod')
+force_https = _env_bool('FORCE_HTTPS', is_production)
+app.config.update(
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SAMESITE='Lax',
+    SESSION_COOKIE_SECURE=_env_bool('SESSION_COOKIE_SECURE', force_https),
+    PERMANENT_SESSION_LIFETIME=timedelta(hours=max(1, int(os.environ.get('SESSION_LIFETIME_HOURS', '12'))))
+)
+
 try:
     MAX_UPLOAD_MB = max(1, int(os.environ.get('MAX_UPLOAD_MB', '25')))
 except ValueError:
@@ -57,9 +86,108 @@ app.config['MAX_CONTENT_LENGTH'] = MAX_UPLOAD_MB * 1024 * 1024
 Compress(app)
 db = DatabaseManager()
 
+RATE_LIMIT_RULES = (
+    {'name': 'login', 'path': '/login', 'methods': {'POST'}, 'limit': 12, 'window': 300, 'prefix': False},
+    {'name': 'contact', 'path': '/contact-submit', 'methods': {'POST'}, 'limit': 20, 'window': 3600, 'prefix': False},
+    {'name': 'booking_submit', 'path': '/api/bookings', 'methods': {'POST'}, 'limit': 40, 'window': 3600, 'prefix': False},
+    {'name': 'api_mutation', 'path': '/api/', 'methods': {'POST', 'PUT', 'DELETE', 'PATCH'}, 'limit': 240, 'window': 300, 'prefix': True},
+    {'name': 'admin_upload', 'path': '/admin/upload-photo', 'methods': {'POST'}, 'limit': 50, 'window': 300, 'prefix': False},
+)
+_rate_buckets = defaultdict(deque)
+
+
+def get_csrf_token():
+    token = session.get('_csrf_token')
+    if not token:
+        token = secrets.token_urlsafe(32)
+        session['_csrf_token'] = token
+    return token
+
+
+@app.context_processor
+def inject_security_template_values():
+    return {
+        'csrf_token': get_csrf_token
+    }
+
+
+def _is_secure_request():
+    proto = (request.headers.get('X-Forwarded-Proto') or '').split(',')[0].strip().lower()
+    return request.is_secure or proto == 'https'
+
+
+def _extract_csrf_token_from_request():
+    token = request.headers.get('X-CSRF-Token', '').strip()
+    if token:
+        return token
+    token = request.form.get('csrf_token', '').strip()
+    if token:
+        return token
+    data = request.get_json(silent=True)
+    if isinstance(data, dict):
+        return (data.get('csrf_token') or '').strip()
+    return ''
+
+
+def _csrf_failure_response():
+    message = 'Invalid or missing CSRF token. Refresh the page and try again.'
+    if request.path.startswith('/api/') or request.path.startswith('/contact-submit') or request.path.startswith('/admin/'):
+        return jsonify({'success': False, 'message': message}), 400
+    return message, 400
+
+
+def _rate_limit_failure_response():
+    message = 'Too many requests. Please wait a moment and try again.'
+    if request.path.startswith('/api/') or request.path.startswith('/contact-submit') or request.path.startswith('/admin/'):
+        return jsonify({'success': False, 'message': message}), 429
+    return message, 429
+
+
+def _rate_key(scope):
+    ip = get_client_ip() or 'unknown'
+    username = session.get('admin_username') or 'anon'
+    return f'{scope}:{ip}:{username}'
+
+
+def _is_rate_limited(scope, limit, window):
+    now = time.time()
+    key = _rate_key(scope)
+    bucket = _rate_buckets[key]
+    threshold = now - window
+    while bucket and bucket[0] < threshold:
+        bucket.popleft()
+    if len(bucket) >= limit:
+        return True
+    bucket.append(now)
+    return False
+
+
+@app.before_request
+def security_guardrails():
+    host = (request.host or '').split(':')[0].lower()
+    localhost_hosts = {'127.0.0.1', 'localhost'}
+
+    if force_https and not _is_secure_request() and host not in localhost_hosts:
+        https_url = request.url.replace('http://', 'https://', 1)
+        return redirect(https_url, code=301)
+
+    for rule in RATE_LIMIT_RULES:
+        path_match = request.path.startswith(rule['path']) if rule['prefix'] else request.path == rule['path']
+        if path_match and request.method in rule['methods']:
+            if _is_rate_limited(rule['name'], rule['limit'], rule['window']):
+                return _rate_limit_failure_response()
+            break
+
+    if request.method in {'POST', 'PUT', 'PATCH', 'DELETE'}:
+        expected = session.get('_csrf_token') or get_csrf_token()
+        provided = _extract_csrf_token_from_request()
+        if not provided or not hmac.compare_digest(provided, expected):
+            return _csrf_failure_response()
+
+
 # Optional noindex header (enabled only when BLOCK_INDEXING=true)
 @app.after_request
-def add_noindex_headers(response):
+def add_security_headers(response):
     sensitive_paths = (
         '/admin',
         '/login',
@@ -68,10 +196,23 @@ def add_noindex_headers(response):
     )
     if request.path.startswith(sensitive_paths):
         response.headers['X-Robots-Tag'] = 'noindex, nofollow, noarchive, nosnippet'
-        return response
-
-    if os.environ.get('BLOCK_INDEXING', '').lower() in ('1', 'true', 'yes'):
+    elif os.environ.get('BLOCK_INDEXING', '').lower() in ('1', 'true', 'yes'):
         response.headers['X-Robots-Tag'] = 'noindex, nofollow, nosnippet, noarchive, notranslate, noimageindex'
+
+    response.headers.setdefault('X-Frame-Options', 'DENY')
+    response.headers.setdefault('X-Content-Type-Options', 'nosniff')
+    response.headers.setdefault('Referrer-Policy', 'strict-origin-when-cross-origin')
+    response.headers.setdefault('Permissions-Policy', 'geolocation=(), camera=(), microphone=()')
+    response.headers.setdefault(
+        'Content-Security-Policy',
+        "default-src 'self'; img-src 'self' data: https: blob:; "
+        "script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; "
+        "font-src 'self' data: https://cdnjs.cloudflare.com; connect-src 'self'; media-src 'self' data: blob:; "
+        "base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+    )
+    if _is_secure_request():
+        response.headers.setdefault('Strict-Transport-Security', 'max-age=31536000; includeSubDomains')
+
     return response
 
 @app.errorhandler(RequestEntityTooLarge)
@@ -113,12 +254,6 @@ def get_client_ip():
         return request.headers.get('X-Real-IP')
     else:
         return request.remote_addr
-
-def _env_bool(name, default=False):
-    value = os.environ.get(name)
-    if value is None:
-        return default
-    return value.strip().lower() in ('1', 'true', 'yes', 'on')
 
 def _send_email(to_email, subject, body):
     """Send email via configured SMTP provider, with localhost fallback."""
@@ -1188,7 +1323,28 @@ def reset_user_two_factor(user_id):
 
 @app.route('/sitemap.xml')
 def sitemap():
-    return send_from_directory('static', 'sitemap.xml')
+    today = datetime.utcnow().date().isoformat()
+    base_url = 'https://bolderelectric.com'
+    entries = [
+        ('/', 'weekly', '1.0'),
+        ('/gallery', 'weekly', '0.9'),
+        ('/schedule', 'weekly', '0.9'),
+    ]
+    lines = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+    ]
+    for path, changefreq, priority in entries:
+        lines.extend([
+            '  <url>',
+            f'    <loc>{base_url}{path}</loc>',
+            f'    <lastmod>{today}</lastmod>',
+            f'    <changefreq>{changefreq}</changefreq>',
+            f'    <priority>{priority}</priority>',
+            '  </url>'
+        ])
+    lines.append('</urlset>')
+    return Response('\n'.join(lines), mimetype='application/xml')
 
 @app.route('/robots.txt')
 def robots():
@@ -1200,4 +1356,5 @@ def favicon():
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8080))
-    app.run(host='0.0.0.0', port=port, debug=True)
+    debug_mode = _env_bool('FLASK_DEBUG', False)
+    app.run(host='0.0.0.0', port=port, debug=debug_mode)

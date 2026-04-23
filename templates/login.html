@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Admin Login - Bolder Electric</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.min.css') }}">
     <style>
@@ -209,6 +210,7 @@
             
             {% if two_factor_required %}
             <form method="POST" autocomplete="off">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <input type="hidden" name="step" value="verify_2fa">
                 <input type="hidden" name="username" value="{{ username }}">
 
@@ -242,6 +244,7 @@
             </form>
             {% else %}
             <form method="POST" autocomplete="off">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <input type="hidden" name="step" value="password">
                 <div class="form-group">
                     <label for="username">Username</label>

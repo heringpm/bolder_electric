@@ -3,6 +3,7 @@ import sqlite3
 from datetime import datetime, timedelta
 import hashlib
 import secrets
+from werkzeug.security import generate_password_hash, check_password_hash
 
 try:
     import psycopg2
@@ -334,8 +335,20 @@ class DatabaseManager:
 
             cursor.execute(self._prepare_query('SELECT COUNT(*) FROM admin_users'))
             if self._fetchone_value(cursor) == 0:
-                self.create_admin_user('admin', 'usLaG4wLCnJW1F')
-                print('Created admin user')
+                bootstrap_user = (os.environ.get('ADMIN_BOOTSTRAP_USERNAME') or 'admin').strip() or 'admin'
+                bootstrap_password = (os.environ.get('ADMIN_BOOTSTRAP_PASSWORD') or '').strip()
+                generated_password = False
+                if not bootstrap_password:
+                    bootstrap_password = secrets.token_urlsafe(18)
+                    generated_password = True
+
+                self.create_admin_user(bootstrap_user, bootstrap_password)
+                print(f'Created bootstrap admin user: {bootstrap_user}')
+                if generated_password:
+                    print('WARNING: ADMIN_BOOTSTRAP_PASSWORD was not set. Generated one-time admin password:')
+                    print(bootstrap_password)
+                else:
+                    print('Bootstrap admin password loaded from ADMIN_BOOTSTRAP_PASSWORD.')
 
             cursor.execute(self._prepare_query('SELECT COUNT(*) FROM contact_info'))
             if self._fetchone_value(cursor) == 0:
@@ -385,10 +398,34 @@ class DatabaseManager:
                 conn.close()
 
     def hash_password(self, password, salt=None):
-        if salt is None:
-            salt = secrets.token_hex(32)
-        password_hash = hashlib.sha256((password + salt).encode()).hexdigest()
-        return password_hash, salt
+        # Legacy compatibility: when salt is provided, compute historical SHA256 hash.
+        if salt is not None:
+            password_hash = hashlib.sha256((password + salt).encode()).hexdigest()
+            return password_hash, salt
+
+        # Default for new/updated passwords: Werkzeug PBKDF2/Scrypt hash.
+        password_hash = generate_password_hash(password)
+        return password_hash, ''
+
+    def verify_password(self, password, stored_hash, salt):
+        """Verify both modern Werkzeug hashes and legacy SHA256+salt hashes.
+        Returns (is_valid, needs_upgrade_to_modern_hash).
+        """
+        if not stored_hash:
+            return False, False
+
+        if stored_hash.startswith(('pbkdf2:', 'scrypt:')):
+            try:
+                return check_password_hash(stored_hash, password), False
+            except Exception:
+                return False, False
+
+        if not salt:
+            return False, False
+
+        legacy_hash, _ = self.hash_password(password, salt)
+        is_valid = legacy_hash == stored_hash
+        return is_valid, is_valid
 
     def create_admin_user(self, username, password, role='admin'):
         password_hash, salt = self.hash_password(password)
@@ -437,8 +474,15 @@ class DatabaseManager:
                 self.log_access(username, ip_address, user_agent, 'login_attempt_inactive', False)
                 return False, 'Account is disabled', None
 
-            password_hash, _ = self.hash_password(password, salt)
-            if password_hash == stored_hash:
+            password_ok, needs_upgrade = self.verify_password(password, stored_hash, salt)
+            if password_ok:
+                if needs_upgrade:
+                    new_hash, new_salt = self.hash_password(password)
+                    cursor.execute(self._prepare_query('''
+                        UPDATE admin_users
+                        SET password_hash = ?, salt = ?
+                        WHERE id = ?
+                    '''), (new_hash, new_salt, user_id))
                 cursor.execute(self._prepare_query('''
                     UPDATE admin_users
                     SET failed_attempts = 0, last_login = CURRENT_TIMESTAMP, locked_until = NULL
@@ -503,8 +547,15 @@ class DatabaseManager:
                 self.log_access(username, ip_address, user_agent, 'login_attempt_inactive', False)
                 return False, 'Account is disabled', None
 
-            password_hash, _ = self.hash_password(password, salt)
-            if password_hash == stored_hash:
+            password_ok, needs_upgrade = self.verify_password(password, stored_hash, salt)
+            if password_ok:
+                if needs_upgrade:
+                    new_hash, new_salt = self.hash_password(password)
+                    cursor.execute(self._prepare_query('''
+                        UPDATE admin_users
+                        SET password_hash = ?, salt = ?
+                        WHERE id = ?
+                    '''), (new_hash, new_salt, user_id))
                 cursor.execute(self._prepare_query('''
                     UPDATE admin_users
                     SET failed_attempts = 0, locked_until = NULL

@@ -48,8 +48,12 @@ A professional web application for Bolder Electric, built with Flask and designe
 
 7. **Access Admin Panel**
    - Navigate to `http://localhost:8080/admin`
-   - Login with username: `admin`, password: `usLaG4wLCnJW1F`
-   - The database will be created automatically on first run
+   - On first database initialization, a bootstrap admin user is created.
+   - Set `ADMIN_BOOTSTRAP_PASSWORD` before first run to control that password:
+     ```bash
+     export ADMIN_BOOTSTRAP_PASSWORD='change-this-now'
+     ```
+   - If `ADMIN_BOOTSTRAP_PASSWORD` is not set, a random one-time password is generated and printed in server logs.
 
 ## AWS EC2 Deployment
 
@@ -111,14 +115,20 @@ Do not run `python app.py` and Gunicorn at the same time in production.
 6. **Create environment file for systemd**
    ```bash
    sudo tee /etc/bolder_electric.env >/dev/null <<'EOF'
+   SECRET_KEY=replace_with_a_long_random_secret
+   FORCE_HTTPS=true
+   SESSION_COOKIE_SECURE=true
+   SESSION_LIFETIME_HOURS=12
+   ADMIN_BOOTSTRAP_USERNAME=admin
+   ADMIN_BOOTSTRAP_PASSWORD=replace_with_strong_bootstrap_password
    DATABASE_URL=postgresql://bolder_app:change_this_password@127.0.0.1:5432/bolder_electric
    FLASK_ENV=production
    MAX_UPLOAD_MB=25
    # SMTP provider settings (required for contact/booking emails)
-   SMTP_HOST=smtp.sendgrid.net
+   SMTP_HOST=email-smtp.us-west-1.amazonaws.com
    SMTP_PORT=587
-   SMTP_USERNAME=apikey
-   SMTP_PASSWORD=your_smtp_password_or_api_key
+   SMTP_USERNAME=your_ses_smtp_username
+   SMTP_PASSWORD=your_ses_smtp_password
    SMTP_USE_TLS=true
    SMTP_USE_SSL=false
    SMTP_FROM_EMAIL=noreply@bolderelectric.com
@@ -261,9 +271,10 @@ Do not run `python app.py` and Gunicorn at the same time in production.
 - `bookings` - Customer booking records
 - `gallery_photos` - Gallery image metadata
 
-### Default Admin Credentials
-- **Username**: `admin`
-- **Password**: `usLaG4wLCnJW1F`
+### Bootstrap Admin Credentials
+- **Username** defaults to `admin` (override with `ADMIN_BOOTSTRAP_USERNAME`)
+- **Password** comes from `ADMIN_BOOTSTRAP_PASSWORD`
+- If not set, a random password is generated and printed once at first startup
 
 ### PostgreSQL Setup
 Use these steps to install PostgreSQL and run this app on Postgres instead of SQLite.
@@ -380,12 +391,68 @@ Update the services section in `templates/index.html` to match your specific off
 ## Security Considerations
 
 - In production, Gunicorn should run on `127.0.0.1:8000` only
-- Admin panel is protected with secure login
+- Set a strong `SECRET_KEY` in environment (never hardcode)
+- Use HTTPS with `FORCE_HTTPS=true` and `SESSION_COOKIE_SECURE=true`
+- Admin panel is protected with secure login + 2FA
 - Access logging tracks all login attempts
-- Database uses password hashing for admin users
+- Database uses modern password hashing (legacy hashes auto-upgrade on login)
 - Nginx handles external traffic on port 80/443
 - Gunicorn runs as a systemd service
 - Static files are served directly by Nginx for better performance
+
+## Production Hardening Checklist
+
+Use this checklist before public launch:
+
+1. Infrastructure
+   - EC2 security group allows only `80/443` publicly and `22` from your IP only.
+   - PostgreSQL bound to localhost (`127.0.0.1`) or moved to private RDS.
+   - Automatic OS patching and regular `dnf update` schedule in place.
+
+2. TLS and web server
+   - TLS certificate installed (`certbot` or ACM/ALB path).
+   - HTTP redirects to HTTPS.
+   - Nginx `client_max_body_size` matches app upload limits.
+   - Nginx access/error logs enabled and rotated.
+
+3. Application security
+   - `SECRET_KEY` set to a long random value.
+   - `FORCE_HTTPS=true` and `SESSION_COOKIE_SECURE=true`.
+   - CSRF protections validated on login, contact, booking, admin actions.
+   - Rate limits validated on login, contact, booking, and admin mutation APIs.
+   - 2FA enabled for all admin/editor accounts.
+   - Remove/disable unused user accounts.
+
+4. Identity and secrets
+   - Rotate bootstrap/admin passwords after first login.
+   - Store env file with strict permissions:
+     ```bash
+     sudo chown root:root /etc/bolder_electric.env
+     sudo chmod 600 /etc/bolder_electric.env
+     ```
+   - Do not commit secrets to git.
+
+5. Email (AWS SES)
+   - SES SMTP credentials configured in env.
+   - Domain verified in SES.
+   - SPF, DKIM, DMARC DNS records published.
+   - SES out of sandbox before production sends.
+
+6. Data and backups
+   - Nightly PostgreSQL backups (`pg_dump`) with retention policy.
+   - Off-instance backup copy (S3).
+   - Restore drill tested at least once.
+
+7. Monitoring and incident response
+   - Health checks in place (`/`, `/schedule`, `/gallery`).
+   - Alerts configured for service down / high 5xx / disk full.
+   - Review auth/access logs regularly.
+
+8. SEO readiness
+   - Confirm `https://bolderelectric.com/sitemap.xml` is live.
+   - Submit sitemap in Google Search Console and Bing Webmaster Tools.
+   - Confirm canonical URLs and meta descriptions render on home/gallery/schedule.
+   - Verify robots rules block `/admin`, `/login`, `/account`, `/api`.
 
 ## Troubleshooting
 
