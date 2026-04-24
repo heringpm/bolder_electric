@@ -777,7 +777,6 @@
                     </div>
                     <div class="service-card-content">
                         <p>{{ service_descriptions.get('commercial') or 'At Bolder Electric, we deliver dependable, high-performance electrical solutions for commercial and industrial environments. From ground-up construction to complex upgrades and ongoing maintenance, every project is completed safely, efficiently, and to code.' }}</p>
-                        {% if service_prices.get('commercial') is not none %}<p class="service-price-inline">Starting at ${{ '%.2f'|format(service_prices.get('commercial')) }}</p>{% endif %}
                         <ul class="service-list">
                             <li>New Construction & Tenant Improvement Systems</li>
                             <li>Service Upgrades, Power Distribution & Infrastructure Improvements</li>
@@ -801,7 +800,6 @@
                     </div>
                     <div class="service-card-content">
                         <p>{{ service_descriptions.get('residential') or 'At Bolder Electric, we provide safe, reliable, and high-quality electrical solutions for homes of all sizes. Whether you are upgrading, remodeling, or troubleshooting a repair, our licensed electricians focus on safety, efficiency, and long-term performance.' }}</p>
-                        {% if service_prices.get('residential') is not none %}<p class="service-price-inline">Starting at ${{ '%.2f'|format(service_prices.get('residential')) }}</p>{% endif %}
                         <ul class="service-list">
                             <li>Home Rewiring & Electrical System Upgrades</li>
                             <li>Electrical Panel Upgrades & Service Changes</li>
@@ -825,19 +823,16 @@
                         <div class="card-icon">🔧</div>
                         <h4>Emergency Repairs</h4>
                         <p>{{ service_descriptions.get('emergency') or '24/7 emergency electrical repair services with fast response times for electrical emergencies.' }}</p>
-                        {% if service_prices.get('emergency') is not none %}<p class="service-price-inline">Starting at ${{ '%.2f'|format(service_prices.get('emergency')) }}</p>{% endif %}
                     </div>
                     <div class="service-card-new">
                         <div class="card-icon">💡</div>
                         <h4>Lighting Solutions</h4>
                         <p>{{ service_descriptions.get('lighting') or 'Indoor and outdoor lighting installation, design, and maintenance for all property types.' }}</p>
-                        {% if service_prices.get('lighting') is not none %}<p class="service-price-inline">Starting at ${{ '%.2f'|format(service_prices.get('lighting')) }}</p>{% endif %}
                     </div>
                     <div class="service-card-new">
                         <div class="card-icon">🛡️</div>
                         <h4>Safety Inspections</h4>
                         <p>{{ service_descriptions.get('safety') or service_descriptions.get('panel') or 'Comprehensive electrical safety inspections to ensure your property meets all code requirements.' }}</p>
-                        {% if service_prices.get('safety') is not none %}<p class="service-price-inline">Starting at ${{ '%.2f'|format(service_prices.get('safety')) }}</p>{% elif service_prices.get('panel') is not none %}<p class="service-price-inline">Starting at ${{ '%.2f'|format(service_prices.get('panel')) }}</p>{% endif %}
                     </div>
                 </div>
             </div>
