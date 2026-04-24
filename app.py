@@ -1283,8 +1283,34 @@ def get_contact_submissions():
         'message': s[5],
         'ip_address': s[6],
         'user_agent': s[7],
-        'created_at': s[8]
+        'acknowledged': bool(s[8]),
+        'acknowledged_at': s[9],
+        'created_at': s[10]
     } for s in submissions])
+
+
+@app.route('/api/contact-submissions/<int:submission_id>/acknowledge', methods=['PUT'])
+@login_required
+def acknowledge_contact_submission(submission_id):
+    if not can_manage_bookings():
+        return jsonify({'success': False, 'message': 'Permission denied'}), 403
+
+    updated = db.acknowledge_contact_submission(submission_id)
+    if not updated:
+        return jsonify({'success': False, 'message': 'Submission not found'}), 404
+    return jsonify({'success': True})
+
+
+@app.route('/api/contact-submissions/<int:submission_id>', methods=['DELETE'])
+@login_required
+def delete_contact_submission(submission_id):
+    if not can_manage_bookings():
+        return jsonify({'success': False, 'message': 'Permission denied'}), 403
+
+    deleted = db.delete_contact_submission(submission_id)
+    if not deleted:
+        return jsonify({'success': False, 'message': 'Submission not found'}), 404
+    return jsonify({'success': True})
 
 @app.route('/api/users', methods=['GET'])
 @admin_required

@@ -1209,21 +1209,64 @@
                 return;
             }
 
+            const canManage = currentUserRole === 'admin' || currentUserRole === 'editor';
             contactSubmissions.forEach(submission => {
                 const div = document.createElement('div');
                 div.className = 'booking-item';
+                const isAcknowledged = Boolean(submission.acknowledged);
+                const statusClass = isAcknowledged ? 'status-confirmed' : 'status-pending';
+                const statusLabel = isAcknowledged ? 'ACKNOWLEDGED' : 'PENDING';
                 div.innerHTML = `
                     <div class="booking-header">
                         <span class="booking-service">${escapeHtml(submission.name)} (${escapeHtml(submission.service_type)})</span>
-                        <span class="booking-status status-completed">${new Date(submission.created_at).toLocaleString()}</span>
+                        <span class="booking-status ${statusClass}">${statusLabel}</span>
                     </div>
+                    <div class="booking-detail"><strong>Submitted:</strong> ${formatDateTime(submission.created_at)}</div>
+                    ${isAcknowledged ? `<div class="booking-detail"><strong>Acknowledged:</strong> ${formatDateTime(submission.acknowledged_at)}</div>` : ''}
                     <div><strong>Email:</strong> ${escapeHtml(submission.email)}</div>
                     <div><strong>Phone:</strong> ${escapeHtml(submission.phone)}</div>
                     <div><strong>IP:</strong> ${escapeHtml(submission.ip_address || 'N/A')}</div>
                     <div><strong>Message:</strong> ${escapeHtml(submission.message)}</div>
+                    ${canManage ? `
+                        <div class="booking-actions">
+                            ${!isAcknowledged ? `<button class="btn-edit" onclick="acknowledgeContactSubmission(${submission.id})">Acknowledge</button>` : ''}
+                            <button class="btn-delete" onclick="deleteContactSubmission(${submission.id})">Delete</button>
+                        </div>
+                    ` : ''}
                 `;
                 container.appendChild(div);
             });
+        }
+
+        function acknowledgeContactSubmission(submissionId) {
+            fetch(`/api/contact-submissions/${submissionId}/acknowledge`, {
+                method: 'PUT'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    alert(data.message || 'Unable to acknowledge submission');
+                    return;
+                }
+                loadContactSubmissions();
+            })
+            .catch(() => alert('Unable to acknowledge submission'));
+        }
+
+        function deleteContactSubmission(submissionId) {
+            if (!confirm('Delete this contact submission permanently?')) return;
+            fetch(`/api/contact-submissions/${submissionId}`, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    alert(data.message || 'Unable to delete submission');
+                    return;
+                }
+                loadContactSubmissions();
+            })
+            .catch(() => alert('Unable to delete submission'));
         }
 
         function loadNotificationSettings() {
@@ -1364,6 +1407,12 @@
                 .replace(/>/g, '&gt;')
                 .replace(/"/g, '&quot;')
                 .replace(/'/g, '&#039;');
+        }
+
+        function formatDateTime(value) {
+            if (!value) return 'N/A';
+            const d = new Date(value);
+            return Number.isNaN(d.getTime()) ? escapeHtml(value) : d.toLocaleString();
         }
 
         function loadGalleryPhotos() {

@@ -104,6 +104,8 @@ class DatabaseManager:
                         message TEXT NOT NULL,
                         ip_address TEXT,
                         user_agent TEXT,
+                        acknowledged BOOLEAN DEFAULT FALSE,
+                        acknowledged_at TIMESTAMP,
                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                     )
                 ''')
@@ -231,6 +233,8 @@ class DatabaseManager:
                         message TEXT NOT NULL,
                         ip_address TEXT,
                         user_agent TEXT,
+                        acknowledged BOOLEAN DEFAULT 0,
+                        acknowledged_at TIMESTAMP,
                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                     )
                 ''')
@@ -309,6 +313,7 @@ class DatabaseManager:
                 ''')
 
             self._ensure_admin_user_security_columns(cursor)
+            self._ensure_contact_submission_columns(cursor)
             conn.commit()
         except Exception as e:
             if conn:
@@ -341,6 +346,27 @@ class DatabaseManager:
             if 'two_factor_enabled' not in columns:
                 try:
                     cursor.execute('ALTER TABLE admin_users ADD COLUMN two_factor_enabled BOOLEAN DEFAULT 0')
+                except sqlite3.OperationalError as e:
+                    if 'duplicate column name' not in str(e).lower():
+                        raise
+
+    def _ensure_contact_submission_columns(self, cursor):
+        """Ensure contact_submissions supports acknowledge workflow."""
+        if self.use_postgres:
+            cursor.execute('ALTER TABLE contact_submissions ADD COLUMN IF NOT EXISTS acknowledged BOOLEAN DEFAULT FALSE')
+            cursor.execute('ALTER TABLE contact_submissions ADD COLUMN IF NOT EXISTS acknowledged_at TIMESTAMP')
+        else:
+            cursor.execute('PRAGMA table_info(contact_submissions)')
+            columns = [row[1] for row in cursor.fetchall()]
+            if 'acknowledged' not in columns:
+                try:
+                    cursor.execute('ALTER TABLE contact_submissions ADD COLUMN acknowledged BOOLEAN DEFAULT 0')
+                except sqlite3.OperationalError as e:
+                    if 'duplicate column name' not in str(e).lower():
+                        raise
+            if 'acknowledged_at' not in columns:
+                try:
+                    cursor.execute('ALTER TABLE contact_submissions ADD COLUMN acknowledged_at TIMESTAMP')
                 except sqlite3.OperationalError as e:
                     if 'duplicate column name' not in str(e).lower():
                         raise
@@ -886,7 +912,7 @@ class DatabaseManager:
         conn = self.get_connection()
         cursor = conn.cursor()
         cursor.execute(self._prepare_query('''
-            SELECT id, name, email, phone, service_type, message, ip_address, user_agent, created_at
+            SELECT id, name, email, phone, service_type, message, ip_address, user_agent, acknowledged, acknowledged_at, created_at
             FROM contact_submissions
             ORDER BY created_at DESC
             LIMIT ?
@@ -894,6 +920,28 @@ class DatabaseManager:
         rows = cursor.fetchall()
         conn.close()
         return rows
+
+    def acknowledge_contact_submission(self, submission_id):
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        cursor.execute(self._prepare_query('''
+            UPDATE contact_submissions
+            SET acknowledged = ?, acknowledged_at = CURRENT_TIMESTAMP
+            WHERE id = ?
+        '''), (True if self.use_postgres else 1, submission_id))
+        updated = cursor.rowcount > 0
+        conn.commit()
+        conn.close()
+        return updated
+
+    def delete_contact_submission(self, submission_id):
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        cursor.execute(self._prepare_query('DELETE FROM contact_submissions WHERE id = ?'), (submission_id,))
+        deleted = cursor.rowcount > 0
+        conn.commit()
+        conn.close()
+        return deleted
 
     def get_services(self):
         conn = self.get_connection()
