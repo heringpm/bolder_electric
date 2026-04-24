@@ -544,6 +544,7 @@
             <button class="admin-tab {% if current_role != 'admin' %}active{% endif %}" data-section="bookings" onclick="showSection('bookings', this)">Bookings</button>
             <button class="admin-tab" data-section="contacts" onclick="showSection('contacts', this)">Contact Leads</button>
             {% if current_role == 'admin' %}
+            <button class="admin-tab" data-section="settings" onclick="showSection('settings', this)">Settings</button>
             <button class="admin-tab" data-section="gallery" onclick="showSection('gallery', this)">Gallery</button>
             <button class="admin-tab" data-section="users" onclick="showSection('users', this)">Users</button>
             <button class="admin-tab" data-section="logs" onclick="showSection('logs', this)">Access Logs</button>
@@ -616,6 +617,31 @@
         </div>
 
         {% if current_role == 'admin' %}
+        <!-- Settings Section -->
+        <div id="settings-section" class="admin-section">
+            <div class="section-header">
+                <h2 class="section-title">Notification Settings</h2>
+            </div>
+            <div style="max-width: 640px; background: var(--white); border: 1px solid #ddd; border-radius: 8px; padding: 1rem;">
+                <p style="margin-bottom: 1rem; color: var(--dark-gray);">
+                    Configure where website notifications are sent.
+                </p>
+                <div class="form-group">
+                    <label for="settings-contact-email">Contact Form Notification Email</label>
+                    <input type="email" id="settings-contact-email" placeholder="support@bolderelectric.com">
+                </div>
+                <div class="form-group">
+                    <label for="settings-booking-email">Scheduling/Booking Notification Email</label>
+                    <input type="email" id="settings-booking-email" placeholder="info@bolderelectric.com">
+                </div>
+                <div style="display: flex; gap: 0.75rem;">
+                    <button type="button" class="btn-add" onclick="saveNotificationSettings()">Save Settings</button>
+                    <button type="button" class="btn-edit" onclick="loadNotificationSettings()">Reload</button>
+                </div>
+                <p id="settings-status" style="margin-top: 0.8rem; color: var(--dark-gray);"></p>
+            </div>
+        </div>
+
         <!-- Gallery Section -->
         <div id="gallery-section" class="admin-section">
             <div class="section-header">
@@ -858,6 +884,7 @@
             if (section === 'availability') loadTimeSlots();
             if (section === 'bookings') loadBookings();
             if (section === 'contacts') loadContactSubmissions();
+            if (section === 'settings') loadNotificationSettings();
             if (section === 'gallery') loadGalleryPhotos();
             if (section === 'users') loadUsers();
             if (section === 'logs') loadLogs();
@@ -1196,6 +1223,59 @@
                     <div><strong>Message:</strong> ${escapeHtml(submission.message)}</div>
                 `;
                 container.appendChild(div);
+            });
+        }
+
+        function loadNotificationSettings() {
+            fetch('/api/settings/notifications')
+                .then(response => response.json())
+                .then(data => {
+                    const contactInput = document.getElementById('settings-contact-email');
+                    const bookingInput = document.getElementById('settings-booking-email');
+                    const status = document.getElementById('settings-status');
+                    if (!contactInput || !bookingInput || !status) return;
+                    contactInput.value = data.contact_notification_email || '';
+                    bookingInput.value = data.booking_notification_email || '';
+                    status.textContent = '';
+                })
+                .catch(() => {
+                    const status = document.getElementById('settings-status');
+                    if (status) {
+                        status.style.color = '#b91c1c';
+                        status.textContent = 'Failed to load notification settings.';
+                    }
+                });
+        }
+
+        function saveNotificationSettings() {
+            const contactInput = document.getElementById('settings-contact-email');
+            const bookingInput = document.getElementById('settings-booking-email');
+            const status = document.getElementById('settings-status');
+            if (!contactInput || !bookingInput || !status) return;
+
+            const payload = {
+                contact_notification_email: contactInput.value.trim(),
+                booking_notification_email: bookingInput.value.trim()
+            };
+
+            fetch('/api/settings/notifications', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    status.style.color = '#b91c1c';
+                    status.textContent = data.message || 'Failed to save settings.';
+                    return;
+                }
+                status.style.color = '#166534';
+                status.textContent = 'Notification settings saved.';
+            })
+            .catch(() => {
+                status.style.color = '#b91c1c';
+                status.textContent = 'Failed to save settings.';
             });
         }
 
@@ -1577,7 +1657,7 @@
             setupGalleryHandlers();
             setupUserHandlers();
             const tab = new URLSearchParams(window.location.search).get('tab');
-            const adminTabs = ['services', 'availability', 'bookings', 'contacts', 'gallery', 'users', 'logs'];
+            const adminTabs = ['services', 'availability', 'bookings', 'contacts', 'settings', 'gallery', 'users', 'logs'];
             const limitedTabs = ['bookings', 'contacts'];
             const validTabs = currentUserRole === 'admin' ? adminTabs : limitedTabs;
             if (tab && validTabs.includes(tab)) {

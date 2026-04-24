@@ -109,6 +109,15 @@ class DatabaseManager:
                 ''')
 
                 cursor.execute('''
+                    CREATE TABLE IF NOT EXISTS site_settings (
+                        id SERIAL PRIMARY KEY,
+                        setting_key TEXT UNIQUE NOT NULL,
+                        setting_value TEXT,
+                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    )
+                ''')
+
+                cursor.execute('''
                     CREATE TABLE IF NOT EXISTS services (
                         id SERIAL PRIMARY KEY,
                         name TEXT NOT NULL,
@@ -223,6 +232,15 @@ class DatabaseManager:
                         ip_address TEXT,
                         user_agent TEXT,
                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    )
+                ''')
+
+                cursor.execute('''
+                    CREATE TABLE IF NOT EXISTS site_settings (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        setting_key TEXT UNIQUE NOT NULL,
+                        setting_value TEXT,
+                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                     )
                 ''')
 
@@ -363,6 +381,28 @@ class DatabaseManager:
                     'Mon-Fri: 8AM-6PM, Emergency: 24/7'
                 ))
                 print('Created contact info')
+
+            # Seed notification routing settings.
+            default_contact_notify = 'support@bolderelectric.com'
+            default_booking_notify = os.environ.get('BOOKING_NOTIFICATION_EMAIL', 'info@bolderelectric.com')
+            settings_to_seed = [
+                ('contact_notification_email', default_contact_notify),
+                ('booking_notification_email', default_booking_notify)
+            ]
+            for setting_key, setting_value in settings_to_seed:
+                cursor.execute(self._prepare_query('SELECT COUNT(*) FROM site_settings WHERE setting_key = ?'), (setting_key,))
+                if self._fetchone_value(cursor) == 0:
+                    if self.use_postgres:
+                        cursor.execute(self._prepare_query('''
+                            INSERT INTO site_settings (setting_key, setting_value, updated_at)
+                            VALUES (?, ?, CURRENT_TIMESTAMP)
+                            ON CONFLICT (setting_key) DO NOTHING
+                        '''), (setting_key, setting_value))
+                    else:
+                        cursor.execute(self._prepare_query('''
+                            INSERT OR IGNORE INTO site_settings (setting_key, setting_value, updated_at)
+                            VALUES (?, ?, CURRENT_TIMESTAMP)
+                        '''), (setting_key, setting_value))
 
             cursor.execute(self._prepare_query('SELECT COUNT(*) FROM services'))
             if self._fetchone_value(cursor) == 0:
@@ -754,6 +794,43 @@ class DatabaseManager:
         contact = cursor.fetchone()
         conn.close()
         return contact
+
+    def get_site_setting(self, key, default=None):
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        cursor.execute(self._prepare_query('''
+            SELECT setting_value
+            FROM site_settings
+            WHERE setting_key = ?
+            LIMIT 1
+        '''), (key,))
+        row = cursor.fetchone()
+        conn.close()
+        if row and row[0] is not None:
+            return row[0]
+        return default
+
+    def set_site_setting(self, key, value):
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        if self.use_postgres:
+            cursor.execute(self._prepare_query('''
+                INSERT INTO site_settings (setting_key, setting_value, updated_at)
+                VALUES (?, ?, CURRENT_TIMESTAMP)
+                ON CONFLICT (setting_key) DO UPDATE SET
+                    setting_value = EXCLUDED.setting_value,
+                    updated_at = CURRENT_TIMESTAMP
+            '''), (key, value))
+        else:
+            cursor.execute(self._prepare_query('''
+                INSERT INTO site_settings (setting_key, setting_value, updated_at)
+                VALUES (?, ?, CURRENT_TIMESTAMP)
+                ON CONFLICT(setting_key) DO UPDATE SET
+                    setting_value = excluded.setting_value,
+                    updated_at = CURRENT_TIMESTAMP
+            '''), (key, value))
+        conn.commit()
+        conn.close()
 
     def update_contact_info(self, phone, email, address, service_area, business_hours):
         conn = self.get_connection()

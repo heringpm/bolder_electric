@@ -371,9 +371,12 @@ def render_login(**kwargs):
 def send_contact_email(name, email, phone, service_type, message):
     """Send contact form submission email."""
     try:
-        # Get the recipient email from database
+        # Get the recipient email from settings/database.
         contact_info = db.get_contact_info()
-        recipient_email = contact_info[1] if contact_info else 'support@bolderelectric.com'
+        fallback_email = contact_info[1] if contact_info else 'support@bolderelectric.com'
+        recipient_email = db.get_site_setting('contact_notification_email', fallback_email)
+        if not recipient_email:
+            recipient_email = fallback_email
         
         # Create email content
         subject = f"New Contact Form Submission - {service_type}"
@@ -402,7 +405,10 @@ This email was sent from the Bolder Electric contact form.
 def send_booking_notification_email(booking_data, service_name):
     """Send booking notification email."""
     try:
-        recipient_email = os.environ.get('BOOKING_NOTIFICATION_EMAIL', 'info@bolderelectric.com')
+        env_fallback = os.environ.get('BOOKING_NOTIFICATION_EMAIL', 'info@bolderelectric.com')
+        recipient_email = db.get_site_setting('booking_notification_email', env_fallback)
+        if not recipient_email:
+            recipient_email = env_fallback
         subject = f"New Booking Request - {service_name or 'Service'}"
         body = f"""
 New Booking Request from Bolder Electric Website
@@ -1208,6 +1214,35 @@ def update_contact():
         data['service_area'],
         data['business_hours']
     )
+    return jsonify({'success': True})
+
+
+@app.route('/api/settings/notifications', methods=['GET'])
+@admin_required
+def get_notification_settings():
+    contact_info = db.get_contact_info()
+    contact_fallback = contact_info[1] if contact_info else 'support@bolderelectric.com'
+    booking_fallback = os.environ.get('BOOKING_NOTIFICATION_EMAIL', 'info@bolderelectric.com')
+    return jsonify({
+        'contact_notification_email': db.get_site_setting('contact_notification_email', contact_fallback),
+        'booking_notification_email': db.get_site_setting('booking_notification_email', booking_fallback)
+    })
+
+
+@app.route('/api/settings/notifications', methods=['POST'])
+@admin_required
+def update_notification_settings():
+    data = request.get_json() or {}
+    contact_notification_email = (data.get('contact_notification_email') or '').strip()
+    booking_notification_email = (data.get('booking_notification_email') or '').strip()
+
+    if not contact_notification_email or '@' not in contact_notification_email:
+        return jsonify({'success': False, 'message': 'Valid contact notification email is required'}), 400
+    if not booking_notification_email or '@' not in booking_notification_email:
+        return jsonify({'success': False, 'message': 'Valid booking notification email is required'}), 400
+
+    db.set_site_setting('contact_notification_email', contact_notification_email)
+    db.set_site_setting('booking_notification_email', booking_notification_email)
     return jsonify({'success': True})
 
 @app.route('/api/logs', methods=['GET'])
