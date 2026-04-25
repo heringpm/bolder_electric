@@ -1,5 +1,5 @@
 (function () {
-    var CONSENT_KEY = 'bolder_cookie_consent_v1';
+    var CONSENT_KEY = 'bolder_cookie_consent_v2';
     var CONSENT_ACCEPTED = 'accepted';
     var CONSENT_REJECTED = 'rejected';
     var scriptTag = document.currentScript;
