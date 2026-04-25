@@ -43,6 +43,21 @@
         if (banner) banner.remove();
     }
 
+    function openPreferences(event) {
+        if (event && typeof event.preventDefault === 'function') {
+            event.preventDefault();
+        }
+        closeBanner();
+        buildBanner();
+    }
+
+    function bindPreferenceLinks() {
+        var links = document.querySelectorAll('[data-open-privacy-notice]');
+        links.forEach(function (link) {
+            link.addEventListener('click', openPreferences);
+        });
+    }
+
     function attachHandlers() {
         var acceptBtn = document.getElementById('privacy-notice-accept');
         var declineBtn = document.getElementById('privacy-notice-decline');
@@ -89,6 +104,9 @@
     }
 
     function init() {
+        bindPreferenceLinks();
+        window.openPrivacyNotice = openPreferences;
+
         var consent = readConsent();
         if (consent === CONSENT_ACCEPTED) {
             loadAnalytics();
