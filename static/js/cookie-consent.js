@@ -1,5 +1,5 @@
 (function () {
-    var CONSENT_KEY = 'bolder_cookie_consent_v2';
+    var CONSENT_KEY = 'bolder_cookie_consent_v3';
     var CONSENT_ACCEPTED = 'accepted';
     var CONSENT_REJECTED = 'rejected';
     var scriptTag = document.currentScript;
@@ -86,9 +86,6 @@
         var consent = readConsent();
         if (consent === CONSENT_ACCEPTED) {
             loadAnalytics();
-            return;
-        }
-        if (consent === CONSENT_REJECTED) {
             return;
         }
         buildBanner();
