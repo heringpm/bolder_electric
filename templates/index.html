@@ -37,21 +37,13 @@
     <link rel="canonical" href="https://bolderelectric.com">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HPSXGKK99R"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-HPSXGKK99R');
-    </script>
-    
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
     
     <!-- Stylesheets -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cookie-consent.css') }}">
+    <script defer src="{{ url_for('static', filename='js/cookie-consent.js') }}" data-ga-measurement-id="G-HPSXGKK99R"></script>
     <style>
         .section-title::after {
             content: none !important;
