@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bolder Electric - Professional Commercial & Residential Electrician | Licensed Electrical Contractor</title>
+    <title>Bolder Electric | Commercial & Residential Electrician in Menifee, CA</title>
     
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Bolder Electric provides professional electrical services for commercial and residential properties. Licensed electricians offering 24/7 emergency repairs, panel upgrades, wiring, and installation services. Call (951) 397-4025 for fast, reliable service.">
-    <meta name="keywords" content="electrician, electrical contractor, commercial electrician, residential electrician, emergency electrician, electrical repair, panel upgrade, wiring installation, licensed electrician, electrical services, commercial electrical, residential electrical, 24 hour electrician, electrical contractor near me, electrician near me">
+    <meta name="description" content="Bolder Electric is a licensed electrician in Menifee, CA serving Riverside County and Southern California with commercial electrical, residential electrical, panel upgrades, and 24/7 emergency electrical service. Call (951) 397-4025.">
+    <meta name="keywords" content="Bolder Electric, electrician Menifee CA, commercial electrician Menifee, residential electrician Menifee, emergency electrician Menifee CA, commercial electrical services Riverside County, electrical contractor Southern California">
     <meta name="author" content="Bolder Electric">
     <meta name="robots" content="index, follow">
     <meta name="googlebot" content="index, follow">
@@ -19,19 +19,19 @@
     <!-- Open Graph Meta Tags -->
     <meta property="og:locale" content="en_US">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Bolder Electric - Professional Commercial & Residential Electrician">
-    <meta property="og:description" content="Licensed electricians providing commercial and residential electrical services. 24/7 emergency repairs, panel upgrades, and professional electrical installations.">
+    <meta property="og:title" content="Bolder Electric | Commercial & Residential Electrician in Menifee, CA">
+    <meta property="og:description" content="Licensed electricians serving Menifee, Riverside County, and Southern California with commercial and residential electrical services plus emergency response.">
     <meta property="og:url" content="https://bolderelectric.com">
     <meta property="og:site_name" content="Bolder Electric">
-    <meta property="og:image" content="https://bolderelectric.com/static/images/bolder-electric-logo.jpg">
+    <meta property="og:image" content="https://bolderelectric.com/static/images/hero-1024.webp">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Bolder Electric - Professional Electrician Services">
-    <meta name="twitter:description" content="Licensed electricians for commercial & residential properties. 24/7 emergency service available.">
-    <meta name="twitter:image" content="https://bolderelectric.com/static/images/bolder-electric-logo.jpg">
+    <meta name="twitter:title" content="Bolder Electric | Menifee Commercial & Residential Electrician">
+    <meta name="twitter:description" content="Commercial and residential electrician in Menifee, CA with emergency service across Riverside County and Southern California.">
+    <meta name="twitter:image" content="https://bolderelectric.com/static/images/hero-1024.webp">
     
     <!-- Canonical URL -->
     <link rel="canonical" href="https://bolderelectric.com">
@@ -606,13 +606,14 @@
         "@context": "https://schema.org",
         "@graph": [
             {
-                "@type": "LocalBusiness",
-                "@id": "https://bolderelectric.com",
+                "@type": "Electrician",
+                "@id": "https://bolderelectric.com#business",
                 "name": "Bolder Electric",
-                "description": "Professional electrical services for commercial and residential properties",
+                "alternateName": "Bolder Electric Co",
+                "description": "Commercial and residential electrical contractor based in Menifee, CA serving Riverside County and Southern California.",
                 "url": "https://bolderelectric.com",
                 "telephone": "(951) 397-4025",
-                "email": "info@bolderelectric.com",
+                "email": "support@bolderelectric.com",
                 "address": {
                     "@type": "PostalAddress",
                     "addressLocality": "Menifee",
@@ -626,6 +627,43 @@
                     "latitude": "33.6984",
                     "longitude": "-117.1654"
                 },
+                "areaServed": [
+                    {
+                        "@type": "City",
+                        "name": "Menifee"
+                    },
+                    {
+                        "@type": "AdministrativeArea",
+                        "name": "Riverside County"
+                    },
+                    {
+                        "@type": "AdministrativeArea",
+                        "name": "Southern California"
+                    }
+                ],
+                "openingHoursSpecification": [
+                    {
+                        "@type": "OpeningHoursSpecification",
+                        "dayOfWeek": [
+                            "Monday",
+                            "Tuesday",
+                            "Wednesday",
+                            "Thursday",
+                            "Friday"
+                        ],
+                        "opens": "08:00",
+                        "closes": "18:00"
+                    },
+                    {
+                        "@type": "OpeningHoursSpecification",
+                        "dayOfWeek": [
+                            "Saturday",
+                            "Sunday"
+                        ],
+                        "opens": "00:00",
+                        "closes": "23:59"
+                    }
+                ],
                 "openingHours": [
                     "Mo-Fr 08:00-18:00",
                     "Sa-Su 00:00-23:59"
@@ -633,51 +671,51 @@
                 "priceRange": "$$",
                 "paymentAccepted": ["Cash", "Credit Card", "Check"],
                 "currenciesAccepted": "USD",
-                "image": "https://bolderelectric.com/static/images/bolder-electric-logo.jpg",
-                "logo": "https://bolderelectric.com/static/images/bolder-electric-logo.jpg"
+                "image": "https://bolderelectric.com/static/images/hero-1024.webp",
+                "logo": "https://bolderelectric.com/static/images/bolder_electric_logo-320.webp"
             },
             {
                 "@type": "Service",
-                "@id": "https://bolderelectric.com/commercial",
+                "@id": "https://bolderelectric.com#service-commercial",
                 "name": "Commercial Electrical Services",
                 "description": "Complete electrical solutions for businesses, offices, and commercial properties including new construction, system upgrades, and emergency repairs",
                 "provider": {
-                    "@id": "https://bolderelectric.com"
+                    "@id": "https://bolderelectric.com#business"
                 },
                 "areaServed": {
                     "@type": "Place",
-                    "name": "Riverside County & Surrounding Areas"
+                    "name": "Menifee, Riverside County, and Southern California"
                 }
             },
             {
                 "@type": "Service",
-                "@id": "https://bolderelectric.com/residential",
+                "@id": "https://bolderelectric.com#service-residential",
                 "name": "Residential Electrical Services",
                 "description": "Professional electrical services for homes including rewiring, panel upgrades, lighting installation, and emergency repairs",
                 "provider": {
-                    "@id": "https://bolderelectric.com"
+                    "@id": "https://bolderelectric.com#business"
                 },
                 "areaServed": {
                     "@type": "Place",
-                    "name": "Riverside County & Surrounding Areas"
+                    "name": "Menifee, Riverside County, and Southern California"
                 }
             },
             {
                 "@type": "EmergencyService",
-                "@id": "https://bolderelectric.com/emergency",
+                "@id": "https://bolderelectric.com#service-emergency",
                 "name": "24/7 Emergency Electrical Services",
                 "description": "Round-the-clock emergency electrical repair services for commercial and residential properties",
                 "provider": {
-                    "@id": "https://bolderelectric.com"
+                    "@id": "https://bolderelectric.com#business"
                 },
                 "areaServed": {
                     "@type": "Place",
-                    "name": "Riverside County & Surrounding Areas"
+                    "name": "Menifee, Riverside County, and Southern California"
                 },
                 "availableChannel": {
                     "@type": "ServiceChannel",
                     "servicePhone": "(951) 397-4025",
-                    "serviceUrl": "https://bolderelectric.com"
+                    "serviceUrl": "https://bolderelectric.com/schedule"
                 }
             },
             {
@@ -685,17 +723,10 @@
                 "@id": "https://bolderelectric.com#website",
                 "url": "https://bolderelectric.com",
                 "name": "Bolder Electric",
-                "description": "Professional electrical services for commercial and residential properties",
+                "description": "Commercial and residential electrician serving Menifee and Riverside County",
                 "publisher": {
-                    "@id": "https://bolderelectric.com"
-                },
-                "potentialAction": [
-                    {
-                        "@type": "SearchAction",
-                        "target": "https://bolderelectric.com/search?q={search_term_string}",
-                        "query-input": "required name=search_term_string"
-                    }
-                ]
+                    "@id": "https://bolderelectric.com#business"
+                }
             }
         ]
     }
@@ -738,6 +769,7 @@
                 <div class="hero-overlay"></div>
             </div>
             <div class="hero-content">
+                <h1 class="hero-title">Bolder Electric</h1>
                 <p class="hero-subtitle">Built on Trust. Powered by Experience. Serving Riverside County & the greater Southern California Region.</p>
                 <div class="hero-buttons">
                     <a href="#services" class="btn btn-primary">Our Services</a>

@@ -4,24 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
-    <title>Schedule Service - Bolder Electric</title>
-    <meta name="description" content="Book residential and emergency electrical service with Bolder Electric throughout Riverside County and Southern California.">
+    <title>Request Electrical Service | Bolder Electric Menifee, CA</title>
+    <meta name="description" content="Request commercial, residential, panel upgrade, or emergency electrical service with Bolder Electric in Menifee, Riverside County, and Southern California. All scheduling requests are reviewed and confirmed by our team.">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://bolderelectric.com/schedule">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Schedule Service - Bolder Electric">
-    <meta property="og:description" content="Submit a service scheduling request for residential and emergency electrical work. Our team confirms all appointments directly.">
+    <meta property="og:title" content="Request Electrical Service | Bolder Electric">
+    <meta property="og:description" content="Submit a scheduling request for commercial, residential, panel, or emergency electrical work in Menifee and Riverside County.">
     <meta property="og:url" content="https://bolderelectric.com/schedule">
     <meta property="og:image" content="https://bolderelectric.com/static/images/hero-1024.webp">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Schedule Service - Bolder Electric">
-    <meta name="twitter:description" content="Request residential or emergency electrical service in Riverside County and Southern California.">
+    <meta name="twitter:title" content="Request Electrical Service | Bolder Electric">
+    <meta name="twitter:description" content="Schedule request page for commercial and residential electrician services in Menifee, CA and Riverside County.">
     <meta name="twitter:image" content="https://bolderelectric.com/static/images/hero-1024.webp">
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/privacy-notice.css') }}">
     <script defer src="{{ url_for('static', filename='js/privacy-notice.js') }}" data-ga-measurement-id="G-HPSXGKK99R"></script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "@id": "https://bolderelectric.com/schedule#webpage",
+      "url": "https://bolderelectric.com/schedule",
+      "name": "Request Electrical Service - Bolder Electric",
+      "description": "Online service request page for commercial, residential, and emergency electrician services in Menifee, Riverside County, and Southern California.",
+      "about": {
+        "@id": "https://bolderelectric.com#business"
+      },
+      "isPartOf": {
+        "@id": "https://bolderelectric.com#website"
+      }
+    }
+    </script>
     <style>
         .schedule-container { max-width: 1200px; margin: 0 auto; padding: 100px 20px; }
         .schedule-header { text-align: center; margin-bottom: 2rem; }
