@@ -990,10 +990,10 @@
                                     data-crew-name="Allie"
                                     data-crew-role="Operations"
                                     data-crew-bio="Allie provides administrative and operations support, while also leading marketing efforts to keep Bolder running efficiently and growing its presence."
-                                    data-crew-image=""
+                                    data-crew-image="{{ url_for('static', filename='images/Allie.jpg') }}"
                                 >
                                     <div class="crew-card-photo">
-                                        <div class="crew-card-photo-placeholder">AL</div>
+                                        <img src="{{ url_for('static', filename='images/Allie.jpg') }}" alt="Allie" loading="lazy" decoding="async">
                                         <span class="crew-photo-hint">View Bio</span>
                                     </div>
                                 </button>
