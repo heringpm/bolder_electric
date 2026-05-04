@@ -571,6 +571,76 @@
             line-height: 1.55;
         }
 
+        .reviews-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 56px 0;
+        }
+
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.2rem;
+            align-items: start;
+        }
+
+        .review-box {
+            background: #fff;
+            border: 1px solid #d9e2ec;
+            border-radius: 12px;
+            padding: 1.1rem;
+            box-shadow: 0 8px 20px rgba(24, 39, 75, 0.08);
+        }
+
+        .review-platforms {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.55rem;
+            margin: 0.6rem 0 0.7rem;
+        }
+
+        .review-note {
+            font-size: 0.9rem;
+            color: #475569;
+            margin-bottom: 0.75rem;
+        }
+
+        .top-reviews {
+            display: grid;
+            gap: 0.7rem;
+        }
+
+        .top-review-item {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 0.8rem;
+            background: #fff;
+        }
+
+        .top-review-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 0.6rem;
+            margin-bottom: 0.35rem;
+            font-size: 0.9rem;
+        }
+
+        .top-review-name {
+            font-weight: 700;
+            color: var(--primary-black);
+        }
+
+        .top-review-stars {
+            color: #b45309;
+            font-weight: 700;
+        }
+
+        .top-review-text {
+            margin: 0;
+            color: #334155;
+            font-size: 0.95rem;
+            line-height: 1.45;
+        }
+
         @media (max-width: 900px) {
             .hero {
                 min-height: 64vh !important;
@@ -596,6 +666,9 @@
             }
             .crew-modal-photo {
                 min-height: 260px;
+            }
+            .reviews-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -746,6 +819,7 @@
                     <li><a href="#services" class="nav-link">Services</a></li>
                     <li><a href="#about" class="nav-link">About</a></li>
                     <li><a href="#crew" class="nav-link">Team</a></li>
+                    <li><a href="#reviews" class="nav-link">Reviews</a></li>
                     <li><a href="{{ url_for('gallery') }}" class="nav-link">Gallery</a></li>
                     <li><a href="#contact" class="nav-link">Contact</a></li>
                     <li><a href="{{ url_for('schedule') }}" class="nav-link">Schedule</a></li>
@@ -1033,6 +1107,77 @@
             </div>
         </section>
 
+        <section id="reviews" class="reviews-section">
+            <div class="container">
+                <h2 class="section-title">Customer Reviews</h2>
+                <div class="reviews-grid">
+                    <div class="review-box">
+                        <h3 style="margin-bottom:0.4rem;color:var(--primary-black);">Leave a Review</h3>
+                        <p class="review-note">You can review us on multiple platforms. Most platforms do not allow one review to auto-post to all sites, so you will usually submit separately on each platform.</p>
+                        <div class="review-platforms">
+                            <a class="btn btn-primary" href="{{ review_links.google }}" target="_blank" rel="noopener">Google Review</a>
+                            <a class="btn btn-primary" href="{{ review_links.yelp }}" target="_blank" rel="noopener" style="background:var(--primary-black);">Yelp Review</a>
+                            <a class="btn btn-primary" href="{{ review_links.facebook }}" target="_blank" rel="noopener" style="background:#1877f2;">Facebook Review</a>
+                        </div>
+                        <p class="review-note">Or leave feedback directly here for our website:</p>
+                        <form id="siteReviewForm">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <div class="form-group">
+                                <input type="text" name="name" placeholder="Your Name" required>
+                            </div>
+                            <div class="form-group">
+                                <select name="source" required>
+                                    <option value="website">Website Review</option>
+                                    <option value="google">Also reviewed on Google</option>
+                                    <option value="yelp">Also reviewed on Yelp</option>
+                                    <option value="facebook">Also reviewed on Facebook</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <select name="rating" required>
+                                    <option value="">Select Rating</option>
+                                    <option value="5">5 - Excellent</option>
+                                    <option value="4">4 - Great</option>
+                                    <option value="3">3 - Good</option>
+                                    <option value="2">2 - Fair</option>
+                                    <option value="1">1 - Needs Improvement</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <textarea name="review_text" rows="4" placeholder="Share your experience with Bolder Electric..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit Review</button>
+                            <div id="reviewFormMessage" style="display:none;margin-top:10px;"></div>
+                        </form>
+                    </div>
+                    <div class="review-box">
+                        <h3 style="margin-bottom:0.65rem;color:var(--primary-black);">Top 5 Reviews</h3>
+                        <div class="top-reviews">
+                            {% if top_reviews %}
+                                {% for review in top_reviews %}
+                                <div class="top-review-item">
+                                    <div class="top-review-header">
+                                        <span class="top-review-name">{{ review[1] }}</span>
+                                        <span class="top-review-stars">{{ '★' * review[2] }}{{ '☆' * (5 - review[2]) }}</span>
+                                    </div>
+                                    <p class="top-review-text">{{ review[4] }}</p>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="top-review-item">
+                                    <div class="top-review-header">
+                                        <span class="top-review-name">No reviews yet</span>
+                                        <span class="top-review-stars">★★★★★</span>
+                                    </div>
+                                    <p class="top-review-text">Be the first customer to leave a review.</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section id="contact" class="contact">
             <div class="container">
                 <h2 class="section-title">Contact Bolder Electric Across Riverside County & Southern California</h2>
@@ -1115,6 +1260,7 @@
                                 <li><a href="#about">About</a></li>
                                 <li><a href="#crew">Team</a></li>
                                 <li><a href="{{ url_for('gallery') }}">Gallery</a></li>
+                                <li><a href="#reviews">Reviews</a></li>
                                 <li><a href="#contact">Contact</a></li>
                                 <li><a href="{{ url_for('schedule') }}">Schedule</a></li>
                                 <li><a href="#" data-open-privacy-notice>Privacy/Cookie Settings</a></li>
@@ -1240,6 +1386,48 @@
             if (event.key === 'Escape' && crewBioModal.classList.contains('is-open')) {
                 closeCrewModal();
             }
+        });
+    </script>
+<script>
+        // On-site review form submission
+        document.getElementById('siteReviewForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const form = this;
+            const messageDiv = document.getElementById('reviewFormMessage');
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const payload = {
+                name: form.name.value.trim(),
+                source: form.source.value,
+                rating: Number(form.rating.value),
+                review_text: form.review_text.value.trim()
+            };
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+
+            fetch('/api/reviews', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    messageDiv.innerHTML = '<div style="color:#166534;padding:10px;border:1px solid #86efac;border-radius:4px;background:#dcfce7;">Thank you. Your review was submitted.</div>';
+                    form.reset();
+                } else {
+                    messageDiv.innerHTML = `<div style="color:#b91c1c;padding:10px;border:1px solid #fecaca;border-radius:4px;background:#fee2e2;">${data.message || 'Unable to submit review.'}</div>`;
+                }
+                messageDiv.style.display = 'block';
+            })
+            .catch(() => {
+                messageDiv.innerHTML = '<div style="color:#b91c1c;padding:10px;border:1px solid #fecaca;border-radius:4px;background:#fee2e2;">Unable to submit review right now. Please try again.</div>';
+                messageDiv.style.display = 'block';
+            })
+            .finally(() => {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Review';
+            });
         });
     </script>
 <script>

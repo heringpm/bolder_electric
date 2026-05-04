@@ -568,11 +568,21 @@ def home():
                 service_descriptions['safety'] = description
             service_prices['safety'] = float(base_price) if base_price is not None else service_prices['safety']
     
+    top_reviews = db.get_top_reviews(5)
+
+    review_links = {
+        'google': os.environ.get('REVIEW_URL_GOOGLE', 'https://www.google.com/search?q=Bolder+Electric+Menifee+CA'),
+        'yelp': os.environ.get('REVIEW_URL_YELP', 'https://www.yelp.com/search?find_desc=Bolder+Electric&find_loc=Menifee%2C+CA'),
+        'facebook': os.environ.get('REVIEW_URL_FACEBOOK', 'https://www.facebook.com/')
+    }
+
     return render_template(
         'index.html',
         contact=contact_data,
         service_descriptions=service_descriptions,
-        service_prices=service_prices
+        service_prices=service_prices,
+        top_reviews=top_reviews,
+        review_links=review_links
     )
 
 @app.route('/gallery')
@@ -635,6 +645,33 @@ def contact_submit():
             'success': False,
             'message': 'An error occurred. Please try again or call us directly.'
         }), 500
+
+
+@app.route('/api/reviews', methods=['POST'])
+def submit_review():
+    try:
+        data = request.get_json(silent=True) or {}
+        name = (data.get('name') or '').strip()
+        source = (data.get('source') or 'website').strip().lower()
+        review_text = (data.get('review_text') or '').strip()
+        rating_raw = data.get('rating')
+
+        try:
+            rating = int(rating_raw)
+        except (TypeError, ValueError):
+            rating = 0
+
+        valid_sources = {'website', 'google', 'yelp', 'facebook'}
+        if source not in valid_sources:
+            source = 'website'
+
+        if len(name) < 2 or len(review_text) < 15 or rating < 1 or rating > 5:
+            return jsonify({'success': False, 'message': 'Please provide name, a review (15+ chars), and a rating from 1-5.'}), 400
+
+        db.add_review(name, rating, source, review_text, is_featured=True)
+        return jsonify({'success': True, 'message': 'Thank you for your review.'})
+    except Exception:
+        return jsonify({'success': False, 'message': 'Could not submit your review right now. Please try again.'}), 500
 
 @app.route('/admin/gallery')
 @admin_required

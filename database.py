@@ -181,6 +181,18 @@ class DatabaseManager:
                     )
                 ''')
 
+                cursor.execute('''
+                    CREATE TABLE IF NOT EXISTS reviews (
+                        id SERIAL PRIMARY KEY,
+                        name TEXT NOT NULL,
+                        rating INTEGER NOT NULL,
+                        source TEXT NOT NULL DEFAULT 'website',
+                        review_text TEXT NOT NULL,
+                        is_featured BOOLEAN DEFAULT TRUE,
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    )
+                ''')
+
             else:
                 cursor.execute('''
                     CREATE TABLE IF NOT EXISTS admin_users (
@@ -308,6 +320,18 @@ class DatabaseManager:
                         category TEXT DEFAULT 'general',
                         display_order INTEGER DEFAULT 0,
                         is_active BOOLEAN DEFAULT 1,
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    )
+                ''')
+
+                cursor.execute('''
+                    CREATE TABLE IF NOT EXISTS reviews (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        name TEXT NOT NULL,
+                        rating INTEGER NOT NULL,
+                        source TEXT NOT NULL DEFAULT 'website',
+                        review_text TEXT NOT NULL,
+                        is_featured BOOLEAN DEFAULT 1,
                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                     )
                 ''')
@@ -956,6 +980,41 @@ class DatabaseManager:
         services = cursor.fetchall()
         conn.close()
         return services
+
+    def add_review(self, name, rating, source, review_text, is_featured=True):
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        if self.use_postgres:
+            cursor.execute(self._prepare_query('''
+                INSERT INTO reviews (name, rating, source, review_text, is_featured)
+                VALUES (?, ?, ?, ?, ?)
+                RETURNING id
+            '''), (name, int(rating), source, review_text, bool(is_featured)))
+            review_id = cursor.fetchone()[0]
+        else:
+            cursor.execute(self._prepare_query('''
+                INSERT INTO reviews (name, rating, source, review_text, is_featured)
+                VALUES (?, ?, ?, ?, ?)
+            '''), (name, int(rating), source, review_text, 1 if is_featured else 0))
+            review_id = cursor.lastrowid
+        conn.commit()
+        conn.close()
+        return review_id
+
+    def get_top_reviews(self, limit=5):
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        featured = 'TRUE' if self.use_postgres else '1'
+        cursor.execute(self._prepare_query(f'''
+            SELECT id, name, rating, source, review_text, created_at
+            FROM reviews
+            WHERE is_featured = {featured}
+            ORDER BY created_at DESC
+            LIMIT ?
+        '''), (limit,))
+        rows = cursor.fetchall()
+        conn.close()
+        return rows
 
     def get_service_by_id(self, service_id):
         conn = self.get_connection()
