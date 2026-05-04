@@ -1113,25 +1113,15 @@
                 <div class="reviews-grid">
                     <div class="review-box">
                         <h3 style="margin-bottom:0.4rem;color:var(--primary-black);">Leave a Review</h3>
-                        <p class="review-note">You can review us on multiple platforms. Most platforms do not allow one review to auto-post to all sites, so you will usually submit separately on each platform.</p>
+                        <p class="review-note">We are currently collecting reviews through Google only.</p>
                         <div class="review-platforms">
                             <a class="btn btn-primary" href="{{ review_links.google }}" target="_blank" rel="noopener">Google Review</a>
-                            <a class="btn btn-primary" href="{{ review_links.yelp }}" target="_blank" rel="noopener" style="background:var(--primary-black);">Yelp Review</a>
-                            <a class="btn btn-primary" href="{{ review_links.facebook }}" target="_blank" rel="noopener" style="background:#1877f2;">Facebook Review</a>
                         </div>
-                        <p class="review-note">Or leave feedback directly here for our website:</p>
+                        <p class="review-note">Or leave feedback directly here and we will keep it in our Google-focused review queue:</p>
                         <form id="siteReviewForm">
                             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                             <div class="form-group">
                                 <input type="text" name="name" placeholder="Your Name" required>
-                            </div>
-                            <div class="form-group">
-                                <select name="source" required>
-                                    <option value="website">Website Review</option>
-                                    <option value="google">Also reviewed on Google</option>
-                                    <option value="yelp">Also reviewed on Yelp</option>
-                                    <option value="facebook">Also reviewed on Facebook</option>
-                                </select>
                             </div>
                             <div class="form-group">
                                 <select name="rating" required>
@@ -1397,7 +1387,6 @@
             const submitBtn = form.querySelector('button[type="submit"]');
             const payload = {
                 name: form.name.value.trim(),
-                source: form.source.value,
                 rating: Number(form.rating.value),
                 review_text: form.review_text.value.trim()
             };
