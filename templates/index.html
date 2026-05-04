@@ -819,7 +819,6 @@
                     <li><a href="#services" class="nav-link">Services</a></li>
                     <li><a href="#about" class="nav-link">About</a></li>
                     <li><a href="#crew" class="nav-link">Team</a></li>
-                    <li><a href="#reviews" class="nav-link">Reviews</a></li>
                     <li><a href="{{ url_for('gallery') }}" class="nav-link">Gallery</a></li>
                     <li><a href="#contact" class="nav-link">Contact</a></li>
                     <li><a href="{{ url_for('schedule') }}" class="nav-link">Schedule</a></li>
@@ -1107,63 +1106,6 @@
             </div>
         </section>
 
-        <section id="reviews" class="reviews-section">
-            <div class="container">
-                <h2 class="section-title">Customer Reviews</h2>
-                <div class="reviews-grid">
-                    <div class="review-box">
-                        <h3 style="margin-bottom:0.4rem;color:var(--primary-black);">Leave a Review</h3>
-                        <p class="review-note">Share your feedback here. We’ll use this to highlight customer experiences on the site.</p>
-                        <form id="siteReviewForm">
-                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                            <div class="form-group">
-                                <input type="text" name="name" placeholder="Your Name" required>
-                            </div>
-                            <div class="form-group">
-                                <select name="rating" required>
-                                    <option value="">Select Rating</option>
-                                    <option value="5">5 - Excellent</option>
-                                    <option value="4">4 - Great</option>
-                                    <option value="3">3 - Good</option>
-                                    <option value="2">2 - Fair</option>
-                                    <option value="1">1 - Needs Improvement</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <textarea name="review_text" rows="4" placeholder="Share your experience with Bolder Electric..." required></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Submit Review</button>
-                            <div id="reviewFormMessage" style="display:none;margin-top:10px;"></div>
-                        </form>
-                    </div>
-                    <div class="review-box">
-                        <h3 style="margin-bottom:0.65rem;color:var(--primary-black);">Top 5 Reviews</h3>
-                        <div class="top-reviews">
-                            {% if top_reviews %}
-                                {% for review in top_reviews %}
-                                <div class="top-review-item">
-                                    <div class="top-review-header">
-                                        <span class="top-review-name">{{ review[1] }}</span>
-                                        <span class="top-review-stars">{{ '★' * review[2] }}{{ '☆' * (5 - review[2]) }}</span>
-                                    </div>
-                                    <p class="top-review-text">{{ review[4] }}</p>
-                                </div>
-                                {% endfor %}
-                            {% else %}
-                                <div class="top-review-item">
-                                    <div class="top-review-header">
-                                        <span class="top-review-name">No reviews yet</span>
-                                        <span class="top-review-stars">★★★★★</span>
-                                    </div>
-                                    <p class="top-review-text">Be the first customer to leave a review.</p>
-                                </div>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <section id="contact" class="contact">
             <div class="container">
                 <h2 class="section-title">Contact Bolder Electric Across Riverside County & Southern California</h2>
@@ -1246,7 +1188,6 @@
                                 <li><a href="#about">About</a></li>
                                 <li><a href="#crew">Team</a></li>
                                 <li><a href="{{ url_for('gallery') }}">Gallery</a></li>
-                                <li><a href="#reviews">Reviews</a></li>
                                 <li><a href="#contact">Contact</a></li>
                                 <li><a href="{{ url_for('schedule') }}">Schedule</a></li>
                                 <li><a href="#" data-open-privacy-notice>Privacy/Cookie Settings</a></li>
@@ -1372,47 +1313,6 @@
             if (event.key === 'Escape' && crewBioModal.classList.contains('is-open')) {
                 closeCrewModal();
             }
-        });
-    </script>
-<script>
-        // On-site review form submission
-        document.getElementById('siteReviewForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const form = this;
-            const messageDiv = document.getElementById('reviewFormMessage');
-            const submitBtn = form.querySelector('button[type="submit"]');
-            const payload = {
-                name: form.name.value.trim(),
-                rating: Number(form.rating.value),
-                review_text: form.review_text.value.trim()
-            };
-
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Submitting...';
-
-            fetch('/api/reviews', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            })
-            .then(r => r.json())
-            .then(data => {
-                if (data.success) {
-                    messageDiv.innerHTML = '<div style="color:#166534;padding:10px;border:1px solid #86efac;border-radius:4px;background:#dcfce7;">Thank you. Your review was submitted.</div>';
-                    form.reset();
-                } else {
-                    messageDiv.innerHTML = `<div style="color:#b91c1c;padding:10px;border:1px solid #fecaca;border-radius:4px;background:#fee2e2;">${data.message || 'Unable to submit review.'}</div>`;
-                }
-                messageDiv.style.display = 'block';
-            })
-            .catch(() => {
-                messageDiv.innerHTML = '<div style="color:#b91c1c;padding:10px;border:1px solid #fecaca;border-radius:4px;background:#fee2e2;">Unable to submit review right now. Please try again.</div>';
-                messageDiv.style.display = 'block';
-            })
-            .finally(() => {
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Submit Review';
-            });
         });
     </script>
 <script>

@@ -568,19 +568,11 @@ def home():
                 service_descriptions['safety'] = description
             service_prices['safety'] = float(base_price) if base_price is not None else service_prices['safety']
     
-    top_reviews = db.get_top_reviews(5)
-
-    review_links = {
-        'google': os.environ.get('REVIEW_URL_GOOGLE', 'https://www.google.com/search?q=Bolder+Electric+Menifee+CA')
-    }
-
     return render_template(
         'index.html',
         contact=contact_data,
         service_descriptions=service_descriptions,
-        service_prices=service_prices,
-        top_reviews=top_reviews,
-        review_links=review_links
+        service_prices=service_prices
     )
 
 @app.route('/gallery')
