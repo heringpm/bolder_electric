@@ -641,6 +641,74 @@
             line-height: 1.45;
         }
 
+        .local-seo-section {
+            background: #ffffff;
+            padding: 54px 0 42px;
+            border-top: 1px solid #e6edf5;
+            border-bottom: 1px solid #e6edf5;
+        }
+
+        .local-seo-intro {
+            max-width: 980px;
+            margin: 0 auto 1.2rem;
+            text-align: center;
+            color: #334155;
+        }
+
+        .local-seo-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.95rem;
+        }
+
+        .local-seo-card {
+            border: 1px solid #d9e2ec;
+            border-radius: 12px;
+            padding: 1rem 1rem 0.95rem;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fbff 100%);
+        }
+
+        .local-seo-card h3 {
+            margin-bottom: 0.35rem;
+            color: var(--primary-black);
+            font-size: 1.15rem;
+            line-height: 1.2;
+        }
+
+        .local-seo-card p {
+            margin: 0;
+            color: #475569;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .seo-faq {
+            margin-top: 1rem;
+            display: grid;
+            gap: 0.7rem;
+        }
+
+        .seo-faq-item {
+            border: 1px solid #dce6f1;
+            border-radius: 10px;
+            background: #fff;
+            padding: 0.75rem 0.85rem;
+        }
+
+        .seo-faq-item h4 {
+            margin: 0 0 0.35rem;
+            color: var(--primary-black);
+            font-size: 1rem;
+            line-height: 1.25;
+        }
+
+        .seo-faq-item p {
+            margin: 0;
+            color: #475569;
+            font-size: 0.93rem;
+            line-height: 1.45;
+        }
+
         @media (max-width: 900px) {
             .hero {
                 min-height: 64vh !important;
@@ -668,6 +736,9 @@
                 min-height: 260px;
             }
             .reviews-grid {
+                grid-template-columns: 1fr;
+            }
+            .local-seo-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -800,6 +871,44 @@
                 "publisher": {
                     "@id": "https://bolderelectric.com#business"
                 }
+            },
+            {
+                "@type": "FAQPage",
+                "@id": "https://bolderelectric.com#faq",
+                "mainEntity": [
+                    {
+                        "@type": "Question",
+                        "name": "Do you offer emergency electrician service in Menifee, CA?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Yes. Bolder Electric provides emergency electrician services in Menifee, CA and nearby Riverside County areas."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Do you provide commercial electrical services in Menifee, CA?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Yes. We provide commercial electrical services in Menifee including new construction, tenant improvements, service upgrades, and diagnostics."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Can you handle electrical panel upgrades in Menifee, CA?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Yes. We complete electrical panel upgrades and panel repair projects for homes and commercial properties in Menifee and surrounding areas."
+                        }
+                    },
+                    {
+                        "@type": "Question",
+                        "name": "Do you serve residential electrician requests in Menifee, CA?",
+                        "acceptedAnswer": {
+                            "@type": "Answer",
+                            "text": "Yes. Our residential electricians serve Menifee and nearby communities for rewiring, lighting, troubleshooting, and service upgrades."
+                        }
+                    }
+                ]
             }
         ]
     }
@@ -916,6 +1025,41 @@
                             <li>Troubleshooting, Repairs & Emergency Service</li>
                         </ul>
                         <a href="{{ url_for('schedule') }}" class="btn btn-primary">Schedule Residential Service</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="menifee-electrician-services" class="local-seo-section">
+            <div class="container">
+                <h2 class="section-title">Menifee Electrician Services</h2>
+                <p class="local-seo-intro">Bolder Electric provides commercial, residential, emergency, and panel service work across Menifee, Riverside County, and Southern California.</p>
+                <div class="local-seo-grid">
+                    <article class="local-seo-card">
+                        <h3>Emergency Electrician Menifee CA</h3>
+                        <p>Fast-response emergency troubleshooting, diagnostics, and repairs for electrical outages and urgent hazards.</p>
+                    </article>
+                    <article class="local-seo-card">
+                        <h3>Commercial Electrical Services Menifee CA</h3>
+                        <p>Reliable support for tenant improvements, distribution upgrades, lighting systems, and ongoing commercial maintenance.</p>
+                    </article>
+                    <article class="local-seo-card">
+                        <h3>Residential Electrician Menifee CA</h3>
+                        <p>Safe and code-compliant home electrical work including rewiring, outlets, switches, lighting, and service changes.</p>
+                    </article>
+                    <article class="local-seo-card">
+                        <h3>Electrical Panel Upgrades Menifee CA</h3>
+                        <p>Panel upgrades and panel repair solutions to improve system safety, capacity, and long-term reliability.</p>
+                    </article>
+                </div>
+                <div class="seo-faq">
+                    <div class="seo-faq-item">
+                        <h4>Do you provide home electrical upgrades in Menifee?</h4>
+                        <p>Yes. We perform home electrical upgrades in Menifee including panel improvements, dedicated circuits, and safety-focused modernization work.</p>
+                    </div>
+                    <div class="seo-faq-item">
+                        <h4>Do you serve locations beyond Menifee?</h4>
+                        <p>Yes. We serve Riverside County and broader Southern California for both commercial and residential electrical projects.</p>
                     </div>
                 </div>
             </div>
