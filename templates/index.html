@@ -785,6 +785,84 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        @media (max-width: 768px) {
+            .hero {
+                min-height: 58vh !important;
+                padding: 12px 0 !important;
+            }
+
+            .hero-content {
+                transform: none !important;
+                padding: 0 14px !important;
+            }
+
+            .services-main-grid {
+                grid-template-columns: 1fr !important;
+                gap: 18px !important;
+                padding: 0 14px !important;
+            }
+
+            .service-card-image {
+                height: 210px !important;
+            }
+
+            .additional-services-section,
+            .about-section,
+            .crew-section {
+                height: auto !important;
+                min-height: 0 !important;
+                display: block !important;
+                padding: 34px 0 40px !important;
+                margin-top: 0 !important;
+            }
+
+            .additional-services-container {
+                height: auto !important;
+                min-height: 0 !important;
+                padding: 0 14px !important;
+            }
+
+            .services-cards {
+                grid-template-columns: 1fr !important;
+                height: auto !important;
+                gap: 14px !important;
+                padding: 0 !important;
+            }
+
+            .service-card-new {
+                padding: 20px 16px !important;
+            }
+
+            .crew-feature {
+                min-height: 0 !important;
+            }
+
+            .crew-card-photo {
+                aspect-ratio: 1 / 1 !important;
+            }
+
+            .city-links-grid {
+                gap: 0.45rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-subtitle {
+                font-size: 1.02rem !important;
+                line-height: 1.4;
+            }
+
+            .service-card-content {
+                padding: 16px !important;
+            }
+
+            .about-main,
+            .about-video-card {
+                padding-left: 1rem !important;
+                padding-right: 1rem !important;
+            }
+        }
     </style>
     
     <!-- Structured Data (JSON-LD) -->
