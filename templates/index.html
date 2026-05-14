@@ -709,6 +709,49 @@
             line-height: 1.45;
         }
 
+        .city-links-wrap {
+            margin-top: 1.2rem;
+            border: 1px solid #dce6f1;
+            border-radius: 12px;
+            background: #fff;
+            padding: 0.95rem 1rem;
+        }
+
+        .city-links-title {
+            margin: 0 0 0.55rem;
+            color: var(--primary-black);
+            font-size: 1rem;
+            line-height: 1.25;
+            font-weight: 700;
+        }
+
+        .city-links-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.55rem;
+        }
+
+        .city-link-chip {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #d3dde8;
+            border-radius: 999px;
+            padding: 0.4rem 0.75rem;
+            color: #111111;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            background: #f8fafc;
+            transition: all 0.2s ease;
+        }
+
+        .city-link-chip:hover {
+            background: #eef3f8;
+            border-color: #b6c7d8;
+            color: #111111;
+        }
+
         @media (max-width: 900px) {
             .hero {
                 min-height: 64vh !important;
@@ -1084,15 +1127,13 @@
                         <p>Panel upgrades and panel repair solutions that improve electrical safety, service capacity, and long-term reliability.</p>
                     </article>
                 </div>
-                <div class="seo-faq" style="margin-top: 1.25rem;">
-                    <div class="seo-faq-item">
-                        <h4>Explore City Service Pages</h4>
-                        <p>
-                            <a href="{{ url_for('city_murrieta') }}">Electrician in Murrieta</a> |
-                            <a href="{{ url_for('city_temecula') }}">Electrician in Temecula</a> |
-                            <a href="{{ url_for('city_lake_elsinore') }}">Electrician in Lake Elsinore</a> |
-                            <a href="{{ url_for('city_menifee') }}">Electrician in Menifee</a>
-                        </p>
+                <div class="city-links-wrap">
+                    <h4 class="city-links-title">Explore City Service Pages</h4>
+                    <div class="city-links-grid">
+                        <a class="city-link-chip" href="{{ url_for('city_murrieta') }}">Murrieta</a>
+                        <a class="city-link-chip" href="{{ url_for('city_temecula') }}">Temecula</a>
+                        <a class="city-link-chip" href="{{ url_for('city_lake_elsinore') }}">Lake Elsinore</a>
+                        <a class="city-link-chip" href="{{ url_for('city_menifee') }}">Menifee</a>
                     </div>
                 </div>
                 <div class="seo-faq">
