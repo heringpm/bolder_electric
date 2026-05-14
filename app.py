@@ -71,6 +71,7 @@ app.secret_key = _build_secret_key()
 flask_env = (os.environ.get('FLASK_ENV') or '').strip().lower()
 is_production = flask_env in ('production', 'prod')
 force_https = _env_bool('FORCE_HTTPS', False)
+canonical_host = (os.environ.get('CANONICAL_HOST') or 'bolderelectric.com').strip().lower()
 app.config.update(
     SESSION_COOKIE_HTTPONLY=True,
     SESSION_COOKIE_SAMESITE='Lax',
@@ -94,6 +95,93 @@ RATE_LIMIT_RULES = (
     {'name': 'admin_upload', 'path': '/admin/upload-photo', 'methods': {'POST'}, 'limit': 50, 'window': 300, 'prefix': False},
 )
 _rate_buckets = defaultdict(deque)
+
+CITY_LANDING_PAGES = {
+    'murrieta-ca': {
+        'city': 'Murrieta',
+        'county': 'Riverside County',
+        'state': 'CA',
+        'slug': 'murrieta-ca',
+        'title': 'Electrician in Murrieta, CA | Commercial, Residential & Emergency Electrical Services',
+        'description': 'Bolder Electric provides commercial electrical services, residential electrician support, emergency electrician response, and electrical panel upgrades in Murrieta, CA and surrounding Riverside County communities.',
+        'hero_title': 'Trusted Electrician Services in Murrieta, CA',
+        'hero_text': 'From commercial upgrades and tenant improvements to residential troubleshooting and emergency electrical repairs, Bolder Electric serves Murrieta with reliable, code-compliant workmanship.',
+        'service_points': [
+            'Commercial electrical services for offices, retail, and industrial facilities',
+            'Residential electrical repairs, rewiring, and home electrical upgrades',
+            'Electrical panel upgrades and electrical panel repair',
+            'Emergency electrician service with rapid diagnostics and response'
+        ],
+        'faq': [
+            ('Do you provide commercial electrical services in Murrieta?', 'Yes. We support Murrieta businesses with service upgrades, distribution improvements, lighting, troubleshooting, and ongoing electrical maintenance.'),
+            ('Can I request emergency electrician service in Murrieta, CA?', 'Yes. We provide emergency electrician response in Murrieta for outages, hazards, and urgent electrical issues.'),
+            ('Do you handle home electrical upgrades in Murrieta?', 'Yes. We complete home electrical upgrades, panel improvements, dedicated circuits, and residential safety corrections.')
+        ]
+    },
+    'temecula-ca': {
+        'city': 'Temecula',
+        'county': 'Riverside County',
+        'state': 'CA',
+        'slug': 'temecula-ca',
+        'title': 'Electrician in Temecula, CA | Commercial, Residential & Emergency Electrical Services',
+        'description': 'Bolder Electric delivers commercial electrical services, residential electrician support, electrical panel upgrades, and emergency electrical response in Temecula, CA and nearby Southern California cities.',
+        'hero_title': 'Professional Electrician Services in Temecula, CA',
+        'hero_text': 'Bolder Electric serves Temecula with high-performance electrical solutions for commercial and residential properties, with a strong focus on safety, reliability, and clear communication.',
+        'service_points': [
+            'Commercial electrical build-outs, infrastructure improvements, and maintenance',
+            'Residential electrician services for repairs, outlets, switches, and lighting',
+            'Electrical panel upgrades to improve safety and service capacity',
+            'Emergency electrician support for critical electrical failures'
+        ],
+        'faq': [
+            ('Do you serve both homes and businesses in Temecula?', 'Yes. We provide both residential and commercial electrical services throughout Temecula and nearby areas.'),
+            ('Can you help with panel upgrades in Temecula?', 'Yes. We perform electrical panel upgrades and panel repair to modernize systems and improve long-term reliability.'),
+            ('Is scheduling online an instant booking?', 'No. Scheduling is a request process, and our team confirms appointment details directly with you.')
+        ]
+    },
+    'lake-elsinore-ca': {
+        'city': 'Lake Elsinore',
+        'county': 'Riverside County',
+        'state': 'CA',
+        'slug': 'lake-elsinore-ca',
+        'title': 'Electrician in Lake Elsinore, CA | Commercial, Residential & Emergency Electrical Services',
+        'description': 'Bolder Electric provides dependable commercial electrical services, residential electrician work, emergency electrical response, and panel upgrades in Lake Elsinore, CA and across Riverside County.',
+        'hero_title': 'Reliable Electrician Services in Lake Elsinore, CA',
+        'hero_text': 'We provide electrical services in Lake Elsinore for commercial facilities and homes, including diagnostics, upgrades, code corrections, and emergency repairs.',
+        'service_points': [
+            'Commercial electrical services for expanding businesses and facilities',
+            'Residential electrician support for homes, remodels, and repairs',
+            'Electrical panel upgrades and safety-focused electrical corrections',
+            'Emergency electrical service for urgent power and safety issues'
+        ],
+        'faq': [
+            ('Do you offer emergency electrician service in Lake Elsinore?', 'Yes. We provide emergency electrical response in Lake Elsinore for urgent electrical issues and hazardous failures.'),
+            ('Can you complete electrical panel upgrades for older homes?', 'Yes. We upgrade older electrical panels and perform associated code corrections where needed.'),
+            ('Do you handle commercial electrical projects in Lake Elsinore?', 'Yes. We support commercial projects including tenant improvements, service upgrades, and lighting systems.')
+        ]
+    },
+    'menifee-ca': {
+        'city': 'Menifee',
+        'county': 'Riverside County',
+        'state': 'CA',
+        'slug': 'menifee-ca',
+        'title': 'Electrician in Menifee, CA | Commercial, Residential & Emergency Electrical Services',
+        'description': 'Bolder Electric offers commercial electrical services, residential electrician work, emergency electrical response, and electrical panel upgrades in Menifee, CA and throughout Riverside County.',
+        'hero_title': 'Expert Electrician Services in Menifee, CA',
+        'hero_text': 'As a Riverside County electrical contractor based in Menifee, Bolder Electric provides dependable service for residential projects, commercial work, and emergency electrical needs.',
+        'service_points': [
+            'Commercial electrical services for offices, schools, and utility-related work',
+            'Residential electrician services for upgrades, troubleshooting, and repairs',
+            'Electrical panel upgrades and electrical panel repair',
+            'Emergency electrician response and fast on-site diagnostics'
+        ],
+        'faq': [
+            ('Do you provide commercial electrical services in Menifee?', 'Yes. We provide commercial electrical services in Menifee including upgrades, distribution work, and diagnostics.'),
+            ('Can you help with residential electrical issues in Menifee, CA?', 'Yes. We provide residential electrician services in Menifee for repairs, upgrades, and safety-focused electrical improvements.'),
+            ('Do you serve areas outside Menifee?', 'Yes. We serve Menifee, surrounding Riverside County cities, and broader Southern California service areas.')
+        ]
+    }
+}
 
 
 def get_csrf_token():
@@ -166,10 +254,30 @@ def _is_rate_limited(scope, limit, window):
 def security_guardrails():
     host = (request.host or '').split(':')[0].lower()
     localhost_hosts = {'127.0.0.1', 'localhost'}
+    canonical_hosts = {canonical_host}
+    if canonical_host.startswith('www.'):
+        canonical_hosts.add(canonical_host[4:])
+    else:
+        canonical_hosts.add(f'www.{canonical_host}')
 
     if force_https and not _is_secure_request() and host not in localhost_hosts:
         https_url = request.url.replace('http://', 'https://', 1)
         return redirect(https_url, code=301)
+
+    if host not in localhost_hosts and host not in canonical_hosts:
+        target = canonical_host
+        scheme = 'https' if (_is_secure_request() or force_https) else request.scheme
+        path = request.full_path if request.query_string else request.path
+        if path.endswith('?'):
+            path = path[:-1]
+        return redirect(f'{scheme}://{target}{path}', code=301)
+
+    if host == f'www.{canonical_host}':
+        scheme = 'https' if (_is_secure_request() or force_https) else request.scheme
+        path = request.full_path if request.query_string else request.path
+        if path.endswith('?'):
+            path = path[:-1]
+        return redirect(f'{scheme}://{canonical_host}{path}', code=301)
 
     for rule in RATE_LIMIT_RULES:
         path_match = request.path.startswith(rule['path']) if rule['prefix'] else request.path == rule['path']
@@ -591,6 +699,33 @@ def residential():
 @app.route('/about')
 def about():
     return redirect(url_for('home') + '#about')
+
+
+def _render_city_landing(slug):
+    city_data = CITY_LANDING_PAGES.get(slug)
+    if not city_data:
+        return redirect(url_for('home'))
+    return render_template('city_landing.html', city=city_data)
+
+
+@app.route('/electrician/murrieta-ca')
+def city_murrieta():
+    return _render_city_landing('murrieta-ca')
+
+
+@app.route('/electrician/temecula-ca')
+def city_temecula():
+    return _render_city_landing('temecula-ca')
+
+
+@app.route('/electrician/lake-elsinore-ca')
+def city_lake_elsinore():
+    return _render_city_landing('lake-elsinore-ca')
+
+
+@app.route('/electrician/menifee-ca')
+def city_menifee():
+    return _render_city_landing('menifee-ca')
 
 @app.route('/contact-submit', methods=['POST'])
 def contact_submit():
@@ -1414,6 +1549,10 @@ def sitemap():
         ('/', 'weekly', '1.0'),
         ('/gallery', 'weekly', '0.9'),
         ('/schedule', 'weekly', '0.9'),
+        ('/electrician/murrieta-ca', 'weekly', '0.8'),
+        ('/electrician/temecula-ca', 'weekly', '0.8'),
+        ('/electrician/lake-elsinore-ca', 'weekly', '0.8'),
+        ('/electrician/menifee-ca', 'weekly', '0.8'),
     ]
     lines = [
         '<?xml version="1.0" encoding="UTF-8"?>',
@@ -1437,7 +1576,13 @@ def robots():
 
 @app.route('/favicon.ico')
 def favicon():
-    return send_from_directory('static/images', 'favicon.ico')
+    return send_from_directory('static/images', 'favicon.png')
+
+
+@app.route('/hello-world')
+@app.route('/hello-world/')
+def legacy_hello_world_redirect():
+    return redirect(url_for('index'), code=301)
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8080))
