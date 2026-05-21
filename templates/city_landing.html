@@ -6,6 +6,9 @@
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
     <title>{{ city.title }}</title>
     <meta name="description" content="{{ city.description }}">
+    {% if city.keywords %}
+    <meta name="keywords" content="{{ city.keywords }}">
+    {% endif %}
     <meta name="robots" content="index, follow">
     <meta property="og:type" content="website">
     <meta property="og:title" content="{{ city.title }}">

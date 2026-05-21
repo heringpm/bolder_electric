@@ -166,18 +166,21 @@ CITY_LANDING_PAGES = {
         'state': 'CA',
         'slug': 'menifee-ca',
         'title': 'Electrician in Menifee, CA | Commercial, Residential & Emergency Electrical Services',
-        'description': 'Bolder Electric offers commercial electrical services, residential electrician work, emergency electrical response, and electrical panel upgrades in Menifee, CA and throughout Riverside County.',
+        'description': 'Bolder Electric offers commercial electrical services, residential electrician work, emergency electrician response, electrical panel upgrades, and electrical panel repair in Menifee, CA and throughout Riverside County.',
+        'keywords': 'electrician menifee ca, emergency electrician menifee ca, commercial electrical services menifee ca, residential electrician menifee ca, electrical panel upgrades menifee ca, electrical panel repair menifee ca, electrical repair menifee ca',
         'hero_title': 'Expert Electrician Services in Menifee, CA',
-        'hero_text': 'As a Riverside County electrical contractor based in Menifee, Bolder Electric provides dependable service for residential projects, commercial work, and emergency electrical needs.',
+        'hero_text': 'As a Riverside County electrical contractor based in Menifee, Bolder Electric provides dependable service for residential projects, commercial work, emergency electrical needs, and electrical panel upgrades.',
         'service_points': [
             'Commercial electrical services for offices, schools, and utility-related work',
             'Residential electrician services for upgrades, troubleshooting, and repairs',
-            'Electrical panel upgrades and electrical panel repair',
-            'Emergency electrician response and fast on-site diagnostics'
+            'Electrical panel upgrades, electrical panel replacement, and electrical panel repair',
+            'Emergency electrician response and fast on-site diagnostics',
+            'Electrical repairs for service calls, troubleshooting, and lighting issues'
         ],
         'faq': [
             ('Do you provide commercial electrical services in Menifee?', 'Yes. We provide commercial electrical services in Menifee including upgrades, distribution work, and diagnostics.'),
             ('Can you help with residential electrical issues in Menifee, CA?', 'Yes. We provide residential electrician services in Menifee for repairs, upgrades, and safety-focused electrical improvements.'),
+            ('Do you perform electrical panel upgrades in Menifee, CA?', 'Yes. We handle electrical panel upgrades and panel repair in Menifee, including service changes and safety-focused modernization work.'),
             ('Do you serve areas outside Menifee?', 'Yes. We serve Menifee, surrounding Riverside County cities, and broader Southern California service areas.')
         ]
     }
