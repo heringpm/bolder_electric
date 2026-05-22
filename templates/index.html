@@ -86,6 +86,14 @@
             transform: none;
         }
 
+        .hero-background {
+            background-image: url("{{ url_for('static', filename='images/hero-photo.png') }}");
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: contain;
+            background-color: #06080b;
+        }
+
         .additional-services-container h2::after,
         .services-header h2::after,
         .services-title::after {
@@ -1323,9 +1331,6 @@
     <main>
         <section id="home" class="hero">
             <div class="hero-background">
-                <picture>
-                    <img src="{{ url_for('static', filename='images/hero-photo.png') }}" alt="Bolder Electric Team and Fleet" class="hero-bg-image" width="2048" height="2048" fetchpriority="high" decoding="async">
-                </picture>
                 <div class="hero-overlay"></div>
             </div>
             <div class="hero-content">
