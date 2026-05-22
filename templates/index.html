@@ -62,25 +62,24 @@
             background: #0a0d12 !important;
         }
 
-        body {
+        main {
             position: relative;
             isolation: isolate;
         }
 
-        body::before {
+        main::before {
             content: '';
-            position: fixed;
+            position: absolute;
             inset: 0;
             z-index: -1;
             pointer-events: none;
-            opacity: 0.18;
-            background-color: #0a0d12;
+            opacity: 0.24;
             background-image:
-                linear-gradient(30deg, rgba(242, 193, 78, 0.32) 12%, transparent 12.5%, transparent 87%, rgba(242, 193, 78, 0.32) 87.5%, rgba(242, 193, 78, 0.32)),
-                linear-gradient(150deg, rgba(242, 193, 78, 0.32) 12%, transparent 12.5%, transparent 87%, rgba(242, 193, 78, 0.32) 87.5%, rgba(242, 193, 78, 0.32)),
-                linear-gradient(90deg, rgba(242, 193, 78, 0.18) 2%, transparent 2.5%, transparent 97%, rgba(242, 193, 78, 0.18) 97.5%, rgba(242, 193, 78, 0.18));
-            background-size: 86px 150px;
-            background-position: 0 0, 0 0, 43px 75px;
+                linear-gradient(30deg, rgba(242, 193, 78, 0.42) 12%, transparent 12.5%, transparent 87%, rgba(242, 193, 78, 0.42) 87.5%, rgba(242, 193, 78, 0.42)),
+                linear-gradient(150deg, rgba(242, 193, 78, 0.42) 12%, transparent 12.5%, transparent 87%, rgba(242, 193, 78, 0.42) 87.5%, rgba(242, 193, 78, 0.42)),
+                linear-gradient(90deg, rgba(242, 193, 78, 0.28) 2%, transparent 2.5%, transparent 97%, rgba(242, 193, 78, 0.28) 97.5%, rgba(242, 193, 78, 0.28));
+            background-size: 92px 160px;
+            background-position: 0 0, 0 0, 46px 80px;
         }
 
         .section-title::after {
@@ -796,7 +795,7 @@
         .about-section,
         .crew-section,
         .contact {
-            background: linear-gradient(180deg, #0a0d12 0%, #121922 100%) !important;
+            background: linear-gradient(180deg, rgba(10, 13, 18, 0.86) 0%, rgba(18, 25, 34, 0.86) 100%) !important;
             color: #e8eef7 !important;
             border-top: none !important;
             border-bottom: none !important;
