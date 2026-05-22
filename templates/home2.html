@@ -9,6 +9,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/privacy-notice.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <script defer src="{{ url_for('static', filename='js/privacy-notice.js') }}" data-ga-measurement-id="G-HPSXGKK99R"></script>
     <style>
         :root {
@@ -94,40 +95,63 @@
             flex-direction: column;
         }
         .card-img {
-            height: 185px;
+            height: 255px;
             border-bottom: 1px solid #5f4719;
             background-size: cover;
             background-position: center;
+            position: relative;
         }
-        .card-body { padding: 18px 16px 16px; display: flex; flex-direction: column; flex: 1; }
+        .card-img::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0) 40%, rgba(3, 5, 8, 0.95) 100%);
+        }
+        .card-body { padding: 18px 16px 16px; display: flex; flex-direction: column; flex: 1; margin-top: -54px; position: relative; z-index: 2; }
         .card-icon {
             width: 58px;
             height: 58px;
             border: 2px solid #b38323;
-            border-radius: 16px;
+            clip-path: polygon(25% 6%, 75% 6%, 100% 50%, 75% 94%, 25% 94%, 0 50%);
             display: inline-flex;
             align-items: center;
             justify-content: center;
             color: #f2c14e;
-            font-size: 1.8rem;
+            font-size: 1.45rem;
             margin-bottom: 14px;
-            background: rgba(0, 0, 0, 0.45);
+            background: rgba(0, 0, 0, 0.78);
         }
         .card h3 {
             color: #f5f0e4;
             margin-bottom: 12px;
-            font-size: 2rem;
-            line-height: 1.05;
+            font-size: 2.7rem;
+            line-height: 0.95;
             text-transform: uppercase;
         }
+        .card h3 .amp { display: block; }
         .card p {
             color: #d1d8e2;
-            font-size: 1.05rem;
+            font-size: 1.1rem;
             line-height: 1.5;
+            margin-bottom: 14px;
+        }
+        .card-rule {
+            width: 48px;
+            height: 3px;
+            border-radius: 3px;
+            background: #c7932d;
             margin-bottom: 14px;
         }
         .card ul { margin-top: auto; list-style: none; color: #f2f6fc; font-size: 1rem; line-height: 1.6; }
         .card li::before { content: "◉"; color: var(--gold); margin-right: 10px; font-size: .7rem; vertical-align: middle; }
+        .card-arrow {
+            margin-top: 8px;
+            color: #c7932d;
+            text-align: right;
+            font-size: 2rem;
+            font-weight: 600;
+            line-height: 1;
+        }
 
         .res-banner {
             margin-top: 14px;
@@ -150,7 +174,7 @@
         .res-content h3 {
             color: #f5f0e4;
             margin-bottom: 8px;
-            font-size: 2.1rem;
+            font-size: 1.9rem;
             line-height: 1;
             text-transform: uppercase;
         }
@@ -182,7 +206,7 @@
         .trust:last-child { border-right: none; }
         .trust .t-icon {
             color: #e0ac32;
-            font-size: 1.7rem;
+            font-size: 1.55rem;
             margin-bottom: 6px;
             display: block;
         }
@@ -240,6 +264,7 @@
             .menu { display: none; }
             .cards, .trust-row { grid-template-columns: 1fr; }
             .card { min-height: 0; }
+            .card h3 { font-size: 2.2rem; }
             .res-banner ul { grid-template-columns: 1fr; }
             .trust { border-right: none; border-bottom: 1px solid #4d3813; }
             .trust:last-child { border-bottom: none; }
@@ -280,52 +305,60 @@
                     <article class="card">
                         <div class="card-img" style="background-image:url('{{ url_for('static', filename='images/new1.jpg') }}');"></div>
                         <div class="card-body">
-                            <div class="card-icon">🏢</div>
-                            <h3>Commercial & Industrial</h3>
+                            <div class="card-icon"><i class="fa-solid fa-city"></i></div>
+                            <h3>Commercial <span class="amp">& Industrial</span></h3>
+                            <div class="card-rule"></div>
                             <p>{{ service_descriptions.get('commercial') or 'Electrical systems for commercial and industrial facilities, from new construction to upgrades and maintenance.' }}</p>
                             <ul>
                                 <li>Electrical Construction</li><li>Tenant Improvements</li><li>Distribution Systems</li><li>Lighting Solutions</li><li>Maintenance & Repairs</li>
                             </ul>
+                            <div class="card-arrow">›</div>
                         </div>
                     </article>
                     <article class="card">
                         <div class="card-img" style="background-image:url('{{ url_for('static', filename='images/new3.jpg') }}');"></div>
                         <div class="card-body">
-                            <div class="card-icon">🔋</div>
-                            <h3>Generator & ATS</h3>
+                            <div class="card-icon"><i class="fa-solid fa-gauge-high"></i></div>
+                            <h3>Generator <span class="amp">& ATS</span></h3>
+                            <div class="card-rule"></div>
                             <p>Backup power systems designed and installed for critical uptime and reliable performance.</p>
                             <ul>
                                 <li>Generator Installation</li><li>ATS Systems</li><li>Preventive Maintenance</li><li>Load Bank Testing</li>
                             </ul>
+                            <div class="card-arrow">›</div>
                         </div>
                     </article>
                     <article class="card">
                         <div class="card-img" style="background-image:url('{{ url_for('static', filename='images/new5.jpg') }}');"></div>
                         <div class="card-body">
-                            <div class="card-icon">⚡</div>
-                            <h3>UPS & Power Protection</h3>
+                            <div class="card-icon"><i class="fa-solid fa-bolt"></i></div>
+                            <h3>UPS & Power <span class="amp">Protection</span></h3>
+                            <div class="card-rule"></div>
                             <p>Protection solutions for mission-critical systems where uninterrupted power is essential.</p>
                             <ul>
                                 <li>UPS Systems</li><li>Surge Protection</li><li>Power Conditioning</li><li>Battery Systems</li>
                             </ul>
+                            <div class="card-arrow">›</div>
                         </div>
                     </article>
                     <article class="card">
                         <div class="card-img" style="background-image:url('{{ url_for('static', filename='images/newerrr.jpg') }}');"></div>
                         <div class="card-body">
-                            <div class="card-icon">💡</div>
-                            <h3>Lighting Infrastructure</h3>
+                            <div class="card-icon"><i class="fa-regular fa-lightbulb"></i></div>
+                            <h3>Lighting <span class="amp">& Infrastructure</span></h3>
+                            <div class="card-rule"></div>
                             <p>Energy-efficient indoor/outdoor lighting to improve visibility, safety, and performance.</p>
                             <ul>
                                 <li>LED Lighting</li><li>Site Lighting</li><li>Infrared Thermography</li><li>Infrastructure Upgrades</li>
                             </ul>
+                            <div class="card-arrow">›</div>
                         </div>
                     </article>
                 </div>
                 <div class="res-banner" id="industries">
                     <div class="res-side-image"></div>
                     <div class="res-content">
-                        <h3>Residential Electrical</h3>
+                        <h3><i class="fa-solid fa-house-chimney"></i> Residential Electrical</h3>
                         <p>{{ service_descriptions.get('residential') or 'Reliable electrical services for homes and homeowners across Riverside County and Southern California.' }}</p>
                         <ul>
                             <li>Panel Upgrades</li><li>Lighting Upgrades</li><li>EV Charger Installation</li><li>Troubleshooting</li><li>Generator Installation</li><li>And More</li>
@@ -334,11 +367,11 @@
                     <div class="res-right-image"></div>
                 </div>
                 <div class="trust-row" id="about">
-                    <div class="trust"><span class="t-icon">🛡️</span><strong>Licensed & Insured</strong><span>Fully Licensed, Bonded & Insured</span></div>
-                    <div class="trust"><span class="t-icon">👥</span><strong>Experienced Team</strong><span>Skilled Electricians Committed to Safety</span></div>
-                    <div class="trust"><span class="t-icon">24/7</span><strong>Emergency Service</strong><span>Rapid Response When You Need It Most</span></div>
-                    <div class="trust"><span class="t-icon">⚙️</span><strong>Quality Guaranteed</strong><span>Built to Code. Built to Last.</span></div>
-                    <div class="trust"><span class="t-icon">★</span><strong>Customer Focused</strong><span>Solutions Tailored to Your Needs</span></div>
+                    <div class="trust"><span class="t-icon"><i class="fa-solid fa-shield"></i></span><strong>Licensed & Insured</strong><span>Fully Licensed, Bonded & Insured</span></div>
+                    <div class="trust"><span class="t-icon"><i class="fa-solid fa-users"></i></span><strong>Experienced Team</strong><span>Skilled Electricians Committed to Safety</span></div>
+                    <div class="trust"><span class="t-icon"><i class="fa-regular fa-clock"></i></span><strong>24/7 Emergency Service</strong><span>Rapid Response When You Need It Most</span></div>
+                    <div class="trust"><span class="t-icon"><i class="fa-solid fa-award"></i></span><strong>Quality Guaranteed</strong><span>Built to Code. Built to Last.</span></div>
+                    <div class="trust"><span class="t-icon"><i class="fa-regular fa-star"></i></span><strong>Customer Focused</strong><span>Solutions Tailored to Your Needs</span></div>
                 </div>
             </div>
         </section>
