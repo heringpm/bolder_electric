@@ -10,6 +10,7 @@ import time
 import secrets
 from datetime import datetime, timedelta
 from collections import defaultdict, deque
+import random
 from database import DatabaseManager
 from functools import wraps
 import smtplib
@@ -679,11 +680,17 @@ def home():
                 service_descriptions['safety'] = description
             service_prices['safety'] = float(base_price) if base_price is not None else service_prices['safety']
     
+    captcha_left = random.randint(2, 9)
+    captcha_right = random.randint(1, 8)
+    session['contact_captcha_answer'] = str(captcha_left + captcha_right)
+    session['contact_captcha_issued_at'] = int(time.time())
+
     return render_template(
         'index.html',
         contact=contact_data,
         service_descriptions=service_descriptions,
-        service_prices=service_prices
+        service_prices=service_prices,
+        contact_captcha_question=f'{captcha_left} + {captcha_right}'
     )
 
 @app.route('/gallery')
@@ -740,6 +747,8 @@ def contact_submit():
         phone = request.form.get('phone')
         service_type = request.form.get('service_type')
         message = request.form.get('message')
+        captcha_answer = (request.form.get('captcha_answer') or '').strip()
+        website_field = (request.form.get('website') or '').strip()
         
         # Validate required fields
         if not all([name, email, phone, service_type, message]):
@@ -747,6 +756,31 @@ def contact_submit():
                 'success': False,
                 'message': 'Please fill out all required fields.'
             }), 400
+
+        # Honeypot field should remain empty for humans.
+        if website_field:
+            return jsonify({
+                'success': False,
+                'message': 'Submission blocked. Please try again.'
+            }), 400
+
+        expected_captcha = (session.get('contact_captcha_answer') or '').strip()
+        issued_at = int(session.get('contact_captcha_issued_at') or 0)
+        captcha_ttl_seconds = 15 * 60
+        if not expected_captcha or not captcha_answer or captcha_answer != expected_captcha:
+            return jsonify({
+                'success': False,
+                'message': 'Captcha verification failed. Please refresh and try again.'
+            }), 400
+        if issued_at and int(time.time()) - issued_at > captcha_ttl_seconds:
+            return jsonify({
+                'success': False,
+                'message': 'Captcha expired. Please refresh and try again.'
+            }), 400
+
+        # One-time captcha token usage.
+        session.pop('contact_captcha_answer', None)
+        session.pop('contact_captcha_issued_at', None)
 
         ip_address = get_client_ip()
         user_agent = request.headers.get('User-Agent', '')
