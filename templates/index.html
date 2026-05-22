@@ -67,27 +67,6 @@
             isolation: isolate;
         }
 
-        main::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            z-index: 0;
-            pointer-events: none;
-            opacity: 0.3;
-            background-image:
-                linear-gradient(30deg, rgba(242, 193, 78, 0.42) 12%, transparent 12.5%, transparent 87%, rgba(242, 193, 78, 0.42) 87.5%, rgba(242, 193, 78, 0.42)),
-                linear-gradient(150deg, rgba(242, 193, 78, 0.42) 12%, transparent 12.5%, transparent 87%, rgba(242, 193, 78, 0.42) 87.5%, rgba(242, 193, 78, 0.42)),
-                linear-gradient(90deg, rgba(242, 193, 78, 0.28) 2%, transparent 2.5%, transparent 97%, rgba(242, 193, 78, 0.28) 97.5%, rgba(242, 193, 78, 0.28));
-            background-size: 92px 160px;
-            background-position: 0 0, 0 0, 46px 80px;
-        }
-
-        main > section,
-        main > div {
-            position: relative;
-            z-index: 1;
-        }
-
         .section-title::after {
             content: none !important;
         }
@@ -801,7 +780,14 @@
         .about-section,
         .crew-section,
         .contact {
-            background: linear-gradient(180deg, rgba(10, 13, 18, 0.86) 0%, rgba(18, 25, 34, 0.86) 100%) !important;
+            background-color: #0a0d12 !important;
+            background-image:
+                linear-gradient(180deg, rgba(10, 13, 18, 0.92) 0%, rgba(18, 25, 34, 0.92) 100%),
+                linear-gradient(30deg, rgba(242, 193, 78, 0.22) 12%, transparent 12.5%, transparent 87%, rgba(242, 193, 78, 0.22) 87.5%, rgba(242, 193, 78, 0.22)),
+                linear-gradient(150deg, rgba(242, 193, 78, 0.22) 12%, transparent 12.5%, transparent 87%, rgba(242, 193, 78, 0.22) 87.5%, rgba(242, 193, 78, 0.22)),
+                linear-gradient(90deg, rgba(242, 193, 78, 0.12) 2%, transparent 2.5%, transparent 97%, rgba(242, 193, 78, 0.12) 97.5%, rgba(242, 193, 78, 0.12)) !important;
+            background-size: auto, 92px 160px, 92px 160px, 92px 160px !important;
+            background-position: 0 0, 0 0, 0 0, 46px 80px !important;
             color: #e8eef7 !important;
             border-top: none !important;
             border-bottom: none !important;
