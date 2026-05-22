@@ -45,6 +45,17 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/privacy-notice.css') }}">
     <script defer src="{{ url_for('static', filename='js/privacy-notice.js') }}" data-ga-measurement-id="G-HPSXGKK99R"></script>
     <style>
+        :root {
+            --primary-red: #d4a017;
+            --primary-black: #06080b;
+            --primary-gold: #f2c14e;
+            --dark-gray: #cfd8e3;
+            --light-gray: #11161d;
+            --white: #f7fbff;
+            --gradient-primary: linear-gradient(135deg, #f2c14e 0%, #b8871a 100%);
+            --gradient-dark: linear-gradient(135deg, #06080b 0%, #151d27 100%);
+        }
+
         .section-title::after {
             content: none !important;
         }
@@ -758,7 +769,7 @@
         .about-section,
         .crew-section,
         .contact {
-            background: linear-gradient(180deg, #0c1015 0%, #090d12 100%) !important;
+            background: linear-gradient(180deg, #0a0d12 0%, #121922 100%) !important;
             color: #e8eef7 !important;
         }
 
@@ -823,34 +834,56 @@
         .crew-card,
         .contact-form,
         .contact-item {
-            background: #161d26 !important;
-            border-color: #2a3441 !important;
+            background: linear-gradient(165deg, #121821 0%, #1a2430 100%) !important;
+            border-color: #334253 !important;
             box-shadow: 0 14px 28px rgba(0, 0, 0, 0.38) !important;
         }
 
         .city-link-chip {
-            background: #111821 !important;
-            border-color: #2f3b4a !important;
+            background: #0f151d !important;
+            border-color: #3a4a5d !important;
             color: #f5f9ff !important;
         }
 
         .city-link-chip:hover {
-            background: #1a2431 !important;
-            border-color: #4c6078 !important;
+            background: #18222f !important;
+            border-color: #d4a017 !important;
             color: #ffffff !important;
         }
 
         .form-group input,
         .form-group select,
         .form-group textarea {
-            background: #0f1620 !important;
+            background: #0c1219 !important;
             color: #f2f7ff !important;
-            border-color: #344457 !important;
+            border-color: #3d4f64 !important;
         }
 
         .form-group input::placeholder,
         .form-group textarea::placeholder {
             color: #aebed2 !important;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary) !important;
+            color: #0b0f14 !important;
+            border-color: #d4a017 !important;
+            font-weight: 700;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #ffd56a 0%, #c2901c 100%) !important;
+            color: #06080b !important;
+        }
+
+        .btn-secondary {
+            border-color: #d4a017 !important;
+            color: #f2c14e !important;
+        }
+
+        .btn-secondary:hover {
+            background: #d4a017 !important;
+            color: #0b0f14 !important;
         }
 
         .captcha-row {
