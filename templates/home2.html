@@ -56,38 +56,145 @@
         .hero-content { display: none; }
 
         section { padding: 46px 0; }
-        .section-head { text-align: center; margin-bottom: 24px; }
-        .section-head .tag { color: var(--gold); letter-spacing: .14em; text-transform: uppercase; font-size: 12px; font-weight: 700; }
-        .section-head h2 { margin-top: 8px; font-size: clamp(1.8rem, 4vw, 3rem); }
 
-        .cards { display: grid; gap: 14px; grid-template-columns: repeat(4, minmax(0, 1fr)); }
-        .card {
-            border: 1px solid #5f4719;
-            background: linear-gradient(165deg, #0f141b 0%, #1a222d 100%);
-            overflow: hidden;
+        .services-section {
+            background: #07090d;
+            border-top: 1px solid #261d0c;
+            border-bottom: 1px solid #261d0c;
+            padding-top: 56px;
+            padding-bottom: 46px;
         }
-        .card-img { height: 170px; background: url("{{ url_for('static', filename='images/hero-photo.png') }}") center/cover no-repeat; border-bottom: 1px solid #5f4719; }
-        .card-body { padding: 16px; }
-        .card h3 { color: var(--gold-2); margin-bottom: 8px; font-size: 1.25rem; }
-        .card p { color: var(--muted); font-size: .95rem; line-height: 1.45; }
-        .card ul { margin-top: 10px; list-style: none; color: #dbe3ef; font-size: .9rem; line-height: 1.55; }
-        .card li::before { content: "✓"; color: var(--gold); margin-right: 8px; }
+        .section-head { text-align: center; margin-bottom: 24px; }
+        .section-head .tag {
+            color: var(--gold);
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            font-size: 12px;
+            font-weight: 700;
+        }
+        .section-head h2 {
+            margin-top: 8px;
+            font-size: clamp(1.8rem, 4vw, 3rem);
+            text-transform: uppercase;
+            letter-spacing: .04em;
+        }
+
+        .cards {
+            display: grid;
+            gap: 14px;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+        .card {
+            border: 1px solid #7d5b1d;
+            border-radius: 8px;
+            background: linear-gradient(180deg, #0b0f14 0%, #080b10 100%);
+            overflow: hidden;
+            min-height: 610px;
+            display: flex;
+            flex-direction: column;
+        }
+        .card-img {
+            height: 185px;
+            border-bottom: 1px solid #5f4719;
+            background-size: cover;
+            background-position: center;
+        }
+        .card-body { padding: 18px 16px 16px; display: flex; flex-direction: column; flex: 1; }
+        .card-icon {
+            width: 58px;
+            height: 58px;
+            border: 2px solid #b38323;
+            border-radius: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #f2c14e;
+            font-size: 1.8rem;
+            margin-bottom: 14px;
+            background: rgba(0, 0, 0, 0.45);
+        }
+        .card h3 {
+            color: #f5f0e4;
+            margin-bottom: 12px;
+            font-size: 2rem;
+            line-height: 1.05;
+            text-transform: uppercase;
+        }
+        .card p {
+            color: #d1d8e2;
+            font-size: 1.05rem;
+            line-height: 1.5;
+            margin-bottom: 14px;
+        }
+        .card ul { margin-top: auto; list-style: none; color: #f2f6fc; font-size: 1rem; line-height: 1.6; }
+        .card li::before { content: "◉"; color: var(--gold); margin-right: 10px; font-size: .7rem; vertical-align: middle; }
 
         .res-banner {
-            margin-top: 16px; border: 1px solid #5f4719;
-            background: linear-gradient(95deg, #0f141b 0%, #151d26 55%, #0f141b 100%);
-            padding: 20px; display: grid; grid-template-columns: 2fr 1fr; gap: 18px; align-items: center;
+            margin-top: 14px;
+            border: 1px solid #7d5b1d;
+            border-radius: 8px;
+            background: linear-gradient(95deg, #0a0d12 0%, #121821 58%, #0a0d12 100%);
+            padding: 0;
+            display: grid;
+            grid-template-columns: 42% 1fr 24%;
+            align-items: stretch;
+            overflow: hidden;
         }
-        .res-banner h3 { color: var(--gold-2); margin-bottom: 8px; font-size: 1.5rem; }
-        .res-banner p { color: var(--muted); line-height: 1.5; }
-        .res-banner ul { margin-top: 8px; display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 6px 12px; list-style: none; color: #deebf9; font-size: .92rem; }
-        .res-banner ul li::before { content: "•"; color: var(--gold); margin-right: 8px; }
-        .res-img { min-height: 200px; background: url("{{ url_for('static', filename='images/hero-photo.png') }}") center/cover no-repeat; border: 1px solid #5f4719; }
+        .res-side-image { min-height: 220px; background: url("{{ url_for('static', filename='images/new4.jpg') }}") center/cover no-repeat; }
+        .res-content {
+            padding: 26px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .res-content h3 {
+            color: #f5f0e4;
+            margin-bottom: 8px;
+            font-size: 2.1rem;
+            line-height: 1;
+            text-transform: uppercase;
+        }
+        .res-content p { color: #d1d8e2; line-height: 1.5; margin-bottom: 12px; }
+        .res-content ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 6px 16px;
+            color: #f0f4fa;
+        }
+        .res-content li::before { content: "◉"; color: var(--gold); margin-right: 8px; font-size: .7rem; vertical-align: middle; }
+        .res-right-image { min-height: 220px; background: url("{{ url_for('static', filename='images/new5.jpg') }}") center/cover no-repeat; }
 
-        .trust-row { margin-top: 16px; display: grid; gap: 10px; grid-template-columns: repeat(5, minmax(0,1fr)); }
-        .trust { border: 1px solid #5f4719; background: #0f141b; padding: 12px; text-align: center; }
-        .trust strong { color: var(--gold); font-size: 1.25rem; display:block; margin-bottom:4px; }
-        .trust span { color: var(--muted); font-size: .88rem; }
+        .trust-row {
+            margin-top: 14px;
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0,1fr));
+            border: 1px solid #7d5b1d;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .trust {
+            border-right: 1px solid #4d3813;
+            background: #0a0d12;
+            padding: 18px 14px;
+            text-align: center;
+        }
+        .trust:last-child { border-right: none; }
+        .trust .t-icon {
+            color: #e0ac32;
+            font-size: 1.7rem;
+            margin-bottom: 6px;
+            display: block;
+        }
+        .trust strong {
+            color: #f1cf7d;
+            font-size: 1.15rem;
+            display:block;
+            margin-bottom:5px;
+            text-transform: uppercase;
+            letter-spacing: .03em;
+        }
+        .trust span { color: #d0d9e6; font-size: .9rem; line-height: 1.4; display: block; }
 
         .contact { border-top: 1px solid #2b210e; }
         .contact-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
@@ -115,9 +222,12 @@
 
         @media (max-width: 1080px) {
             .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-            .trust-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .res-banner {
+                grid-template-columns: 1fr;
+            }
+            .res-side-image, .res-right-image { min-height: 180px; }
+            .trust-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
             .contact-wrap { grid-template-columns: 1fr; }
-            .res-banner { grid-template-columns: 1fr; }
         }
         @media (max-width: 900px) {
             .menu { gap: 14px; }
@@ -129,7 +239,10 @@
             }
             .menu { display: none; }
             .cards, .trust-row { grid-template-columns: 1fr; }
+            .card { min-height: 0; }
             .res-banner ul { grid-template-columns: 1fr; }
+            .trust { border-right: none; border-bottom: 1px solid #4d3813; }
+            .trust:last-child { border-bottom: none; }
         }
     </style>
 </head>
@@ -157,7 +270,7 @@
             <div class="hero-overlay"></div>
         </section>
 
-        <section id="services">
+        <section id="services" class="services-section">
             <div class="container">
                 <div class="section-head">
                     <div class="tag">Our Services</div>
@@ -165,18 +278,20 @@
                 </div>
                 <div class="cards">
                     <article class="card">
-                        <div class="card-img"></div>
+                        <div class="card-img" style="background-image:url('{{ url_for('static', filename='images/new1.jpg') }}');"></div>
                         <div class="card-body">
+                            <div class="card-icon">🏢</div>
                             <h3>Commercial & Industrial</h3>
                             <p>{{ service_descriptions.get('commercial') or 'Electrical systems for commercial and industrial facilities, from new construction to upgrades and maintenance.' }}</p>
                             <ul>
-                                <li>Electrical Construction</li><li>Tenant Improvements</li><li>Distribution Systems</li><li>Maintenance & Repairs</li>
+                                <li>Electrical Construction</li><li>Tenant Improvements</li><li>Distribution Systems</li><li>Lighting Solutions</li><li>Maintenance & Repairs</li>
                             </ul>
                         </div>
                     </article>
                     <article class="card">
-                        <div class="card-img"></div>
+                        <div class="card-img" style="background-image:url('{{ url_for('static', filename='images/new3.jpg') }}');"></div>
                         <div class="card-body">
+                            <div class="card-icon">🔋</div>
                             <h3>Generator & ATS</h3>
                             <p>Backup power systems designed and installed for critical uptime and reliable performance.</p>
                             <ul>
@@ -185,8 +300,9 @@
                         </div>
                     </article>
                     <article class="card">
-                        <div class="card-img"></div>
+                        <div class="card-img" style="background-image:url('{{ url_for('static', filename='images/new5.jpg') }}');"></div>
                         <div class="card-body">
+                            <div class="card-icon">⚡</div>
                             <h3>UPS & Power Protection</h3>
                             <p>Protection solutions for mission-critical systems where uninterrupted power is essential.</p>
                             <ul>
@@ -195,8 +311,9 @@
                         </div>
                     </article>
                     <article class="card">
-                        <div class="card-img"></div>
+                        <div class="card-img" style="background-image:url('{{ url_for('static', filename='images/newerrr.jpg') }}');"></div>
                         <div class="card-body">
+                            <div class="card-icon">💡</div>
                             <h3>Lighting Infrastructure</h3>
                             <p>Energy-efficient indoor/outdoor lighting to improve visibility, safety, and performance.</p>
                             <ul>
@@ -206,21 +323,22 @@
                     </article>
                 </div>
                 <div class="res-banner" id="industries">
-                    <div>
+                    <div class="res-side-image"></div>
+                    <div class="res-content">
                         <h3>Residential Electrical</h3>
                         <p>{{ service_descriptions.get('residential') or 'Reliable electrical services for homes and homeowners across Riverside County and Southern California.' }}</p>
                         <ul>
                             <li>Panel Upgrades</li><li>Lighting Upgrades</li><li>EV Charger Installation</li><li>Troubleshooting</li><li>Generator Installation</li><li>And More</li>
                         </ul>
                     </div>
-                    <div class="res-img"></div>
+                    <div class="res-right-image"></div>
                 </div>
                 <div class="trust-row" id="about">
-                    <div class="trust"><strong>Licensed</strong><span>Fully Licensed, Bonded & Insured</span></div>
-                    <div class="trust"><strong>Experienced</strong><span>Skilled Electricians Committed to Safety</span></div>
-                    <div class="trust"><strong>24/7</strong><span>Rapid Emergency Response</span></div>
-                    <div class="trust"><strong>Quality</strong><span>Built to Last</span></div>
-                    <div class="trust"><strong>Customer First</strong><span>Solutions Tailored to Your Needs</span></div>
+                    <div class="trust"><span class="t-icon">🛡️</span><strong>Licensed & Insured</strong><span>Fully Licensed, Bonded & Insured</span></div>
+                    <div class="trust"><span class="t-icon">👥</span><strong>Experienced Team</strong><span>Skilled Electricians Committed to Safety</span></div>
+                    <div class="trust"><span class="t-icon">24/7</span><strong>Emergency Service</strong><span>Rapid Response When You Need It Most</span></div>
+                    <div class="trust"><span class="t-icon">⚙️</span><strong>Quality Guaranteed</strong><span>Built to Code. Built to Last.</span></div>
+                    <div class="trust"><span class="t-icon">★</span><strong>Customer Focused</strong><span>Solutions Tailored to Your Needs</span></div>
                 </div>
             </div>
         </section>
