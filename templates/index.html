@@ -78,8 +78,9 @@
         }
 
         .hero {
-            min-height: 72vh !important;
-            padding: 24px 0 !important;
+            min-height: 100vh !important;
+            height: 100vh !important;
+            padding: 0 !important;
         }
 
         .hero-content {
@@ -90,7 +91,7 @@
             background-image: url("{{ url_for('static', filename='images/hero-photo.png') }}");
             background-repeat: no-repeat;
             background-position: center center;
-            background-size: contain;
+            background-size: cover;
             background-color: #06080b;
         }
 
