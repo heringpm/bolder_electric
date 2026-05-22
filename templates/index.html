@@ -754,6 +754,7 @@
 
         .services-new,
         .local-seo-section,
+        .additional-services-section,
         .about-section,
         .crew-section,
         .contact {
@@ -761,10 +762,27 @@
             color: #e8eef7 !important;
         }
 
+        .additional-services-section::before,
+        .about-section::before {
+            background: linear-gradient(180deg, #0c1015 0%, #090d12 100%) !important;
+        }
+
+        .additional-services-container,
+        .about-section .additional-services-container {
+            background: transparent !important;
+        }
+
+        .additional-services-container h2,
+        .about-section .additional-services-container h2 {
+            background: transparent !important;
+            color: #f7fbff !important;
+        }
+
         .services-subtitle,
         .local-seo-intro,
         .local-seo-card p,
         .seo-faq-item p,
+        .service-card-new p,
         .contact-info p,
         .about-main p,
         .about-panel p,
