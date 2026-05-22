@@ -56,6 +56,12 @@
             --gradient-dark: linear-gradient(135deg, #06080b 0%, #151d27 100%);
         }
 
+        html,
+        body,
+        main {
+            background: #0a0d12 !important;
+        }
+
         .section-title::after {
             content: none !important;
         }
@@ -771,11 +777,40 @@
         .contact {
             background: linear-gradient(180deg, #0a0d12 0%, #121922 100%) !important;
             color: #e8eef7 !important;
+            border-top: none !important;
+            border-bottom: none !important;
         }
 
         .additional-services-section::before,
         .about-section::before {
             background: linear-gradient(180deg, #0c1015 0%, #090d12 100%) !important;
+        }
+
+        .additional-services-section::before,
+        .about-section::before,
+        .crew-section::before,
+        .contact::before,
+        .local-seo-section::before,
+        .local-seo-section::after {
+            content: none !important;
+            display: none !important;
+            border: none !important;
+        }
+
+        .crew-section {
+            border-top: none !important;
+            border-bottom: none !important;
+        }
+
+        .local-seo-section {
+            border-top: none !important;
+            border-bottom: none !important;
+        }
+
+        .gallery-cta {
+            margin-top: 0 !important;
+            border-top: none !important;
+            box-shadow: none !important;
         }
 
         .additional-services-container,
