@@ -25,12 +25,29 @@
         body { font-family: "Inter", "Segoe UI", sans-serif; background: var(--bg); color: var(--text); }
         .container { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
         .nav { position: sticky; top: 0; z-index: 50; background: rgba(7,9,13,0.9); backdrop-filter: blur(8px); border-bottom: 1px solid #211a0d; }
-        .nav-inner { height: 78px; display: flex; align-items: center; justify-content: space-between; }
+        .nav-inner {
+            height: 78px;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 20px;
+        }
         .logo img { width: 70px; height: 70px; object-fit: contain; }
-        .menu { display: flex; gap: 22px; list-style: none; }
+        .menu {
+            display: flex;
+            gap: 22px;
+            list-style: none;
+            justify-content: center;
+            justify-self: center;
+        }
         .menu a { color: var(--text); text-decoration: none; font-weight: 600; font-size: 13px; letter-spacing: .05em; text-transform: uppercase; }
         .menu a:hover, .menu .active { color: var(--gold); }
-        .phone { color: var(--gold-2); font-weight: 700; }
+        .phone {
+            color: var(--gold-2);
+            font-weight: 700;
+            white-space: nowrap;
+            justify-self: end;
+        }
 
         .hero { min-height: 88vh; position: relative; overflow: hidden; border-bottom: 1px solid #211a0d; }
         .hero::before {
@@ -126,7 +143,14 @@
             .contact-wrap { grid-template-columns: 1fr; }
             .res-banner { grid-template-columns: 1fr; }
         }
+        @media (max-width: 900px) {
+            .menu { gap: 14px; }
+            .menu a { font-size: 12px; }
+        }
         @media (max-width: 680px) {
+            .nav-inner {
+                grid-template-columns: auto 1fr;
+            }
             .menu { display: none; }
             .cards, .hero-kpis, .trust-row { grid-template-columns: 1fr; }
             .hero-panel { clip-path: none; border-radius: 14px; padding: 26px 18px; }
@@ -137,9 +161,17 @@
 <body>
     <nav class="nav">
         <div class="container nav-inner">
-            <a class="logo" href="{{ url_for('home2') }}">
+            <a class="logo" href="{{ url_for('home') }}">
                 <img src="{{ url_for('static', filename='images/shield-final-160.png') }}" alt="Bolder Electric">
             </a>
+            <ul class="menu">
+                <li><a href="#home" class="active">Home</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="{{ url_for('gallery') }}">Projects</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#industries">Industries</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
             <div class="phone">{{ contact.phone }}</div>
         </div>
     </nav>

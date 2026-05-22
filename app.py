@@ -592,7 +592,7 @@ Bolder Electric
 @app.route('/')
 def home():
     context = _build_home_context()
-    return render_template('index.html', **context)
+    return render_template('home2.html', **context)
 
 
 def _build_home_context():
