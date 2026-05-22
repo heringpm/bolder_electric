@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bolder Electric | Critical Power & Electrical Infrastructure</title>
+    <meta name="description" content="Bolder Electric delivers commercial, industrial, mission-critical, and residential electrical solutions with rapid response and quality workmanship.">
+    <meta name="robots" content="index, follow">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/privacy-notice.css') }}">
+    <script defer src="{{ url_for('static', filename='js/privacy-notice.js') }}" data-ga-measurement-id="G-HPSXGKK99R"></script>
+    <style>
+        :root {
+            --bg: #07090d;
+            --panel: #11161d;
+            --panel-2: #171f29;
+            --gold: #e0ac32;
+            --gold-2: #f3cb6f;
+            --text: #f2f5fb;
+            --muted: #c6cfdd;
+            --line: #3a2d12;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: "Inter", "Segoe UI", sans-serif; background: var(--bg); color: var(--text); }
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 20px; }
+        .nav { position: sticky; top: 0; z-index: 50; background: rgba(7,9,13,0.9); backdrop-filter: blur(8px); border-bottom: 1px solid #211a0d; }
+        .nav-inner { height: 78px; display: flex; align-items: center; justify-content: space-between; }
+        .logo img { width: 70px; height: 70px; object-fit: contain; }
+        .menu { display: flex; gap: 22px; list-style: none; }
+        .menu a { color: var(--text); text-decoration: none; font-weight: 600; font-size: 13px; letter-spacing: .05em; text-transform: uppercase; }
+        .menu a:hover, .menu .active { color: var(--gold); }
+        .phone { color: var(--gold-2); font-weight: 700; }
+
+        .hero { min-height: 88vh; position: relative; overflow: hidden; border-bottom: 1px solid #211a0d; }
+        .hero::before {
+            content: ""; position: absolute; inset: 0;
+            background-image:
+                linear-gradient(30deg, rgba(224,172,50,.32) 12%, transparent 12.5%, transparent 87%, rgba(224,172,50,.32) 87.5%, rgba(224,172,50,.32)),
+                linear-gradient(150deg, rgba(224,172,50,.32) 12%, transparent 12.5%, transparent 87%, rgba(224,172,50,.32) 87.5%, rgba(224,172,50,.32)),
+                linear-gradient(90deg, rgba(224,172,50,.22) 2%, transparent 2.5%, transparent 97%, rgba(224,172,50,.22) 97.5%, rgba(224,172,50,.22));
+            background-size: 88px 152px;
+            background-position: 0 0, 0 0, 44px 76px;
+            opacity: .25;
+        }
+        .hero-bg { position: absolute; inset: 0; background: url("{{ url_for('static', filename='images/hero-photo.png') }}") center/cover no-repeat; opacity: .45; }
+        .hero-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(7,9,13,.2), rgba(7,9,13,.85)); }
+        .hero-content { position: relative; z-index: 2; padding: 90px 0 60px; }
+        .hero-panel {
+            max-width: 820px; margin: 0 auto; text-align: center; padding: 44px 32px;
+            background: linear-gradient(160deg, rgba(13,17,23,.92), rgba(20,27,36,.94));
+            border: 1px solid #6a501b; box-shadow: 0 20px 40px rgba(0,0,0,.45);
+            clip-path: polygon(6% 0, 94% 0, 100% 50%, 94% 100%, 6% 100%, 0 50%);
+        }
+        .eyebrow { color: var(--gold-2); text-transform: uppercase; letter-spacing: .18em; font-weight: 700; font-size: 13px; margin-bottom: 12px; }
+        .hero h1 { font-size: clamp(2.2rem, 6vw, 4.3rem); line-height: 1; margin-bottom: 10px; }
+        .hero h1 span { color: var(--gold); }
+        .hero p { color: var(--muted); font-size: clamp(1rem, 2vw, 1.3rem); }
+        .hero-kpis { margin-top: 34px; display: grid; gap: 14px; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        .kpi { background: rgba(11,14,19,.82); border: 1px solid #4d3a14; padding: 14px; text-align: center; }
+        .kpi strong { display: block; color: var(--gold); font-size: .98rem; margin-bottom: 5px; }
+        .kpi span { color: #e7edf8; font-size: .9rem; }
+
+        section { padding: 46px 0; }
+        .section-head { text-align: center; margin-bottom: 24px; }
+        .section-head .tag { color: var(--gold); letter-spacing: .14em; text-transform: uppercase; font-size: 12px; font-weight: 700; }
+        .section-head h2 { margin-top: 8px; font-size: clamp(1.8rem, 4vw, 3rem); }
+
+        .cards { display: grid; gap: 14px; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        .card {
+            border: 1px solid #5f4719;
+            background: linear-gradient(165deg, #0f141b 0%, #1a222d 100%);
+            overflow: hidden;
+        }
+        .card-img { height: 170px; background: url("{{ url_for('static', filename='images/hero-photo.png') }}") center/cover no-repeat; border-bottom: 1px solid #5f4719; }
+        .card-body { padding: 16px; }
+        .card h3 { color: var(--gold-2); margin-bottom: 8px; font-size: 1.25rem; }
+        .card p { color: var(--muted); font-size: .95rem; line-height: 1.45; }
+        .card ul { margin-top: 10px; list-style: none; color: #dbe3ef; font-size: .9rem; line-height: 1.55; }
+        .card li::before { content: "✓"; color: var(--gold); margin-right: 8px; }
+
+        .res-banner {
+            margin-top: 16px; border: 1px solid #5f4719;
+            background: linear-gradient(95deg, #0f141b 0%, #151d26 55%, #0f141b 100%);
+            padding: 20px; display: grid; grid-template-columns: 2fr 1fr; gap: 18px; align-items: center;
+        }
+        .res-banner h3 { color: var(--gold-2); margin-bottom: 8px; font-size: 1.5rem; }
+        .res-banner p { color: var(--muted); line-height: 1.5; }
+        .res-banner ul { margin-top: 8px; display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 6px 12px; list-style: none; color: #deebf9; font-size: .92rem; }
+        .res-banner ul li::before { content: "•"; color: var(--gold); margin-right: 8px; }
+        .res-img { min-height: 200px; background: url("{{ url_for('static', filename='images/hero-photo.png') }}") center/cover no-repeat; border: 1px solid #5f4719; }
+
+        .trust-row { margin-top: 16px; display: grid; gap: 10px; grid-template-columns: repeat(5, minmax(0,1fr)); }
+        .trust { border: 1px solid #5f4719; background: #0f141b; padding: 12px; text-align: center; }
+        .trust strong { color: var(--gold); font-size: 1.25rem; display:block; margin-bottom:4px; }
+        .trust span { color: var(--muted); font-size: .88rem; }
+
+        .contact { border-top: 1px solid #2b210e; }
+        .contact-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+        .panel { background: #121922; border: 1px solid #5f4719; padding: 20px; }
+        .panel h3 { color: var(--gold-2); margin-bottom: 10px; }
+        .panel p { color: var(--muted); margin-bottom: 10px; }
+        .details div { margin-bottom: 8px; color: #e4ebf6; }
+        .details strong { color: var(--gold); }
+        .form input, .form select, .form textarea {
+            width: 100%; margin-bottom: 10px; padding: 11px 12px;
+            color: #f7fbff; background: #0b1016; border: 1px solid #455469;
+        }
+        .captcha { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: center; color: var(--gold-2); margin-bottom: 10px; font-weight: 700; }
+        .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+        .btns { display: flex; gap: 10px; flex-wrap: wrap; }
+        .btn {
+            text-decoration: none; border: 1px solid #c79425;
+            background: linear-gradient(135deg, #f2c14e, #b8871a); color: #0a0d12;
+            padding: 12px 18px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase;
+        }
+        .btn.alt { background: #0f141b; color: var(--gold-2); }
+        .msg { margin-top: 12px; display: none; }
+
+        footer { border-top: 1px solid #2b210e; padding: 20px 0; text-align: center; color: #a8b4c7; }
+
+        @media (max-width: 1080px) {
+            .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .hero-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .trust-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .contact-wrap { grid-template-columns: 1fr; }
+            .res-banner { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 680px) {
+            .menu { display: none; }
+            .cards, .hero-kpis, .trust-row { grid-template-columns: 1fr; }
+            .hero-panel { clip-path: none; border-radius: 14px; padding: 26px 18px; }
+            .res-banner ul { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="container nav-inner">
+            <a class="logo" href="{{ url_for('home2') }}">
+                <img src="{{ url_for('static', filename='images/shield-final-160.png') }}" alt="Bolder Electric">
+            </a>
+            <ul class="menu">
+                <li><a href="{{ url_for('home2') }}" class="active">Home</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="{{ url_for('gallery') }}">Projects</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#industries">Industries</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="phone">{{ contact.phone }}</div>
+        </div>
+    </nav>
+
+    <main>
+        <section class="hero" id="home">
+            <div class="hero-bg"></div>
+            <div class="hero-overlay"></div>
+            <div class="container hero-content">
+                <div class="hero-panel">
+                    <div class="eyebrow">Critical Power &</div>
+                    <h1>Electrical <span>Infrastructure</span></h1>
+                    <p>Commercial • Industrial • Mission Critical</p>
+                </div>
+                <div class="hero-kpis">
+                    <div class="kpi"><strong>Expert Solutions</strong><span>Commercial & Industrial</span></div>
+                    <div class="kpi"><strong>24/7 Response</strong><span>Emergency Service</span></div>
+                    <div class="kpi"><strong>Licensed & Insured</strong><span>CA Lic. #1098765</span></div>
+                    <div class="kpi"><strong>Built to Last</strong><span>Quality Workmanship</span></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="services">
+            <div class="container">
+                <div class="section-head">
+                    <div class="tag">Our Services</div>
+                    <h2>Complete Electrical Solutions</h2>
+                </div>
+                <div class="cards">
+                    <article class="card">
+                        <div class="card-img"></div>
+                        <div class="card-body">
+                            <h3>Commercial & Industrial</h3>
+                            <p>{{ service_descriptions.get('commercial') or 'Electrical systems for commercial and industrial facilities, from new construction to upgrades and maintenance.' }}</p>
+                            <ul>
+                                <li>Electrical Construction</li><li>Tenant Improvements</li><li>Distribution Systems</li><li>Maintenance & Repairs</li>
+                            </ul>
+                        </div>
+                    </article>
+                    <article class="card">
+                        <div class="card-img"></div>
+                        <div class="card-body">
+                            <h3>Generator & ATS</h3>
+                            <p>Backup power systems designed and installed for critical uptime and reliable performance.</p>
+                            <ul>
+                                <li>Generator Installation</li><li>ATS Systems</li><li>Preventive Maintenance</li><li>Load Bank Testing</li>
+                            </ul>
+                        </div>
+                    </article>
+                    <article class="card">
+                        <div class="card-img"></div>
+                        <div class="card-body">
+                            <h3>UPS & Power Protection</h3>
+                            <p>Protection solutions for mission-critical systems where uninterrupted power is essential.</p>
+                            <ul>
+                                <li>UPS Systems</li><li>Surge Protection</li><li>Power Conditioning</li><li>Battery Systems</li>
+                            </ul>
+                        </div>
+                    </article>
+                    <article class="card">
+                        <div class="card-img"></div>
+                        <div class="card-body">
+                            <h3>Lighting Infrastructure</h3>
+                            <p>Energy-efficient indoor/outdoor lighting to improve visibility, safety, and performance.</p>
+                            <ul>
+                                <li>LED Lighting</li><li>Site Lighting</li><li>Infrared Thermography</li><li>Infrastructure Upgrades</li>
+                            </ul>
+                        </div>
+                    </article>
+                </div>
+                <div class="res-banner" id="industries">
+                    <div>
+                        <h3>Residential Electrical</h3>
+                        <p>{{ service_descriptions.get('residential') or 'Reliable electrical services for homes and homeowners across Riverside County and Southern California.' }}</p>
+                        <ul>
+                            <li>Panel Upgrades</li><li>Lighting Upgrades</li><li>EV Charger Installation</li><li>Troubleshooting</li><li>Generator Installation</li><li>And More</li>
+                        </ul>
+                    </div>
+                    <div class="res-img"></div>
+                </div>
+                <div class="trust-row" id="about">
+                    <div class="trust"><strong>Licensed</strong><span>Fully Licensed, Bonded & Insured</span></div>
+                    <div class="trust"><strong>Experienced</strong><span>Skilled Electricians Committed to Safety</span></div>
+                    <div class="trust"><strong>24/7</strong><span>Rapid Emergency Response</span></div>
+                    <div class="trust"><strong>Quality</strong><span>Built to Last</span></div>
+                    <div class="trust"><strong>Customer First</strong><span>Solutions Tailored to Your Needs</span></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="contact" id="contact">
+            <div class="container contact-wrap">
+                <div class="panel">
+                    <h3>Contact Bolder Electric</h3>
+                    <p>Commercial, industrial, emergency, and residential electrical services.</p>
+                    <div class="details">
+                        <div><strong>Phone:</strong> {{ contact.phone }}</div>
+                        <div><strong>Email:</strong> support@bolderelectric.com</div>
+                        <div><strong>Address:</strong> {{ contact.address }}</div>
+                        <div><strong>Service Area:</strong> {{ contact.service_area }}</div>
+                        <div><strong>Hours:</strong> {{ contact.business_hours }}</div>
+                    </div>
+                </div>
+                <div class="panel form">
+                    <h3>Request Service</h3>
+                    <form id="contactForm" method="POST" action="/contact-submit">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <input type="text" name="name" placeholder="Your Name" required>
+                        <input type="email" name="email" placeholder="Your Email" required>
+                        <input type="tel" name="phone" placeholder="Your Phone Number" required>
+                        <select name="service_type" required>
+                            <option value="">Select Service Type</option>
+                            <option value="commercial">Commercial Electrical</option>
+                            <option value="residential">Residential Electrical</option>
+                            <option value="emergency">Emergency Service</option>
+                            <option value="panel">Panel Upgrade</option>
+                            <option value="lighting">Lighting Installation</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <textarea name="message" rows="4" placeholder="Tell us about your project..." required></textarea>
+                        <label class="captcha">
+                            <span>Captcha: {{ contact_captcha_question }} =</span>
+                            <input type="number" name="captcha_answer" required>
+                        </label>
+                        <div class="hp" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off"></div>
+                        <div class="btns">
+                            <button class="btn" type="submit">Send Message</button>
+                            <a class="btn alt" href="{{ url_for('schedule') }}">Schedule Online</a>
+                        </div>
+                    </form>
+                    <div id="formMessage" class="msg"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">© 2026 Bolder Electric. All rights reserved.</div>
+    </footer>
+
+    <script>
+        (function () {
+            const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+            if (!token || typeof window.fetch !== 'function') return;
+            const originalFetch = window.fetch.bind(window);
+            window.fetch = (input, init = {}) => {
+                const options = { ...init };
+                const method = (options.method || 'GET').toUpperCase();
+                if (!['GET', 'HEAD', 'OPTIONS', 'TRACE'].includes(method)) {
+                    const headers = new Headers(options.headers || {});
+                    if (!headers.has('X-CSRF-Token')) headers.set('X-CSRF-Token', token);
+                    options.headers = headers;
+                }
+                return originalFetch(input, options);
+            };
+        })();
+
+        const form = document.getElementById('contactForm');
+        const formMessage = document.getElementById('formMessage');
+        if (form) {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                formMessage.style.display = 'none';
+                const data = new FormData(form);
+                try {
+                    const response = await fetch('/contact-submit', { method: 'POST', body: data });
+                    const result = await response.json();
+                    formMessage.style.display = 'block';
+                    if (result.success) {
+                        formMessage.innerHTML = '<div style="color:#90ee90">Thank you. Your request has been submitted.</div>';
+                        form.reset();
+                    } else {
+                        formMessage.innerHTML = `<div style="color:#ffb4b4">${result.message || 'Unable to submit request.'}</div>`;
+                    }
+                } catch (error) {
+                    formMessage.style.display = 'block';
+                    formMessage.innerHTML = '<div style="color:#ffb4b4">An error occurred. Please try again.</div>';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

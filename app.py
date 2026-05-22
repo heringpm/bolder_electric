@@ -591,6 +591,11 @@ Bolder Electric
 
 @app.route('/')
 def home():
+    context = _build_home_context()
+    return render_template('index.html', **context)
+
+
+def _build_home_context():
     # Get contact info for display
     contact_info = db.get_contact_info()
     contact_data = {
@@ -685,13 +690,18 @@ def home():
     session['contact_captcha_answer'] = str(captcha_left + captcha_right)
     session['contact_captcha_issued_at'] = int(time.time())
 
-    return render_template(
-        'index.html',
-        contact=contact_data,
-        service_descriptions=service_descriptions,
-        service_prices=service_prices,
-        contact_captcha_question=f'{captcha_left} + {captcha_right}'
-    )
+    return {
+        'contact': contact_data,
+        'service_descriptions': service_descriptions,
+        'service_prices': service_prices,
+        'contact_captcha_question': f'{captcha_left} + {captcha_right}'
+    }
+
+
+@app.route('/home2')
+def home2():
+    context = _build_home_context()
+    return render_template('home2.html', **context)
 
 @app.route('/gallery')
 def gallery():
