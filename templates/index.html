@@ -45,28 +45,6 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/privacy-notice.css') }}">
     <script defer src="{{ url_for('static', filename='js/privacy-notice.js') }}" data-ga-measurement-id="G-HPSXGKK99R"></script>
     <style>
-        :root {
-            --primary-red: #d4a017;
-            --primary-black: #06080b;
-            --primary-gold: #f2c14e;
-            --dark-gray: #cfd8e3;
-            --light-gray: #11161d;
-            --white: #f7fbff;
-            --gradient-primary: linear-gradient(135deg, #f2c14e 0%, #b8871a 100%);
-            --gradient-dark: linear-gradient(135deg, #06080b 0%, #151d27 100%);
-        }
-
-        html,
-        body,
-        main {
-            background: #0a0d12 !important;
-        }
-
-        main {
-            position: relative;
-            isolation: isolate;
-        }
-
         .section-title::after {
             content: none !important;
         }
@@ -76,28 +54,14 @@
             display: none !important;
             background: none !important;
         }
-        .hero-overlay {
-            display: none !important;
-            background: none !important;
-            opacity: 0 !important;
-        }
 
         .hero {
-            min-height: 82vh !important;
-            height: 82vh !important;
-            padding: 0 !important;
+            min-height: 72vh !important;
+            padding: 24px 0 !important;
         }
 
         .hero-content {
             transform: none;
-        }
-
-        .hero-background {
-            background-image: url("{{ url_for('static', filename='images/hero-photo.png') }}");
-            background-repeat: no-repeat;
-            background-position: center center;
-            background-size: cover;
-            background-color: #06080b;
         }
 
         .additional-services-container h2::after,
@@ -788,210 +752,6 @@
             color: #111111;
         }
 
-        .services-new,
-        .local-seo-section,
-        .additional-services-section,
-        .about-section,
-        .crew-section,
-        .contact {
-            background-color: #0a0d12 !important;
-            background-image: linear-gradient(180deg, rgba(10, 13, 18, 0.94) 0%, rgba(18, 25, 34, 0.94) 100%) !important;
-            color: #e8eef7 !important;
-            border-top: none !important;
-            border-bottom: none !important;
-        }
-
-        .additional-services-section::before,
-        .about-section::before {
-            background: linear-gradient(180deg, #0c1015 0%, #090d12 100%) !important;
-        }
-
-        .additional-services-section::before,
-        .about-section::before,
-        .crew-section::before,
-        .contact::before,
-        .local-seo-section::before,
-        .local-seo-section::after {
-            content: none !important;
-            display: none !important;
-            border: none !important;
-        }
-
-        .crew-section {
-            border-top: none !important;
-            border-bottom: none !important;
-        }
-
-        .local-seo-section {
-            border-top: none !important;
-            border-bottom: none !important;
-        }
-
-        .gallery-cta {
-            margin-top: 0 !important;
-            border-top: none !important;
-            box-shadow: none !important;
-        }
-
-        .additional-services-container,
-        .about-section .additional-services-container {
-            background: transparent !important;
-        }
-
-        .additional-services-container h2,
-        .about-section .additional-services-container h2 {
-            background: transparent !important;
-            color: #f7fbff !important;
-        }
-
-        .services-subtitle,
-        .local-seo-intro,
-        .local-seo-card p,
-        .seo-faq-item p,
-        .service-card-new p,
-        .contact-info p,
-        .about-main p,
-        .about-panel p,
-        .crew-feature-content p,
-        .crew-role,
-        .service-card-content p,
-        .service-list li,
-        .contact-item,
-        .contact-item strong,
-        .footer-contact p {
-            color: #d3deec !important;
-        }
-
-        .services-title,
-        .section-title,
-        .local-seo-card h3,
-        .seo-faq-item h4,
-        .about-main h3,
-        .about-panel h4,
-        .crew-headline,
-        .crew-feature-name,
-        .crew-card h4,
-        .contact-info h3,
-        .service-card-header h3,
-        .service-card-new h4,
-        .city-links-title {
-            color: #f7fbff !important;
-        }
-
-        .crew-feature-role {
-            color: #f2c14e !important;
-        }
-
-        .service-main-card,
-        .local-seo-card,
-        .city-links-wrap,
-        .seo-faq-item,
-        .service-card-new,
-        .about-main,
-        .about-video-card,
-        .about-panel,
-        .crew-feature,
-        .crew-card,
-        .contact-form,
-        .contact-item {
-            background: linear-gradient(165deg, #121821 0%, #1a2430 100%) !important;
-            border-color: #334253 !important;
-            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.38) !important;
-        }
-
-        /* Trial: dark-gold panels for key info boxes */
-        .service-card-new,
-        .about-panel,
-        .contact-item {
-            background: linear-gradient(160deg, #3b2a0c 0%, #6d4d18 55%, #8a6320 100%) !important;
-            border-color: #d4a017 !important;
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.34) !important;
-        }
-
-        .service-card-new h4,
-        .about-panel h4,
-        .contact-item,
-        .contact-item strong {
-            color: #fff5dc !important;
-        }
-
-        .service-card-new p,
-        .about-panel p {
-            color: #f5e6c2 !important;
-        }
-
-        .city-link-chip {
-            background: #0f151d !important;
-            border-color: #3a4a5d !important;
-            color: #f5f9ff !important;
-        }
-
-        .city-link-chip:hover {
-            background: #18222f !important;
-            border-color: #d4a017 !important;
-            color: #ffffff !important;
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            background: #0c1219 !important;
-            color: #f2f7ff !important;
-            border-color: #3d4f64 !important;
-        }
-
-        .form-group input::placeholder,
-        .form-group textarea::placeholder {
-            color: #aebed2 !important;
-        }
-
-        .btn-primary {
-            background: var(--gradient-primary) !important;
-            color: #0b0f14 !important;
-            border-color: #d4a017 !important;
-            font-weight: 700;
-        }
-
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #ffd56a 0%, #c2901c 100%) !important;
-            color: #06080b !important;
-        }
-
-        .btn-secondary {
-            border-color: #d4a017 !important;
-            color: #f2c14e !important;
-        }
-
-        .btn-secondary:hover {
-            background: #d4a017 !important;
-            color: #0b0f14 !important;
-        }
-
-        .captcha-row {
-            display: flex;
-            gap: 0.75rem;
-            align-items: center;
-        }
-
-        .captcha-label {
-            min-width: 120px;
-            font-weight: 700;
-            color: #f2f7ff;
-        }
-
-        .captcha-row input {
-            flex: 1;
-        }
-
-        .hp-field {
-            position: absolute !important;
-            left: -9999px !important;
-            width: 1px !important;
-            height: 1px !important;
-            opacity: 0 !important;
-            pointer-events: none !important;
-        }
-
         @media (max-width: 900px) {
             .hero {
                 min-height: 64vh !important;
@@ -1337,7 +1097,33 @@
     <main>
         <section id="home" class="hero">
             <div class="hero-background">
+                <picture>
+                    <source type="image/webp" srcset="{{ url_for('static', filename='images/hero-640.webp') }} 640w, {{ url_for('static', filename='images/hero-1024.webp') }} 1024w, {{ url_for('static', filename='images/hero-1280.webp') }} 1280w, {{ url_for('static', filename='images/hero-1600.webp') }} 1600w" sizes="(max-width: 768px) 100vw, 80vw">
+                    <img src="{{ url_for('static', filename='images/hero-optimized.jpg') }}" alt="Bolder Electric Team and Fleet" class="hero-bg-image" width="1920" height="1280" fetchpriority="high" decoding="async">
+                </picture>
                 <div class="hero-overlay"></div>
+            </div>
+            <div class="hero-content">
+                <h1 class="hero-title">Bolder Electric</h1>
+                <p class="hero-subtitle">Built on Trust. Powered by Experience. Serving Riverside County & the greater Southern California Region.</p>
+                <div class="hero-buttons">
+                    <a href="#services" class="btn btn-primary">Our Services</a>
+                    <a href="#contact" class="btn btn-primary" style="background: var(--primary-gold); color: var(--primary-black);">Contact Us</a>
+                </div>
+                <div class="hero-features">
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>Licensed & Insured</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>24/7 Emergency Service</span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>Free Estimates</span>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -1680,16 +1466,6 @@
                             </div>
                             <div class="form-group">
                                 <textarea name="message" placeholder="Tell us about your electrical project or emergency..." rows="4" required></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label class="captcha-row">
-                                    <span class="captcha-label">Captcha: {{ contact_captcha_question }} =</span>
-                                    <input type="number" name="captcha_answer" placeholder="Enter answer" required>
-                                </label>
-                            </div>
-                            <div class="hp-field" aria-hidden="true">
-                                <label for="website">Website</label>
-                                <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
                             </div>
                             <div class="form-buttons">
                                 <button type="submit" class="btn btn-primary">Send Message</button>
