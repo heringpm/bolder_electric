@@ -851,13 +851,23 @@
             }
 
             .footer-links ul {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
                 justify-content: center !important;
                 text-align: center !important;
+                margin: 0 auto !important;
+                padding-left: 0 !important;
             }
 
             .footer-links ul li {
                 text-align: center !important;
-                width: 100%;
+                width: auto !important;
+            }
+
+            .footer-main,
+            .footer-info {
+                align-items: center !important;
             }
 
             .service-card-new {
