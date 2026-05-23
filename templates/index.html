@@ -787,6 +787,20 @@
         }
 
         @media (max-width: 768px) {
+            .navbar {
+                position: relative !important;
+                z-index: 3000 !important;
+            }
+
+            .nav-menu {
+                z-index: 3100 !important;
+                top: 78px !important;
+            }
+
+            .nav-menu.active {
+                left: 0 !important;
+            }
+
             .hero {
                 min-height: 58vh !important;
                 padding: 12px 0 !important;
@@ -828,6 +842,22 @@
                 height: auto !important;
                 gap: 14px !important;
                 padding: 0 !important;
+            }
+
+            .footer-links,
+            .footer-contact {
+                text-align: center !important;
+                width: 100% !important;
+            }
+
+            .footer-links ul {
+                justify-content: center !important;
+                text-align: center !important;
+            }
+
+            .footer-links ul li {
+                text-align: center !important;
+                width: 100%;
             }
 
             .service-card-new {
