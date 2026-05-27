@@ -1665,7 +1665,41 @@
             }
         });
     </script>
-<script>
+    <style>
+        @media (max-width: 768px) {
+            .footer-main,
+            .footer-info,
+            .footer-links,
+            .footer-contact {
+                text-align: center !important;
+                align-items: center !important;
+                justify-content: center !important;
+                width: 100% !important;
+            }
+
+            .footer-links ul {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: center !important;
+                text-align: center !important;
+                gap: 0.5rem !important;
+                margin: 0 auto !important;
+                padding: 0 !important;
+            }
+
+            .footer-links ul li {
+                width: 100% !important;
+                text-align: center !important;
+            }
+
+            .footer-links a {
+                display: inline-block !important;
+                text-align: center !important;
+            }
+        }
+    </style>
+    <script>
         // Contact form submission
         document.getElementById('contactForm').addEventListener('submit', function(e) {
             e.preventDefault();
