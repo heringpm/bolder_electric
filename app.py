@@ -184,6 +184,202 @@ CITY_LANDING_PAGES = {
             ('Do you perform electrical panel upgrades in Menifee, CA?', 'Yes. We handle electrical panel upgrades and panel repair in Menifee, including service changes and safety-focused modernization work.'),
             ('Do you serve areas outside Menifee?', 'Yes. We serve Menifee, surrounding Riverside County cities, and broader Southern California service areas.')
         ]
+    },
+    'perris-ca': {
+        'city': 'Perris',
+        'county': 'Riverside County',
+        'state': 'CA',
+        'slug': 'perris-ca',
+        'title': 'Electrician in Perris, CA | Commercial, Residential & Emergency Electrical Services',
+        'description': 'Bolder Electric provides commercial electrical services, residential electrician support, emergency electrical response, and electrical panel upgrades in Perris, CA and surrounding Riverside County communities.',
+        'hero_title': 'Dependable Electrician Services in Perris, CA',
+        'hero_text': 'From business power upgrades to home electrical repairs, Bolder Electric delivers code-compliant electrical services across Perris and nearby Riverside County cities.',
+        'service_points': [
+            'Commercial electrical build-outs, upgrades, and maintenance',
+            'Residential electrician services for troubleshooting and repairs',
+            'Electrical panel upgrades, replacements, and safety corrections',
+            'Emergency electrician response for urgent outages and hazards'
+        ],
+        'faq': [
+            ('Do you provide commercial electrical services in Perris?', 'Yes. We support Perris businesses with commercial electrical upgrades, power distribution work, and electrical maintenance.'),
+            ('Can I request emergency electrician service in Perris, CA?', 'Yes. We provide emergency electrician response in Perris for urgent electrical failures and safety issues.'),
+            ('Do you work on residential electrical panel upgrades?', 'Yes. We provide residential electrical panel upgrades and related code-compliance improvements.')
+        ]
+    },
+    'wildomar-ca': {
+        'city': 'Wildomar',
+        'county': 'Riverside County',
+        'state': 'CA',
+        'slug': 'wildomar-ca',
+        'title': 'Electrician in Wildomar, CA | Commercial, Residential & Emergency Electrical Services',
+        'description': 'Bolder Electric delivers commercial electrical services, home electrical upgrades, emergency electrician response, and panel work in Wildomar, CA and nearby Southern California areas.',
+        'hero_title': 'Professional Electrical Services in Wildomar, CA',
+        'hero_text': 'Bolder Electric provides safe, reliable electrical services for businesses and homeowners in Wildomar, with a focus on long-term performance and responsive service.',
+        'service_points': [
+            'Commercial electrical services for offices and facilities',
+            'Residential electrician support for homes and remodel projects',
+            'Electrical panel upgrades and service capacity improvements',
+            'Emergency electrical diagnostics and repair service'
+        ],
+        'faq': [
+            ('Do you serve both homes and businesses in Wildomar?', 'Yes. We provide both residential and commercial electrical services throughout Wildomar and surrounding areas.'),
+            ('Can you help with electrical troubleshooting in Wildomar?', 'Yes. We provide professional diagnostics and troubleshooting for intermittent or urgent electrical issues.'),
+            ('Is scheduling online an instant appointment?', 'No. Scheduling is a request. Our team confirms date/time details directly with you.')
+        ]
+    },
+    'hemet-ca': {
+        'city': 'Hemet',
+        'county': 'Riverside County',
+        'state': 'CA',
+        'slug': 'hemet-ca',
+        'title': 'Electrician in Hemet, CA | Commercial, Residential & Emergency Electrical Services',
+        'description': 'Bolder Electric provides residential and commercial electrical services, emergency electrician support, and panel upgrades in Hemet, CA and surrounding Riverside County communities.',
+        'hero_title': 'Trusted Electrician Services in Hemet, CA',
+        'hero_text': 'We deliver electrical repairs, upgrades, and emergency response services in Hemet with quality workmanship and clear communication from start to finish.',
+        'service_points': [
+            'Commercial electrical services for active job sites and facilities',
+            'Residential electrical repairs and home electrical upgrades',
+            'Electrical panel repair, replacement, and upgrades',
+            'Emergency electrician response when power or safety issues occur'
+        ],
+        'faq': [
+            ('Can you handle both commercial and residential work in Hemet?', 'Yes. We provide full-scope electrical services for both homes and businesses in Hemet.'),
+            ('Do you provide electrical panel upgrades in Hemet?', 'Yes. We perform panel upgrades and service improvements to support safety and capacity needs.'),
+            ('Do you provide emergency electrical support?', 'Yes. We provide emergency response for urgent electrical issues in Hemet and nearby communities.')
+        ]
+    },
+    'corona-ca': {
+        'city': 'Corona',
+        'county': 'Riverside County',
+        'state': 'CA',
+        'slug': 'corona-ca',
+        'title': 'Electrician in Corona, CA | Commercial, Residential & Emergency Electrical Services',
+        'description': 'Bolder Electric offers commercial electrical services, residential electrician support, emergency repairs, and electrical panel upgrades in Corona, CA and throughout Riverside County.',
+        'hero_title': 'Commercial & Residential Electrician in Corona, CA',
+        'hero_text': 'Bolder Electric serves Corona with professional electrical services for facilities and homes, including urgent repairs, upgrades, and long-term system improvements.',
+        'service_points': [
+            'Commercial electrical upgrades, tenant improvements, and maintenance',
+            'Residential electrician support for service calls and upgrades',
+            'Electrical panel upgrades, replacements, and corrections',
+            'Emergency electrician service for urgent outages and failures'
+        ],
+        'faq': [
+            ('Do you provide commercial electrical services in Corona?', 'Yes. We provide commercial electrical services in Corona for offices, facilities, and tenant improvement projects.'),
+            ('Can you help with residential electrical upgrades in Corona, CA?', 'Yes. We provide residential electrician support including rewiring, panel upgrades, and dedicated circuits.'),
+            ('Do you respond to emergency electrical issues?', 'Yes. We provide emergency electrical diagnostics and repair support in Corona and nearby cities.')
+        ]
+    }
+}
+
+SERVICE_LANDING_PAGES = {
+    'commercial-electrical-services': {
+        'slug': 'commercial-electrical-services',
+        'title': 'Commercial Electrical Services | Bolder Electric',
+        'description': 'Commercial electrical services for offices, industrial spaces, school districts, and utility-related projects across Riverside County and Southern California.',
+        'h1': 'Commercial Electrical Services',
+        'intro': 'Bolder Electric delivers dependable commercial electrical services for new construction, tenant improvements, infrastructure upgrades, and ongoing maintenance.',
+        'bullets': [
+            'New construction and tenant improvement electrical systems',
+            'Service upgrades, power distribution, and infrastructure improvements',
+            'Interior/exterior commercial lighting design and installation',
+            'Switchgear, panel upgrades, and equipment replacement',
+            'Preventive maintenance and system evaluations',
+            'Emergency diagnostics and rapid electrical repairs'
+        ],
+        'faq': [
+            ('What types of facilities do you serve?', 'We support offices, industrial spaces, schools, and utility-related facilities across Riverside County and Southern California.'),
+            ('Can you support phased commercial projects?', 'Yes. We coordinate with project schedules and phases to keep work safe, compliant, and on timeline.')
+        ]
+    },
+    'emergency-electrician-services': {
+        'slug': 'emergency-electrician-services',
+        'title': 'Emergency Electrician Services | Bolder Electric',
+        'description': 'Emergency electrician services for urgent outages, hazards, and critical electrical failures across Riverside County and Southern California.',
+        'h1': 'Emergency Electrician Services',
+        'intro': 'When electrical issues cannot wait, Bolder Electric provides rapid-response emergency electrician services to diagnose hazards and stabilize systems safely.',
+        'bullets': [
+            'Urgent troubleshooting for outages and intermittent failures',
+            'Electrical hazard assessment and immediate risk mitigation',
+            'Emergency panel and circuit diagnostics',
+            'Power restoration planning and corrective repairs',
+            'Commercial and residential emergency response'
+        ],
+        'faq': [
+            ('Do you provide emergency service after normal business hours?', 'Yes. We provide emergency response coverage and prioritize urgent electrical safety issues.'),
+            ('Can emergency service include commercial sites?', 'Yes. We support both commercial facilities and residential properties during emergency calls.')
+        ]
+    },
+    'residential-electrician-services': {
+        'slug': 'residential-electrician-services',
+        'title': 'Residential Electrician Services | Bolder Electric',
+        'description': 'Residential electrician services including troubleshooting, rewiring, lighting, panel upgrades, and code corrections for homes across Riverside County.',
+        'h1': 'Residential Electrician Services',
+        'intro': 'Bolder Electric provides safe, clean, and code-compliant residential electrician services with clear communication and reliable workmanship.',
+        'bullets': [
+            'Home rewiring and electrical system upgrades',
+            'Outlet, switch, and dedicated circuit installation',
+            'Interior and exterior lighting installations',
+            'Troubleshooting and electrical repair service calls',
+            'Code corrections and electrical safety improvements'
+        ],
+        'faq': [
+            ('Do you handle older home electrical upgrades?', 'Yes. We evaluate existing systems and recommend practical upgrades for safety and reliability.'),
+            ('Can you install new dedicated circuits?', 'Yes. We install dedicated circuits for appliances, EV chargers, and specialty equipment.')
+        ]
+    },
+    'electrical-panel-upgrades': {
+        'slug': 'electrical-panel-upgrades',
+        'title': 'Electrical Panel Upgrades | Bolder Electric',
+        'description': 'Electrical panel upgrades, replacements, and panel repair services to improve safety, capacity, and reliability in homes and facilities.',
+        'h1': 'Electrical Panel Upgrades',
+        'intro': 'Bolder Electric performs electrical panel upgrades and related service improvements to support modern load demands and improve long-term system safety.',
+        'bullets': [
+            'Panel replacements and service capacity upgrades',
+            'Electrical panel repair and troubleshooting',
+            'Main breaker and distribution improvements',
+            'Code-compliant modernization recommendations',
+            'Residential and commercial panel solutions'
+        ],
+        'faq': [
+            ('How do I know if I need a panel upgrade?', 'Frequent breaker trips, outdated equipment, or expanded electrical usage are common indicators.'),
+            ('Do you provide both repair and replacement?', 'Yes. We assess your current equipment and recommend repair or replacement based on safety and performance.')
+        ]
+    },
+    'ev-charger-installation': {
+        'slug': 'ev-charger-installation',
+        'title': 'EV Charger Installation | Bolder Electric',
+        'description': 'Professional EV charger installation services for homes and facilities across Riverside County and Southern California.',
+        'h1': 'EV Charger Installation',
+        'intro': 'We install EV charging systems with proper circuit sizing, panel capacity evaluation, and code-compliant workmanship for reliable long-term charging.',
+        'bullets': [
+            'Residential EV charger installations',
+            'Commercial and fleet charging infrastructure',
+            'Circuit sizing and load calculation support',
+            'Panel capacity review and upgrade recommendations',
+            'Code-compliant installation and testing'
+        ],
+        'faq': [
+            ('Can you install EV chargers at both homes and businesses?', 'Yes. We provide EV charger installation for residential and commercial properties.'),
+            ('Do I need a panel upgrade for EV charging?', 'Some installations do. We evaluate your panel and recommend upgrades when needed.')
+        ]
+    },
+    'lighting-installation-services': {
+        'slug': 'lighting-installation-services',
+        'title': 'Lighting Installation Services | Bolder Electric',
+        'description': 'Indoor and outdoor lighting installation services for commercial and residential properties across Riverside County.',
+        'h1': 'Lighting Installation Services',
+        'intro': 'Bolder Electric provides lighting installation and upgrade services that improve safety, visibility, and energy efficiency for both commercial and residential properties.',
+        'bullets': [
+            'Interior and exterior lighting installation',
+            'LED retrofit and fixture upgrades',
+            'Site and security lighting improvements',
+            'Control and dimming system integration',
+            'Lighting troubleshooting and repair service'
+        ],
+        'faq': [
+            ('Do you install both indoor and outdoor lighting?', 'Yes. We install and upgrade interior, exterior, site, and security lighting systems.'),
+            ('Can you help reduce energy use with lighting upgrades?', 'Yes. We provide LED-focused upgrade options designed to improve efficiency and performance.')
+        ]
     }
 }
 
@@ -710,11 +906,11 @@ def gallery():
 
 @app.route('/commercial')
 def commercial():
-    return redirect(url_for('home') + '#services')
+    return redirect(url_for('service_landing', slug='commercial-electrical-services'), code=301)
 
 @app.route('/residential')
 def residential():
-    return redirect(url_for('home') + '#services')
+    return redirect(url_for('service_landing', slug='residential-electrician-services'), code=301)
 
 @app.route('/about')
 def about():
@@ -726,6 +922,12 @@ def _render_city_landing(slug):
     if not city_data:
         return redirect(url_for('home'))
     return render_template('city_landing.html', city=city_data)
+
+def _render_service_landing(slug):
+    service_data = SERVICE_LANDING_PAGES.get(slug)
+    if not service_data:
+        return redirect(url_for('home'))
+    return render_template('service_landing.html', service=service_data)
 
 
 @app.route('/electrician/murrieta-ca')
@@ -746,6 +948,26 @@ def city_lake_elsinore():
 @app.route('/electrician/menifee-ca')
 def city_menifee():
     return _render_city_landing('menifee-ca')
+
+@app.route('/electrician/perris-ca')
+def city_perris():
+    return _render_city_landing('perris-ca')
+
+@app.route('/electrician/wildomar-ca')
+def city_wildomar():
+    return _render_city_landing('wildomar-ca')
+
+@app.route('/electrician/hemet-ca')
+def city_hemet():
+    return _render_city_landing('hemet-ca')
+
+@app.route('/electrician/corona-ca')
+def city_corona():
+    return _render_city_landing('corona-ca')
+
+@app.route('/services/<slug>')
+def service_landing(slug):
+    return _render_service_landing(slug)
 
 @app.route('/contact-submit', methods=['POST'])
 def contact_submit():
@@ -1596,11 +1818,9 @@ def sitemap():
         ('/', 'weekly', '1.0'),
         ('/gallery', 'weekly', '0.9'),
         ('/schedule', 'weekly', '0.9'),
-        ('/electrician/murrieta-ca', 'weekly', '0.8'),
-        ('/electrician/temecula-ca', 'weekly', '0.8'),
-        ('/electrician/lake-elsinore-ca', 'weekly', '0.8'),
-        ('/electrician/menifee-ca', 'weekly', '0.8'),
     ]
+    entries.extend([(f"/electrician/{slug}", 'weekly', '0.8') for slug in CITY_LANDING_PAGES.keys()])
+    entries.extend([(f"/services/{slug}", 'weekly', '0.8') for slug in SERVICE_LANDING_PAGES.keys()])
     lines = [
         '<?xml version="1.0" encoding="UTF-8"?>',
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
@@ -1629,7 +1849,7 @@ def favicon():
 @app.route('/hello-world')
 @app.route('/hello-world/')
 def legacy_hello_world_redirect():
-    return redirect(url_for('index'), code=301)
+    return redirect(url_for('home'), code=301)
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8080))

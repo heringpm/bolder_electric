@@ -4,20 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
-    <title>Request Electrical Service | Commercial, Residential, Emergency & Panel Work</title>
-    <meta name="description" content="Request commercial electrical services, residential electrician work, emergency electrician response, electrical panel upgrades, or electrical panel repair with Bolder Electric in Menifee, Riverside County, and Southern California. All scheduling requests are reviewed and confirmed by our team.">
-    <meta name="keywords" content="electrician menifee ca, emergency electrician menifee ca, electrical panel upgrades menifee ca, residential electrician menifee ca, commercial electrical services menifee ca, schedule electrician">
+    <title>Request Electrical Service in Riverside County & Southern California | Bolder Electric</title>
+    <meta name="description" content="Request commercial electrical services, residential electrician work, emergency electrician response, electrical panel upgrades, EV charger installation, and lighting services with Bolder Electric. All scheduling requests are reviewed and confirmed by our team.">
+    <meta name="keywords" content="schedule electrician, emergency electrician services, commercial electrical services, residential electrician, electrical panel upgrades, EV charger installation, lighting installation">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://bolderelectric.com/schedule">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta property="og:type" content="website">
     <meta property="og:title" content="Request Electrical Service | Bolder Electric">
-    <meta property="og:description" content="Submit a scheduling request for commercial, residential, panel, or emergency electrical work in Menifee, Riverside County, and Southern California.">
+    <meta property="og:description" content="Submit a scheduling request for commercial, residential, emergency, panel, EV charger, and lighting electrical work across Riverside County and Southern California.">
     <meta property="og:url" content="https://bolderelectric.com/schedule">
     <meta property="og:image" content="https://bolderelectric.com/static/images/hero-1024.webp">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Request Electrical Service | Bolder Electric">
-    <meta name="twitter:description" content="Schedule request page for commercial, residential, emergency, and panel electrician services in Menifee and Riverside County.">
+    <meta name="twitter:description" content="Schedule request page for commercial, residential, emergency, panel, EV charger, and lighting electrician services across Riverside County and Southern California.">
     <meta name="twitter:image" content="https://bolderelectric.com/static/images/hero-1024.webp">
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.min.css') }}">
@@ -100,6 +100,13 @@
         <div class="schedule-header">
             <h2 class="section-title">Request Electrical Service</h2>
             <p class="schedule-subtitle">Submitting this form creates a scheduling request only. Your appointment is not booked until our team contacts you and confirms your date/time.</p>
+            <p class="schedule-subtitle" style="margin-top:0.6rem;">
+                Popular services:
+                <a href="{{ url_for('service_landing', slug='commercial-electrical-services') }}">Commercial Electrical</a>,
+                <a href="{{ url_for('service_landing', slug='emergency-electrician-services') }}">Emergency Electrician</a>,
+                <a href="{{ url_for('service_landing', slug='electrical-panel-upgrades') }}">Panel Upgrades</a>,
+                <a href="{{ url_for('service_landing', slug='ev-charger-installation') }}">EV Charger Installation</a>.
+            </p>
         </div>
 
         <div class="schedule-content">

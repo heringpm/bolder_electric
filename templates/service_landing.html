@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+    <title>{{ service.title }}</title>
+    <meta name="description" content="{{ service.description }}">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{{ service.title }}">
+    <meta property="og:description" content="{{ service.description }}">
+    <meta property="og:url" content="https://bolderelectric.com/services/{{ service.slug }}">
+    <meta property="og:image" content="https://bolderelectric.com/static/images/hero-1024.webp">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ service.title }}">
+    <meta name="twitter:description" content="{{ service.description }}">
+    <meta name="twitter:image" content="https://bolderelectric.com/static/images/hero-1024.webp">
+    <link rel="canonical" href="https://bolderelectric.com/services/{{ service.slug }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/privacy-notice.css') }}">
+    <script defer src="{{ url_for('static', filename='js/privacy-notice.js') }}" data-ga-measurement-id="G-HPSXGKK99R"></script>
+    <style>
+        .service-page {
+            background: #f4f6f8;
+            min-height: calc(100vh - 160px);
+            padding: 120px 0 72px;
+        }
+        .service-shell {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .service-hero {
+            background: linear-gradient(135deg, #0b1626 0%, #23384f 100%);
+            color: #fff;
+            border-radius: 16px;
+            padding: 36px 32px;
+            box-shadow: 0 18px 40px rgba(10, 23, 42, 0.24);
+        }
+        .service-hero h1 {
+            font-size: clamp(2rem, 3.8vw, 2.75rem);
+            margin-bottom: 14px;
+        }
+        .service-hero p {
+            margin: 0;
+            max-width: 860px;
+            line-height: 1.65;
+            color: rgba(255, 255, 255, 0.92);
+        }
+        .service-layout {
+            margin-top: 24px;
+            display: grid;
+            grid-template-columns: 1.25fr 1fr;
+            gap: 22px;
+        }
+        .service-card {
+            background: #fff;
+            border: 1px solid #dbe3ec;
+            border-radius: 14px;
+            padding: 24px;
+            box-shadow: 0 8px 24px rgba(18, 40, 68, 0.08);
+        }
+        .service-card h2 {
+            margin-bottom: 14px;
+            font-size: 1.5rem;
+        }
+        .service-card ul {
+            padding-left: 1rem;
+            margin: 0;
+        }
+        .service-card li {
+            margin-bottom: 10px;
+            color: #2f4359;
+            line-height: 1.5;
+        }
+        .faq-item + .faq-item {
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px solid #e4ebf2;
+        }
+        .faq-item h3 {
+            font-size: 1.04rem;
+            margin-bottom: 6px;
+        }
+        .faq-item p {
+            margin: 0;
+            color: #334a60;
+            line-height: 1.5;
+        }
+        .cta-row {
+            margin-top: 24px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .service-area-links {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .service-area-links a {
+            text-decoration: none;
+            border: 1px solid #dbe3ec;
+            border-radius: 999px;
+            padding: 6px 12px;
+            color: #1f3b58;
+            background: #fff;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        @media (max-width: 900px) {
+            .service-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebPage",
+          "@id": "https://bolderelectric.com/services/{{ service.slug }}#webpage",
+          "url": "https://bolderelectric.com/services/{{ service.slug }}",
+          "name": "{{ service.title }}",
+          "description": "{{ service.description }}"
+        },
+        {
+          "@type": "Service",
+          "@id": "https://bolderelectric.com/services/{{ service.slug }}#service",
+          "name": "{{ service.h1 }}",
+          "provider": {
+            "@id": "https://bolderelectric.com#business"
+          },
+          "areaServed": {
+            "@type": "AdministrativeArea",
+            "name": "Riverside County and Southern California"
+          }
+        }
+      ]
+    }
+    </script>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                    <a href="{{ url_for('home') }}" aria-label="Bolder Electric Home">
+                        <img src="{{ url_for('static', filename='images/shield-final-160.png') }}" srcset="{{ url_for('static', filename='images/shield-final-80.png') }} 80w, {{ url_for('static', filename='images/shield-final-160.png') }} 160w, {{ url_for('static', filename='images/shield-final-320.png') }} 320w" sizes="(max-width: 768px) 45px, 80px" alt="Bolder Electric Logo" class="logo-img" width="160" height="160" decoding="async">
+                    </a>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="{{ url_for('home') }}" class="nav-link">Home</a></li>
+                    <li><a href="{{ url_for('home') }}#services" class="nav-link">Services</a></li>
+                    <li><a href="{{ url_for('home') }}#about" class="nav-link">About</a></li>
+                    <li><a href="{{ url_for('home') }}#crew" class="nav-link">Team</a></li>
+                    <li><a href="{{ url_for('gallery') }}" class="nav-link">Gallery</a></li>
+                    <li><a href="{{ url_for('home') }}#contact" class="nav-link">Contact</a></li>
+                    <li><a href="{{ url_for('schedule') }}" class="nav-link">Schedule</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="service-page">
+        <div class="service-shell">
+            <section class="service-hero">
+                <h1>{{ service.h1 }}</h1>
+                <p>{{ service.intro }}</p>
+                <div class="cta-row">
+                    <a href="{{ url_for('schedule') }}" class="btn btn-primary">Request Service</a>
+                    <a href="{{ url_for('home') }}#contact" class="btn btn-outline">Contact Our Team</a>
+                </div>
+            </section>
+
+            <section class="service-layout" aria-label="Service details">
+                <article class="service-card">
+                    <h2>What We Provide</h2>
+                    <ul>
+                        {% for point in service.bullets %}
+                        <li>{{ point }}</li>
+                        {% endfor %}
+                    </ul>
+                    <div class="service-area-links">
+                        <a href="{{ url_for('city_murrieta') }}">Murrieta</a>
+                        <a href="{{ url_for('city_temecula') }}">Temecula</a>
+                        <a href="{{ url_for('city_lake_elsinore') }}">Lake Elsinore</a>
+                        <a href="{{ url_for('city_menifee') }}">Menifee</a>
+                    </div>
+                </article>
+                <article class="service-card">
+                    <h2>Frequently Asked Questions</h2>
+                    {% for question, answer in service.faq %}
+                    <div class="faq-item">
+                        <h3>{{ question }}</h3>
+                        <p>{{ answer }}</p>
+                    </div>
+                    {% endfor %}
+                </article>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-main">
+                    <div class="footer-brand">
+                        <img src="{{ url_for('static', filename='images/shield-final-320.png') }}" alt="Bolder Electric Logo" class="footer-logo">
+                        <div class="footer-text">
+                            <p class="footer-tagline">Professional Electrical Services</p>
+                        </div>
+                    </div>
+                    <div class="footer-links">
+                        <h4>Quick Links</h4>
+                        <ul>
+                            <li><a href="{{ url_for('home') }}">Home</a></li>
+                            <li><a href="{{ url_for('home') }}#services">Services</a></li>
+                            <li><a href="{{ url_for('gallery') }}">Gallery</a></li>
+                            <li><a href="{{ url_for('schedule') }}">Schedule</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2026 Bolder Electric. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+        if (hamburger && navMenu) {
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                navMenu.classList.toggle('active');
+            });
+        }
+    </script>
+</body>
+</html>

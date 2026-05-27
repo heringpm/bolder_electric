@@ -3,26 +3,21 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-
-    <url>
-        <loc>https://bolderelectric.com/</loc>
-        <lastmod>2026-05-05</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>1.0</priority>
-    </url>
-
-    <url>
-        <loc>https://bolderelectric.com/gallery</loc>
-        <lastmod>2026-05-05</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.9</priority>
-    </url>
-
-    <url>
-        <loc>https://bolderelectric.com/schedule</loc>
-        <lastmod>2026-05-05</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.9</priority>
-    </url>
-
+    <url><loc>https://bolderelectric.com/</loc><lastmod>2026-05-27</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
+    <url><loc>https://bolderelectric.com/gallery</loc><lastmod>2026-05-27</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+    <url><loc>https://bolderelectric.com/schedule</loc><lastmod>2026-05-27</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+    <url><loc>https://bolderelectric.com/electrician/murrieta-ca</loc><lastmod>2026-05-27</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://bolderelectric.com/electrician/temecula-ca</loc><lastmod>2026-05-27</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://bolderelectric.com/electrician/lake-elsinore-ca</loc><lastmod>2026-05-27</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://bolderelectric.com/electrician/menifee-ca</loc><lastmod>2026-05-27</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://bolderelectric.com/electrician/perris-ca</loc><lastmod>2026-05-27</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://bolderelectric.com/electrician/wildomar-ca</loc><lastmod>2026-05-27</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://bolderelectric.com/electrician/hemet-ca</loc><lastmod>2026-05-27</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://bolderelectric.com/electrician/corona-ca</loc><lastmod>2026-05-27</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://bolderelectric.com/services/commercial-electrical-services</loc><lastmod>2026-05-27</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://bolderelectric.com/services/emergency-electrician-services</loc><lastmod>2026-05-27</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://bolderelectric.com/services/residential-electrician-services</loc><lastmod>2026-05-27</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://bolderelectric.com/services/electrical-panel-upgrades</loc><lastmod>2026-05-27</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://bolderelectric.com/services/ev-charger-installation</loc><lastmod>2026-05-27</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+    <url><loc>https://bolderelectric.com/services/lighting-installation-services</loc><lastmod>2026-05-27</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
 </urlset>
