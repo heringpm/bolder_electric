@@ -24,6 +24,28 @@ python3 scripts/import_search_console_export.py data/search-console/exports/YOUR
 python3 scripts/build_search_console_report.py
 ```
 
+## Automated Grafana Sync
+
+To refresh local Search Console history from the API, push it to the Grafana server, and reload the remote Postgres datasource in one run:
+
+```bash
+/Users/osx/Documents/Projects/auto-seo/.venv/bin/python scripts/update_search_console_grafana_remote.py
+```
+
+The script will:
+
+1. Pull the current server-side history CSVs first so newer remote snapshots are not overwritten.
+2. Append a fresh Search Console snapshot for the latest complete 7-day window.
+3. Rebuild `report.html`.
+4. Push the merged history CSVs back to the server.
+5. Run the existing remote Grafana loader to repopulate Postgres.
+
+Defaults are set for the current Bolder Electric stack:
+
+- Search Console property: `sc-domain:bolderelectric.com`
+- SSH target: `root@192.168.111.138`
+- Remote app root: `/root/bolder-electric`
+
 ## Files
 
 - `exports/`: raw Google Search Console ZIP exports.
