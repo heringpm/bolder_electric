@@ -103,20 +103,29 @@ CITY_LANDING_PAGES = {
         'county': 'Riverside County',
         'state': 'CA',
         'slug': 'murrieta-ca',
-        'title': 'Electrician in Murrieta, CA | Commercial, Residential & Emergency Electrical Services',
-        'description': 'Bolder Electric provides commercial electrical services, residential electrician support, emergency electrician response, and electrical panel upgrades in Murrieta, CA and surrounding Riverside County communities.',
-        'hero_title': 'Trusted Electrician Services in Murrieta, CA',
-        'hero_text': 'From commercial upgrades and tenant improvements to residential troubleshooting and emergency electrical repairs, Bolder Electric serves Murrieta with reliable, code-compliant workmanship.',
+        'title': 'Electrician in Murrieta, CA | Electrical Panel Repair, Upgrades & Emergency Service',
+        'description': 'Bolder Electric provides electrical panel repair, electrical panel upgrades, commercial electrical services, residential electrician support, and emergency electrician response in Murrieta, CA.',
+        'keywords': 'electrician murrieta ca, electrical panel repair murrieta ca, electrical panel repair murrieta, electrical panel upgrade murrieta ca, emergency electrician murrieta',
+        'hero_title': 'Electrical Panel Repair & Electrician Services in Murrieta, CA',
+        'hero_text': 'Bolder Electric serves Murrieta with electrical panel repair, panel upgrades, residential troubleshooting, commercial electrical service, and emergency electrical response delivered with reliable, code-compliant workmanship.',
         'service_points': [
+            'Electrical panel repair, breaker troubleshooting, and electrical panel replacement planning',
+            'Electrical panel upgrades and service capacity improvements for homes and facilities',
             'Commercial electrical services for offices, retail, and industrial facilities',
             'Residential electrical repairs, rewiring, and home electrical upgrades',
-            'Electrical panel upgrades and electrical panel repair',
             'Emergency electrician service with rapid diagnostics and response'
         ],
         'faq': [
             ('Do you provide commercial electrical services in Murrieta?', 'Yes. We support Murrieta businesses with service upgrades, distribution improvements, lighting, troubleshooting, and ongoing electrical maintenance.'),
             ('Can I request emergency electrician service in Murrieta, CA?', 'Yes. We provide emergency electrician response in Murrieta for outages, hazards, and urgent electrical issues.'),
+            ('Do you handle electrical panel repair in Murrieta, CA?', 'Yes. We diagnose electrical panel issues in Murrieta and recommend repair or replacement based on safety, condition, and load requirements.'),
             ('Do you handle home electrical upgrades in Murrieta?', 'Yes. We complete home electrical upgrades, panel improvements, dedicated circuits, and residential safety corrections.')
+        ],
+        'related_services': [
+            {'slug': 'electrical-panel-upgrades', 'label': 'Electrical Panel Upgrades'},
+            {'slug': 'emergency-electrician-services', 'label': 'Emergency Electrician Services'},
+            {'slug': 'residential-electrician-services', 'label': 'Residential Electrician Services'},
+            {'slug': 'commercial-electrical-services', 'label': 'Commercial Electrical Services'}
         ]
     },
     'temecula-ca': {
@@ -166,23 +175,30 @@ CITY_LANDING_PAGES = {
         'county': 'Riverside County',
         'state': 'CA',
         'slug': 'menifee-ca',
-        'title': 'Electrician in Menifee, CA | Commercial, Residential & Emergency Electrical Services',
-        'description': 'Bolder Electric offers commercial electrical services, residential electrician work, emergency electrician response, electrical panel upgrades, and electrical panel repair in Menifee, CA and throughout Riverside County.',
+        'title': 'Electrician in Menifee, CA | Emergency, Commercial, Residential & Panel Upgrades',
+        'description': 'Bolder Electric is a licensed electrician in Menifee, CA providing commercial electrical services, residential electrician work, emergency electrical services, electrical panel upgrades, and electrical panel repair.',
         'keywords': 'electrician menifee ca, emergency electrician menifee ca, commercial electrical services menifee ca, residential electrician menifee ca, electrical panel upgrades menifee ca, electrical panel repair menifee ca, electrical repair menifee ca',
-        'hero_title': 'Expert Electrician Services in Menifee, CA',
-        'hero_text': 'As a Riverside County electrical contractor based in Menifee, Bolder Electric provides dependable service for residential projects, commercial work, emergency electrical needs, and electrical panel upgrades.',
+        'hero_title': 'Licensed Electrician in Menifee, CA',
+        'hero_text': 'As a Menifee electrical contractor, Bolder Electric provides commercial electrical services, residential electrician support, emergency electrical services, electrical panel repair, and electrical panel upgrades with dependable local response.',
         'service_points': [
-            'Commercial electrical services for offices, schools, and utility-related work',
-            'Residential electrician services for upgrades, troubleshooting, and repairs',
+            'Commercial electrical services for offices, schools, warehouses, and utility-related work',
+            'Residential electrician services for upgrades, troubleshooting, and home electrical repairs',
+            'Emergency electrical services in Menifee for outages, hazards, and urgent failures',
             'Electrical panel upgrades, electrical panel replacement, and electrical panel repair',
-            'Emergency electrician response and fast on-site diagnostics',
-            'Electrical repairs for service calls, troubleshooting, and lighting issues'
+            'Electrical repairs for service calls, troubleshooting, lighting issues, and service changes'
         ],
         'faq': [
             ('Do you provide commercial electrical services in Menifee?', 'Yes. We provide commercial electrical services in Menifee including upgrades, distribution work, and diagnostics.'),
             ('Can you help with residential electrical issues in Menifee, CA?', 'Yes. We provide residential electrician services in Menifee for repairs, upgrades, and safety-focused electrical improvements.'),
+            ('Do you offer emergency electrical services in Menifee?', 'Yes. We provide emergency electrician response in Menifee for urgent outages, unsafe electrical conditions, and critical troubleshooting needs.'),
             ('Do you perform electrical panel upgrades in Menifee, CA?', 'Yes. We handle electrical panel upgrades and panel repair in Menifee, including service changes and safety-focused modernization work.'),
             ('Do you serve areas outside Menifee?', 'Yes. We serve Menifee, surrounding Riverside County cities, and broader Southern California service areas.')
+        ],
+        'related_services': [
+            {'slug': 'commercial-electrical-services', 'label': 'Commercial Electrical Services'},
+            {'slug': 'emergency-electrician-services', 'label': 'Emergency Electrician Services'},
+            {'slug': 'residential-electrician-services', 'label': 'Residential Electrician Services'},
+            {'slug': 'electrical-panel-upgrades', 'label': 'Electrical Panel Upgrades'}
         ]
     },
     'perris-ca': {
