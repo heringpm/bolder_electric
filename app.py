@@ -103,14 +103,14 @@ CITY_LANDING_PAGES = {
         'county': 'Riverside County',
         'state': 'CA',
         'slug': 'murrieta-ca',
-        'title': 'Electrician in Murrieta, CA | Electrical Panel Repair, Upgrades & Emergency Service',
-        'description': 'Bolder Electric provides electrical panel repair, electrical panel upgrades, commercial electrical services, residential electrician support, and emergency electrician response in Murrieta, CA.',
-        'keywords': 'electrician murrieta ca, electrical panel repair murrieta ca, electrical panel repair murrieta, electrical panel upgrade murrieta ca, emergency electrician murrieta',
-        'hero_title': 'Electrical Panel Repair & Electrician Services in Murrieta, CA',
-        'hero_text': 'Bolder Electric serves Murrieta with electrical panel repair, panel upgrades, residential troubleshooting, commercial electrical service, and emergency electrical response delivered with reliable, code-compliant workmanship.',
+        'title': 'Electrician in Murrieta, CA | Electrical Panel Repair, Replacement & Upgrades',
+        'description': 'Bolder Electric provides electrical panel repair, electrical panel replacement, electrical panel upgrades, commercial electrical services, and emergency electrician response in Murrieta, CA.',
+        'keywords': 'electrician murrieta ca, electrical panel repair murrieta ca, electrical panel repair murrieta, electrical panel replacement murrieta, electrical panel upgrade murrieta ca, murrieta electrical panel upgrades, emergency electrician murrieta',
+        'hero_title': 'Electrical Panel Repair, Replacement & Electrician Services in Murrieta, CA',
+        'hero_text': 'Bolder Electric serves Murrieta with electrical panel repair, electrical panel replacement planning, panel upgrades, residential troubleshooting, commercial electrical service, and emergency electrical response delivered with reliable, code-compliant workmanship.',
         'service_points': [
-            'Electrical panel repair, breaker troubleshooting, and electrical panel replacement planning',
-            'Electrical panel upgrades and service capacity improvements for homes and facilities',
+            'Electrical panel repair in Murrieta, including breaker troubleshooting and overheating or damage diagnostics',
+            'Electrical panel replacement and electrical panel upgrade planning for homes and facilities in Murrieta',
             'Commercial electrical services for offices, retail, and industrial facilities',
             'Residential electrical repairs, rewiring, and home electrical upgrades',
             'Emergency electrician service with rapid diagnostics and response'
@@ -119,6 +119,8 @@ CITY_LANDING_PAGES = {
             ('Do you provide commercial electrical services in Murrieta?', 'Yes. We support Murrieta businesses with service upgrades, distribution improvements, lighting, troubleshooting, and ongoing electrical maintenance.'),
             ('Can I request emergency electrician service in Murrieta, CA?', 'Yes. We provide emergency electrician response in Murrieta for outages, hazards, and urgent electrical issues.'),
             ('Do you handle electrical panel repair in Murrieta, CA?', 'Yes. We diagnose electrical panel issues in Murrieta and recommend repair or replacement based on safety, condition, and load requirements.'),
+            ('Do you provide electrical panel upgrades in Murrieta, CA?', 'Yes. We complete electrical panel upgrades in Murrieta when homes or facilities need more capacity, safer equipment, or updated service components.'),
+            ('Can you help with electrical panel replacement in Murrieta?', 'Yes. If a panel is outdated, damaged, or no longer safe to repair, we can plan and complete electrical panel replacement in Murrieta.'),
             ('Do you handle home electrical upgrades in Murrieta?', 'Yes. We complete home electrical upgrades, panel improvements, dedicated circuits, and residential safety corrections.')
         ],
         'related_services': [
@@ -133,18 +135,20 @@ CITY_LANDING_PAGES = {
         'county': 'Riverside County',
         'state': 'CA',
         'slug': 'temecula-ca',
-        'title': 'Electrician in Temecula, CA | Commercial, Residential & Emergency Electrical Services',
-        'description': 'Bolder Electric delivers commercial electrical services, residential electrician support, electrical panel upgrades, and emergency electrical response in Temecula, CA and nearby Southern California cities.',
-        'hero_title': 'Professional Electrician Services in Temecula, CA',
-        'hero_text': 'Bolder Electric serves Temecula with high-performance electrical solutions for commercial and residential properties, with a strong focus on safety, reliability, and clear communication.',
+        'title': 'Electrician in Temecula, CA | Residential, Commercial & Emergency Electrical Services',
+        'description': 'Bolder Electric delivers residential electrician services, commercial electrical services, electrical panel upgrades, and emergency electrical response in Temecula, CA and nearby Southern California cities.',
+        'keywords': 'electrician temecula ca, residential electrician temecula, residential electrician temecula ca, commercial electrical services temecula ca, emergency electrician temecula ca',
+        'hero_title': 'Residential & Commercial Electrician Services in Temecula, CA',
+        'hero_text': 'Bolder Electric serves Temecula with residential electrician services, commercial electrical support, panel upgrades, and emergency response backed by safety, reliability, and clear communication.',
         'service_points': [
+            'Residential electrician services for repairs, outlets, switches, lighting, and home electrical upgrades',
             'Commercial electrical build-outs, infrastructure improvements, and maintenance',
-            'Residential electrician services for repairs, outlets, switches, and lighting',
             'Electrical panel upgrades to improve safety and service capacity',
             'Emergency electrician support for critical electrical failures'
         ],
         'faq': [
             ('Do you serve both homes and businesses in Temecula?', 'Yes. We provide both residential and commercial electrical services throughout Temecula and nearby areas.'),
+            ('Can you help if I need a residential electrician in Temecula?', 'Yes. We provide residential electrician services in Temecula for troubleshooting, repairs, lighting, dedicated circuits, and home electrical upgrades.'),
             ('Can you help with panel upgrades in Temecula?', 'Yes. We perform electrical panel upgrades and panel repair to modernize systems and improve long-term reliability.'),
             ('Is scheduling online an instant booking?', 'No. Scheduling is a request process, and our team confirms appointment details directly with you.')
         ]
@@ -154,18 +158,20 @@ CITY_LANDING_PAGES = {
         'county': 'Riverside County',
         'state': 'CA',
         'slug': 'lake-elsinore-ca',
-        'title': 'Electrician in Lake Elsinore, CA | Commercial, Residential & Emergency Electrical Services',
-        'description': 'Bolder Electric provides dependable commercial electrical services, residential electrician work, emergency electrical response, and panel upgrades in Lake Elsinore, CA and across Riverside County.',
-        'hero_title': 'Reliable Electrician Services in Lake Elsinore, CA',
-        'hero_text': 'We provide electrical services in Lake Elsinore for commercial facilities and homes, including diagnostics, upgrades, code corrections, and emergency repairs.',
+        'title': 'Electrician in Lake Elsinore, CA | Panel Upgrades, Commercial & Residential Service',
+        'description': 'Bolder Electric provides dependable electrician services in Lake Elsinore, CA including commercial electrical services, residential electrician work, emergency electrical response, and panel upgrades.',
+        'keywords': 'electrician lake elsinore, electrician lake elsinore ca, lake elsinore electrician, electricians in lake elsinore ca, electrical panel upgrades lake elsinore ca',
+        'hero_title': 'Reliable Electrician in Lake Elsinore, CA',
+        'hero_text': 'We provide electrician services in Lake Elsinore for commercial facilities and homes, including diagnostics, electrical panel upgrades, code corrections, and emergency repairs.',
         'service_points': [
             'Commercial electrical services for expanding businesses and facilities',
-            'Residential electrician support for homes, remodels, and repairs',
-            'Electrical panel upgrades and safety-focused electrical corrections',
+            'Residential electrician support for homes, remodels, repairs, and dedicated circuit work',
+            'Electrical panel upgrades in Lake Elsinore and safety-focused electrical corrections',
             'Emergency electrical service for urgent power and safety issues'
         ],
         'faq': [
             ('Do you offer emergency electrician service in Lake Elsinore?', 'Yes. We provide emergency electrical response in Lake Elsinore for urgent electrical issues and hazardous failures.'),
+            ('Can I hire an electrician in Lake Elsinore for home or business work?', 'Yes. We provide electrician services in Lake Elsinore for both commercial facilities and residential properties.'),
             ('Can you complete electrical panel upgrades for older homes?', 'Yes. We upgrade older electrical panels and perform associated code corrections where needed.'),
             ('Do you handle commercial electrical projects in Lake Elsinore?', 'Yes. We support commercial projects including tenant improvements, service upgrades, and lighting systems.')
         ]
@@ -178,8 +184,8 @@ CITY_LANDING_PAGES = {
         'title': 'Electrician in Menifee, CA | Emergency, Commercial, Residential & Panel Upgrades',
         'description': 'Bolder Electric is a licensed electrician in Menifee, CA providing commercial electrical services, residential electrician work, emergency electrical services, electrical panel upgrades, and electrical panel repair.',
         'keywords': 'electrician menifee ca, emergency electrician menifee ca, commercial electrical services menifee ca, residential electrician menifee ca, electrical panel upgrades menifee ca, electrical panel repair menifee ca, electrical repair menifee ca',
-        'hero_title': 'Licensed Electrician in Menifee, CA',
-        'hero_text': 'As a Menifee electrical contractor, Bolder Electric provides commercial electrical services, residential electrician support, emergency electrical services, electrical panel repair, and electrical panel upgrades with dependable local response.',
+        'hero_title': 'Licensed Electrician Services in Menifee, CA',
+        'hero_text': 'As a Menifee electrical contractor, Bolder Electric provides electrician services in Menifee, CA including commercial electrical services, residential electrician support, emergency electrical services, electrical panel repair, and electrical panel upgrades with dependable local response.',
         'service_points': [
             'Commercial electrical services for offices, schools, warehouses, and utility-related work',
             'Residential electrician services for upgrades, troubleshooting, and home electrical repairs',
@@ -189,6 +195,7 @@ CITY_LANDING_PAGES = {
         ],
         'faq': [
             ('Do you provide commercial electrical services in Menifee?', 'Yes. We provide commercial electrical services in Menifee including upgrades, distribution work, and diagnostics.'),
+            ('Can you help if I need an electrician in Menifee, CA?', 'Yes. We provide electrician services in Menifee, CA for homes, businesses, panel work, troubleshooting, and emergency response.'),
             ('Can you help with residential electrical issues in Menifee, CA?', 'Yes. We provide residential electrician services in Menifee for repairs, upgrades, and safety-focused electrical improvements.'),
             ('Do you offer emergency electrical services in Menifee?', 'Yes. We provide emergency electrician response in Menifee for urgent outages, unsafe electrical conditions, and critical troubleshooting needs.'),
             ('Do you perform electrical panel upgrades in Menifee, CA?', 'Yes. We handle electrical panel upgrades and panel repair in Menifee, including service changes and safety-focused modernization work.'),
