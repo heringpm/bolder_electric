@@ -105,6 +105,20 @@
             margin-bottom: 10px;
             font-size: 1rem;
         }
+        .city-support-block {
+            margin-top: 18px;
+            padding-top: 16px;
+            border-top: 1px solid #e4ebf2;
+        }
+        .city-support-block h3 {
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+        .city-support-block p {
+            margin: 0;
+            color: #334a60;
+            line-height: 1.6;
+        }
         .city-link-chips {
             display: flex;
             flex-wrap: wrap;
@@ -205,12 +219,28 @@
                         <li>{{ point }}</li>
                         {% endfor %}
                     </ul>
+                    {% if city.support_heading and city.supporting_copy %}
+                    <div class="city-support-block">
+                        <h3>{{ city.support_heading }}</h3>
+                        <p>{{ city.supporting_copy }}</p>
+                    </div>
+                    {% endif %}
                     {% if city.related_services %}
                     <div class="city-link-group">
                         <h3>Related service pages</h3>
                         <div class="city-link-chips">
                             {% for link in city.related_services %}
                             <a href="{{ url_for('service_landing', slug=link.slug) }}">{{ link.label }} in {{ city.city }}</a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% if city.nearby_cities %}
+                    <div class="city-link-group">
+                        <h3>Nearby electrician pages</h3>
+                        <div class="city-link-chips">
+                            {% for link in city.nearby_cities %}
+                            <a href="/electrician/{{ link.slug }}">{{ link.label }}</a>
                             {% endfor %}
                         </div>
                     </div>
