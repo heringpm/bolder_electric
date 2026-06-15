@@ -1,0 +1,38 @@
+# Search Console SEO Report
+
+- Site: `sc-domain:bolderelectric.com`
+- Scope: `all pages`
+- Date range: `2026-06-08` to `2026-06-14`
+
+## Opportunities
+
+| Priority | Page | Query | Clicks | Impressions | CTR | Avg. position | Recommendation |
+| --- | --- | --- | ---: | ---: | ---: | ---: | --- |
+| high | https://bolderelectric.com/electrician/murrieta-ca | electrical panel repair murrieta ca | 0 | 73 | 0.00% | 14.4 | Page is close to stronger rankings. Add a focused section that answers this query, use natural variants in headings/body copy, and strengthen internal links with relevant anchor text. |
+| high | https://bolderelectric.com/electrician/menifee-ca | electrician menifee ca | 0 | 27 | 0.00% | 10.9 | Page is close to stronger rankings. Add a focused section that answers this query, use natural variants in headings/body copy, and strengthen internal links with relevant anchor text. |
+| high | https://bolderelectric.com/electrician/murrieta-ca | commercial electrical repair | 0 | 16 | 0.00% | 4.4 | Page is close to stronger rankings. Add a focused section that answers this query, use natural variants in headings/body copy, and strengthen internal links with relevant anchor text. |
+| high | https://bolderelectric.com/electrician/corona-ca | electrician near me | 0 | 15 | 0.00% | 9.9 | Page is close to stronger rankings. Add a focused section that answers this query, use natural variants in headings/body copy, and strengthen internal links with relevant anchor text. |
+| high | https://bolderelectric.com/electrician/murrieta-ca | emergency electrician murrieta | 0 | 11 | 0.00% | 6.0 | Page is close to stronger rankings. Add a focused section that answers this query, use natural variants in headings/body copy, and strengthen internal links with relevant anchor text. |
+| high | https://bolderelectric.com/electrician/menifee-ca | electrician near me | 0 | 11 | 0.00% | 12.1 | Page is close to stronger rankings. Add a focused section that answers this query, use natural variants in headings/body copy, and strengthen internal links with relevant anchor text. |
+| high | https://bolderelectric.com/electrician/menifee-ca | electricians menifee ca | 0 | 11 | 0.00% | 14.3 | Page is close to stronger rankings. Add a focused section that answers this query, use natural variants in headings/body copy, and strengthen internal links with relevant anchor text. |
+| high | https://bolderelectric.com/electrician/corona-ca | emergency electrical services corona | 0 | 10 | 0.00% | 6.5 | Page is close to stronger rankings. Add a focused section that answers this query, use natural variants in headings/body copy, and strengthen internal links with relevant anchor text. |
+| medium | https://bolderelectric.com/electrician/murrieta-ca | electrical panel repair murrieta | 0 | 75 | 0.00% | 15.4 | The query has visibility without clicks. Check whether the page truly satisfies the intent, then add clearer on-page wording or create a more relevant supporting page. |
+| medium | https://bolderelectric.com/electrician/murrieta-ca | electrical panel replacement murrieta | 0 | 66 | 0.00% | 26.0 | The query has visibility without clicks. Check whether the page truly satisfies the intent, then add clearer on-page wording or create a more relevant supporting page. |
+| medium | https://bolderelectric.com/electrician/murrieta-ca | electrical panel upgrade murrieta ca | 0 | 65 | 0.00% | 17.8 | The query has visibility without clicks. Check whether the page truly satisfies the intent, then add clearer on-page wording or create a more relevant supporting page. |
+| medium | https://bolderelectric.com/electrician/murrieta-ca | electrician murrieta | 0 | 56 | 0.00% | 32.6 | The query has visibility without clicks. Check whether the page truly satisfies the intent, then add clearer on-page wording or create a more relevant supporting page. |
+| medium | https://bolderelectric.com/electrician/murrieta-ca | electrician murrieta ca | 0 | 52 | 0.00% | 29.3 | The query has visibility without clicks. Check whether the page truly satisfies the intent, then add clearer on-page wording or create a more relevant supporting page. |
+| medium | https://bolderelectric.com/electrician/murrieta-ca | electrical panel upgrade murrieta | 0 | 38 | 0.00% | 24.8 | Search engines see some relevance. Expand topical coverage, add supporting FAQ-style answers, and link from stronger related pages. |
+| medium | https://bolderelectric.com/electrician/lake-elsinore-ca | electrician lake elsinore | 0 | 29 | 0.00% | 15.6 | Search engines see some relevance. Expand topical coverage, add supporting FAQ-style answers, and link from stronger related pages. |
+| medium | https://bolderelectric.com/electrician/wildomar-ca | electrician wildomar | 0 | 22 | 0.00% | 17.5 | Search engines see some relevance. Expand topical coverage, add supporting FAQ-style answers, and link from stronger related pages. |
+| medium | https://bolderelectric.com/electrician/menifee-ca | electrician menifee | 0 | 19 | 0.00% | 16.2 | Search engines see some relevance. Expand topical coverage, add supporting FAQ-style answers, and link from stronger related pages. |
+| medium | https://bolderelectric.com/electrician/lake-elsinore-ca | electrical service lake elsinore | 0 | 17 | 0.00% | 18.2 | Search engines see some relevance. Expand topical coverage, add supporting FAQ-style answers, and link from stronger related pages. |
+| medium | https://bolderelectric.com/electrician/corona-ca | electrician corona | 0 | 15 | 0.00% | 15.3 | Search engines see some relevance. Expand topical coverage, add supporting FAQ-style answers, and link from stronger related pages. |
+| medium | https://bolderelectric.com/electrician/lake-elsinore-ca | electrical contractor in lake elsinore | 0 | 15 | 0.00% | 24.8 | Search engines see some relevance. Expand topical coverage, add supporting FAQ-style answers, and link from stronger related pages. |
+| medium | https://bolderelectric.com/electrician/menifee-ca | licensed electrician menifee ca | 0 | 10 | 0.00% | 16.2 | Search engines see some relevance. Expand topical coverage, add supporting FAQ-style answers, and link from stronger related pages. |
+| medium | https://bolderelectric.com/electrician/corona-ca | electrician corona ca | 0 | 10 | 0.00% | 18.3 | Search engines see some relevance. Expand topical coverage, add supporting FAQ-style answers, and link from stronger related pages. |
+| low | https://bolderelectric.com/electrician/murrieta-ca | murrieta electrician | 0 | 48 | 0.00% | 36.0 | Monitor this query. Keep the wording natural and look for related queries with higher impressions. |
+| low | https://bolderelectric.com/electrician/murrieta-ca | emergency electrician | 0 | 29 | 0.00% | 3.0 | Monitor this query. Keep the wording natural and look for related queries with higher impressions. |
+| low | https://bolderelectric.com/electrician/temecula-ca | electrician temecula ca | 0 | 23 | 0.00% | 38.9 | Monitor this query. Keep the wording natural and look for related queries with higher impressions. |
+| low | https://bolderelectric.com/electrician/temecula-ca | temecula electrician | 0 | 18 | 0.00% | 42.4 | Monitor this query. Keep the wording natural and look for related queries with higher impressions. |
+| low | https://bolderelectric.com/electrician/temecula-ca | electrical repair temecula ca | 0 | 16 | 0.00% | 34.8 | Monitor this query. Keep the wording natural and look for related queries with higher impressions. |
+| low | https://bolderelectric.com/electrician/temecula-ca | electrician temecula | 0 | 13 | 0.00% | 42.1 | Monitor this query. Keep the wording natural and look for related queries with higher impressions. |

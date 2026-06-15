@@ -119,6 +119,42 @@
             color: #334a60;
             line-height: 1.6;
         }
+        .city-opportunity-grid {
+            margin-top: 18px;
+            display: grid;
+            gap: 14px;
+        }
+        .city-opportunity-card {
+            padding: 16px 18px;
+            border: 1px solid #e4ebf2;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #f8fbff 0%, #ffffff 100%);
+        }
+        .city-opportunity-card h3 {
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+        .city-opportunity-card p {
+            margin: 0;
+            color: #334a60;
+            line-height: 1.6;
+        }
+        .city-opportunity-links {
+            margin-top: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .city-opportunity-links a {
+            text-decoration: none;
+            border: 1px solid #dbe3ec;
+            border-radius: 999px;
+            padding: 7px 12px;
+            color: #1f3b58;
+            background: #fff;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
         .city-link-chips {
             display: flex;
             flex-wrap: wrap;
@@ -223,6 +259,23 @@
                     <div class="city-support-block">
                         <h3>{{ city.support_heading }}</h3>
                         <p>{{ city.supporting_copy }}</p>
+                    </div>
+                    {% endif %}
+                    {% if city.opportunity_sections %}
+                    <div class="city-opportunity-grid">
+                        {% for section in city.opportunity_sections %}
+                        <section class="city-opportunity-card">
+                            <h3>{{ section.heading }}</h3>
+                            <p>{{ section.body }}</p>
+                            {% if section.service_links %}
+                            <div class="city-opportunity-links">
+                                {% for link in section.service_links %}
+                                <a href="{{ url_for('service_landing', slug=link.slug) }}">{{ link.label }}</a>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </section>
+                        {% endfor %}
                     </div>
                     {% endif %}
                     {% if city.related_services %}
