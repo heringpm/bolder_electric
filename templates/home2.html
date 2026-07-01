@@ -178,15 +178,15 @@
         .topbar-inner {
             width: min(calc(100% - 40px), 1380px);
             margin: 0 auto;
-            min-height: 78px;
+            min-height: 72px;
             display: grid;
             grid-template-columns: auto 1fr auto;
             align-items: center;
-            gap: 18px;
+            gap: 14px;
         }
 
         .brand-link img {
-            width: 84px;
+            width: 74px;
             height: auto;
             filter: drop-shadow(0 0 18px rgba(255, 200, 76, 0.16));
         }
@@ -194,15 +194,15 @@
         .nav {
             display: flex;
             justify-content: center;
-            gap: 18px;
+            gap: 16px;
             flex-wrap: nowrap;
         }
 
         .nav a {
             position: relative;
             font-family: "Bebas Neue", Arial, sans-serif;
-            font-size: 18px;
-            letter-spacing: 0.08em;
+            font-size: 16px;
+            letter-spacing: 0.07em;
             color: rgba(255, 255, 255, 0.9);
             text-transform: uppercase;
             white-space: nowrap;
@@ -230,15 +230,15 @@
         }
 
         .proposal-link {
-            min-height: 40px;
-            padding: 0 16px;
+            min-height: 36px;
+            padding: 0 14px;
             border-radius: 8px;
             border: 1px solid rgba(241, 186, 32, 0.78);
             background: rgba(0, 0, 0, 0.56);
             color: var(--gold);
             font-family: "Bebas Neue", Arial, sans-serif;
-            font-size: 18px;
-            letter-spacing: 0.08em;
+            font-size: 16px;
+            letter-spacing: 0.07em;
             text-transform: uppercase;
             display: inline-flex;
             align-items: center;
@@ -250,7 +250,7 @@
             align-items: center;
             gap: 8px;
             font-family: "Bebas Neue", Arial, sans-serif;
-            font-size: 24px;
+            font-size: 20px;
             letter-spacing: 0.02em;
             color: #fff;
             white-space: nowrap;
@@ -277,31 +277,31 @@
             overflow: hidden;
             border-bottom: 1px solid rgba(241, 186, 32, 0.18);
             background: #000;
-            min-height: calc(100vh - 78px);
+            min-height: calc(100vh - 72px);
         }
 
         .hero-scene {
             position: absolute;
-            inset: 0 0 0 39%;
+            inset: 0;
             background:
-                linear-gradient(180deg, rgba(0, 0, 0, 0.08) 0%, rgba(0, 0, 0, 0.14) 100%),
-                url("{{ url_for('static', filename='images/home2-hero-bg.png') }}") center/cover no-repeat;
+                linear-gradient(180deg, rgba(0, 0, 0, 0.08) 0%, rgba(0, 0, 0, 0.18) 100%),
+                url("{{ url_for('static', filename='images/home2-hero-generated.png') }}") center/cover no-repeat;
         }
 
         .hero-scene::before {
             content: "";
             position: absolute;
-            inset: 0 auto 0 -26%;
-            width: 36%;
+            inset: 0 auto 0 0;
+            width: 54%;
             background:
-                linear-gradient(90deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.98) 58%, rgba(0, 0, 0, 0.78) 82%, rgba(0, 0, 0, 0) 100%);
+                linear-gradient(90deg, rgba(0, 0, 0, 0.96) 0%, rgba(0, 0, 0, 0.9) 54%, rgba(0, 0, 0, 0.56) 82%, rgba(0, 0, 0, 0.06) 100%);
         }
 
         .hero-scene::after {
             content: "";
             position: absolute;
             inset: auto 0 0 0;
-            height: 19%;
+            height: 18%;
             background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.88) 100%);
         }
 
@@ -318,25 +318,25 @@
             z-index: 1;
             width: min(calc(100% - 40px), 1380px);
             margin: 0 auto;
-            padding: 32px 0 18px;
-            min-height: calc(100vh - 78px);
+            padding: 24px 0 14px;
+            min-height: calc(100vh - 72px);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            gap: 26px;
+            gap: 20px;
         }
 
         .hero-copy {
-            max-width: 520px;
-            padding-top: 6px;
+            max-width: 500px;
+            padding-top: 0;
         }
 
         .hero-kicker {
-            margin-bottom: 14px;
+            margin-bottom: 12px;
             color: #d3a127;
             font-family: "Bebas Neue", Arial, sans-serif;
-            font-size: clamp(24px, 1.85vw, 38px);
-            letter-spacing: 0.14em;
+            font-size: clamp(20px, 1.45vw, 30px);
+            letter-spacing: 0.12em;
             line-height: 0.96;
             text-transform: uppercase;
         }
@@ -355,7 +355,7 @@
         }
 
         .hero-title .white {
-            font-size: clamp(64px, 5.65vw, 112px);
+            font-size: clamp(52px, 4.7vw, 92px);
             background: linear-gradient(180deg, #ffffff 0%, #f2f2f2 50%, #bbbbbb 100%);
             -webkit-background-clip: text;
             background-clip: text;
@@ -363,7 +363,7 @@
         }
 
         .hero-title .gold {
-            font-size: clamp(70px, 6.15vw, 122px);
+            font-size: clamp(58px, 5.25vw, 100px);
             background: linear-gradient(180deg, #ffd86d 0%, #f1ba20 42%, #d08a00 76%, #8e5300 100%);
             -webkit-background-clip: text;
             background-clip: text;
@@ -371,45 +371,38 @@
         }
 
         .hero-meta {
-            margin-top: 14px;
+            margin-top: 12px;
             font-family: "Bebas Neue", Arial, sans-serif;
-            font-size: clamp(18px, 1.25vw, 26px);
-            letter-spacing: 0.12em;
+            font-size: clamp(15px, 1vw, 20px);
+            letter-spacing: 0.1em;
             text-transform: uppercase;
             color: rgba(255, 255, 255, 0.9);
         }
 
         .hero-meta .dot {
             color: var(--gold);
-            padding: 0 12px;
+            padding: 0 10px;
         }
 
         .hero-text {
-            margin-top: 16px;
-            max-width: 430px;
-            font-size: clamp(17px, 1vw, 21px);
-            line-height: 1.24;
+            margin-top: 14px;
+            max-width: 420px;
+            font-size: clamp(15px, 0.88vw, 18px);
+            line-height: 1.28;
             color: rgba(255, 255, 255, 0.95);
         }
 
         .hero-actions {
             display: flex;
             flex-wrap: wrap;
-            gap: 14px;
-            margin-top: 22px;
+            gap: 12px;
+            margin-top: 18px;
         }
 
         .hero-actions .btn {
-            min-width: 220px;
-        }
-
-        .hero-machine {
-            position: absolute;
-            right: 0;
-            bottom: 13.4%;
-            width: min(33vw, 560px);
-            z-index: 1;
-            filter: drop-shadow(0 18px 36px rgba(0, 0, 0, 0.44));
+            min-width: 210px;
+            min-height: 50px;
+            font-size: 20px;
         }
 
         .trust-strip {
@@ -423,8 +416,8 @@
         .trust-item {
             display: flex;
             align-items: center;
-            gap: 16px;
-            padding: 18px 20px;
+            gap: 12px;
+            padding: 14px 16px;
             border-right: 1px solid rgba(241, 186, 32, 0.2);
         }
 
@@ -434,18 +427,18 @@
 
         .trust-icon {
             flex: 0 0 auto;
-            width: 52px;
-            height: 52px;
+            width: 42px;
+            height: 42px;
             display: grid;
             place-items: center;
             color: var(--gold);
-            font-size: 34px;
+            font-size: 26px;
         }
 
         .trust-copy strong {
             display: block;
             font-family: "Bebas Neue", Arial, sans-serif;
-            font-size: 28px;
+            font-size: 20px;
             letter-spacing: 0.03em;
             line-height: 0.98;
             text-transform: uppercase;
@@ -453,9 +446,9 @@
 
         .trust-copy span {
             display: block;
-            margin-top: 6px;
-            font-size: 22px;
-            line-height: 1.05;
+            margin-top: 4px;
+            font-size: 15px;
+            line-height: 1.1;
             color: var(--muted);
         }
 
@@ -1198,7 +1191,7 @@
             }
 
             .phone-link {
-                font-size: 22px;
+                font-size: 18px;
             }
 
             .services-grid,
@@ -1268,31 +1261,22 @@
                 padding-top: 6px;
             }
 
-            .hero-machine {
-                position: relative;
-                right: auto;
-                bottom: auto;
-                width: min(92vw, 440px);
-                align-self: flex-end;
-                margin-top: 10px;
-            }
-
             .hero-kicker {
-                font-size: 24px;
+                font-size: 20px;
                 margin-bottom: 12px;
             }
 
             .hero-title .white {
-                font-size: clamp(52px, 13.5vw, 78px);
+                font-size: clamp(42px, 11vw, 62px);
             }
 
             .hero-title .gold {
-                font-size: clamp(58px, 14.5vw, 84px);
+                font-size: clamp(48px, 12vw, 68px);
             }
 
             .hero-meta {
-                font-size: 18px;
-                letter-spacing: 0.08em;
+                font-size: 14px;
+                letter-spacing: 0.06em;
             }
 
             .hero-meta .dot {
@@ -1437,8 +1421,6 @@
                             </a>
                         </div>
                     </div>
-
-                    <img class="hero-machine" src="{{ url_for('static', filename='images/home2-hero-generator.png') }}" alt="Power generation equipment" aria-hidden="true">
 
                     <div class="trust-strip">
                         <div class="trust-item">
