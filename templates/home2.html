@@ -186,7 +186,7 @@
         }
 
         .brand-link img {
-            width: 94px;
+            width: 122px;
             height: auto;
             filter: drop-shadow(0 0 18px rgba(255, 200, 76, 0.16));
         }
@@ -203,7 +203,7 @@
         .nav a {
             position: relative;
             font-family: "Bebas Neue", Arial, sans-serif;
-            font-size: 14px;
+            font-size: 13px;
             letter-spacing: 0.06em;
             color: rgba(255, 255, 255, 0.9);
             text-transform: uppercase;
@@ -294,9 +294,9 @@
             content: "";
             position: absolute;
             inset: 0 auto 0 0;
-            width: 56%;
+            width: 48%;
             background:
-                linear-gradient(90deg, rgba(0, 0, 0, 0.94) 0%, rgba(0, 0, 0, 0.84) 30%, rgba(0, 0, 0, 0.58) 54%, rgba(0, 0, 0, 0.26) 76%, rgba(0, 0, 0, 0.08) 90%, rgba(0, 0, 0, 0) 100%);
+                linear-gradient(90deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.76) 28%, rgba(0, 0, 0, 0.42) 52%, rgba(0, 0, 0, 0.18) 74%, rgba(0, 0, 0, 0.04) 90%, rgba(0, 0, 0, 0) 100%);
         }
 
         .hero-scene::after {
@@ -358,7 +358,7 @@
         }
 
         .hero-title .white {
-            font-size: clamp(46px, 4.2vw, 82px);
+            font-size: clamp(50px, 4.55vw, 88px);
             background: linear-gradient(180deg, #ffffff 0%, #f2f2f2 50%, #bbbbbb 100%);
             -webkit-background-clip: text;
             background-clip: text;
@@ -366,7 +366,7 @@
         }
 
         .hero-title .gold {
-            font-size: clamp(52px, 4.75vw, 90px);
+            font-size: clamp(56px, 5.1vw, 98px);
             background: linear-gradient(180deg, #ffd86d 0%, #f1ba20 42%, #d08a00 76%, #8e5300 100%);
             -webkit-background-clip: text;
             background-clip: text;
@@ -399,17 +399,31 @@
         .hero-actions {
             display: flex;
             flex-wrap: nowrap;
-            gap: 12px;
+            gap: 16px;
             margin-top: 18px;
             align-items: center;
         }
 
         .hero-actions .btn {
             min-width: 0;
-            min-height: 50px;
-            padding: 0 20px;
-            font-size: 18px;
+            min-height: 58px;
+            padding: 0 26px;
+            font-size: 22px;
             white-space: nowrap;
+            flex: 0 0 auto;
+            letter-spacing: 0.05em;
+        }
+
+        .hero-actions .btn-primary {
+            background: linear-gradient(180deg, #ffd968 0%, #f5c22d 36%, #e3a805 68%, #c88400 100%);
+            box-shadow: inset 0 1px 0 rgba(255, 244, 204, 0.5), 0 14px 30px rgba(0, 0, 0, 0.24);
+        }
+
+        .hero-actions .btn-secondary {
+            color: #f6f3ea;
+            border-color: rgba(241, 186, 32, 0.9);
+            background: linear-gradient(180deg, rgba(18, 18, 18, 0.72) 0%, rgba(0, 0, 0, 0.82) 100%);
+            box-shadow: inset 0 0 0 1px rgba(241, 186, 32, 0.1);
         }
 
         .trust-strip {
@@ -423,8 +437,8 @@
         .trust-item {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 14px 16px;
+            gap: 14px;
+            padding: 16px 18px;
             border-right: 1px solid rgba(241, 186, 32, 0.2);
         }
 
@@ -450,16 +464,17 @@
         .trust-copy strong {
             display: block;
             font-family: "Bebas Neue", Arial, sans-serif;
-            font-size: 21px;
-            letter-spacing: 0.03em;
+            font-size: 23px;
+            letter-spacing: 0.04em;
             line-height: 0.98;
             text-transform: uppercase;
+            color: #fbf8f1;
         }
 
         .trust-copy span {
             display: block;
             margin-top: 4px;
-            font-size: 15px;
+            font-size: 16px;
             line-height: 1.1;
             color: var(--muted);
         }
