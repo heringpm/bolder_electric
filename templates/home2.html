@@ -294,9 +294,9 @@
             content: "";
             position: absolute;
             inset: 0 auto 0 0;
-            width: 66%;
+            width: 56%;
             background:
-                linear-gradient(90deg, rgba(0, 0, 0, 0.97) 0%, rgba(0, 0, 0, 0.93) 34%, rgba(0, 0, 0, 0.72) 58%, rgba(0, 0, 0, 0.36) 78%, rgba(0, 0, 0, 0.1) 92%, rgba(0, 0, 0, 0) 100%);
+                linear-gradient(90deg, rgba(0, 0, 0, 0.94) 0%, rgba(0, 0, 0, 0.84) 30%, rgba(0, 0, 0, 0.58) 54%, rgba(0, 0, 0, 0.26) 76%, rgba(0, 0, 0, 0.08) 90%, rgba(0, 0, 0, 0) 100%);
         }
 
         .hero-scene::after {
@@ -354,6 +354,7 @@
             display: block;
             font-family: "Bebas Neue", Arial, sans-serif;
             letter-spacing: 0.015em;
+            filter: drop-shadow(0 2px 0 rgba(0, 0, 0, 0.34));
         }
 
         .hero-title .white {
@@ -370,6 +371,7 @@
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+            text-shadow: 0 0 18px rgba(241, 186, 32, 0.12);
         }
 
         .hero-meta {
@@ -396,16 +398,18 @@
 
         .hero-actions {
             display: flex;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
             gap: 12px;
             margin-top: 18px;
+            align-items: center;
         }
 
         .hero-actions .btn {
-            min-width: 280px;
+            min-width: 0;
             min-height: 50px;
-            padding: 0 22px;
+            padding: 0 20px;
             font-size: 18px;
+            white-space: nowrap;
         }
 
         .trust-strip {
@@ -430,18 +434,23 @@
 
         .trust-icon {
             flex: 0 0 auto;
-            width: 42px;
-            height: 42px;
+            width: 56px;
+            height: 56px;
             display: grid;
             place-items: center;
-            color: var(--gold);
-            font-size: 26px;
+        }
+
+        .trust-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
         }
 
         .trust-copy strong {
             display: block;
             font-family: "Bebas Neue", Arial, sans-serif;
-            font-size: 20px;
+            font-size: 21px;
             letter-spacing: 0.03em;
             line-height: 0.98;
             text-transform: uppercase;
@@ -1264,6 +1273,10 @@
                 padding-top: 6px;
             }
 
+            .hero-actions {
+                flex-wrap: wrap;
+            }
+
             .hero-kicker {
                 font-size: 20px;
                 margin-bottom: 12px;
@@ -1427,33 +1440,33 @@
 
                     <div class="trust-strip">
                         <div class="trust-item">
-                            <div class="trust-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                            <div class="trust-icon"><img src="{{ url_for('static', filename='images/home2-icon-license.png') }}" alt="" aria-hidden="true"></div>
                             <div class="trust-copy">
                                 <strong>Licensed &amp; Insured</strong>
                                 <span>CA C-10 License #1098765</span>
                             </div>
                         </div>
                         <div class="trust-item">
-                            <div class="trust-icon"><i class="fa-regular fa-clock"></i></div>
+                            <div class="trust-icon"><img src="{{ url_for('static', filename='images/home2-icon-emergency.png') }}" alt="" aria-hidden="true"></div>
                             <div class="trust-copy">
                                 <strong>24/7 Emergency Service</strong>
                                 <span>Rapid Response</span>
                             </div>
                         </div>
                         <div class="trust-item">
-                            <div class="trust-icon"><i class="fa-solid fa-building"></i></div>
+                            <div class="trust-icon"><img src="{{ url_for('static', filename='images/home2-icon-commercial.png') }}" alt="" aria-hidden="true"></div>
                             <div class="trust-copy">
                                 <strong>Commercial &amp; Industrial Specialists</strong>
                             </div>
                         </div>
                         <div class="trust-item">
-                            <div class="trust-icon"><i class="fa-solid fa-award"></i></div>
+                            <div class="trust-icon"><img src="{{ url_for('static', filename='images/home2-icon-mission.png') }}" alt="" aria-hidden="true"></div>
                             <div class="trust-copy">
                                 <strong>Mission Critical Expertise</strong>
                             </div>
                         </div>
                         <div class="trust-item">
-                            <div class="trust-icon"><i class="fa-regular fa-lightbulb"></i></div>
+                            <div class="trust-icon"><img src="{{ url_for('static', filename='images/home2-icon-serving.png') }}" alt="" aria-hidden="true"></div>
                             <div class="trust-copy">
                                 <strong>Serving Southern California</strong>
                                 <span>Riverside County &amp; Beyond</span>
