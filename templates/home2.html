@@ -283,17 +283,34 @@
             background-image:
                 linear-gradient(180deg, rgba(0, 0, 0, 0.18) 0%, rgba(0, 0, 0, 0.18) 100%),
                 url("{{ url_for('static', filename='images/home2-reference.png') }}");
-            background-position: center;
+            background-position: right center;
             background-size: cover;
-            transform: scale(1.02);
+            transform: scale(1.01);
+        }
+
+        .hero-scene::before {
+            content: "";
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 52%;
+            background:
+                linear-gradient(90deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.98) 72%, rgba(0, 0, 0, 0.78) 88%, rgba(0, 0, 0, 0) 100%);
+        }
+
+        .hero-scene::after {
+            content: "";
+            position: absolute;
+            inset: 0 0 auto 0;
+            height: 132px;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.94) 72%, rgba(0, 0, 0, 0) 100%);
         }
 
         .hero-overlay {
             position: absolute;
             inset: 0;
             background:
-                linear-gradient(90deg, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.88) 25%, rgba(0, 0, 0, 0.62) 47%, rgba(0, 0, 0, 0.22) 70%, rgba(0, 0, 0, 0.08) 100%),
-                linear-gradient(180deg, rgba(0, 0, 0, 0.34) 0%, rgba(0, 0, 0, 0.06) 24%, rgba(0, 0, 0, 0.3) 100%);
+                linear-gradient(90deg, rgba(0, 0, 0, 0.52) 0%, rgba(0, 0, 0, 0.28) 34%, rgba(0, 0, 0, 0.12) 58%, rgba(0, 0, 0, 0.06) 100%),
+                linear-gradient(180deg, rgba(0, 0, 0, 0.24) 0%, rgba(0, 0, 0, 0.02) 28%, rgba(0, 0, 0, 0.24) 100%);
         }
 
         .hero-inner {
@@ -310,16 +327,16 @@
         }
 
         .hero-copy {
-            max-width: 660px;
-            padding-top: 22px;
+            max-width: 560px;
+            padding-top: 10px;
         }
 
         .hero-kicker {
-            margin-bottom: 18px;
+            margin-bottom: 14px;
             color: #d3a127;
             font-family: "Bebas Neue", Arial, sans-serif;
-            font-size: clamp(36px, 2.45vw, 52px);
-            letter-spacing: 0.16em;
+            font-size: clamp(24px, 1.85vw, 38px);
+            letter-spacing: 0.14em;
             line-height: 0.96;
             text-transform: uppercase;
         }
@@ -338,7 +355,7 @@
         }
 
         .hero-title .white {
-            font-size: clamp(88px, 8vw, 164px);
+            font-size: clamp(74px, 6.7vw, 126px);
             background: linear-gradient(180deg, #ffffff 0%, #f2f2f2 50%, #bbbbbb 100%);
             -webkit-background-clip: text;
             background-clip: text;
@@ -346,7 +363,7 @@
         }
 
         .hero-title .gold {
-            font-size: clamp(96px, 8.7vw, 184px);
+            font-size: clamp(80px, 7.2vw, 138px);
             background: linear-gradient(180deg, #ffd86d 0%, #f1ba20 42%, #d08a00 76%, #8e5300 100%);
             -webkit-background-clip: text;
             background-clip: text;
@@ -354,10 +371,10 @@
         }
 
         .hero-meta {
-            margin-top: 18px;
+            margin-top: 14px;
             font-family: "Bebas Neue", Arial, sans-serif;
-            font-size: clamp(28px, 1.9vw, 42px);
-            letter-spacing: 0.15em;
+            font-size: clamp(18px, 1.25vw, 26px);
+            letter-spacing: 0.12em;
             text-transform: uppercase;
             color: rgba(255, 255, 255, 0.9);
         }
@@ -368,10 +385,10 @@
         }
 
         .hero-text {
-            margin-top: 18px;
-            max-width: 520px;
-            font-size: clamp(23px, 1.5vw, 32px);
-            line-height: 1.18;
+            margin-top: 16px;
+            max-width: 460px;
+            font-size: clamp(18px, 1.15vw, 23px);
+            line-height: 1.24;
             color: rgba(255, 255, 255, 0.95);
         }
 
@@ -379,11 +396,11 @@
             display: flex;
             flex-wrap: wrap;
             gap: 14px;
-            margin-top: 26px;
+            margin-top: 22px;
         }
 
         .hero-actions .btn {
-            min-width: 280px;
+            min-width: 250px;
         }
 
         .trust-strip {
@@ -1219,13 +1236,20 @@
             }
 
             .hero-scene {
-                background-position: 64% center;
+                background-position: 72% center;
+            }
+
+            .hero-scene::before {
+                width: 100%;
+                background: linear-gradient(180deg, rgba(0, 0, 0, 0.86) 0%, rgba(0, 0, 0, 0.76) 48%, rgba(0, 0, 0, 0.68) 100%);
+            }
+
+            .hero-scene::after {
+                height: 88px;
             }
 
             .hero-overlay {
-                background:
-                    linear-gradient(180deg, rgba(0, 0, 0, 0.76) 0%, rgba(0, 0, 0, 0.7) 28%, rgba(0, 0, 0, 0.78) 100%),
-                    linear-gradient(90deg, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.32) 100%);
+                background: linear-gradient(180deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.2) 34%, rgba(0, 0, 0, 0.46) 100%);
             }
 
             .hero-copy {
@@ -1234,21 +1258,21 @@
             }
 
             .hero-kicker {
-                font-size: 28px;
+                font-size: 24px;
                 margin-bottom: 12px;
             }
 
             .hero-title .white {
-                font-size: clamp(58px, 15vw, 96px);
+                font-size: clamp(52px, 13.5vw, 78px);
             }
 
             .hero-title .gold {
-                font-size: clamp(66px, 16vw, 104px);
+                font-size: clamp(58px, 14.5vw, 84px);
             }
 
             .hero-meta {
-                font-size: 24px;
-                letter-spacing: 0.1em;
+                font-size: 18px;
+                letter-spacing: 0.08em;
             }
 
             .hero-meta .dot {
