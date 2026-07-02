@@ -167,12 +167,13 @@
         }
 
         .topbar {
-            position: sticky;
+            position: absolute;
             top: 0;
+            left: 0;
+            right: 0;
             z-index: 50;
-            backdrop-filter: blur(12px);
-            background: rgba(0, 0, 0, 0.7);
-            border-bottom: 1px solid rgba(241, 186, 32, 0.12);
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.44) 0%, rgba(0, 0, 0, 0.16) 72%, rgba(0, 0, 0, 0) 100%);
+            border-bottom: 0;
         }
 
         .topbar-inner {
@@ -320,8 +321,8 @@
             z-index: 1;
             width: min(calc(100% - 40px), 1380px);
             margin: 0 auto;
-            padding: 24px 0 26px;
-            min-height: calc(100vh - 72px);
+            padding: 110px 0 26px;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -1265,7 +1266,7 @@
 
             .hero-inner {
                 min-height: 0;
-                padding: 24px 0 20px;
+                padding: 92px 0 20px;
             }
 
             .hero-scene {
