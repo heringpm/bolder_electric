@@ -320,17 +320,19 @@
             z-index: 1;
             width: min(calc(100% - 40px), 1380px);
             margin: 0 auto;
-            padding: 24px 0 14px;
+            padding: 24px 0 26px;
             min-height: calc(100vh - 72px);
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            gap: 20px;
+            justify-content: center;
+            gap: 34px;
         }
 
         .hero-copy {
             max-width: 620px;
             padding-top: 0;
+            margin-top: auto;
+            margin-bottom: auto;
         }
 
         .hero-kicker {
@@ -432,6 +434,8 @@
             border: 1px solid rgba(241, 186, 32, 0.28);
             background: rgba(0, 0, 0, 0.9);
             box-shadow: 0 14px 36px rgba(0, 0, 0, 0.22);
+            margin-top: auto;
+            margin-bottom: 10px;
         }
 
         .trust-item {
@@ -1286,6 +1290,8 @@
             .hero-copy {
                 max-width: none;
                 padding-top: 6px;
+                margin-top: 0;
+                margin-bottom: 0;
             }
 
             .hero-actions {
@@ -1352,6 +1358,10 @@
 
             .trust-item:last-child {
                 border-bottom: 0;
+            }
+
+            .trust-strip {
+                margin-bottom: 0;
             }
 
             .service-card-media {
