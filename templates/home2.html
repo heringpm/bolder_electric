@@ -820,100 +820,234 @@
         }
 
         .service-areas {
-            padding-top: 58px;
-            padding-bottom: 74px;
+            padding-top: 56px;
+            padding-bottom: 78px;
             background:
-                radial-gradient(circle at top right, rgba(241, 186, 32, 0.08), transparent 18%),
+                radial-gradient(circle at 78% 10%, rgba(241, 186, 32, 0.08), transparent 18%),
+                radial-gradient(circle at 20% 0%, rgba(241, 186, 32, 0.04), transparent 18%),
                 linear-gradient(180deg, #080808 0%, #050505 100%);
-        }
-
-        .service-areas .section-head {
-            margin-bottom: 24px;
         }
 
         .service-areas-shell {
             display: grid;
-            gap: 18px;
+            gap: 28px;
         }
 
-        .service-areas-intro {
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .service-areas-hero {
             display: grid;
-            grid-template-columns: 1.2fr 0.8fr;
+            grid-template-columns: 0.72fr 1.08fr 0.82fr;
             gap: 18px;
             align-items: stretch;
+            padding-bottom: 22px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
         }
 
         .service-areas-copy {
-            padding: 24px 24px 22px;
-            border: 1px solid rgba(241, 186, 32, 0.18);
-            border-radius: 18px;
-            background:
-                linear-gradient(180deg, rgba(14, 14, 14, 0.98) 0%, rgba(7, 7, 7, 0.98) 100%);
-            box-shadow: var(--shadow);
+            display: grid;
+            align-content: center;
+            gap: 16px;
+            padding: 14px 8px 14px 4px;
+        }
+
+        .service-areas-copy .section-tag {
+            justify-self: start;
+            margin: 0;
+            font-size: 19px;
+            letter-spacing: 0.14em;
+        }
+
+        .service-areas-copy h2 {
+            margin: 0;
+            font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: clamp(52px, 4.5vw, 78px);
+            line-height: 0.95;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+        }
+
+        .service-areas-copy .service-area-rule {
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, #f1ba20 0%, #be7900 100%);
+            border-radius: 999px;
         }
 
         .service-areas-copy p {
             margin: 0;
+            max-width: 420px;
+            font-size: 19px;
+            line-height: 1.45;
+            color: rgba(245, 243, 239, 0.84);
+        }
+
+        .service-areas-map {
+            position: relative;
+            min-height: 420px;
+            border-radius: 20px;
+            overflow: hidden;
+            background:
+                radial-gradient(circle at 25% 25%, rgba(241, 186, 32, 0.16), transparent 22%),
+                radial-gradient(circle at 55% 58%, rgba(241, 186, 32, 0.12), transparent 18%),
+                linear-gradient(180deg, rgba(19, 19, 19, 0.96) 0%, rgba(9, 9, 9, 0.98) 100%);
+            border: 1px solid rgba(241, 186, 32, 0.14);
+        }
+
+        .service-areas-map::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at center, rgba(255, 255, 255, 0.02), transparent 65%),
+                linear-gradient(135deg, rgba(241, 186, 32, 0.08), transparent 34%);
+            opacity: 0.8;
+        }
+
+        .service-areas-map::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image:
+                radial-gradient(rgba(241, 186, 32, 0.04) 0.6px, transparent 0.6px);
+            background-size: 18px 18px;
+            opacity: 0.16;
+        }
+
+        .service-areas-map svg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .service-areas-region {
+            position: absolute;
+            z-index: 2;
+            display: grid;
+            gap: 6px;
+            color: #f8f5ed;
+            text-transform: uppercase;
+            font-family: "Bebas Neue", Arial, sans-serif;
+            letter-spacing: 0.04em;
+        }
+
+        .service-areas-region strong {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
             font-size: 18px;
-            line-height: 1.42;
-            color: rgba(245, 243, 239, 0.86);
+            line-height: 1;
+            font-weight: 400;
         }
 
-        .service-areas-copy p + p {
-            margin-top: 14px;
+        .service-areas-region strong::before {
+            content: "";
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #f1ba20;
+            box-shadow: 0 0 0 6px rgba(241, 186, 32, 0.12), 0 0 16px rgba(241, 186, 32, 0.5);
         }
 
-        .service-areas-copy a,
-        .service-areas-footnote a {
-            color: var(--gold-soft);
-            text-decoration: underline;
-            text-decoration-color: rgba(241, 186, 32, 0.32);
-            text-underline-offset: 4px;
+        .service-areas-region.la { top: 82px; left: 118px; }
+        .service-areas-region.sb { top: 80px; right: 94px; }
+        .service-areas-region.riv { top: 178px; right: 88px; }
+        .service-areas-region.oc { top: 206px; left: 192px; }
+        .service-areas-region.sd { bottom: 96px; right: 66px; }
+
+        .service-areas-stats {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            align-content: center;
         }
 
         .service-areas-stat {
-            padding: 24px 22px;
-            border: 1px solid rgba(241, 186, 32, 0.24);
-            border-radius: 18px;
-            background:
-                radial-gradient(circle at top, rgba(241, 186, 32, 0.08), transparent 38%),
-                linear-gradient(180deg, rgba(16, 16, 16, 0.98) 0%, rgba(8, 8, 8, 0.98) 100%);
-            box-shadow: var(--shadow);
+            min-height: 154px;
+            padding: 18px 14px 14px;
+            border: 1px solid rgba(241, 186, 32, 0.42);
+            border-radius: 14px;
+            background: linear-gradient(180deg, rgba(15, 15, 15, 0.98) 0%, rgba(7, 7, 7, 0.98) 100%);
             display: grid;
-            align-content: center;
-            gap: 14px;
+            justify-items: center;
+            align-content: start;
+            gap: 10px;
             text-align: center;
         }
 
-        .service-areas-stat strong,
-        .service-areas-stat span {
+        .service-areas-stat-icon {
+            width: 36px;
+            height: 36px;
+            color: var(--gold);
+            display: grid;
+            place-items: center;
+        }
+
+        .service-areas-stat-icon svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .service-areas-stat-value,
+        .service-areas-stat-label,
+        .service-areas-stat-copy {
             display: block;
             font-family: "Bebas Neue", Arial, sans-serif;
             text-transform: uppercase;
         }
 
-        .service-areas-stat strong {
-            font-size: 74px;
+        .service-areas-stat-value {
+            font-size: 54px;
             line-height: 0.9;
-            letter-spacing: 0.03em;
-            background: linear-gradient(180deg, #ffd86d 0%, #f1ba20 58%, #b16e00 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            color: #fbf8f1;
         }
 
-        .service-areas-stat span {
-            font-size: 24px;
-            line-height: 1;
-            letter-spacing: 0.08em;
-            color: #f8f5ed;
+        .service-areas-stat-label {
+            font-size: 18px;
+            line-height: 1.06;
+            letter-spacing: 0.05em;
+            color: #f6f2e9;
         }
 
-        .service-areas-stat small {
-            display: block;
+        .service-areas-stat-copy {
             font-size: 14px;
-            line-height: 1.35;
-            color: rgba(245, 243, 239, 0.72);
+            line-height: 1.15;
+            letter-spacing: 0.03em;
+            color: rgba(245, 243, 239, 0.78);
+        }
+
+        .service-areas-cities-head {
+            display: grid;
+            justify-items: center;
+            gap: 10px;
+        }
+
+        .service-areas-cities-head .section-tag {
+            margin: 0;
+            font-size: 22px;
+            letter-spacing: 0.16em;
+        }
+
+        .service-areas-cities-head h3 {
+            margin: 0;
+            font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: clamp(38px, 3vw, 56px);
+            line-height: 0.95;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
         }
 
         .service-area-grid,
@@ -927,7 +1061,7 @@
         }
 
         .service-area-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
+            grid-template-columns: repeat(5, minmax(0, 1fr));
             margin-top: 0;
         }
 
@@ -952,50 +1086,148 @@
         .service-area-card {
             position: relative;
             overflow: hidden;
-            padding: 24px 24px 22px;
+            padding: 24px 18px 18px;
             border-radius: 18px;
-            border: 1px solid rgba(241, 186, 32, 0.2);
+            border: 1px solid rgba(241, 186, 32, 0.32);
             background:
                 linear-gradient(180deg, rgba(17, 17, 17, 0.98) 0%, rgba(8, 8, 8, 0.98) 100%);
+            box-shadow: var(--shadow);
+            display: grid;
+            align-content: start;
+            justify-items: center;
+            min-height: 344px;
         }
 
-        .service-area-card::before {
-            content: "";
-            position: absolute;
-            inset: 0 0 auto 0;
-            height: 2px;
-            background: linear-gradient(90deg, rgba(241, 186, 32, 0) 0%, rgba(241, 186, 32, 0.8) 20%, rgba(241, 186, 32, 0.18) 100%);
+        .service-area-card-icon {
+            width: 60px;
+            height: 60px;
+            display: grid;
+            place-items: center;
+            margin: 0 auto 20px;
+            color: var(--gold);
+        }
+
+        .service-area-card-icon svg {
+            width: 100%;
+            height: 100%;
+            display: block;
         }
 
         .service-area-card h3 {
-            margin: 0 0 12px;
+            margin: 0;
             font-family: "Bebas Neue", Arial, sans-serif;
-            font-size: clamp(30px, 2.1vw, 40px);
+            font-size: clamp(25px, 1.8vw, 34px);
             line-height: 0.98;
             letter-spacing: 0.035em;
             text-transform: uppercase;
             color: #fbf8f1;
+            text-align: center;
         }
 
-        .service-area-card p {
+        .service-area-card-rule {
+            width: min(100%, 240px);
+            height: 1px;
+            margin: 18px auto 16px;
+            background: linear-gradient(90deg, rgba(241, 186, 32, 0) 0%, rgba(241, 186, 32, 0.82) 18%, rgba(241, 186, 32, 0.82) 82%, rgba(241, 186, 32, 0) 100%);
+        }
+
+        .service-area-card-cities {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px 14px;
             margin: 0;
-            font-size: 16px;
-            line-height: 1.38;
-            color: rgba(245, 243, 239, 0.76);
+            padding: 0;
+            list-style: none;
+            min-height: 104px;
         }
 
-        .service-areas-footnote {
-            padding: 22px 24px;
-            border: 1px solid rgba(241, 186, 32, 0.16);
-            border-radius: 18px;
-            background: linear-gradient(180deg, rgba(13, 13, 13, 0.96) 0%, rgba(7, 7, 7, 0.96) 100%);
+        .service-area-card-cities li {
+            position: relative;
+            font-size: 13px;
+            line-height: 1.2;
+            color: rgba(245, 243, 239, 0.84);
+            white-space: nowrap;
         }
 
-        .service-areas-footnote p {
-            margin: 0;
-            font-size: 16px;
-            line-height: 1.42;
-            color: rgba(245, 243, 239, 0.78);
+        .service-area-card-cities a {
+            color: inherit;
+        }
+
+        .service-area-card-cities li:not(:last-child)::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            right: -10px;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--gold);
+            transform: translateY(-50%);
+        }
+
+        .service-area-card-more {
+            margin-top: 10px;
+            font-size: 13px;
+            line-height: 1.2;
+            color: rgba(245, 243, 239, 0.72);
+            text-align: center;
+        }
+
+        .service-area-card-link-rule {
+            width: min(100%, 180px);
+            height: 1px;
+            margin: 22px auto 16px;
+            background: linear-gradient(90deg, rgba(241, 186, 32, 0) 0%, rgba(241, 186, 32, 0.7) 50%, rgba(241, 186, 32, 0) 100%);
+        }
+
+        .service-area-card-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: 24px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--gold);
+        }
+
+        .service-area-card-link span:last-child {
+            font-size: 28px;
+        }
+
+        .service-area-map-button {
+            width: fit-content;
+        }
+
+        .service-area-icon {
+            width: 100%;
+            height: 100%;
+        }
+
+        .service-area-icon .hex-fill {
+            fill: rgba(0, 0, 0, 0.72);
+        }
+
+        .service-area-icon .hex-stroke {
+            fill: none;
+            stroke: #f1ba20;
+            stroke-width: 2.25;
+            stroke-linejoin: round;
+        }
+
+        .service-area-icon .icon-stroke {
+            fill: none;
+            stroke: #f1ba20;
+            stroke-width: 2.15;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .service-area-icon .icon-fill {
+            fill: #f1ba20;
         }
 
         .dark-card h3,
@@ -1597,14 +1829,36 @@
                 grid-template-columns: 1fr;
             }
 
-            .service-areas-intro {
+            .service-areas-hero {
                 grid-template-columns: 1fr;
+            }
+
+            .service-areas-copy {
+                padding-right: 0;
+            }
+
+            .service-areas-map {
+                min-height: 380px;
+            }
+
+            .service-areas-region.la { top: 76px; left: 104px; }
+            .service-areas-region.sb { top: 78px; right: 80px; }
+            .service-areas-region.riv { top: 170px; right: 74px; }
+            .service-areas-region.oc { top: 196px; left: 180px; }
+            .service-areas-region.sd { bottom: 82px; right: 54px; }
+
+            .service-areas-stats {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
             }
 
             .service-area-grid,
             .mini-card-grid,
             .faq-grid {
                 grid-template-columns: 1fr 1fr;
+            }
+
+            .service-area-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
             }
 
             .trust-strip {
@@ -1765,35 +2019,95 @@
                 padding-bottom: 64px;
             }
 
-            .service-areas-copy,
-            .service-areas-stat,
-            .service-area-card,
-            .service-areas-footnote,
-            .link-group {
-                padding: 20px 18px;
+            .service-areas-shell {
+                gap: 22px;
             }
 
-            .service-areas-copy p,
-            .service-area-card p,
-            .service-areas-footnote p {
+            .service-areas-hero {
+                gap: 20px;
+                padding-bottom: 18px;
+            }
+
+            .service-areas-copy {
+                padding: 8px 0 0;
+                gap: 14px;
+            }
+
+            .service-areas-copy h2 {
+                font-size: clamp(42px, 13vw, 58px);
+            }
+
+            .service-areas-copy p {
+                max-width: none;
                 font-size: 15px;
-                line-height: 1.38;
+                line-height: 1.45;
             }
 
-            .service-areas-stat strong {
-                font-size: 58px;
+            .service-areas-map {
+                min-height: 320px;
             }
 
-            .service-areas-stat span {
-                font-size: 20px;
+            .service-areas-region strong {
+                font-size: 15px;
             }
 
-            .service-areas-stat small {
-                font-size: 13px;
+            .service-areas-region.la { top: 58px; left: 54px; }
+            .service-areas-region.sb { top: 58px; right: 28px; }
+            .service-areas-region.riv { top: 144px; right: 24px; }
+            .service-areas-region.oc { top: 162px; left: 102px; }
+            .service-areas-region.sd { bottom: 54px; right: 20px; }
+
+            .service-areas-stats,
+            .service-area-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .service-areas-stat {
+                min-height: 0;
+                padding: 18px 14px;
+            }
+
+            .service-areas-stat-value {
+                font-size: 42px;
+            }
+
+            .service-areas-stat-label {
+                font-size: 16px;
+            }
+
+            .service-areas-stat-copy {
+                font-size: 12px;
+            }
+
+            .service-areas-cities-head .section-tag {
+                font-size: 18px;
+            }
+
+            .service-areas-cities-head h3 {
+                font-size: clamp(32px, 10vw, 44px);
+            }
+
+            .service-area-card {
+                min-height: 0;
+                padding: 22px 18px 18px;
+            }
+
+            .service-area-card-icon {
+                width: 56px;
+                height: 56px;
+                margin-bottom: 18px;
             }
 
             .service-area-card h3 {
-                font-size: 32px;
+                font-size: 28px;
+            }
+
+            .service-area-card-cities {
+                min-height: 0;
+            }
+
+            .service-area-card-link {
+                font-size: 21px;
             }
 
             .chip {
@@ -2129,87 +2443,260 @@
 
             <section class="section service-areas" id="service-areas">
                 <div class="container">
-                    <div class="section-head">
-                        <div class="section-tag">Service Areas</div>
-                        <h2>Across Southern California</h2>
-                        <p>Regional coverage, complex project support, and critical-power expertise carried into the same premium `/home2` system.</p>
-                    </div>
-
                     <div class="service-areas-shell">
-                        <div class="service-areas-intro">
+                        <div class="service-areas-hero">
                             <article class="service-areas-copy">
-                                <p>Bolder Electric provides commercial electrical contracting, critical power infrastructure, emergency electrical services, generator systems, ATS/switchgear solutions, and electrical upgrades throughout Southern California. Our team serves industrial, commercial, healthcare, education, government, and mission-critical facilities across Riverside, San Bernardino, Los Angeles, Orange, and San Diego Counties, delivering reliable electrical solutions for complex projects of every size.</p>
-                                <p>If you need a <a href="{{ url_for('city_menifee') }}">licensed electrician in Menifee, CA</a>, our team handles <a href="{{ url_for('service_landing', slug='commercial-electrical-services') }}">commercial electrical services</a>, <a href="{{ url_for('service_landing', slug='emergency-electrician-services') }}">emergency electrical services</a>, <a href="{{ url_for('service_landing', slug='residential-electrician-services') }}">residential electrician work</a>, and <a href="{{ url_for('service_landing', slug='electrical-panel-upgrades') }}">electrical panel upgrades and panel repair</a>. For city-specific information, visit our <a href="{{ url_for('city_murrieta') }}">Murrieta electrician page</a>, our <a href="{{ url_for('city_temecula') }}">Temecula electrician page</a>, our <a href="{{ url_for('city_lake_elsinore') }}">Lake Elsinore electrician page</a>, or our <a href="{{ url_for('city_corona') }}">Corona electrician page</a>.</p>
+                                <div class="section-tag">Service Areas</div>
+                                <h2>Across Southern California</h2>
+                                <div class="service-area-rule"></div>
+                                <p>Regional coverage, complex project support, and critical power expertise carried into the same premium experience.</p>
+                                <a class="btn btn-outline service-area-map-button" href="#cities-we-serve">
+                                    <span>View Full Service Area Map</span>
+                                    <span aria-hidden="true">&rarr;</span>
+                                </a>
+                                <p class="sr-only">Bolder Electric provides commercial electrical contracting, critical power infrastructure, emergency electrical services, generator systems, ATS/switchgear solutions, and electrical upgrades throughout Southern California. Our team serves industrial, commercial, healthcare, education, government, and mission-critical facilities across Riverside, San Bernardino, Los Angeles, Orange, and San Diego Counties, delivering reliable electrical solutions for complex projects of every size.</p>
                             </article>
 
-                            <aside class="service-areas-stat">
-                                <strong>5</strong>
-                                <span>County Coverage</span>
-                                <small>Riverside, San Bernardino, Los Angeles, Orange, and San Diego Counties.</small>
-                            </aside>
+                            <div class="service-areas-map" aria-label="Southern California service area coverage map">
+                                <svg viewBox="0 0 520 420" role="img" aria-hidden="true" focusable="false">
+                                    <defs>
+                                        <filter id="serviceAreaGlow">
+                                            <feGaussianBlur stdDeviation="4" result="blur"></feGaussianBlur>
+                                            <feMerge>
+                                                <feMergeNode in="blur"></feMergeNode>
+                                                <feMergeNode in="SourceGraphic"></feMergeNode>
+                                            </feMerge>
+                                        </filter>
+                                    </defs>
+                                    <path d="M121 24 L150 52 L142 86 L170 104 L183 140 L226 160 L246 194 L278 214 L286 256 L308 286 L322 334 L334 396" fill="none" stroke="rgba(241,186,32,0.75)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    <path d="M185 72 L337 72 L337 198" fill="none" stroke="rgba(241,186,32,0.55)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    <path d="M170 104 L316 104" fill="none" stroke="rgba(241,186,32,0.35)" stroke-width="1.6"></path>
+                                    <path d="M208 160 L351 160" fill="none" stroke="rgba(241,186,32,0.35)" stroke-width="1.6"></path>
+                                    <path d="M246 214 L365 214" fill="none" stroke="rgba(241,186,32,0.35)" stroke-width="1.6"></path>
+                                    <path d="M279 257 L372 257" fill="none" stroke="rgba(241,186,32,0.35)" stroke-width="1.6"></path>
+                                    <path d="M112 188 L128 198 L140 212 L124 218 L110 206 Z" fill="none" stroke="rgba(241,186,32,0.55)" stroke-width="2"></path>
+                                    <path d="M98 202 L108 208 L114 220 L102 222 L92 214 Z" fill="none" stroke="rgba(241,186,32,0.45)" stroke-width="1.6"></path>
+                                    <circle cx="166" cy="106" r="6" fill="#f1ba20" filter="url(#serviceAreaGlow)"></circle>
+                                    <circle cx="306" cy="104" r="6" fill="#f1ba20" filter="url(#serviceAreaGlow)"></circle>
+                                    <circle cx="319" cy="209" r="6" fill="#f1ba20" filter="url(#serviceAreaGlow)"></circle>
+                                    <circle cx="238" cy="236" r="6" fill="#f1ba20" filter="url(#serviceAreaGlow)"></circle>
+                                    <circle cx="327" cy="309" r="6" fill="#f1ba20" filter="url(#serviceAreaGlow)"></circle>
+                                </svg>
+                                <div class="service-areas-region la"><strong>Los Angeles County</strong></div>
+                                <div class="service-areas-region sb"><strong>San Bernardino County</strong></div>
+                                <div class="service-areas-region riv"><strong>Riverside County</strong></div>
+                                <div class="service-areas-region oc"><strong>Orange County</strong></div>
+                                <div class="service-areas-region sd"><strong>San Diego County</strong></div>
+                            </div>
+
+                            <div class="service-areas-stats">
+                                <article class="service-areas-stat">
+                                    <div class="service-areas-stat-icon" aria-hidden="true">
+                                        <svg viewBox="0 0 32 32">
+                                            <path class="icon-stroke" d="M16 28s-7-7.4-7-13a7 7 0 1 1 14 0c0 5.6-7 13-7 13Z"></path>
+                                            <circle class="icon-stroke" cx="16" cy="15" r="2.8"></circle>
+                                        </svg>
+                                    </div>
+                                    <span class="service-areas-stat-value">5</span>
+                                    <span class="service-areas-stat-label">Counties Covered</span>
+                                </article>
+                                <article class="service-areas-stat">
+                                    <div class="service-areas-stat-icon" aria-hidden="true">
+                                        <svg viewBox="0 0 32 32">
+                                            <path class="icon-stroke" d="M8 25V12h5v13"></path>
+                                            <path class="icon-stroke" d="M13 25V7h6v18"></path>
+                                            <path class="icon-stroke" d="M19 25v-9h5v9"></path>
+                                            <path class="icon-stroke" d="M6 25h20"></path>
+                                            <path class="icon-stroke" d="M10 15h1.5M10 18h1.5M15 10h1.5M15 14h1.5M21 19h1.5"></path>
+                                        </svg>
+                                    </div>
+                                    <span class="service-areas-stat-value">100+</span>
+                                    <span class="service-areas-stat-label">Cities Served</span>
+                                </article>
+                                <article class="service-areas-stat">
+                                    <div class="service-areas-stat-icon" aria-hidden="true">
+                                        <svg viewBox="0 0 32 32">
+                                            <path class="icon-stroke" d="M18 4 10 18h5l-1 10 8-14h-5Z"></path>
+                                        </svg>
+                                    </div>
+                                    <span class="service-areas-stat-value">24/7</span>
+                                    <span class="service-areas-stat-label">Response Available</span>
+                                </article>
+                                <article class="service-areas-stat">
+                                    <div class="service-areas-stat-icon" aria-hidden="true">
+                                        <svg viewBox="0 0 32 32">
+                                            <path class="icon-stroke" d="M16 28s9-4 9-11V8l-9-3-9 3v9c0 7 9 11 9 11Z"></path>
+                                            <path class="icon-stroke" d="m12.5 16.5 2.4 2.5 4.8-5.6"></path>
+                                        </svg>
+                                    </div>
+                                    <span class="service-areas-stat-label">Local Experts</span>
+                                    <span class="service-areas-stat-copy">On The Ground</span>
+                                </article>
+                                <article class="service-areas-stat">
+                                    <div class="service-areas-stat-icon" aria-hidden="true">
+                                        <svg viewBox="0 0 32 32">
+                                            <path class="icon-stroke" d="m7 18 4-4 4 4"></path>
+                                            <path class="icon-stroke" d="m25 18-4-4-4 4"></path>
+                                            <path class="icon-stroke" d="M11 18h10"></path>
+                                            <path class="icon-stroke" d="M9 18v4c0 1.7 1.3 3 3 3h2"></path>
+                                            <path class="icon-stroke" d="M23 18v4c0 1.7-1.3 3-3 3h-2"></path>
+                                        </svg>
+                                    </div>
+                                    <span class="service-areas-stat-label">Built On Trust</span>
+                                    <span class="service-areas-stat-copy">Delivered With Integrity</span>
+                                </article>
+                            </div>
+                        </div>
+
+                        <div class="service-areas-cities-head" id="cities-we-serve">
+                            <div class="section-tag">Cities We Serve</div>
+                            <h3>Cities We Serve</h3>
                         </div>
 
                         <div class="service-area-grid">
-                            <article class="service-area-card">
-                            <h3>Emergency Electrician Services</h3>
-                            <p>Fast-response troubleshooting, diagnostics, and repairs for electrical outages, unsafe panels, and urgent hazards in Menifee and nearby Riverside County cities.</p>
+                            <article class="service-area-card" id="los-angeles-county-cities">
+                                <div class="service-area-card-icon" aria-hidden="true">
+                                    <svg class="service-area-icon" viewBox="0 0 64 64">
+                                        <polygon class="hex-fill" points="32,3 54,16 54,48 32,61 10,48 10,16"></polygon>
+                                        <polygon class="hex-stroke" points="32,3 54,16 54,48 32,61 10,48 10,16"></polygon>
+                                        <path class="icon-stroke" d="M22 42V26h7v16"></path>
+                                        <path class="icon-stroke" d="M29 42V18h8v24"></path>
+                                        <path class="icon-stroke" d="M37 42V23h7v19"></path>
+                                        <path class="icon-stroke" d="M20 42h26"></path>
+                                        <path class="icon-stroke" d="M24 31h3M24 35h3M32 24h3M32 29h3M40 29h2M40 34h2"></path>
+                                    </svg>
+                                </div>
+                                <h3>Los Angeles County</h3>
+                                <div class="service-area-card-rule"></div>
+                                <ul class="service-area-card-cities">
+                                    <li><a href="#la-los-angeles">Los Angeles</a></li>
+                                    <li><a href="#la-long-beach">Long Beach</a></li>
+                                    <li><a href="#la-pasadena">Pasadena</a></li>
+                                    <li><a href="#la-burbank">Burbank</a></li>
+                                    <li><a href="#la-santa-monica">Santa Monica</a></li>
+                                    <li><a href="#la-glendale">Glendale</a></li>
+                                    <li><a href="#la-anaheim">Anaheim</a></li>
+                                    <li><a href="#la-torrance">Torrance</a></li>
+                                    <li><a href="#la-downey">Downey</a></li>
+                                </ul>
+                                <div class="service-area-card-more">And More</div>
+                                <div class="service-area-card-link-rule"></div>
+                                <a class="service-area-card-link" href="#los-angeles-county-cities"><span>View All Cities</span><span aria-hidden="true">&rsaquo;</span></a>
                             </article>
-                            <article class="service-area-card">
-                            <h3>Commercial Electrical Facilities Support</h3>
-                            <p>Reliable support for tenant improvements, distribution upgrades, lighting systems, and ongoing commercial electrical maintenance in Menifee and surrounding cities.</p>
-                            </article>
-                            <article class="service-area-card">
-                            <h3>Residential Upgrades &amp; Repairs</h3>
-                            <p>Safe and code-compliant home electrical work including rewiring, outlets, switches, lighting, service changes, electrical panel upgrades, and electrical repairs.</p>
-                            </article>
-                            <article class="service-area-card">
-                            <h3>Panel Upgrades &amp; Repair</h3>
-                            <p>Panel upgrades, panel replacement, and panel repair solutions that improve electrical safety, service capacity, and long-term reliability in Menifee, Murrieta, and nearby communities.</p>
-                            </article>
-                        </div>
 
-                        <article class="service-areas-footnote">
-                            <p>Murrieta homeowners and facility managers can review our <a href="{{ url_for('city_murrieta') }}">electrical panel repair in Murrieta, CA</a> coverage for troubleshooting, replacement planning, service upgrades, and emergency electrician response. If you are searching for an <a href="{{ url_for('city_lake_elsinore') }}">electrician in Lake Elsinore</a>, an <a href="{{ url_for('city_wildomar') }}">electrician in Wildomar, CA</a>, or an <a href="{{ url_for('city_corona') }}">electrician in Corona, CA</a>, we also provide commercial, residential, emergency, and panel-upgrade support in those cities.</p>
-                        </article>
-
-                        <div class="link-group">
-                            <h4>Explore City Service Pages</h4>
-                            <div class="chip-grid">
-                                <a class="chip" href="{{ url_for('city_murrieta') }}">Murrieta</a>
-                                <a class="chip" href="{{ url_for('city_temecula') }}">Temecula</a>
-                                <a class="chip" href="{{ url_for('city_lake_elsinore') }}">Lake Elsinore</a>
-                                <a class="chip" href="{{ url_for('city_menifee') }}">Menifee</a>
-                                <a class="chip" href="{{ url_for('city_perris') }}">Perris</a>
-                                <a class="chip" href="{{ url_for('city_wildomar') }}">Wildomar</a>
-                                <a class="chip" href="{{ url_for('city_hemet') }}">Hemet</a>
-                                <a class="chip" href="{{ url_for('city_corona') }}">Corona</a>
-                            </div>
-                        </div>
-
-                        <div class="link-group">
-                            <h4>Popular Service Pages</h4>
-                            <div class="chip-grid">
-                                <a class="chip" href="{{ url_for('service_landing', slug='commercial-electrical-services') }}">Commercial Electrical Services</a>
-                                <a class="chip" href="{{ url_for('service_landing', slug='emergency-electrician-services') }}">Emergency Electrician Services</a>
-                                <a class="chip" href="{{ url_for('service_landing', slug='residential-electrician-services') }}">Residential Electrician Services</a>
-                                <a class="chip" href="{{ url_for('service_landing', slug='electrical-panel-upgrades') }}">Electrical Panel Upgrades</a>
-                                <a class="chip" href="{{ url_for('service_landing', slug='ev-charger-installation') }}">EV Charger Installation</a>
-                                <a class="chip" href="{{ url_for('service_landing', slug='lighting-installation-services') }}">Lighting Installation Services</a>
-                            </div>
-                        </div>
-
-                        <div class="faq-grid">
-                            <article class="dark-card">
-                                <h4>Do you provide home upgrades across multiple cities?</h4>
-                                <p>Yes. We perform home electrical upgrades across Riverside County communities including Menifee, Murrieta, Temecula, Lake Elsinore, Perris, Wildomar, Hemet, San Jacinto, and Corona.</p>
+                            <article class="service-area-card" id="san-bernardino-county-cities">
+                                <div class="service-area-card-icon" aria-hidden="true">
+                                    <svg class="service-area-icon" viewBox="0 0 64 64">
+                                        <polygon class="hex-fill" points="32,3 54,16 54,48 32,61 10,48 10,16"></polygon>
+                                        <polygon class="hex-stroke" points="32,3 54,16 54,48 32,61 10,48 10,16"></polygon>
+                                        <path class="icon-stroke" d="M20 26h24v16H20z"></path>
+                                        <circle class="icon-stroke" cx="32" cy="34" r="6"></circle>
+                                        <path class="icon-stroke" d="M25 22h14M24 42h16M17 30h3M44 30h3M17 38h3M44 38h3"></path>
+                                    </svg>
+                                </div>
+                                <h3>San Bernardino County</h3>
+                                <div class="service-area-card-rule"></div>
+                                <ul class="service-area-card-cities">
+                                    <li><a href="#sb-ontario">Ontario</a></li>
+                                    <li><a href="#sb-rancho-cucamonga">Rancho Cucamonga</a></li>
+                                    <li><a href="#sb-fontana">Fontana</a></li>
+                                    <li><a href="#sb-san-bernardino">San Bernardino</a></li>
+                                    <li><a href="#sb-victorville">Victorville</a></li>
+                                    <li><a href="#sb-redlands">Redlands</a></li>
+                                    <li><a href="#sb-highland">Highland</a></li>
+                                    <li><a href="#sb-yucaipa">Yucaipa</a></li>
+                                    <li><a href="#sb-hesperia">Hesperia</a></li>
+                                </ul>
+                                <div class="service-area-card-more">And More</div>
+                                <div class="service-area-card-link-rule"></div>
+                                <a class="service-area-card-link" href="#san-bernardino-county-cities"><span>View All Cities</span><span aria-hidden="true">&rsaquo;</span></a>
                             </article>
-                            <article class="dark-card">
-                                <h4>Can I request emergency or panel work in Menifee?</h4>
-                                <p>Yes. We provide emergency electrical services in Menifee, plus electrical panel upgrades, panel repair, and residential or commercial electrical service calls.</p>
+
+                            <article class="service-area-card" id="riverside-county-cities">
+                                <div class="service-area-card-icon" aria-hidden="true">
+                                    <svg class="service-area-icon" viewBox="0 0 64 64">
+                                        <polygon class="hex-fill" points="32,3 54,16 54,48 32,61 10,48 10,16"></polygon>
+                                        <polygon class="hex-stroke" points="32,3 54,16 54,48 32,61 10,48 10,16"></polygon>
+                                        <path class="icon-stroke" d="M24 44V28l8-6 8 6v16"></path>
+                                        <path class="icon-stroke" d="M18 44h28"></path>
+                                        <path class="icon-stroke" d="M36 20c2 2 4 5 4 8 0 4-3 7-8 7s-8-3-8-7c0-3 2-6 4-8"></path>
+                                        <path class="icon-stroke" d="M30 44v-7h4v7"></path>
+                                    </svg>
+                                </div>
+                                <h3>Riverside County</h3>
+                                <div class="service-area-card-rule"></div>
+                                <ul class="service-area-card-cities">
+                                    <li><a href="#riv-riverside">Riverside</a></li>
+                                    <li><a href="#riv-corona">Corona</a></li>
+                                    <li><a href="#riv-murrieta">Murrieta</a></li>
+                                    <li><a href="#riv-temecula">Temecula</a></li>
+                                    <li><a href="#riv-lake-elsinore">Lake Elsinore</a></li>
+                                    <li><a href="#riv-perris">Perris</a></li>
+                                    <li><a href="#riv-cathedral-city">Cathedral City</a></li>
+                                    <li><a href="#riv-palm-springs">Palm Springs</a></li>
+                                </ul>
+                                <div class="service-area-card-more">And More</div>
+                                <div class="service-area-card-link-rule"></div>
+                                <a class="service-area-card-link" href="#riverside-county-cities"><span>View All Cities</span><span aria-hidden="true">&rsaquo;</span></a>
                             </article>
-                            <article class="dark-card">
-                                <h4>Do you serve locations beyond Riverside County?</h4>
-                                <p>Yes. We serve Riverside County and broader Southern California for both commercial and residential electrical projects.</p>
+
+                            <article class="service-area-card" id="orange-county-cities">
+                                <div class="service-area-card-icon" aria-hidden="true">
+                                    <svg class="service-area-icon" viewBox="0 0 64 64">
+                                        <polygon class="hex-fill" points="32,3 54,16 54,48 32,61 10,48 10,16"></polygon>
+                                        <polygon class="hex-stroke" points="32,3 54,16 54,48 32,61 10,48 10,16"></polygon>
+                                        <path class="icon-stroke" d="M18 38c4 0 6-3 8-7 2-4 5-7 9-7 5 0 9 4 9 9"></path>
+                                        <path class="icon-stroke" d="M18 42h28"></path>
+                                        <path class="icon-stroke" d="M21 28c0-5 4-9 9-9 3 0 6 1 8 4"></path>
+                                        <path class="icon-stroke" d="M39 20c5 0 9 4 9 9 0 3-1 6-4 8"></path>
+                                    </svg>
+                                </div>
+                                <h3>Orange County</h3>
+                                <div class="service-area-card-rule"></div>
+                                <ul class="service-area-card-cities">
+                                    <li><a href="#oc-anaheim">Anaheim</a></li>
+                                    <li><a href="#oc-irvine">Irvine</a></li>
+                                    <li><a href="#oc-santa-ana">Santa Ana</a></li>
+                                    <li><a href="#oc-huntington-beach">Huntington Beach</a></li>
+                                    <li><a href="#oc-fullerton">Fullerton</a></li>
+                                    <li><a href="#oc-garden-grove">Garden Grove</a></li>
+                                    <li><a href="#oc-orange">Orange</a></li>
+                                    <li><a href="#oc-costa-mesa">Costa Mesa</a></li>
+                                    <li><a href="#oc-laguna-hills">Laguna Hills</a></li>
+                                </ul>
+                                <div class="service-area-card-more">And More</div>
+                                <div class="service-area-card-link-rule"></div>
+                                <a class="service-area-card-link" href="#orange-county-cities"><span>View All Cities</span><span aria-hidden="true">&rsaquo;</span></a>
+                            </article>
+
+                            <article class="service-area-card" id="san-diego-county-cities">
+                                <div class="service-area-card-icon" aria-hidden="true">
+                                    <svg class="service-area-icon" viewBox="0 0 64 64">
+                                        <polygon class="hex-fill" points="32,3 54,16 54,48 32,61 10,48 10,16"></polygon>
+                                        <polygon class="hex-stroke" points="32,3 54,16 54,48 32,61 10,48 10,16"></polygon>
+                                        <path class="icon-stroke" d="M20 42V24h7v18"></path>
+                                        <path class="icon-stroke" d="M27 42V18h9v24"></path>
+                                        <path class="icon-stroke" d="M36 42V28h8v14"></path>
+                                        <path class="icon-stroke" d="M18 42h28"></path>
+                                        <path class="icon-stroke" d="M23 29h2M23 33h2M31 23h2M31 28h2M31 33h2M39 32h2"></path>
+                                    </svg>
+                                </div>
+                                <h3>San Diego County</h3>
+                                <div class="service-area-card-rule"></div>
+                                <ul class="service-area-card-cities">
+                                    <li><a href="#sd-san-diego">San Diego</a></li>
+                                    <li><a href="#sd-chula-vista">Chula Vista</a></li>
+                                    <li><a href="#sd-carlsbad">Carlsbad</a></li>
+                                    <li><a href="#sd-oceanside">Oceanside</a></li>
+                                    <li><a href="#sd-escondido">Escondido</a></li>
+                                    <li><a href="#sd-vista">Vista</a></li>
+                                    <li><a href="#sd-el-cajon">El Cajon</a></li>
+                                    <li><a href="#sd-poway">Poway</a></li>
+                                    <li><a href="#sd-encinitas">Encinitas</a></li>
+                                </ul>
+                                <div class="service-area-card-more">And More</div>
+                                <div class="service-area-card-link-rule"></div>
+                                <a class="service-area-card-link" href="#san-diego-county-cities"><span>View All Cities</span><span aria-hidden="true">&rsaquo;</span></a>
                             </article>
                         </div>
                     </div>
