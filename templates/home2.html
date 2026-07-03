@@ -558,8 +558,9 @@
             z-index: 1;
             display: flex;
             flex-direction: column;
+            justify-content: flex-end;
             height: 100%;
-            padding: 142px 18px 12px;
+            padding: 142px 18px 8px;
         }
 
         .service-card-head {
@@ -627,15 +628,18 @@
             color: #f3efe7;
         }
 
-        .service-list li i {
-            color: var(--gold);
-            font-size: 12px;
+        .service-list li::before,
+        .services-feature-list li::before {
+            content: "";
+            width: 14px;
+            height: 14px;
+            flex: 0 0 14px;
             margin-top: 1px;
+            background: url("{{ url_for('static', filename='images/home2-icon-check.svg') }}") center/contain no-repeat;
         }
 
         .service-card-link {
-            margin-top: auto;
-            padding-top: 6px;
+            margin-top: 8px;
             align-self: flex-end;
             color: var(--gold);
             font-size: 28px;
@@ -729,10 +733,6 @@
             font-size: 12px;
             line-height: 1.2;
             color: #f3efe7;
-        }
-
-        .services-feature-list li i {
-            color: var(--gold);
         }
 
         .services-value-strip {
@@ -1809,11 +1809,11 @@
                                 </div>
                                 <p>Electrical systems for commercial and industrial facilities, from new construction through upgrades, maintenance, and long-term infrastructure support.</p>
                                 <ul class="service-list">
-                                    <li><i class="fa-regular fa-circle-check" aria-hidden="true"></i><span>Electrical Construction</span></li>
-                                    <li><i class="fa-regular fa-circle-check" aria-hidden="true"></i><span>Tenant Improvements</span></li>
-                                    <li><i class="fa-regular fa-circle-check" aria-hidden="true"></i><span>Distribution Systems</span></li>
-                                    <li><i class="fa-regular fa-circle-check" aria-hidden="true"></i><span>Lighting Solutions</span></li>
-                                    <li><i class="fa-regular fa-circle-check" aria-hidden="true"></i><span>Maintenance &amp; Repairs</span></li>
+                                    <li><span>Electrical Construction</span></li>
+                                    <li><span>Tenant Improvements</span></li>
+                                    <li><span>Distribution Systems</span></li>
+                                    <li><span>Lighting Solutions</span></li>
+                                    <li><span>Maintenance &amp; Repairs</span></li>
                                 </ul>
                                 <a class="service-card-link" href="{{ url_for('service_landing', slug='commercial-electrical-services') }}" aria-label="Commercial and industrial services">›</a>
                             </div>
@@ -1833,10 +1833,10 @@
                                 </div>
                                 <p>Backup power systems designed and installed for seamless performance when uptime matters and critical loads cannot go down.</p>
                                 <ul class="service-list">
-                                    <li><i class="fa-regular fa-circle-check" aria-hidden="true"></i><span>Generator Installation</span></li>
-                                    <li><i class="fa-regular fa-circle-check" aria-hidden="true"></i><span>ATS Systems</span></li>
-                                    <li><i class="fa-regular fa-circle-check" aria-hidden="true"></i><span>Preventative Maintenance</span></li>
-                                    <li><i class="fa-regular fa-circle-check" aria-hidden="true"></i><span>Load Bank Testing</span></li>
+                                    <li><span>Generator Installation</span></li>
+                                    <li><span>ATS Systems</span></li>
+                                    <li><span>Preventative Maintenance</span></li>
+                                    <li><span>Load Bank Testing</span></li>
                                 </ul>
                                 <a class="service-card-link" href="{{ url_for('service_landing', slug='commercial-electrical-services') }}" aria-label="Generator and ATS services">›</a>
                             </div>
@@ -1856,10 +1856,10 @@
                                 </div>
                                 <p>Protect critical equipment and maintain uninterrupted performance with advanced UPS systems and conditioned backup power.</p>
                                 <ul class="service-list">
-                                    <li><i class="fa-regular fa-circle-check" aria-hidden="true"></i><span>UPS Systems</span></li>
-                                    <li><i class="fa-regular fa-circle-check" aria-hidden="true"></i><span>Surge Protection</span></li>
-                                    <li><i class="fa-regular fa-circle-check" aria-hidden="true"></i><span>Power Conditioning</span></li>
-                                    <li><i class="fa-regular fa-circle-check" aria-hidden="true"></i><span>Battery Systems</span></li>
+                                    <li><span>UPS Systems</span></li>
+                                    <li><span>Surge Protection</span></li>
+                                    <li><span>Power Conditioning</span></li>
+                                    <li><span>Battery Systems</span></li>
                                 </ul>
                                 <a class="service-card-link" href="{{ url_for('service_landing', slug='emergency-electrician-services') }}" aria-label="UPS and power protection services">›</a>
                             </div>
@@ -1879,10 +1879,10 @@
                                 </div>
                                 <p>Energy-efficient lighting and facility infrastructure solutions that improve visibility, safety, efficiency, and performance.</p>
                                 <ul class="service-list">
-                                    <li><i class="fa-regular fa-circle-check" aria-hidden="true"></i><span>LED Lighting</span></li>
-                                    <li><i class="fa-regular fa-circle-check" aria-hidden="true"></i><span>Site Lighting</span></li>
-                                    <li><i class="fa-regular fa-circle-check" aria-hidden="true"></i><span>Infrared Thermography</span></li>
-                                    <li><i class="fa-regular fa-circle-check" aria-hidden="true"></i><span>Infrastructure Upgrades</span></li>
+                                    <li><span>LED Lighting</span></li>
+                                    <li><span>Site Lighting</span></li>
+                                    <li><span>Infrared Thermography</span></li>
+                                    <li><span>Infrastructure Upgrades</span></li>
                                 </ul>
                                 <a class="service-card-link" href="{{ url_for('service_landing', slug='commercial-electrical-services') }}" aria-label="Lighting and infrastructure services">›</a>
                             </div>
@@ -1903,12 +1903,12 @@
                             <div class="services-feature-copy">
                                 <p>Reliable electrical services for homes and homeowners, from service equipment upgrades to EV charging, lighting improvements, and troubleshooting.</p>
                                 <ul class="services-feature-list">
-                                    <li><i class="fa-regular fa-circle-check" aria-hidden="true"></i><span>Panel Upgrades</span></li>
-                                    <li><i class="fa-regular fa-circle-check" aria-hidden="true"></i><span>Lighting Upgrades</span></li>
-                                    <li><i class="fa-regular fa-circle-check" aria-hidden="true"></i><span>EV Charger Installation</span></li>
-                                    <li><i class="fa-regular fa-circle-check" aria-hidden="true"></i><span>Troubleshooting</span></li>
-                                    <li><i class="fa-regular fa-circle-check" aria-hidden="true"></i><span>Generator Installation</span></li>
-                                    <li><i class="fa-regular fa-circle-check" aria-hidden="true"></i><span>And More</span></li>
+                                    <li><span>Panel Upgrades</span></li>
+                                    <li><span>Lighting Upgrades</span></li>
+                                    <li><span>EV Charger Installation</span></li>
+                                    <li><span>Troubleshooting</span></li>
+                                    <li><span>Generator Installation</span></li>
+                                    <li><span>And More</span></li>
                                 </ul>
                             </div>
                         </div>
