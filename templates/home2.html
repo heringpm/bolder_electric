@@ -523,7 +523,7 @@
 
         .service-card {
             position: relative;
-            min-height: 458px;
+            min-height: 434px;
             border: 1px solid rgba(241, 186, 32, 0.42);
             border-radius: 10px;
             overflow: hidden;
@@ -537,11 +537,12 @@
         }
 
         .service-card-media img {
-            width: 110%;
-            height: 110%;
+            width: 100%;
+            height: 100%;
             object-fit: cover;
             filter: brightness(1.18) saturate(1.02);
-            transform: translate(-5%, -5%) scale(0.94);
+            transform: none;
+            object-position: center center;
         }
 
         .service-card-media::after {
@@ -558,7 +559,7 @@
             display: flex;
             flex-direction: column;
             height: 100%;
-            padding: 134px 18px 12px;
+            padding: 142px 18px 12px;
         }
 
         .service-card-head {
@@ -567,7 +568,7 @@
 
         .service-icon {
             position: absolute;
-            top: 82px;
+            top: 78px;
             left: 18px;
             width: 66px;
             height: 74px;
@@ -602,7 +603,7 @@
         }
 
         .service-card p {
-            margin: 0 0 10px;
+            margin: 0 0 8px;
             font-size: 12px;
             line-height: 1.24;
             color: rgba(245, 243, 239, 0.84);
@@ -612,9 +613,9 @@
         .service-list {
             list-style: none;
             padding: 0;
-            margin: auto 0 0;
+            margin: 0;
             display: grid;
-            gap: 5px;
+            gap: 4px;
         }
 
         .service-list li {
@@ -633,7 +634,8 @@
         }
 
         .service-card-link {
-            margin-top: 8px;
+            margin-top: auto;
+            padding-top: 6px;
             align-self: flex-end;
             color: var(--gold);
             font-size: 28px;
@@ -749,7 +751,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            gap: 10px;
             padding: 14px 12px;
             border-right: 1px solid rgba(241, 186, 32, 0.18);
             text-align: center;
@@ -788,6 +790,16 @@
         .services-value-copy strong {
             font-size: 18px;
             color: var(--gold-soft);
+        }
+
+        .services-value-item.emergency-item .services-value-copy {
+            display: grid;
+            justify-items: center;
+        }
+
+        .services-value-item.emergency-item .services-value-copy strong {
+            max-width: 160px;
+            margin: 0 auto;
         }
 
         .services-value-copy .services-value-big {
@@ -1917,8 +1929,8 @@
                                 <span>Skilled electricians committed to safety and excellence.</span>
                             </div>
                         </div>
-                        <div class="services-value-item">
-                            <div class="services-value-icon" aria-hidden="true"></div>
+                        <div class="services-value-item emergency-item">
+                            <div class="services-value-icon"><img src="{{ url_for('static', filename='images/home2-icon-value-emergency.svg') }}" alt=""></div>
                             <div class="services-value-copy">
                                 <span class="services-value-big">24/7</span>
                                 <strong>Emergency Service</strong>
