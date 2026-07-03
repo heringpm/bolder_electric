@@ -1299,47 +1299,269 @@
             text-transform: uppercase;
         }
 
-        .about-layout {
+        .about-bolder {
+            padding: 28px 0 34px;
+            background:
+                radial-gradient(circle at 82% 18%, rgba(241, 186, 32, 0.05), transparent 18%),
+                linear-gradient(180deg, #060606 0%, #050505 100%);
+        }
+
+        .about-bolder .container {
+            width: min(calc(100% - 18px), 1640px);
+        }
+
+        .about-shell {
             display: grid;
-            grid-template-columns: 1.15fr 0.95fr;
-            gap: 24px;
+            grid-template-columns: 0.27fr 0.4fr 0.33fr;
+            gap: 12px;
             align-items: stretch;
         }
 
-        .about-copy {
+        .about-intro {
+            padding: 22px 18px 16px;
+        }
+
+        .about-intro .section-tag {
+            margin: 0 0 10px;
+            font-size: 12px;
+            letter-spacing: 0.11em;
+        }
+
+        .about-intro h2 {
+            margin: 0;
+            font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: clamp(34px, 3vw, 50px);
+            line-height: 0.96;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            max-width: 320px;
+        }
+
+        .about-intro-rule {
+            width: 40px;
+            height: 3px;
+            margin: 14px 0 16px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #f1ba20 0%, #be7900 100%);
+        }
+
+        .about-intro p {
+            margin: 0;
+            max-width: 320px;
+            font-size: 14px;
+            line-height: 1.55;
+            color: rgba(245, 243, 239, 0.84);
+        }
+
+        .about-main-card {
+            border: 1px solid rgba(241, 186, 32, 0.24);
+            border-radius: 8px;
+            background: linear-gradient(180deg, rgba(13, 13, 13, 0.98) 0%, rgba(8, 8, 8, 0.98) 100%);
+            padding: 16px 18px;
+        }
+
+        .about-main-card h3 {
+            margin: 0;
+            font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: 22px;
+            line-height: 1;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+        }
+
+        .about-main-rule {
+            width: 34px;
+            height: 3px;
+            margin: 12px 0 14px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #f1ba20 0%, #be7900 100%);
+        }
+
+        .about-main-grid {
             display: grid;
-            gap: 20px;
+            grid-template-columns: 1fr 158px;
+            gap: 16px;
+            align-items: start;
         }
 
-        .about-main h3 {
-            margin-bottom: 16px;
+        .about-main-copy {
+            padding-right: 16px;
+            border-right: 1px solid rgba(241, 186, 32, 0.22);
         }
 
-        .about-main p + p {
-            margin-top: 14px;
+        .about-main-copy p {
+            margin: 0;
+            font-size: 13px;
+            line-height: 1.6;
+            color: rgba(245, 243, 239, 0.84);
         }
 
-        .about-video-wrap {
-            position: relative;
-            min-height: 100%;
-            border: 1px solid rgba(241, 186, 32, 0.22);
-            border-radius: var(--radius);
-            overflow: hidden;
-            background: #000;
-            box-shadow: var(--shadow);
+        .about-main-copy p + p {
+            margin-top: 12px;
         }
 
-        .about-video-wrap video {
+        .about-values {
+            display: grid;
+            gap: 14px;
+        }
+
+        .about-value {
+            display: grid;
+            grid-template-columns: 28px 1fr;
+            gap: 10px;
+            align-items: start;
+        }
+
+        .about-value-icon {
+            width: 24px;
+            height: 24px;
+            color: var(--gold);
+        }
+
+        .about-value-icon svg {
             width: 100%;
             height: 100%;
-            min-height: 440px;
+            display: block;
+        }
+
+        .about-value strong,
+        .about-value span {
+            display: block;
+            font-family: "Bebas Neue", Arial, sans-serif;
+            text-transform: uppercase;
+        }
+
+        .about-value strong {
+            font-size: 14px;
+            line-height: 1;
+            letter-spacing: 0.03em;
+            color: #f8f5ed;
+        }
+
+        .about-value span {
+            margin-top: 4px;
+            font-size: 10px;
+            line-height: 1.25;
+            letter-spacing: 0.03em;
+            color: rgba(245, 243, 239, 0.72);
+        }
+
+        .about-video-card {
+            position: relative;
+            display: block;
+            padding: 0;
+            border: 1px solid rgba(241, 186, 32, 0.24);
+            border-radius: 8px;
+            overflow: hidden;
+            background: #000;
+            cursor: pointer;
+        }
+
+        .about-video-thumb {
+            position: relative;
+            aspect-ratio: 16 / 9;
+            min-height: 100%;
+        }
+
+        .about-video-thumb img {
+            width: 100%;
+            height: 100%;
             object-fit: cover;
             display: block;
         }
 
-        .about-panel-grid {
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            margin-top: 22px;
+        .about-video-thumb::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.12) 0%, rgba(0, 0, 0, 0.36) 100%);
+        }
+
+        .about-video-play {
+            position: absolute;
+            inset: 50% auto auto 50%;
+            transform: translate(-50%, -50%);
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            border: 1px solid rgba(241, 186, 32, 0.42);
+            background: rgba(0, 0, 0, 0.62);
+            display: grid;
+            place-items: center;
+            z-index: 2;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+        }
+
+        .about-video-play::before {
+            content: "";
+            margin-left: 4px;
+            border-top: 12px solid transparent;
+            border-bottom: 12px solid transparent;
+            border-left: 18px solid #f1ba20;
+        }
+
+        .about-video-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 120;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            background: rgba(0, 0, 0, 0.78);
+            backdrop-filter: blur(8px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.22s ease;
+        }
+
+        .about-video-modal.is-open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .about-video-dialog {
+            position: relative;
+            width: min(1100px, 100%);
+            transform: scale(0.96);
+            transition: transform 0.22s ease;
+        }
+
+        .about-video-modal.is-open .about-video-dialog {
+            transform: scale(1);
+        }
+
+        .about-video-close {
+            position: absolute;
+            top: -14px;
+            right: -14px;
+            z-index: 2;
+            width: 42px;
+            height: 42px;
+            border: 1px solid rgba(241, 186, 32, 0.32);
+            border-radius: 50%;
+            background: #090909;
+            color: #f1ba20;
+            font-size: 26px;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        .about-video-player {
+            aspect-ratio: 16 / 9;
+            border: 1px solid rgba(241, 186, 32, 0.22);
+            border-radius: 12px;
+            overflow: hidden;
+            background: #000;
+            box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
+        }
+
+        .about-video-player video {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: contain;
+            background: #000;
         }
 
         .crew-section {
@@ -1818,11 +2040,26 @@
                 font-size: 18px;
             }
 
-            .about-layout,
+            .about-shell,
             .crew-layout,
             .contact-grid,
             .footer-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .about-bolder {
+                padding: 24px 0 28px;
+            }
+
+            .about-main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .about-main-copy {
+                padding-right: 0;
+                padding-bottom: 14px;
+                border-right: 0;
+                border-bottom: 1px solid rgba(241, 186, 32, 0.22);
             }
 
             .services-grid {
@@ -2155,11 +2392,22 @@
                 font-size: 50px;
             }
 
-            .about-video-wrap video,
+            .about-video-thumb,
+            .about-video-player,
             .crew-modal-photo,
             .crew-modal-photo img,
             .crew-modal-photo-placeholder {
                 min-height: 280px;
+            }
+
+            .about-video-play {
+                width: 62px;
+                height: 62px;
+            }
+
+            .about-intro h2 {
+                font-size: clamp(30px, 11vw, 46px);
+                max-width: none;
             }
 
             .crew-modal-body {
@@ -2616,44 +2864,76 @@
                 </div>
             </section>
 
-            <section class="section" id="about">
+            <section class="section about-bolder" id="about">
                 <div class="container">
-                    <div class="section-head">
-                        <div class="section-tag">About Bolder</div>
-                        <h2>Electrical Work Done Safely, Professionally, and Built to Last</h2>
-                    </div>
+                    <div class="about-shell">
+                        <div class="about-intro">
+                            <div class="section-tag">About Bolder</div>
+                            <h2>Electrical Work Done Safely, Professionally, and Built to Last</h2>
+                            <div class="about-intro-rule"></div>
+                            <p>At Bolder Electric, we take pride in delivering safe, professional, and reliable electrical solutions for commercial and residential projects of every size.</p>
+                        </div>
 
-                    <div class="about-layout">
-                        <div class="about-copy">
-                            <article class="dark-card about-main">
-                                <h3>Built for Large-Scale Reliability</h3>
-                                <p>At Bolder Electric, we believe electrical work should be done one way: safely, professionally, and built to last. We provide reliable service for large-scale commercial projects and residential clients with clean workmanship, clear communication, and dependable results.</p>
-                                <p>Whether the project is a school district upgrade, a utility site buildout, or a residential service call, our team brings planning, precision, and accountability to every phase.</p>
-                                <p>We do not just complete jobs. We build long-term trust through reliable execution, transparent communication, and workmanship that holds up over time.</p>
-                            </article>
-
-                            <div class="about-panel-grid">
-                                <article class="dark-card">
-                                    <h4>Our Approach</h4>
-                                    <p>Prepared, on-time crews, clear communication, and safety-first execution from start to finish.</p>
-                                </article>
-                                <article class="dark-card">
-                                    <h4>What We Do</h4>
-                                    <p>Commercial and industrial projects, utility/Edison site work, panel upgrades, lighting solutions, and emergency troubleshooting.</p>
-                                </article>
-                                <article class="dark-card">
-                                    <h4>Why Choose Bolder</h4>
-                                    <p>Honest communication, transparent pricing, clean installations, and dependable follow-through.</p>
-                                </article>
+                        <article class="about-main-card">
+                            <h3>Built for Large-Scale Reliability</h3>
+                            <div class="about-main-rule"></div>
+                            <div class="about-main-grid">
+                                <div class="about-main-copy">
+                                    <p>At Bolder Electric, we believe electrical work should be done one way: safely, professionally, and built to last. We provide reliable service for large-scale commercial projects and residential clients with clean workmanship, clear communication, and dependable results.</p>
+                                    <p>Whether the project is a school district upgrade, a utility site buildout, or a residential service call, our team brings planning, precision, and accountability to every phase.</p>
+                                    <p>We do not just complete jobs. We build long-term trust through reliable execution, transparent communication, and workmanship that holds up over time.</p>
+                                </div>
+                                <div class="about-values">
+                                    <div class="about-value">
+                                        <div class="about-value-icon" aria-hidden="true">
+                                            <svg viewBox="0 0 32 32">
+                                                <path class="icon-stroke" d="M16 28s9-4 9-11V8l-9-3-9 3v9c0 7 9 11 9 11Z"></path>
+                                                <path class="icon-stroke" d="m12.5 16.5 2.4 2.5 4.8-5.6"></path>
+                                            </svg>
+                                        </div>
+                                        <div><strong>Safety First</strong><span>Every project starts and ends with safety.</span></div>
+                                    </div>
+                                    <div class="about-value">
+                                        <div class="about-value-icon" aria-hidden="true">
+                                            <svg viewBox="0 0 32 32">
+                                                <circle class="icon-stroke" cx="16" cy="16" r="6.2"></circle>
+                                                <path class="icon-stroke" d="M16 5v3.2M16 23.8V27M5 16h3.2M23.8 16H27M8.2 8.2l2.3 2.3M21.5 21.5l2.3 2.3M23.8 8.2l-2.3 2.3M10.5 21.5l-2.3 2.3"></path>
+                                            </svg>
+                                        </div>
+                                        <div><strong>Experienced Crews</strong><span>Skilled electricians with years of hands-on experience.</span></div>
+                                    </div>
+                                    <div class="about-value">
+                                        <div class="about-value-icon" aria-hidden="true">
+                                            <svg viewBox="0 0 32 32">
+                                                <path class="icon-stroke" d="M5.5 18.5 10 14l4.2 4.2"></path>
+                                                <path class="icon-stroke" d="M26.5 18.5 22 14l-4.2 4.2"></path>
+                                                <path class="icon-stroke" d="M13.5 18.2h4.2l2-2h2.8"></path>
+                                                <path class="icon-stroke" d="M10.8 14.8 8 12l-3 3"></path>
+                                                <path class="icon-stroke" d="M21.2 14.8 24 12l3 3"></path>
+                                                <path class="icon-stroke" d="M12.2 19.8 15 22c.7.6 1.7.6 2.4 0l2.4-2"></path>
+                                            </svg>
+                                        </div>
+                                        <div><strong>Built on Trust</strong><span>Transparent communication and dependable follow-through.</span></div>
+                                    </div>
+                                    <div class="about-value">
+                                        <div class="about-value-icon" aria-hidden="true">
+                                            <svg viewBox="0 0 32 32">
+                                                <circle class="icon-stroke" cx="16" cy="16" r="8.6"></circle>
+                                                <path class="icon-stroke" d="M16 11.5v4.6l3.3 1.9"></path>
+                                            </svg>
+                                        </div>
+                                        <div><strong>Quality That Lasts</strong><span>Work built to meet code and exceed expectations.</span></div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        </article>
 
-                        <div class="about-video-wrap">
-                            <video controls preload="none" poster="{{ url_for('static', filename='images/hero-1024.webp') }}">
-                                <source src="{{ url_for('static', filename='videos/BE-about-video.mp4') }}" type="video/mp4">
-                                Your browser does not support the video tag.
-                            </video>
-                        </div>
+                        <button type="button" class="about-video-card" id="aboutVideoTrigger" aria-haspopup="dialog" aria-controls="aboutVideoModal" aria-label="Play About Bolder video">
+                            <div class="about-video-thumb">
+                                <img src="{{ url_for('static', filename='images/about-video-poster.jpg') }}" alt="Bolder Electric team standing with company vehicles" loading="lazy">
+                                <span class="about-video-play" aria-hidden="true"></span>
+                            </div>
+                        </button>
                     </div>
                 </div>
             </section>
@@ -2738,6 +3018,13 @@
                             <p class="crew-modal-bio" id="crewModalBio"></p>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <div id="aboutVideoModal" class="about-video-modal" aria-hidden="true">
+                <div class="about-video-dialog" role="dialog" aria-modal="true" aria-label="About Bolder video">
+                    <button type="button" class="about-video-close" id="aboutVideoClose" aria-label="Close video dialog">&times;</button>
+                    <div class="about-video-player" id="aboutVideoPlayer"></div>
                 </div>
             </div>
 
@@ -2924,7 +3211,20 @@
         const crewModalName = document.getElementById('crewModalName');
         const crewModalBio = document.getElementById('crewModalBio');
         const crewModalClose = document.getElementById('crewModalClose');
+        const aboutVideoTrigger = document.getElementById('aboutVideoTrigger');
+        const aboutVideoModal = document.getElementById('aboutVideoModal');
+        const aboutVideoClose = document.getElementById('aboutVideoClose');
+        const aboutVideoPlayer = document.getElementById('aboutVideoPlayer');
         let lastCrewTrigger = null;
+        let aboutVideoLoaded = false;
+
+        function lockPageScroll() {
+            document.body.style.overflow = 'hidden';
+        }
+
+        function unlockPageScroll() {
+            document.body.style.overflow = '';
+        }
 
         function openCrewModal(button) {
             const name = button.dataset.crewName || '';
@@ -2950,7 +3250,7 @@
 
             crewBioModal.classList.add('is-open');
             crewBioModal.setAttribute('aria-hidden', 'false');
-            document.body.style.overflow = 'hidden';
+            lockPageScroll();
             lastCrewTrigger = button;
         }
 
@@ -2958,12 +3258,55 @@
             crewBioModal.classList.remove('is-open');
             crewBioModal.setAttribute('aria-hidden', 'true');
             crewModalPhoto.innerHTML = '';
-            document.body.style.overflow = '';
+            unlockPageScroll();
             if (lastCrewTrigger) lastCrewTrigger.focus();
+        }
+
+        function ensureAboutVideoLoaded() {
+            if (aboutVideoLoaded || !aboutVideoPlayer) return null;
+            aboutVideoPlayer.innerHTML = `
+                <video id="aboutVideoElement" controls playsinline preload="metadata">
+                    <source src="{{ url_for('static', filename='videos/BE-about-video.mp4') }}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            `;
+            aboutVideoLoaded = true;
+            return document.getElementById('aboutVideoElement');
+        }
+
+        function openAboutVideoModal() {
+            const video = ensureAboutVideoLoaded() || document.getElementById('aboutVideoElement');
+            if (!aboutVideoModal || !video) return;
+            aboutVideoModal.classList.add('is-open');
+            aboutVideoModal.setAttribute('aria-hidden', 'false');
+            lockPageScroll();
+            setTimeout(() => {
+                video.currentTime = 0;
+                video.play().catch(() => {});
+            }, 20);
+        }
+
+        function closeAboutVideoModal() {
+            const video = document.getElementById('aboutVideoElement');
+            if (!aboutVideoModal) return;
+            aboutVideoModal.classList.remove('is-open');
+            aboutVideoModal.setAttribute('aria-hidden', 'true');
+            if (video) {
+                video.pause();
+                video.currentTime = 0;
+            }
+            unlockPageScroll();
+            aboutVideoTrigger?.focus();
         }
 
         document.querySelectorAll('.crew-card-photo-btn').forEach(button => {
             button.addEventListener('click', () => openCrewModal(button));
+        });
+
+        aboutVideoTrigger?.addEventListener('click', openAboutVideoModal);
+        aboutVideoClose?.addEventListener('click', closeAboutVideoModal);
+        aboutVideoModal?.addEventListener('click', event => {
+            if (event.target === aboutVideoModal) closeAboutVideoModal();
         });
 
         if (crewModalClose) crewModalClose.addEventListener('click', closeCrewModal);
@@ -2975,6 +3318,9 @@
         document.addEventListener('keydown', event => {
             if (event.key === 'Escape' && crewBioModal?.classList.contains('is-open')) {
                 closeCrewModal();
+            }
+            if (event.key === 'Escape' && aboutVideoModal?.classList.contains('is-open')) {
+                closeAboutVideoModal();
             }
         });
     </script>
