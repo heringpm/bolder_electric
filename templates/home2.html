@@ -820,26 +820,100 @@
         }
 
         .service-areas {
-            background: linear-gradient(180deg, #0b0b0b 0%, #070707 100%);
+            padding-top: 58px;
+            padding-bottom: 74px;
+            background:
+                radial-gradient(circle at top right, rgba(241, 186, 32, 0.08), transparent 18%),
+                linear-gradient(180deg, #080808 0%, #050505 100%);
         }
 
-        .text-stack {
+        .service-areas .section-head {
+            margin-bottom: 24px;
+        }
+
+        .service-areas-shell {
             display: grid;
             gap: 18px;
         }
 
-        .text-stack p {
-            margin: 0;
-            font-size: 24px;
-            line-height: 1.22;
-            color: var(--muted);
+        .service-areas-intro {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 18px;
+            align-items: stretch;
         }
 
-        .text-stack a {
+        .service-areas-copy {
+            padding: 24px 24px 22px;
+            border: 1px solid rgba(241, 186, 32, 0.18);
+            border-radius: 18px;
+            background:
+                linear-gradient(180deg, rgba(14, 14, 14, 0.98) 0%, rgba(7, 7, 7, 0.98) 100%);
+            box-shadow: var(--shadow);
+        }
+
+        .service-areas-copy p {
+            margin: 0;
+            font-size: 18px;
+            line-height: 1.42;
+            color: rgba(245, 243, 239, 0.86);
+        }
+
+        .service-areas-copy p + p {
+            margin-top: 14px;
+        }
+
+        .service-areas-copy a,
+        .service-areas-footnote a {
             color: var(--gold-soft);
             text-decoration: underline;
             text-decoration-color: rgba(241, 186, 32, 0.32);
             text-underline-offset: 4px;
+        }
+
+        .service-areas-stat {
+            padding: 24px 22px;
+            border: 1px solid rgba(241, 186, 32, 0.24);
+            border-radius: 18px;
+            background:
+                radial-gradient(circle at top, rgba(241, 186, 32, 0.08), transparent 38%),
+                linear-gradient(180deg, rgba(16, 16, 16, 0.98) 0%, rgba(8, 8, 8, 0.98) 100%);
+            box-shadow: var(--shadow);
+            display: grid;
+            align-content: center;
+            gap: 14px;
+            text-align: center;
+        }
+
+        .service-areas-stat strong,
+        .service-areas-stat span {
+            display: block;
+            font-family: "Bebas Neue", Arial, sans-serif;
+            text-transform: uppercase;
+        }
+
+        .service-areas-stat strong {
+            font-size: 74px;
+            line-height: 0.9;
+            letter-spacing: 0.03em;
+            background: linear-gradient(180deg, #ffd86d 0%, #f1ba20 58%, #b16e00 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .service-areas-stat span {
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: 0.08em;
+            color: #f8f5ed;
+        }
+
+        .service-areas-stat small {
+            display: block;
+            font-size: 14px;
+            line-height: 1.35;
+            color: rgba(245, 243, 239, 0.72);
         }
 
         .service-area-grid,
@@ -854,7 +928,7 @@
 
         .service-area-grid {
             grid-template-columns: repeat(2, minmax(0, 1fr));
-            margin-top: 28px;
+            margin-top: 0;
         }
 
         .mini-card-grid {
@@ -875,6 +949,55 @@
             box-shadow: var(--shadow);
         }
 
+        .service-area-card {
+            position: relative;
+            overflow: hidden;
+            padding: 24px 24px 22px;
+            border-radius: 18px;
+            border: 1px solid rgba(241, 186, 32, 0.2);
+            background:
+                linear-gradient(180deg, rgba(17, 17, 17, 0.98) 0%, rgba(8, 8, 8, 0.98) 100%);
+        }
+
+        .service-area-card::before {
+            content: "";
+            position: absolute;
+            inset: 0 0 auto 0;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(241, 186, 32, 0) 0%, rgba(241, 186, 32, 0.8) 20%, rgba(241, 186, 32, 0.18) 100%);
+        }
+
+        .service-area-card h3 {
+            margin: 0 0 12px;
+            font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: clamp(30px, 2.1vw, 40px);
+            line-height: 0.98;
+            letter-spacing: 0.035em;
+            text-transform: uppercase;
+            color: #fbf8f1;
+        }
+
+        .service-area-card p {
+            margin: 0;
+            font-size: 16px;
+            line-height: 1.38;
+            color: rgba(245, 243, 239, 0.76);
+        }
+
+        .service-areas-footnote {
+            padding: 22px 24px;
+            border: 1px solid rgba(241, 186, 32, 0.16);
+            border-radius: 18px;
+            background: linear-gradient(180deg, rgba(13, 13, 13, 0.96) 0%, rgba(7, 7, 7, 0.96) 100%);
+        }
+
+        .service-areas-footnote p {
+            margin: 0;
+            font-size: 16px;
+            line-height: 1.42;
+            color: rgba(245, 243, 239, 0.78);
+        }
+
         .dark-card h3,
         .dark-card h4 {
             margin: 0 0 12px;
@@ -893,13 +1016,17 @@
         }
 
         .link-group {
-            margin-top: 28px;
+            margin-top: 0;
+            padding: 24px 24px 22px;
+            border: 1px solid rgba(241, 186, 32, 0.16);
+            border-radius: 18px;
+            background: linear-gradient(180deg, rgba(14, 14, 14, 0.98) 0%, rgba(7, 7, 7, 0.98) 100%);
         }
 
         .link-group h4 {
             margin: 0 0 14px;
             font-family: "Bebas Neue", Arial, sans-serif;
-            font-size: 34px;
+            font-size: 30px;
             letter-spacing: 0.04em;
             text-transform: uppercase;
         }
@@ -914,14 +1041,14 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            min-height: 46px;
-            padding: 0 18px;
-            border: 1px solid rgba(241, 186, 32, 0.28);
+            min-height: 42px;
+            padding: 0 16px;
+            border: 1px solid rgba(241, 186, 32, 0.24);
             border-radius: 999px;
-            background: rgba(241, 186, 32, 0.06);
+            background: rgba(241, 186, 32, 0.05);
             color: var(--gold-soft);
             font-family: "Bebas Neue", Arial, sans-serif;
-            font-size: 22px;
+            font-size: 18px;
             letter-spacing: 0.05em;
             text-transform: uppercase;
         }
@@ -1470,6 +1597,10 @@
                 grid-template-columns: 1fr;
             }
 
+            .service-areas-intro {
+                grid-template-columns: 1fr;
+            }
+
             .service-area-grid,
             .mini-card-grid,
             .faq-grid {
@@ -1627,6 +1758,46 @@
             .service-card h3,
             .contact-card h3 {
                 font-size: 38px;
+            }
+
+            .service-areas {
+                padding-top: 48px;
+                padding-bottom: 64px;
+            }
+
+            .service-areas-copy,
+            .service-areas-stat,
+            .service-area-card,
+            .service-areas-footnote,
+            .link-group {
+                padding: 20px 18px;
+            }
+
+            .service-areas-copy p,
+            .service-area-card p,
+            .service-areas-footnote p {
+                font-size: 15px;
+                line-height: 1.38;
+            }
+
+            .service-areas-stat strong {
+                font-size: 58px;
+            }
+
+            .service-areas-stat span {
+                font-size: 20px;
+            }
+
+            .service-areas-stat small {
+                font-size: 13px;
+            }
+
+            .service-area-card h3 {
+                font-size: 32px;
+            }
+
+            .chip {
+                font-size: 16px;
             }
 
             .services-feature {
@@ -1960,77 +2131,87 @@
                 <div class="container">
                     <div class="section-head">
                         <div class="section-tag">Service Areas</div>
-                        <h2>Across Riverside County &amp; Southern California</h2>
-                        <p>Every section from the main index is carried over here, now restyled into the same critical-power look and feel.</p>
+                        <h2>Across Southern California</h2>
+                        <p>Regional coverage, complex project support, and critical-power expertise carried into the same premium `/home2` system.</p>
                     </div>
 
-                    <div class="text-stack">
-                        <p>Bolder Electric provides commercial electrical services, residential electrician support, emergency electrical services, and electrical panel upgrades across Riverside County and nearby Southern California communities including Menifee, Murrieta, Temecula, Lake Elsinore, Perris, Wildomar, Hemet, San Jacinto, and Corona.</p>
-                        <p>If you need a <a href="{{ url_for('city_menifee') }}">licensed electrician in Menifee, CA</a>, our team handles <a href="{{ url_for('service_landing', slug='commercial-electrical-services') }}">commercial electrical services</a>, <a href="{{ url_for('service_landing', slug='emergency-electrician-services') }}">emergency electrical services</a>, <a href="{{ url_for('service_landing', slug='residential-electrician-services') }}">residential electrician work</a>, and <a href="{{ url_for('service_landing', slug='electrical-panel-upgrades') }}">electrical panel upgrades and panel repair</a>. For city-specific information, visit our <a href="{{ url_for('city_murrieta') }}">Murrieta electrician page</a>, our <a href="{{ url_for('city_temecula') }}">Temecula electrician page</a>, our <a href="{{ url_for('city_lake_elsinore') }}">Lake Elsinore electrician page</a>, or our <a href="{{ url_for('city_corona') }}">Corona electrician page</a>.</p>
-                    </div>
+                    <div class="service-areas-shell">
+                        <div class="service-areas-intro">
+                            <article class="service-areas-copy">
+                                <p>Bolder Electric provides commercial electrical contracting, critical power infrastructure, emergency electrical services, generator systems, ATS/switchgear solutions, and electrical upgrades throughout Southern California. Our team serves industrial, commercial, healthcare, education, government, and mission-critical facilities across Riverside, San Bernardino, Los Angeles, Orange, and San Diego Counties, delivering reliable electrical solutions for complex projects of every size.</p>
+                                <p>If you need a <a href="{{ url_for('city_menifee') }}">licensed electrician in Menifee, CA</a>, our team handles <a href="{{ url_for('service_landing', slug='commercial-electrical-services') }}">commercial electrical services</a>, <a href="{{ url_for('service_landing', slug='emergency-electrician-services') }}">emergency electrical services</a>, <a href="{{ url_for('service_landing', slug='residential-electrician-services') }}">residential electrician work</a>, and <a href="{{ url_for('service_landing', slug='electrical-panel-upgrades') }}">electrical panel upgrades and panel repair</a>. For city-specific information, visit our <a href="{{ url_for('city_murrieta') }}">Murrieta electrician page</a>, our <a href="{{ url_for('city_temecula') }}">Temecula electrician page</a>, our <a href="{{ url_for('city_lake_elsinore') }}">Lake Elsinore electrician page</a>, or our <a href="{{ url_for('city_corona') }}">Corona electrician page</a>.</p>
+                            </article>
 
-                    <div class="service-area-grid">
-                        <article class="dark-card">
+                            <aside class="service-areas-stat">
+                                <strong>5</strong>
+                                <span>County Coverage</span>
+                                <small>Riverside, San Bernardino, Los Angeles, Orange, and San Diego Counties.</small>
+                            </aside>
+                        </div>
+
+                        <div class="service-area-grid">
+                            <article class="service-area-card">
                             <h3>Emergency Electrician Services</h3>
                             <p>Fast-response troubleshooting, diagnostics, and repairs for electrical outages, unsafe panels, and urgent hazards in Menifee and nearby Riverside County cities.</p>
-                        </article>
-                        <article class="dark-card">
+                            </article>
+                            <article class="service-area-card">
                             <h3>Commercial Electrical Facilities Support</h3>
                             <p>Reliable support for tenant improvements, distribution upgrades, lighting systems, and ongoing commercial electrical maintenance in Menifee and surrounding cities.</p>
-                        </article>
-                        <article class="dark-card">
+                            </article>
+                            <article class="service-area-card">
                             <h3>Residential Upgrades &amp; Repairs</h3>
                             <p>Safe and code-compliant home electrical work including rewiring, outlets, switches, lighting, service changes, electrical panel upgrades, and electrical repairs.</p>
-                        </article>
-                        <article class="dark-card">
+                            </article>
+                            <article class="service-area-card">
                             <h3>Panel Upgrades &amp; Repair</h3>
                             <p>Panel upgrades, panel replacement, and panel repair solutions that improve electrical safety, service capacity, and long-term reliability in Menifee, Murrieta, and nearby communities.</p>
-                        </article>
-                    </div>
-
-                    <div class="text-stack" style="margin-top: 28px;">
-                        <p>Murrieta homeowners and facility managers can review our <a href="{{ url_for('city_murrieta') }}">electrical panel repair in Murrieta, CA</a> coverage for troubleshooting, replacement planning, service upgrades, and emergency electrician response. If you are searching for an <a href="{{ url_for('city_lake_elsinore') }}">electrician in Lake Elsinore</a>, an <a href="{{ url_for('city_wildomar') }}">electrician in Wildomar, CA</a>, or an <a href="{{ url_for('city_corona') }}">electrician in Corona, CA</a>, we also provide commercial, residential, emergency, and panel-upgrade support in those cities.</p>
-                    </div>
-
-                    <div class="link-group">
-                        <h4>Explore City Service Pages</h4>
-                        <div class="chip-grid">
-                            <a class="chip" href="{{ url_for('city_murrieta') }}">Murrieta</a>
-                            <a class="chip" href="{{ url_for('city_temecula') }}">Temecula</a>
-                            <a class="chip" href="{{ url_for('city_lake_elsinore') }}">Lake Elsinore</a>
-                            <a class="chip" href="{{ url_for('city_menifee') }}">Menifee</a>
-                            <a class="chip" href="{{ url_for('city_perris') }}">Perris</a>
-                            <a class="chip" href="{{ url_for('city_wildomar') }}">Wildomar</a>
-                            <a class="chip" href="{{ url_for('city_hemet') }}">Hemet</a>
-                            <a class="chip" href="{{ url_for('city_corona') }}">Corona</a>
+                            </article>
                         </div>
-                    </div>
 
-                    <div class="link-group">
-                        <h4>Popular Service Pages</h4>
-                        <div class="chip-grid">
-                            <a class="chip" href="{{ url_for('service_landing', slug='commercial-electrical-services') }}">Commercial Electrical Services</a>
-                            <a class="chip" href="{{ url_for('service_landing', slug='emergency-electrician-services') }}">Emergency Electrician Services</a>
-                            <a class="chip" href="{{ url_for('service_landing', slug='residential-electrician-services') }}">Residential Electrician Services</a>
-                            <a class="chip" href="{{ url_for('service_landing', slug='electrical-panel-upgrades') }}">Electrical Panel Upgrades</a>
-                            <a class="chip" href="{{ url_for('service_landing', slug='ev-charger-installation') }}">EV Charger Installation</a>
-                            <a class="chip" href="{{ url_for('service_landing', slug='lighting-installation-services') }}">Lighting Installation Services</a>
+                        <article class="service-areas-footnote">
+                            <p>Murrieta homeowners and facility managers can review our <a href="{{ url_for('city_murrieta') }}">electrical panel repair in Murrieta, CA</a> coverage for troubleshooting, replacement planning, service upgrades, and emergency electrician response. If you are searching for an <a href="{{ url_for('city_lake_elsinore') }}">electrician in Lake Elsinore</a>, an <a href="{{ url_for('city_wildomar') }}">electrician in Wildomar, CA</a>, or an <a href="{{ url_for('city_corona') }}">electrician in Corona, CA</a>, we also provide commercial, residential, emergency, and panel-upgrade support in those cities.</p>
+                        </article>
+
+                        <div class="link-group">
+                            <h4>Explore City Service Pages</h4>
+                            <div class="chip-grid">
+                                <a class="chip" href="{{ url_for('city_murrieta') }}">Murrieta</a>
+                                <a class="chip" href="{{ url_for('city_temecula') }}">Temecula</a>
+                                <a class="chip" href="{{ url_for('city_lake_elsinore') }}">Lake Elsinore</a>
+                                <a class="chip" href="{{ url_for('city_menifee') }}">Menifee</a>
+                                <a class="chip" href="{{ url_for('city_perris') }}">Perris</a>
+                                <a class="chip" href="{{ url_for('city_wildomar') }}">Wildomar</a>
+                                <a class="chip" href="{{ url_for('city_hemet') }}">Hemet</a>
+                                <a class="chip" href="{{ url_for('city_corona') }}">Corona</a>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="faq-grid">
-                        <article class="dark-card">
-                            <h4>Do you provide home upgrades across multiple cities?</h4>
-                            <p>Yes. We perform home electrical upgrades across Riverside County communities including Menifee, Murrieta, Temecula, Lake Elsinore, Perris, Wildomar, Hemet, San Jacinto, and Corona.</p>
-                        </article>
-                        <article class="dark-card">
-                            <h4>Can I request emergency or panel work in Menifee?</h4>
-                            <p>Yes. We provide emergency electrical services in Menifee, plus electrical panel upgrades, panel repair, and residential or commercial electrical service calls.</p>
-                        </article>
-                        <article class="dark-card">
-                            <h4>Do you serve locations beyond Riverside County?</h4>
-                            <p>Yes. We serve Riverside County and broader Southern California for both commercial and residential electrical projects.</p>
-                        </article>
+                        <div class="link-group">
+                            <h4>Popular Service Pages</h4>
+                            <div class="chip-grid">
+                                <a class="chip" href="{{ url_for('service_landing', slug='commercial-electrical-services') }}">Commercial Electrical Services</a>
+                                <a class="chip" href="{{ url_for('service_landing', slug='emergency-electrician-services') }}">Emergency Electrician Services</a>
+                                <a class="chip" href="{{ url_for('service_landing', slug='residential-electrician-services') }}">Residential Electrician Services</a>
+                                <a class="chip" href="{{ url_for('service_landing', slug='electrical-panel-upgrades') }}">Electrical Panel Upgrades</a>
+                                <a class="chip" href="{{ url_for('service_landing', slug='ev-charger-installation') }}">EV Charger Installation</a>
+                                <a class="chip" href="{{ url_for('service_landing', slug='lighting-installation-services') }}">Lighting Installation Services</a>
+                            </div>
+                        </div>
+
+                        <div class="faq-grid">
+                            <article class="dark-card">
+                                <h4>Do you provide home upgrades across multiple cities?</h4>
+                                <p>Yes. We perform home electrical upgrades across Riverside County communities including Menifee, Murrieta, Temecula, Lake Elsinore, Perris, Wildomar, Hemet, San Jacinto, and Corona.</p>
+                            </article>
+                            <article class="dark-card">
+                                <h4>Can I request emergency or panel work in Menifee?</h4>
+                                <p>Yes. We provide emergency electrical services in Menifee, plus electrical panel upgrades, panel repair, and residential or commercial electrical service calls.</p>
+                            </article>
+                            <article class="dark-card">
+                                <h4>Do you serve locations beyond Riverside County?</h4>
+                                <p>Yes. We serve Riverside County and broader Southern California for both commercial and residential electrical projects.</p>
+                            </article>
+                        </div>
                     </div>
                 </div>
             </section>
