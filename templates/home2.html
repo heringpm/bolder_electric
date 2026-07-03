@@ -974,6 +974,12 @@
             display: block;
         }
 
+        .service-areas-stat-icon img {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
         .service-areas-stat-value,
         .service-areas-stat-label,
         .service-areas-stat-copy {
@@ -2441,10 +2447,7 @@
                         <div class="service-areas-stats">
                             <article class="service-areas-stat">
                                 <div class="service-areas-stat-icon" aria-hidden="true">
-                                    <svg viewBox="0 0 32 32">
-                                        <path class="icon-stroke" d="M16 28s-7-7.4-7-13a7 7 0 1 1 14 0c0 5.6-7 13-7 13Z"></path>
-                                        <circle class="icon-stroke" cx="16" cy="15" r="2.8"></circle>
-                                    </svg>
+                                    <img src="{{ url_for('static', filename='images/home2-service-area-stat-pin.svg') }}" alt="">
                                 </div>
                                 <div class="service-areas-stat-body">
                                     <span class="service-areas-stat-value">5</span>
@@ -2453,13 +2456,7 @@
                             </article>
                             <article class="service-areas-stat">
                                 <div class="service-areas-stat-icon" aria-hidden="true">
-                                    <svg viewBox="0 0 32 32">
-                                        <path class="icon-stroke" d="M8 25V12h5v13"></path>
-                                        <path class="icon-stroke" d="M13 25V7h6v18"></path>
-                                        <path class="icon-stroke" d="M19 25v-9h5v9"></path>
-                                        <path class="icon-stroke" d="M6 25h20"></path>
-                                        <path class="icon-stroke" d="M10 15h1.5M10 18h1.5M15 10h1.5M15 14h1.5M21 19h1.5"></path>
-                                    </svg>
+                                    <img src="{{ url_for('static', filename='images/home2-service-area-stat-city.svg') }}" alt="">
                                 </div>
                                 <div class="service-areas-stat-body">
                                     <span class="service-areas-stat-value">100+</span>
@@ -2468,10 +2465,7 @@
                             </article>
                             <article class="service-areas-stat">
                                 <div class="service-areas-stat-icon" aria-hidden="true">
-                                    <svg viewBox="0 0 32 32">
-                                        <path class="icon-stroke" d="M16 28s9-4 9-11V8l-9-3-9 3v9c0 7 9 11 9 11Z"></path>
-                                        <path class="icon-stroke" d="m12.5 16.5 2.4 2.5 4.8-5.6"></path>
-                                    </svg>
+                                    <img src="{{ url_for('static', filename='images/home2-service-area-stat-shield.svg') }}" alt="">
                                 </div>
                                 <div class="service-areas-stat-body">
                                     <span class="service-areas-stat-label">Local Experts</span>
@@ -2480,14 +2474,7 @@
                             </article>
                             <article class="service-areas-stat">
                                 <div class="service-areas-stat-icon" aria-hidden="true">
-                                    <svg viewBox="0 0 32 32">
-                                        <path class="icon-stroke" d="M5.5 18.5 10 14l4.2 4.2"></path>
-                                        <path class="icon-stroke" d="M26.5 18.5 22 14l-4.2 4.2"></path>
-                                        <path class="icon-stroke" d="M13.5 18.2h4.2l2-2h2.8"></path>
-                                        <path class="icon-stroke" d="M10.8 14.8 8 12l-3 3"></path>
-                                        <path class="icon-stroke" d="M21.2 14.8 24 12l3 3"></path>
-                                        <path class="icon-stroke" d="M12.2 19.8 15 22c.7.6 1.7.6 2.4 0l2.4-2"></path>
-                                    </svg>
+                                    <img src="{{ url_for('static', filename='images/home2-service-area-stat-handshake.svg') }}" alt="">
                                 </div>
                                 <div class="service-areas-stat-body">
                                     <span class="service-areas-stat-label">Built On Trust</span>
