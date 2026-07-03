@@ -523,7 +523,7 @@
 
         .service-card {
             position: relative;
-            min-height: 490px;
+            min-height: 458px;
             border: 1px solid rgba(241, 186, 32, 0.42);
             border-radius: 10px;
             overflow: hidden;
@@ -537,10 +537,11 @@
         }
 
         .service-card-media img {
-            width: 100%;
-            height: 100%;
+            width: 110%;
+            height: 110%;
             object-fit: cover;
             filter: brightness(1.18) saturate(1.02);
+            transform: translate(-5%, -5%) scale(0.94);
         }
 
         .service-card-media::after {
@@ -557,7 +558,7 @@
             display: flex;
             flex-direction: column;
             height: 100%;
-            padding: 122px 18px 14px;
+            padding: 134px 18px 12px;
         }
 
         .service-card-head {
@@ -589,7 +590,7 @@
             line-height: 1;
             letter-spacing: 0.035em;
             text-transform: uppercase;
-            max-width: 180px;
+            max-width: 172px;
         }
 
         .service-card .service-rule {
@@ -605,7 +606,7 @@
             font-size: 12px;
             line-height: 1.24;
             color: rgba(245, 243, 239, 0.84);
-            max-width: 190px;
+            max-width: 176px;
         }
 
         .service-list {
@@ -745,10 +746,13 @@
 
         .services-value-item {
             display: flex;
-            align-items: flex-start;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             gap: 12px;
-            padding: 16px 14px;
+            padding: 14px 12px;
             border-right: 1px solid rgba(241, 186, 32, 0.18);
+            text-align: center;
         }
 
         .services-value-item:last-child {
@@ -756,10 +760,20 @@
         }
 
         .services-value-icon {
+            width: 54px;
+            height: 54px;
+            display: grid;
+            place-items: center;
             color: var(--gold);
             font-size: 28px;
             line-height: 1;
-            margin-top: 2px;
+            margin-top: 0;
+        }
+
+        .services-value-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
 
         .services-value-copy strong,
@@ -772,12 +786,12 @@
         }
 
         .services-value-copy strong {
-            font-size: 20px;
+            font-size: 18px;
             color: var(--gold-soft);
         }
 
         .services-value-copy .services-value-big {
-            font-size: 42px;
+            font-size: 38px;
             background: linear-gradient(180deg, #ffd86d 0%, #f1ba20 56%, #b16e00 100%);
             -webkit-background-clip: text;
             background-clip: text;
@@ -787,8 +801,8 @@
         .services-value-copy span {
             display: block;
             margin-top: 4px;
-            font-size: 12px;
-            line-height: 1.24;
+            font-size: 11px;
+            line-height: 1.2;
             color: rgba(245, 243, 239, 0.76);
         }
 
@@ -1890,21 +1904,21 @@
 
                     <div class="services-value-strip">
                         <div class="services-value-item">
-                            <div class="services-value-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                            <div class="services-value-icon"><img src="{{ url_for('static', filename='images/home2-icon-value-license.svg') }}" alt=""></div>
                             <div class="services-value-copy">
                                 <strong>Licensed &amp; Insured</strong>
                                 <span>CA Lic. #1098765<br>Fully Licensed, Bonded &amp; Insured</span>
                             </div>
                         </div>
                         <div class="services-value-item">
-                            <div class="services-value-icon"><i class="fa-solid fa-users"></i></div>
+                            <div class="services-value-icon"><img src="{{ url_for('static', filename='images/home2-icon-value-team.svg') }}" alt=""></div>
                             <div class="services-value-copy">
                                 <strong>Experienced Team</strong>
                                 <span>Skilled electricians committed to safety and excellence.</span>
                             </div>
                         </div>
                         <div class="services-value-item">
-                            <div class="services-value-icon" style="display:none;"></div>
+                            <div class="services-value-icon" aria-hidden="true"></div>
                             <div class="services-value-copy">
                                 <span class="services-value-big">24/7</span>
                                 <strong>Emergency Service</strong>
@@ -1912,14 +1926,14 @@
                             </div>
                         </div>
                         <div class="services-value-item">
-                            <div class="services-value-icon"><i class="fa-solid fa-award"></i></div>
+                            <div class="services-value-icon"><img src="{{ url_for('static', filename='images/home2-icon-value-quality.svg') }}" alt=""></div>
                             <div class="services-value-copy">
                                 <strong>Quality Guaranteed</strong>
                                 <span>Built to code. Built to last.</span>
                             </div>
                         </div>
                         <div class="services-value-item">
-                            <div class="services-value-icon"><i class="fa-solid fa-star"></i></div>
+                            <div class="services-value-icon"><img src="{{ url_for('static', filename='images/home2-icon-value-focused.svg') }}" alt=""></div>
                             <div class="services-value-copy">
                                 <strong>Customer Focused</strong>
                                 <span>Solutions tailored to your property and needs.</span>
