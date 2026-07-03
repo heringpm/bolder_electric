@@ -828,6 +828,10 @@
                 linear-gradient(180deg, #090909 0%, #050505 100%);
         }
 
+        .service-areas > .container {
+            width: min(calc(100% - 32px), 1620px);
+        }
+
         .service-areas-shell {
             display: grid;
             gap: 22px;
@@ -846,15 +850,41 @@
         }
 
         .service-areas-hero {
+            position: relative;
             display: grid;
             grid-template-columns: 330px 1fr 645px;
             gap: 14px;
             align-items: center;
-            padding: 4px 0 28px;
+            min-height: 456px;
+            padding: 28px 24px 28px 12px;
             border-bottom: 1px solid rgba(241, 186, 32, 0.08);
+            overflow: hidden;
+        }
+
+        .service-areas-hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(90deg, rgba(5, 5, 5, 0.97) 0%, rgba(5, 5, 5, 0.92) 19%, rgba(5, 5, 5, 0.36) 42%, rgba(5, 5, 5, 0.08) 62%, rgba(5, 5, 5, 0.18) 100%),
+                linear-gradient(180deg, rgba(5, 5, 5, 0.18) 0%, rgba(5, 5, 5, 0.02) 45%, rgba(5, 5, 5, 0.12) 100%),
+                url("{{ url_for('static', filename='images/home2-service-areas-map-bg-v1.png') }}") center center / cover no-repeat;
+            z-index: 0;
+        }
+
+        .service-areas-hero::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 56% 46%, rgba(241, 186, 32, 0.08), transparent 20%),
+                radial-gradient(circle at 64% 54%, rgba(241, 186, 32, 0.06), transparent 16%);
+            z-index: 0;
         }
 
         .service-areas-copy {
+            position: relative;
+            z-index: 1;
             display: grid;
             align-content: center;
             gap: 14px;
@@ -895,79 +925,13 @@
 
         .service-areas-map {
             position: relative;
-            min-height: 408px;
-            overflow: hidden;
-            background:
-                radial-gradient(circle at 28% 20%, rgba(241, 186, 32, 0.13), transparent 18%),
-                radial-gradient(circle at 62% 54%, rgba(241, 186, 32, 0.1), transparent 16%),
-                radial-gradient(circle at 52% 42%, rgba(255, 255, 255, 0.028), transparent 42%),
-                linear-gradient(180deg, rgba(18, 18, 18, 0.98) 0%, rgba(9, 9, 9, 0.99) 100%);
-        }
-
-        .service-areas-map::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background:
-                radial-gradient(circle at center, rgba(255, 255, 255, 0.02), transparent 65%),
-                linear-gradient(135deg, rgba(241, 186, 32, 0.06), transparent 34%);
-            opacity: 0.78;
-        }
-
-        .service-areas-map::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background-image:
-                radial-gradient(rgba(241, 186, 32, 0.04) 0.6px, transparent 0.6px);
-            background-size: 18px 18px;
-            opacity: 0.16;
-        }
-
-        .service-areas-map svg {
-            position: absolute;
-            inset: -6px 0 0 -8px;
-            width: 100%;
-            height: 100%;
+            min-height: 1px;
             z-index: 1;
         }
 
-        .service-areas-region {
-            position: absolute;
-            z-index: 2;
-            display: grid;
-            gap: 6px;
-            color: #f8f5ed;
-            text-transform: uppercase;
-            font-family: "Bebas Neue", Arial, sans-serif;
-            letter-spacing: 0.04em;
-        }
-
-        .service-areas-region strong {
-            display: inline-flex;
-            align-items: center;
-            gap: 11px;
-            font-size: 16px;
-            line-height: 1;
-            font-weight: 400;
-        }
-
-        .service-areas-region strong::before {
-            content: "";
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: #f1ba20;
-            box-shadow: 0 0 0 6px rgba(241, 186, 32, 0.12), 0 0 16px rgba(241, 186, 32, 0.5);
-        }
-
-        .service-areas-region.la { top: 76px; left: 128px; }
-        .service-areas-region.sb { top: 72px; right: 76px; }
-        .service-areas-region.riv { top: 170px; right: 66px; }
-        .service-areas-region.oc { top: 198px; left: 212px; }
-        .service-areas-region.sd { bottom: 102px; right: 38px; }
-
         .service-areas-stats {
+            position: relative;
+            z-index: 1;
             display: grid;
             grid-template-columns: repeat(5, minmax(0, 1fr));
             gap: 10px;
@@ -1840,6 +1804,8 @@
 
             .service-areas-hero {
                 grid-template-columns: 1fr;
+                min-height: 0;
+                padding: 28px 18px 24px;
             }
 
             .service-areas-copy {
@@ -1848,14 +1814,8 @@
             }
 
             .service-areas-map {
-                min-height: 380px;
+                display: none;
             }
-
-            .service-areas-region.la { top: 76px; left: 104px; }
-            .service-areas-region.sb { top: 78px; right: 80px; }
-            .service-areas-region.riv { top: 170px; right: 74px; }
-            .service-areas-region.oc { top: 196px; left: 180px; }
-            .service-areas-region.sd { bottom: 82px; right: 54px; }
 
             .service-areas-stats {
                 grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -2035,7 +1995,8 @@
 
             .service-areas-hero {
                 gap: 20px;
-                padding-bottom: 18px;
+                min-height: 0;
+                padding: 24px 16px 18px;
             }
 
             .service-areas-copy {
@@ -2056,18 +2017,8 @@
             }
 
             .service-areas-map {
-                min-height: 320px;
+                display: none;
             }
-
-            .service-areas-region strong {
-                font-size: 15px;
-            }
-
-            .service-areas-region.la { top: 58px; left: 54px; }
-            .service-areas-region.sb { top: 58px; right: 28px; }
-            .service-areas-region.riv { top: 144px; right: 24px; }
-            .service-areas-region.oc { top: 162px; left: 102px; }
-            .service-areas-region.sd { bottom: 54px; right: 20px; }
 
             .service-areas-stats,
             .service-area-grid {
@@ -2474,37 +2425,7 @@
                                 <p class="sr-only">Bolder Electric provides commercial electrical contracting, critical power infrastructure, emergency electrical services, generator systems, ATS/switchgear solutions, and electrical upgrades throughout Southern California. Our team serves industrial, commercial, healthcare, education, government, and mission-critical facilities across Riverside, San Bernardino, Los Angeles, Orange, and San Diego Counties, delivering reliable electrical solutions for complex projects of every size.</p>
                             </article>
 
-                            <div class="service-areas-map" aria-label="Southern California service area coverage map">
-                                <svg viewBox="0 0 520 420" role="img" aria-hidden="true" focusable="false">
-                                    <defs>
-                                        <filter id="serviceAreaGlow">
-                                            <feGaussianBlur stdDeviation="4" result="blur"></feGaussianBlur>
-                                            <feMerge>
-                                                <feMergeNode in="blur"></feMergeNode>
-                                                <feMergeNode in="SourceGraphic"></feMergeNode>
-                                            </feMerge>
-                                        </filter>
-                                    </defs>
-                                    <path d="M121 24 L150 52 L142 86 L170 104 L183 140 L226 160 L246 194 L278 214 L286 256 L308 286 L322 334 L334 396" fill="none" stroke="rgba(241,186,32,0.75)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
-                                    <path d="M185 72 L337 72 L337 198" fill="none" stroke="rgba(241,186,32,0.55)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                    <path d="M170 104 L316 104" fill="none" stroke="rgba(241,186,32,0.35)" stroke-width="1.6"></path>
-                                    <path d="M208 160 L351 160" fill="none" stroke="rgba(241,186,32,0.35)" stroke-width="1.6"></path>
-                                    <path d="M246 214 L365 214" fill="none" stroke="rgba(241,186,32,0.35)" stroke-width="1.6"></path>
-                                    <path d="M279 257 L372 257" fill="none" stroke="rgba(241,186,32,0.35)" stroke-width="1.6"></path>
-                                    <path d="M112 188 L128 198 L140 212 L124 218 L110 206 Z" fill="none" stroke="rgba(241,186,32,0.55)" stroke-width="2"></path>
-                                    <path d="M98 202 L108 208 L114 220 L102 222 L92 214 Z" fill="none" stroke="rgba(241,186,32,0.45)" stroke-width="1.6"></path>
-                                    <circle cx="166" cy="106" r="6" fill="#f1ba20" filter="url(#serviceAreaGlow)"></circle>
-                                    <circle cx="306" cy="104" r="6" fill="#f1ba20" filter="url(#serviceAreaGlow)"></circle>
-                                    <circle cx="319" cy="209" r="6" fill="#f1ba20" filter="url(#serviceAreaGlow)"></circle>
-                                    <circle cx="238" cy="236" r="6" fill="#f1ba20" filter="url(#serviceAreaGlow)"></circle>
-                                    <circle cx="327" cy="309" r="6" fill="#f1ba20" filter="url(#serviceAreaGlow)"></circle>
-                                </svg>
-                                <div class="service-areas-region la"><strong>Los Angeles<br>County</strong></div>
-                                <div class="service-areas-region sb"><strong>San Bernardino<br>County</strong></div>
-                                <div class="service-areas-region riv"><strong>Riverside<br>County</strong></div>
-                                <div class="service-areas-region oc"><strong>Orange<br>County</strong></div>
-                                <div class="service-areas-region sd"><strong>San Diego<br>County</strong></div>
-                            </div>
+                            <div class="service-areas-map" aria-hidden="true"></div>
 
                             <div class="service-areas-stats">
                                 <article class="service-areas-stat">
