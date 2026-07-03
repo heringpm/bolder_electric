@@ -820,17 +820,17 @@
         }
 
         .service-areas {
-            padding-top: 56px;
-            padding-bottom: 78px;
+            padding-top: 42px;
+            padding-bottom: 62px;
             background:
-                radial-gradient(circle at 78% 10%, rgba(241, 186, 32, 0.08), transparent 18%),
-                radial-gradient(circle at 20% 0%, rgba(241, 186, 32, 0.04), transparent 18%),
-                linear-gradient(180deg, #080808 0%, #050505 100%);
+                radial-gradient(circle at 72% 8%, rgba(241, 186, 32, 0.06), transparent 18%),
+                radial-gradient(circle at 24% 0%, rgba(241, 186, 32, 0.035), transparent 20%),
+                linear-gradient(180deg, #090909 0%, #050505 100%);
         }
 
         .service-areas-shell {
             display: grid;
-            gap: 28px;
+            gap: 22px;
         }
 
         .sr-only {
@@ -847,61 +847,61 @@
 
         .service-areas-hero {
             display: grid;
-            grid-template-columns: 0.72fr 1.08fr 0.82fr;
-            gap: 18px;
-            align-items: stretch;
-            padding-bottom: 22px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            grid-template-columns: 330px 1fr 645px;
+            gap: 14px;
+            align-items: center;
+            padding: 4px 0 28px;
+            border-bottom: 1px solid rgba(241, 186, 32, 0.08);
         }
 
         .service-areas-copy {
             display: grid;
             align-content: center;
-            gap: 16px;
-            padding: 14px 8px 14px 4px;
+            gap: 14px;
+            padding: 8px 8px 8px 6px;
         }
 
         .service-areas-copy .section-tag {
             justify-self: start;
             margin: 0;
-            font-size: 19px;
-            letter-spacing: 0.14em;
+            font-size: 17px;
+            letter-spacing: 0.13em;
         }
 
         .service-areas-copy h2 {
             margin: 0;
             font-family: "Bebas Neue", Arial, sans-serif;
-            font-size: clamp(52px, 4.5vw, 78px);
-            line-height: 0.95;
+            font-size: clamp(56px, 4.8vw, 80px);
+            line-height: 0.92;
             letter-spacing: 0.02em;
             text-transform: uppercase;
+            max-width: 300px;
         }
 
         .service-areas-copy .service-area-rule {
-            width: 50px;
-            height: 3px;
+            width: 48px;
+            height: 2px;
             background: linear-gradient(90deg, #f1ba20 0%, #be7900 100%);
             border-radius: 999px;
         }
 
         .service-areas-copy p {
             margin: 0;
-            max-width: 420px;
-            font-size: 19px;
-            line-height: 1.45;
+            max-width: 300px;
+            font-size: 16px;
+            line-height: 1.65;
             color: rgba(245, 243, 239, 0.84);
         }
 
         .service-areas-map {
             position: relative;
-            min-height: 420px;
-            border-radius: 20px;
+            min-height: 408px;
             overflow: hidden;
             background:
-                radial-gradient(circle at 25% 25%, rgba(241, 186, 32, 0.16), transparent 22%),
-                radial-gradient(circle at 55% 58%, rgba(241, 186, 32, 0.12), transparent 18%),
-                linear-gradient(180deg, rgba(19, 19, 19, 0.96) 0%, rgba(9, 9, 9, 0.98) 100%);
-            border: 1px solid rgba(241, 186, 32, 0.14);
+                radial-gradient(circle at 28% 20%, rgba(241, 186, 32, 0.13), transparent 18%),
+                radial-gradient(circle at 62% 54%, rgba(241, 186, 32, 0.1), transparent 16%),
+                radial-gradient(circle at 52% 42%, rgba(255, 255, 255, 0.028), transparent 42%),
+                linear-gradient(180deg, rgba(18, 18, 18, 0.98) 0%, rgba(9, 9, 9, 0.99) 100%);
         }
 
         .service-areas-map::before {
@@ -910,8 +910,8 @@
             inset: 0;
             background:
                 radial-gradient(circle at center, rgba(255, 255, 255, 0.02), transparent 65%),
-                linear-gradient(135deg, rgba(241, 186, 32, 0.08), transparent 34%);
-            opacity: 0.8;
+                linear-gradient(135deg, rgba(241, 186, 32, 0.06), transparent 34%);
+            opacity: 0.78;
         }
 
         .service-areas-map::after {
@@ -926,7 +926,7 @@
 
         .service-areas-map svg {
             position: absolute;
-            inset: 0;
+            inset: -6px 0 0 -8px;
             width: 100%;
             height: 100%;
             z-index: 1;
@@ -946,8 +946,8 @@
         .service-areas-region strong {
             display: inline-flex;
             align-items: center;
-            gap: 10px;
-            font-size: 18px;
+            gap: 11px;
+            font-size: 16px;
             line-height: 1;
             font-weight: 400;
         }
@@ -961,35 +961,35 @@
             box-shadow: 0 0 0 6px rgba(241, 186, 32, 0.12), 0 0 16px rgba(241, 186, 32, 0.5);
         }
 
-        .service-areas-region.la { top: 82px; left: 118px; }
-        .service-areas-region.sb { top: 80px; right: 94px; }
-        .service-areas-region.riv { top: 178px; right: 88px; }
-        .service-areas-region.oc { top: 206px; left: 192px; }
-        .service-areas-region.sd { bottom: 96px; right: 66px; }
+        .service-areas-region.la { top: 76px; left: 128px; }
+        .service-areas-region.sb { top: 72px; right: 76px; }
+        .service-areas-region.riv { top: 170px; right: 66px; }
+        .service-areas-region.oc { top: 198px; left: 212px; }
+        .service-areas-region.sd { bottom: 102px; right: 38px; }
 
         .service-areas-stats {
             display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 12px;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 10px;
             align-content: center;
         }
 
         .service-areas-stat {
-            min-height: 154px;
-            padding: 18px 14px 14px;
-            border: 1px solid rgba(241, 186, 32, 0.42);
-            border-radius: 14px;
-            background: linear-gradient(180deg, rgba(15, 15, 15, 0.98) 0%, rgba(7, 7, 7, 0.98) 100%);
+            min-height: 188px;
+            padding: 20px 10px 16px;
+            border: 1px solid rgba(241, 186, 32, 0.54);
+            border-radius: 10px;
+            background: linear-gradient(180deg, rgba(12, 12, 12, 0.99) 0%, rgba(8, 8, 8, 0.99) 100%);
             display: grid;
             justify-items: center;
             align-content: start;
-            gap: 10px;
+            gap: 12px;
             text-align: center;
         }
 
         .service-areas-stat-icon {
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             color: var(--gold);
             display: grid;
             place-items: center;
@@ -1010,44 +1010,50 @@
         }
 
         .service-areas-stat-value {
-            font-size: 54px;
-            line-height: 0.9;
+            font-size: 58px;
+            line-height: 0.88;
             color: #fbf8f1;
         }
 
         .service-areas-stat-label {
-            font-size: 18px;
-            line-height: 1.06;
-            letter-spacing: 0.05em;
+            font-size: 16px;
+            line-height: 1.16;
+            letter-spacing: 0.045em;
             color: #f6f2e9;
         }
 
         .service-areas-stat-copy {
-            font-size: 14px;
-            line-height: 1.15;
+            font-size: 13px;
+            line-height: 1.2;
             letter-spacing: 0.03em;
             color: rgba(245, 243, 239, 0.78);
         }
 
         .service-areas-cities-head {
-            display: grid;
+            display: flex;
             justify-items: center;
-            gap: 10px;
-        }
-
-        .service-areas-cities-head .section-tag {
-            margin: 0;
-            font-size: 22px;
-            letter-spacing: 0.16em;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            margin-top: 2px;
         }
 
         .service-areas-cities-head h3 {
             margin: 0;
             font-family: "Bebas Neue", Arial, sans-serif;
-            font-size: clamp(38px, 3vw, 56px);
-            line-height: 0.95;
-            letter-spacing: 0.04em;
+            font-size: clamp(28px, 2vw, 40px);
+            line-height: 1;
+            letter-spacing: 0.07em;
             text-transform: uppercase;
+            color: var(--gold);
+        }
+
+        .service-areas-cities-head::before,
+        .service-areas-cities-head::after {
+            content: "";
+            width: 92px;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(241, 186, 32, 0), rgba(241, 186, 32, 0.9), rgba(241, 186, 32, 0));
         }
 
         .service-area-grid,
@@ -1063,6 +1069,7 @@
         .service-area-grid {
             grid-template-columns: repeat(5, minmax(0, 1fr));
             margin-top: 0;
+            gap: 10px;
         }
 
         .mini-card-grid {
@@ -1086,24 +1093,23 @@
         .service-area-card {
             position: relative;
             overflow: hidden;
-            padding: 24px 18px 18px;
-            border-radius: 18px;
-            border: 1px solid rgba(241, 186, 32, 0.32);
+            padding: 22px 18px 18px;
+            border-radius: 10px;
+            border: 1px solid rgba(241, 186, 32, 0.5);
             background:
-                linear-gradient(180deg, rgba(17, 17, 17, 0.98) 0%, rgba(8, 8, 8, 0.98) 100%);
-            box-shadow: var(--shadow);
+                linear-gradient(180deg, rgba(12, 12, 12, 0.985) 0%, rgba(7, 7, 7, 0.99) 100%);
             display: grid;
             align-content: start;
             justify-items: center;
-            min-height: 344px;
+            min-height: 374px;
         }
 
         .service-area-card-icon {
-            width: 60px;
-            height: 60px;
+            width: 54px;
+            height: 54px;
             display: grid;
             place-items: center;
-            margin: 0 auto 20px;
+            margin: 0 auto 18px;
             color: var(--gold);
         }
 
@@ -1116,37 +1122,37 @@
         .service-area-card h3 {
             margin: 0;
             font-family: "Bebas Neue", Arial, sans-serif;
-            font-size: clamp(25px, 1.8vw, 34px);
-            line-height: 0.98;
-            letter-spacing: 0.035em;
+            font-size: clamp(22px, 1.55vw, 30px);
+            line-height: 1;
+            letter-spacing: 0.03em;
             text-transform: uppercase;
             color: #fbf8f1;
             text-align: center;
         }
 
         .service-area-card-rule {
-            width: min(100%, 240px);
+            width: min(100%, 260px);
             height: 1px;
-            margin: 18px auto 16px;
-            background: linear-gradient(90deg, rgba(241, 186, 32, 0) 0%, rgba(241, 186, 32, 0.82) 18%, rgba(241, 186, 32, 0.82) 82%, rgba(241, 186, 32, 0) 100%);
+            margin: 18px auto 18px;
+            background: linear-gradient(90deg, rgba(241, 186, 32, 0) 0%, rgba(241, 186, 32, 0.72) 14%, rgba(241, 186, 32, 0.72) 86%, rgba(241, 186, 32, 0) 100%);
         }
 
         .service-area-card-cities {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 10px 14px;
+            gap: 12px 14px;
             margin: 0;
             padding: 0;
             list-style: none;
-            min-height: 104px;
+            min-height: 118px;
         }
 
         .service-area-card-cities li {
             position: relative;
-            font-size: 13px;
-            line-height: 1.2;
-            color: rgba(245, 243, 239, 0.84);
+            font-size: 12px;
+            line-height: 1.25;
+            color: rgba(245, 243, 239, 0.87);
             white-space: nowrap;
         }
 
@@ -1167,17 +1173,17 @@
         }
 
         .service-area-card-more {
-            margin-top: 10px;
-            font-size: 13px;
+            margin-top: 8px;
+            font-size: 12px;
             line-height: 1.2;
             color: rgba(245, 243, 239, 0.72);
             text-align: center;
         }
 
         .service-area-card-link-rule {
-            width: min(100%, 180px);
+            width: min(100%, 146px);
             height: 1px;
-            margin: 22px auto 16px;
+            margin: 20px auto 16px;
             background: linear-gradient(90deg, rgba(241, 186, 32, 0) 0%, rgba(241, 186, 32, 0.7) 50%, rgba(241, 186, 32, 0) 100%);
         }
 
@@ -1188,18 +1194,21 @@
             gap: 12px;
             width: 100%;
             font-family: "Bebas Neue", Arial, sans-serif;
-            font-size: 24px;
-            letter-spacing: 0.05em;
+            font-size: 17px;
+            letter-spacing: 0.06em;
             text-transform: uppercase;
             color: var(--gold);
         }
 
         .service-area-card-link span:last-child {
-            font-size: 28px;
+            font-size: 24px;
         }
 
         .service-area-map-button {
             width: fit-content;
+            min-width: 314px;
+            padding-inline: 22px;
+            font-size: 18px;
         }
 
         .service-area-icon {
@@ -1835,6 +1844,7 @@
 
             .service-areas-copy {
                 padding-right: 0;
+                max-width: 420px;
             }
 
             .service-areas-map {
@@ -2031,10 +2041,12 @@
             .service-areas-copy {
                 padding: 8px 0 0;
                 gap: 14px;
+                max-width: none;
             }
 
             .service-areas-copy h2 {
                 font-size: clamp(42px, 13vw, 58px);
+                max-width: none;
             }
 
             .service-areas-copy p {
@@ -2079,12 +2091,17 @@
                 font-size: 12px;
             }
 
-            .service-areas-cities-head .section-tag {
-                font-size: 18px;
+            .service-areas-cities-head {
+                gap: 12px;
             }
 
             .service-areas-cities-head h3 {
                 font-size: clamp(32px, 10vw, 44px);
+            }
+
+            .service-areas-cities-head::before,
+            .service-areas-cities-head::after {
+                width: 48px;
             }
 
             .service-area-card {
@@ -2482,11 +2499,11 @@
                                     <circle cx="238" cy="236" r="6" fill="#f1ba20" filter="url(#serviceAreaGlow)"></circle>
                                     <circle cx="327" cy="309" r="6" fill="#f1ba20" filter="url(#serviceAreaGlow)"></circle>
                                 </svg>
-                                <div class="service-areas-region la"><strong>Los Angeles County</strong></div>
-                                <div class="service-areas-region sb"><strong>San Bernardino County</strong></div>
-                                <div class="service-areas-region riv"><strong>Riverside County</strong></div>
-                                <div class="service-areas-region oc"><strong>Orange County</strong></div>
-                                <div class="service-areas-region sd"><strong>San Diego County</strong></div>
+                                <div class="service-areas-region la"><strong>Los Angeles<br>County</strong></div>
+                                <div class="service-areas-region sb"><strong>San Bernardino<br>County</strong></div>
+                                <div class="service-areas-region riv"><strong>Riverside<br>County</strong></div>
+                                <div class="service-areas-region oc"><strong>Orange<br>County</strong></div>
+                                <div class="service-areas-region sd"><strong>San Diego<br>County</strong></div>
                             </div>
 
                             <div class="service-areas-stats">
@@ -2498,7 +2515,7 @@
                                         </svg>
                                     </div>
                                     <span class="service-areas-stat-value">5</span>
-                                    <span class="service-areas-stat-label">Counties Covered</span>
+                                    <span class="service-areas-stat-label">Counties<br>Covered</span>
                                 </article>
                                 <article class="service-areas-stat">
                                     <div class="service-areas-stat-icon" aria-hidden="true">
@@ -2511,7 +2528,7 @@
                                         </svg>
                                     </div>
                                     <span class="service-areas-stat-value">100+</span>
-                                    <span class="service-areas-stat-label">Cities Served</span>
+                                    <span class="service-areas-stat-label">Cities<br>Served</span>
                                 </article>
                                 <article class="service-areas-stat">
                                     <div class="service-areas-stat-icon" aria-hidden="true">
@@ -2520,7 +2537,7 @@
                                         </svg>
                                     </div>
                                     <span class="service-areas-stat-value">24/7</span>
-                                    <span class="service-areas-stat-label">Response Available</span>
+                                    <span class="service-areas-stat-label">Response<br>Available</span>
                                 </article>
                                 <article class="service-areas-stat">
                                     <div class="service-areas-stat-icon" aria-hidden="true">
@@ -2529,7 +2546,7 @@
                                             <path class="icon-stroke" d="m12.5 16.5 2.4 2.5 4.8-5.6"></path>
                                         </svg>
                                     </div>
-                                    <span class="service-areas-stat-label">Local Experts</span>
+                                    <span class="service-areas-stat-label">Local<br>Experts</span>
                                     <span class="service-areas-stat-copy">On The Ground</span>
                                 </article>
                                 <article class="service-areas-stat">
@@ -2542,14 +2559,13 @@
                                             <path class="icon-stroke" d="M23 18v4c0 1.7-1.3 3-3 3h-2"></path>
                                         </svg>
                                     </div>
-                                    <span class="service-areas-stat-label">Built On Trust</span>
-                                    <span class="service-areas-stat-copy">Delivered With Integrity</span>
+                                    <span class="service-areas-stat-label">Built On<br>Trust</span>
+                                    <span class="service-areas-stat-copy">Delivered With<br>Integrity</span>
                                 </article>
                             </div>
                         </div>
 
                         <div class="service-areas-cities-head" id="cities-we-serve">
-                            <div class="section-tag">Cities We Serve</div>
                             <h3>Cities We Serve</h3>
                         </div>
 
