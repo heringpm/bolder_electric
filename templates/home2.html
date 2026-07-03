@@ -820,21 +820,26 @@
         }
 
         .service-areas {
-            padding-top: 42px;
-            padding-bottom: 62px;
+            padding-top: 28px;
+            padding-bottom: 46px;
             background:
-                radial-gradient(circle at 72% 8%, rgba(241, 186, 32, 0.06), transparent 18%),
-                radial-gradient(circle at 24% 0%, rgba(241, 186, 32, 0.035), transparent 20%),
-                linear-gradient(180deg, #090909 0%, #050505 100%);
+                radial-gradient(circle at 72% 8%, rgba(241, 186, 32, 0.05), transparent 18%),
+                radial-gradient(circle at 24% 0%, rgba(241, 186, 32, 0.03), transparent 20%),
+                linear-gradient(180deg, #070707 0%, #040404 100%);
         }
 
         .service-areas > .container {
-            width: min(calc(100% - 8px), 100%);
+            width: min(calc(100% - 10px), 100%);
         }
 
         .service-areas-shell {
             display: grid;
-            gap: 22px;
+            gap: 0;
+            border: 1px solid rgba(241, 186, 32, 0.16);
+            border-radius: 8px;
+            background:
+                linear-gradient(180deg, rgba(8, 8, 8, 0.98) 0%, rgba(5, 5, 5, 0.99) 100%);
+            overflow: hidden;
         }
 
         .sr-only {
@@ -852,12 +857,13 @@
         .service-areas-hero {
             position: relative;
             display: grid;
-            grid-template-columns: 520px 1fr;
-            gap: 14px;
+            grid-template-columns: 430px 1fr;
+            gap: 0;
             align-items: center;
-            min-height: 456px;
-            padding: 28px 24px 28px 34px;
+            min-height: 418px;
+            padding: 18px 20px 18px 26px;
             overflow: hidden;
+            border-bottom: 1px solid rgba(241, 186, 32, 0.12);
         }
 
         .service-areas-hero::before {
@@ -865,9 +871,9 @@
             position: absolute;
             inset: 0;
             background:
-                linear-gradient(90deg, rgba(5, 5, 5, 0.97) 0%, rgba(5, 5, 5, 0.92) 19%, rgba(5, 5, 5, 0.36) 42%, rgba(5, 5, 5, 0.08) 62%, rgba(5, 5, 5, 0.18) 100%),
-                linear-gradient(180deg, rgba(5, 5, 5, 0.18) 0%, rgba(5, 5, 5, 0.02) 45%, rgba(5, 5, 5, 0.12) 100%),
-                url("{{ url_for('static', filename='images/home2-service-areas-map-bg-v1.png') }}") center center / cover no-repeat;
+                linear-gradient(90deg, rgba(6, 6, 6, 0.98) 0%, rgba(6, 6, 6, 0.96) 18%, rgba(6, 6, 6, 0.48) 37%, rgba(6, 6, 6, 0.08) 54%, rgba(6, 6, 6, 0.08) 100%),
+                linear-gradient(180deg, rgba(6, 6, 6, 0.12) 0%, rgba(6, 6, 6, 0.02) 52%, rgba(6, 6, 6, 0.08) 100%),
+                url("{{ url_for('static', filename='images/home2-service-areas-map-bg-v2.png') }}") center center / cover no-repeat;
             z-index: 0;
         }
 
@@ -876,8 +882,8 @@
             position: absolute;
             inset: 0;
             background:
-                radial-gradient(circle at 56% 46%, rgba(241, 186, 32, 0.08), transparent 20%),
-                radial-gradient(circle at 64% 54%, rgba(241, 186, 32, 0.06), transparent 16%);
+                radial-gradient(circle at 52% 34%, rgba(241, 186, 32, 0.06), transparent 14%),
+                radial-gradient(circle at 64% 60%, rgba(241, 186, 32, 0.04), transparent 12%);
             z-index: 0;
         }
 
@@ -886,40 +892,51 @@
             z-index: 1;
             display: grid;
             align-content: center;
-            gap: 14px;
-            padding: 14px 16px 14px 8px;
+            gap: 12px;
+            padding: 12px 14px 12px 2px;
         }
 
         .service-areas-copy .section-tag {
             justify-self: start;
             margin: 0;
-            font-size: 17px;
-            letter-spacing: 0.13em;
+            font-size: 14px;
+            letter-spacing: 0.11em;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .service-areas-copy .section-tag::before,
+        .service-areas-copy .section-tag::after {
+            content: "";
+            width: 38px;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(241, 186, 32, 0.15), rgba(241, 186, 32, 0.95));
         }
 
         .service-areas-copy h2 {
             margin: 0;
             font-family: "Bebas Neue", Arial, sans-serif;
-            font-size: clamp(38px, 3.35vw, 52px);
-            line-height: 0.94;
-            letter-spacing: 0.02em;
+            font-size: clamp(58px, 4.3vw, 76px);
+            line-height: 0.88;
+            letter-spacing: 0.01em;
             text-transform: uppercase;
-            max-width: 500px;
+            max-width: 336px;
         }
 
         .service-areas-copy .service-area-rule {
-            width: 48px;
-            height: 2px;
+            width: 40px;
+            height: 3px;
             background: linear-gradient(90deg, #f1ba20 0%, #be7900 100%);
             border-radius: 999px;
         }
 
         .service-areas-copy p {
             margin: 0;
-            max-width: 430px;
-            font-size: 16px;
-            line-height: 1.65;
-            color: rgba(245, 243, 239, 0.84);
+            max-width: 352px;
+            font-size: 17px;
+            line-height: 1.55;
+            color: rgba(245, 243, 239, 0.9);
         }
 
         .service-areas-map {
@@ -934,21 +951,20 @@
             gap: 0;
             align-content: center;
             padding: 0;
-            border: 1px solid rgba(241, 186, 32, 0.3);
-            border-radius: 0 0 8px 8px;
-            background: linear-gradient(180deg, rgba(10, 10, 10, 0.985) 0%, rgba(6, 6, 6, 0.99) 100%);
+            border-bottom: 1px solid rgba(241, 186, 32, 0.12);
+            background: linear-gradient(180deg, rgba(8, 8, 8, 0.985) 0%, rgba(5, 5, 5, 0.99) 100%);
             overflow: hidden;
         }
 
         .service-areas-stat {
-            min-height: 56px;
-            padding: 10px 18px 10px 22px;
+            min-height: 98px;
+            padding: 18px 22px 16px 28px;
             display: grid;
-            grid-template-columns: 34px 1fr;
+            grid-template-columns: 44px 1fr;
             align-items: center;
-            gap: 14px;
+            gap: 18px;
             text-align: left;
-            border-right: 1px solid rgba(241, 186, 32, 0.46);
+            border-right: 1px solid rgba(241, 186, 32, 0.4);
         }
 
         .service-areas-stat:last-child {
@@ -957,12 +973,12 @@
 
         .service-areas-stat-body {
             display: grid;
-            gap: 2px;
+            gap: 4px;
         }
 
         .service-areas-stat-icon {
-            width: 28px;
-            height: 28px;
+            width: 42px;
+            height: 42px;
             color: var(--gold);
             display: grid;
             place-items: center;
@@ -990,20 +1006,20 @@
         }
 
         .service-areas-stat-value {
-            font-size: 24px;
-            line-height: 0.9;
+            font-size: 34px;
+            line-height: 0.86;
             color: #fbf8f1;
         }
 
         .service-areas-stat-label {
-            font-size: 12px;
+            font-size: 16px;
             line-height: 1;
-            letter-spacing: 0.035em;
+            letter-spacing: 0.03em;
             color: #f6f2e9;
         }
 
         .service-areas-stat-copy {
-            font-size: 9px;
+            font-size: 12px;
             line-height: 1.05;
             letter-spacing: 0.03em;
             color: rgba(245, 243, 239, 0.78);
@@ -1014,16 +1030,18 @@
             justify-items: center;
             justify-content: center;
             align-items: center;
-            gap: 16px;
-            margin-top: 2px;
+            gap: 18px;
+            margin-top: 0;
+            padding: 10px 0 8px;
+            border-bottom: 1px solid rgba(241, 186, 32, 0.08);
         }
 
         .service-areas-cities-head h3 {
             margin: 0;
             font-family: "Bebas Neue", Arial, sans-serif;
-            font-size: clamp(28px, 2vw, 40px);
+            font-size: clamp(34px, 2.3vw, 44px);
             line-height: 1;
-            letter-spacing: 0.07em;
+            letter-spacing: 0.05em;
             text-transform: uppercase;
             color: var(--gold);
         }
@@ -1031,8 +1049,8 @@
         .service-areas-cities-head::before,
         .service-areas-cities-head::after {
             content: "";
-            width: 92px;
-            height: 1px;
+            width: 84px;
+            height: 2px;
             background: linear-gradient(90deg, rgba(241, 186, 32, 0), rgba(241, 186, 32, 0.9), rgba(241, 186, 32, 0));
         }
 
@@ -1049,7 +1067,7 @@
         .service-area-grid {
             grid-template-columns: repeat(5, minmax(0, 1fr));
             margin-top: 0;
-            gap: 10px;
+            gap: 0;
         }
 
         .mini-card-grid {
@@ -1072,24 +1090,25 @@
 
         .service-area-card {
             position: relative;
-            overflow: hidden;
-            padding: 22px 18px 18px;
-            border-radius: 10px;
-            border: 1px solid rgba(241, 186, 32, 0.5);
-            background:
-                linear-gradient(180deg, rgba(12, 12, 12, 0.985) 0%, rgba(7, 7, 7, 0.99) 100%);
+            padding: 28px 18px 16px;
+            border-right: 1px solid rgba(241, 186, 32, 0.18);
+            background: transparent;
             display: grid;
             align-content: start;
             justify-items: center;
-            min-height: 374px;
+            min-height: 348px;
+        }
+
+        .service-area-card:last-child {
+            border-right: 0;
         }
 
         .service-area-card-icon {
-            width: 54px;
-            height: 54px;
+            width: 64px;
+            height: 64px;
             display: grid;
             place-items: center;
-            margin: 0 auto 18px;
+            margin: 0 auto 14px;
             color: var(--gold);
         }
 
@@ -1099,10 +1118,16 @@
             display: block;
         }
 
+        .service-area-card-icon img {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
         .service-area-card h3 {
             margin: 0;
             font-family: "Bebas Neue", Arial, sans-serif;
-            font-size: clamp(22px, 1.55vw, 30px);
+            font-size: clamp(24px, 1.65vw, 30px);
             line-height: 1;
             letter-spacing: 0.03em;
             text-transform: uppercase;
@@ -1111,27 +1136,27 @@
         }
 
         .service-area-card-rule {
-            width: min(100%, 260px);
+            width: min(100%, 238px);
             height: 1px;
-            margin: 18px auto 18px;
-            background: linear-gradient(90deg, rgba(241, 186, 32, 0) 0%, rgba(241, 186, 32, 0.72) 14%, rgba(241, 186, 32, 0.72) 86%, rgba(241, 186, 32, 0) 100%);
+            margin: 16px auto 18px;
+            background: linear-gradient(90deg, rgba(241, 186, 32, 0) 0%, rgba(241, 186, 32, 0.48) 12%, rgba(241, 186, 32, 0.48) 88%, rgba(241, 186, 32, 0) 100%);
         }
 
         .service-area-card-cities {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 12px 14px;
+            gap: 14px 14px;
             margin: 0;
             padding: 0;
             list-style: none;
-            min-height: 118px;
+            min-height: 104px;
         }
 
         .service-area-card-cities li {
             position: relative;
-            font-size: 12px;
-            line-height: 1.25;
+            font-size: 14px;
+            line-height: 1.2;
             color: rgba(245, 243, 239, 0.87);
             white-space: nowrap;
         }
@@ -1154,14 +1179,14 @@
 
         .service-area-card-more {
             margin-top: 8px;
-            font-size: 12px;
+            font-size: 13px;
             line-height: 1.2;
             color: rgba(245, 243, 239, 0.72);
             text-align: center;
         }
 
         .service-area-card-link-rule {
-            width: min(100%, 146px);
+            width: min(100%, 132px);
             height: 1px;
             margin: 20px auto 16px;
             background: linear-gradient(90deg, rgba(241, 186, 32, 0) 0%, rgba(241, 186, 32, 0.7) 50%, rgba(241, 186, 32, 0) 100%);
@@ -1174,14 +1199,14 @@
             gap: 12px;
             width: 100%;
             font-family: "Bebas Neue", Arial, sans-serif;
-            font-size: 17px;
+            font-size: 19px;
             letter-spacing: 0.06em;
             text-transform: uppercase;
             color: var(--gold);
         }
 
         .service-area-card-link span:last-child {
-            font-size: 24px;
+            font-size: 28px;
         }
 
         .service-area-map-button {
@@ -2490,15 +2515,7 @@
                         <div class="service-area-grid">
                             <article class="service-area-card" id="los-angeles-county-cities">
                                 <div class="service-area-card-icon" aria-hidden="true">
-                                    <svg class="service-area-icon" viewBox="0 0 64 64">
-                                        <polygon class="hex-fill" points="32,3 54,16 54,48 32,61 10,48 10,16"></polygon>
-                                        <polygon class="hex-stroke" points="32,3 54,16 54,48 32,61 10,48 10,16"></polygon>
-                                        <path class="icon-stroke" d="M22 42V26h7v16"></path>
-                                        <path class="icon-stroke" d="M29 42V18h8v24"></path>
-                                        <path class="icon-stroke" d="M37 42V23h7v19"></path>
-                                        <path class="icon-stroke" d="M20 42h26"></path>
-                                        <path class="icon-stroke" d="M24 31h3M24 35h3M32 24h3M32 29h3M40 29h2M40 34h2"></path>
-                                    </svg>
+                                    <img src="{{ url_for('static', filename='images/home2-service-area-county-la.svg') }}" alt="">
                                 </div>
                                 <h3>Los Angeles County</h3>
                                 <div class="service-area-card-rule"></div>
@@ -2520,13 +2537,7 @@
 
                             <article class="service-area-card" id="san-bernardino-county-cities">
                                 <div class="service-area-card-icon" aria-hidden="true">
-                                    <svg class="service-area-icon" viewBox="0 0 64 64">
-                                        <polygon class="hex-fill" points="32,3 54,16 54,48 32,61 10,48 10,16"></polygon>
-                                        <polygon class="hex-stroke" points="32,3 54,16 54,48 32,61 10,48 10,16"></polygon>
-                                        <path class="icon-stroke" d="M20 26h24v16H20z"></path>
-                                        <circle class="icon-stroke" cx="32" cy="34" r="6"></circle>
-                                        <path class="icon-stroke" d="M25 22h14M24 42h16M17 30h3M44 30h3M17 38h3M44 38h3"></path>
-                                    </svg>
+                                    <img src="{{ url_for('static', filename='images/home2-service-area-county-sb.svg') }}" alt="">
                                 </div>
                                 <h3>San Bernardino County</h3>
                                 <div class="service-area-card-rule"></div>
@@ -2548,14 +2559,7 @@
 
                             <article class="service-area-card" id="riverside-county-cities">
                                 <div class="service-area-card-icon" aria-hidden="true">
-                                    <svg class="service-area-icon" viewBox="0 0 64 64">
-                                        <polygon class="hex-fill" points="32,3 54,16 54,48 32,61 10,48 10,16"></polygon>
-                                        <polygon class="hex-stroke" points="32,3 54,16 54,48 32,61 10,48 10,16"></polygon>
-                                        <path class="icon-stroke" d="M24 44V28l8-6 8 6v16"></path>
-                                        <path class="icon-stroke" d="M18 44h28"></path>
-                                        <path class="icon-stroke" d="M36 20c2 2 4 5 4 8 0 4-3 7-8 7s-8-3-8-7c0-3 2-6 4-8"></path>
-                                        <path class="icon-stroke" d="M30 44v-7h4v7"></path>
-                                    </svg>
+                                    <img src="{{ url_for('static', filename='images/home2-service-area-county-riv.svg') }}" alt="">
                                 </div>
                                 <h3>Riverside County</h3>
                                 <div class="service-area-card-rule"></div>
@@ -2576,14 +2580,7 @@
 
                             <article class="service-area-card" id="orange-county-cities">
                                 <div class="service-area-card-icon" aria-hidden="true">
-                                    <svg class="service-area-icon" viewBox="0 0 64 64">
-                                        <polygon class="hex-fill" points="32,3 54,16 54,48 32,61 10,48 10,16"></polygon>
-                                        <polygon class="hex-stroke" points="32,3 54,16 54,48 32,61 10,48 10,16"></polygon>
-                                        <path class="icon-stroke" d="M18 38c4 0 6-3 8-7 2-4 5-7 9-7 5 0 9 4 9 9"></path>
-                                        <path class="icon-stroke" d="M18 42h28"></path>
-                                        <path class="icon-stroke" d="M21 28c0-5 4-9 9-9 3 0 6 1 8 4"></path>
-                                        <path class="icon-stroke" d="M39 20c5 0 9 4 9 9 0 3-1 6-4 8"></path>
-                                    </svg>
+                                    <img src="{{ url_for('static', filename='images/home2-service-area-county-oc.svg') }}" alt="">
                                 </div>
                                 <h3>Orange County</h3>
                                 <div class="service-area-card-rule"></div>
@@ -2605,15 +2602,7 @@
 
                             <article class="service-area-card" id="san-diego-county-cities">
                                 <div class="service-area-card-icon" aria-hidden="true">
-                                    <svg class="service-area-icon" viewBox="0 0 64 64">
-                                        <polygon class="hex-fill" points="32,3 54,16 54,48 32,61 10,48 10,16"></polygon>
-                                        <polygon class="hex-stroke" points="32,3 54,16 54,48 32,61 10,48 10,16"></polygon>
-                                        <path class="icon-stroke" d="M20 42V24h7v18"></path>
-                                        <path class="icon-stroke" d="M27 42V18h9v24"></path>
-                                        <path class="icon-stroke" d="M36 42V28h8v14"></path>
-                                        <path class="icon-stroke" d="M18 42h28"></path>
-                                        <path class="icon-stroke" d="M23 29h2M23 33h2M31 23h2M31 28h2M31 33h2M39 32h2"></path>
-                                    </svg>
+                                    <img src="{{ url_for('static', filename='images/home2-service-area-county-sd.svg') }}" alt="">
                                 </div>
                                 <h3>San Diego County</h3>
                                 <div class="service-area-card-rule"></div>
