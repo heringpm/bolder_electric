@@ -1307,18 +1307,18 @@
         }
 
         .about-bolder .container {
-            width: min(calc(100% - 6px), 100%);
+            width: min(calc(100% - 52px), var(--content-width));
         }
 
         .about-shell {
             display: grid;
-            grid-template-columns: 0.27fr 0.4fr 0.33fr;
-            gap: 12px;
+            grid-template-columns: minmax(258px, 0.28fr) minmax(0, 0.39fr) minmax(310px, 0.33fr);
+            gap: 16px;
             align-items: stretch;
         }
 
         .about-intro {
-            padding: 22px 18px 16px;
+            padding: 22px 22px 16px 14px;
         }
 
         .about-intro .section-tag {
@@ -1379,13 +1379,13 @@
 
         .about-main-grid {
             display: grid;
-            grid-template-columns: 1fr 158px;
-            gap: 16px;
+            grid-template-columns: minmax(0, 1fr) 186px;
+            gap: 18px;
             align-items: start;
         }
 
         .about-main-copy {
-            padding-right: 16px;
+            padding-right: 18px;
             border-right: 1px solid rgba(241, 186, 32, 0.22);
         }
 
@@ -1402,20 +1402,21 @@
 
         .about-values {
             display: grid;
-            gap: 14px;
+            gap: 12px;
         }
 
         .about-value {
             display: grid;
-            grid-template-columns: 28px 1fr;
-            gap: 10px;
+            grid-template-columns: 24px 1fr;
+            gap: 12px;
             align-items: start;
         }
 
         .about-value-icon {
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            height: 20px;
             color: var(--gold);
+            margin-top: 2px;
         }
 
         .about-value-icon svg {
@@ -1432,17 +1433,17 @@
         }
 
         .about-value strong {
-            font-size: 14px;
-            line-height: 1;
-            letter-spacing: 0.03em;
+            font-size: 13px;
+            line-height: 1.02;
+            letter-spacing: 0.05em;
             color: #f8f5ed;
         }
 
         .about-value span {
             margin-top: 4px;
-            font-size: 10px;
-            line-height: 1.25;
-            letter-spacing: 0.03em;
+            font-size: 9px;
+            line-height: 1.22;
+            letter-spacing: 0.05em;
             color: rgba(245, 243, 239, 0.72);
         }
 
@@ -2887,8 +2888,8 @@
                                     <div class="about-value">
                                         <div class="about-value-icon" aria-hidden="true">
                                             <svg viewBox="0 0 32 32">
-                                                <path class="icon-stroke" d="M16 28s9-4 9-11V8l-9-3-9 3v9c0 7 9 11 9 11Z"></path>
-                                                <path class="icon-stroke" d="m12.5 16.5 2.4 2.5 4.8-5.6"></path>
+                                                <path class="icon-stroke" d="M16 4.5 26 8v7.3c0 6.2-4 10.2-10 12.7-6-2.5-10-6.5-10-12.7V8l10-3.5Z"></path>
+                                                <path class="icon-stroke" d="m12 16.6 2.8 2.9 5.8-6.6"></path>
                                             </svg>
                                         </div>
                                         <div><strong>Safety First</strong><span>Every project starts and ends with safety.</span></div>
@@ -2896,8 +2897,9 @@
                                     <div class="about-value">
                                         <div class="about-value-icon" aria-hidden="true">
                                             <svg viewBox="0 0 32 32">
-                                                <circle class="icon-stroke" cx="16" cy="16" r="6.2"></circle>
-                                                <path class="icon-stroke" d="M16 5v3.2M16 23.8V27M5 16h3.2M23.8 16H27M8.2 8.2l2.3 2.3M21.5 21.5l2.3 2.3M23.8 8.2l-2.3 2.3M10.5 21.5l-2.3 2.3"></path>
+                                                <path class="icon-stroke" d="M10.2 15.5h11.6c1.5 0 2.7 1.2 2.7 2.7s-1.2 2.7-2.7 2.7H12l-3.8 3.2v-6.2c0-1.4 1.1-2.4 2-2.4Z"></path>
+                                                <path class="icon-stroke" d="M12.4 10.1c.6-1.2 1.9-2 3.6-2 2 0 3.5 1 4.2 2.7"></path>
+                                                <path class="icon-stroke" d="M14.1 11.6h.01M17.2 11.6h.01M20.3 11.6h.01"></path>
                                             </svg>
                                         </div>
                                         <div><strong>Experienced Crews</strong><span>Skilled electricians with years of hands-on experience.</span></div>
@@ -2905,12 +2907,8 @@
                                     <div class="about-value">
                                         <div class="about-value-icon" aria-hidden="true">
                                             <svg viewBox="0 0 32 32">
-                                                <path class="icon-stroke" d="M5.5 18.5 10 14l4.2 4.2"></path>
-                                                <path class="icon-stroke" d="M26.5 18.5 22 14l-4.2 4.2"></path>
-                                                <path class="icon-stroke" d="M13.5 18.2h4.2l2-2h2.8"></path>
-                                                <path class="icon-stroke" d="M10.8 14.8 8 12l-3 3"></path>
-                                                <path class="icon-stroke" d="M21.2 14.8 24 12l3 3"></path>
-                                                <path class="icon-stroke" d="M12.2 19.8 15 22c.7.6 1.7.6 2.4 0l2.4-2"></path>
+                                                <path class="icon-stroke" d="M8.4 14.5c1.3-1.2 2.8-1.6 4.4-1.1l3.2 1c.9.3 1.9.3 2.8 0l3.2-1c1.6-.5 3.1-.1 4.4 1.1l-3.1 3.1c-.7.7-1.7 1-2.7.8l-1.8-.4-.7 1.2c-.8 1.3-2.7 1.3-3.5 0l-.7-1.2-1.8.4c-1 .2-2 0-2.7-.8l-3.1-3.1Z"></path>
+                                                <path class="icon-stroke" d="m9 17.8 3.4 3.4c.8.8 1.9 1.2 3 1.2h1.2c1.1 0 2.2-.4 3-1.2l3.4-3.4"></path>
                                             </svg>
                                         </div>
                                         <div><strong>Built on Trust</strong><span>Transparent communication and dependable follow-through.</span></div>
@@ -2918,8 +2916,8 @@
                                     <div class="about-value">
                                         <div class="about-value-icon" aria-hidden="true">
                                             <svg viewBox="0 0 32 32">
-                                                <circle class="icon-stroke" cx="16" cy="16" r="8.6"></circle>
-                                                <path class="icon-stroke" d="M16 11.5v4.6l3.3 1.9"></path>
+                                                <path class="icon-stroke" d="M16 4.2 18.9 10l6.3.9-4.6 4.5 1.1 6.2-5.7-3-5.7 3 1.1-6.2-4.6-4.5 6.3-.9L16 4.2Z"></path>
+                                                <path class="icon-stroke" d="M16 13.2v3.1"></path>
                                             </svg>
                                         </div>
                                         <div><strong>Quality That Lasts</strong><span>Work built to meet code and exceed expectations.</span></div>
