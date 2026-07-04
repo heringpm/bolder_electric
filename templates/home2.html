@@ -1967,22 +1967,24 @@
         footer {
             border-top: 1px solid rgba(241, 186, 32, 0.14);
             background: #050505;
-            padding: 56px 0 28px;
+            padding: 40px 0 22px;
         }
 
         .footer-grid {
-            grid-template-columns: 1.1fr 1fr 0.8fr;
+            display: grid;
+            grid-template-columns: 220px minmax(0, 1fr) 220px;
+            gap: 28px;
             align-items: start;
         }
 
         .footer-brand {
             display: flex;
-            gap: 18px;
+            gap: 16px;
             align-items: flex-start;
         }
 
         .footer-brand img {
-            width: 90px;
+            width: 84px;
             height: auto;
         }
 
@@ -1993,11 +1995,12 @@
             font-size: 0.85rem;
             letter-spacing: 0.04em;
             text-transform: uppercase;
+            color: var(--gold);
         }
 
         .footer-brand p,
         .footer-col p {
-            margin: 10px 0 0;
+            margin: 8px 0 0;
             font-size: 0.85rem;
             line-height: 1.14;
             color: var(--muted);
@@ -2006,9 +2009,10 @@
         .footer-col ul {
             list-style: none;
             padding: 0;
-            margin: 14px 0 0;
-            display: grid;
-            gap: 10px;
+            margin: 12px 0 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 22px 30px;
         }
 
         .footer-col li,
@@ -2018,13 +2022,18 @@
             color: var(--muted);
         }
 
+        .footer-col a {
+            display: inline-block;
+            white-space: nowrap;
+        }
+
         .footer-col a:hover {
             color: var(--gold-soft);
         }
 
         .footer-bottom {
-            margin-top: 30px;
-            padding-top: 18px;
+            margin-top: 28px;
+            padding-top: 16px;
             border-top: 1px solid rgba(241, 186, 32, 0.12);
             font-size: 0.85rem;
             color: rgba(245, 243, 239, 0.5);
@@ -2069,6 +2078,10 @@
             .contact-grid,
             .footer-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .footer-col ul {
+                gap: 12px 18px;
             }
 
             .about-bolder {
