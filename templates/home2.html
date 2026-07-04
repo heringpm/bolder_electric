@@ -835,7 +835,7 @@
         }
 
         .service-areas {
-            padding-top: 28px;
+            padding-top: 0;
             padding-bottom: 46px;
             background:
                 radial-gradient(circle at 72% 8%, rgba(241, 186, 32, 0.05), transparent 18%),
@@ -876,7 +876,7 @@
             gap: 0;
             align-items: center;
             min-height: 418px;
-            padding: 18px 20px 18px 26px;
+            padding: 44px 20px 18px 26px;
             overflow: hidden;
             border-bottom: 1px solid rgba(241, 186, 32, 0.12);
         }
@@ -912,19 +912,24 @@
         }
 
         .service-areas-copy .section-tag {
-            justify-self: start;
+            position: absolute;
+            top: -26px;
+            left: 50%;
+            transform: translateX(-50%);
+            justify-self: center;
             margin: 0;
-            font-size: 14px;
+            font-size: 18px;
             letter-spacing: 0.11em;
             display: inline-flex;
             align-items: center;
             gap: 12px;
+            width: max-content;
         }
 
         .service-areas-copy .section-tag::before,
         .service-areas-copy .section-tag::after {
             content: "";
-            width: 38px;
+            width: 42px;
             height: 2px;
             background: linear-gradient(90deg, rgba(241, 186, 32, 0.15), rgba(241, 186, 32, 0.95));
         }
