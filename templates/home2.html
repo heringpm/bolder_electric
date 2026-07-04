@@ -881,6 +881,30 @@
             border-bottom: 1px solid rgba(241, 186, 32, 0.12);
         }
 
+        .service-areas-hero-tag {
+            position: absolute;
+            top: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            margin: 0;
+            font-size: 18px;
+            letter-spacing: 0.11em;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            width: max-content;
+            pointer-events: none;
+        }
+
+        .service-areas-hero-tag::before,
+        .service-areas-hero-tag::after {
+            content: "";
+            width: 42px;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(241, 186, 32, 0.15), rgba(241, 186, 32, 0.95));
+        }
+
         .service-areas-hero::before {
             content: "";
             position: absolute;
@@ -909,29 +933,6 @@
             align-content: center;
             gap: 12px;
             padding: 12px 14px 12px 2px;
-        }
-
-        .service-areas-copy .section-tag {
-            position: absolute;
-            top: -26px;
-            left: 50%;
-            transform: translateX(-50%);
-            justify-self: center;
-            margin: 0;
-            font-size: 18px;
-            letter-spacing: 0.11em;
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            width: max-content;
-        }
-
-        .service-areas-copy .section-tag::before,
-        .service-areas-copy .section-tag::after {
-            content: "";
-            width: 42px;
-            height: 2px;
-            background: linear-gradient(90deg, rgba(241, 186, 32, 0.15), rgba(241, 186, 32, 0.95));
         }
 
         .service-areas-copy h2 {
@@ -2715,8 +2716,8 @@
                 <div class="container">
                     <div class="service-areas-shell">
                         <div class="service-areas-hero">
+                            <div class="section-tag service-areas-hero-tag">Service Areas</div>
                             <article class="service-areas-copy">
-                                <div class="section-tag">Service Areas</div>
                                 <h2>Across Southern California</h2>
                                 <div class="service-area-rule"></div>
                                 <p>Regional coverage, complex project support, and critical power expertise carried into the same premium experience.</p>
