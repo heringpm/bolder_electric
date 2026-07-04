@@ -1331,6 +1331,20 @@
             width: min(calc(100% - 34px), var(--content-width));
         }
 
+        .about-bolder-head {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            margin: 0 0 14px;
+        }
+
+        .about-bolder-head .section-tag {
+            margin: 0;
+            font-size: 18px;
+            letter-spacing: 0.11em;
+        }
+
         .about-shell {
             display: grid;
             grid-template-columns: minmax(210px, 0.23fr) minmax(0, 0.46fr) minmax(320px, 0.31fr);
@@ -1340,12 +1354,6 @@
 
         .about-intro {
             padding: 18px 12px 12px 8px;
-        }
-
-        .about-intro .section-tag {
-            margin: 0 0 10px;
-            font-size: 12px;
-            letter-spacing: 0.11em;
         }
 
         .about-intro h2 {
@@ -2903,9 +2911,11 @@
 
             <section class="section about-bolder" id="about">
                 <div class="container">
+                    <div class="about-bolder-head">
+                        <div class="section-tag">About Bolder</div>
+                    </div>
                     <div class="about-shell">
                         <div class="about-intro">
-                            <div class="section-tag">About Bolder</div>
                             <h2>Electrical Work Done Safely, Professionally, and Built to Last</h2>
                             <div class="about-intro-rule"></div>
                             <p>At Bolder Electric, we take pride in delivering safe, professional, and reliable electrical solutions for commercial and residential projects of every size.</p>
