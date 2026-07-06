@@ -103,11 +103,11 @@ CITY_LANDING_PAGES = {
         'county': 'Riverside County',
         'state': 'CA',
         'slug': 'murrieta-ca',
-        'title': 'Electrician in Murrieta, CA | Electrical Panel Repair, Upgrade, Replacement & Emergency Service',
-        'description': 'Bolder Electric provides electrical panel repair, electrical panel upgrades, electrical panel replacement, electrical repair, commercial electrical repair, and emergency electrician service in Murrieta, CA.',
-        'keywords': 'electrician murrieta ca, electrical panel repair murrieta ca, electrical panel repair murrieta, electrical panel replacement murrieta, electrical panel upgrade murrieta ca, murrieta electrical panel upgrades, electrical repair murrieta ca, emergency electrician murrieta',
+        'title': 'Electrician in Murrieta, CA | Panel Repair, Upgrades, Replacement & Emergency Service',
+        'description': 'Bolder Electric is an electrician in Murrieta, CA providing electrical panel repair, electrical panel upgrades, electrical panel replacement, electrical repair, commercial electrical repair, and emergency electrician service.',
+        'keywords': 'electrician murrieta ca, electrician murrieta, murrieta electrician, electrical panel repair murrieta ca, electrical panel repair murrieta, electrical panel replacement murrieta, electrical panel upgrade murrieta ca, murrieta electrical panel upgrades, electrical repair murrieta ca, emergency electrician murrieta',
         'hero_title': 'Murrieta Electrician for Panel Repair, Upgrades, Replacement & Emergency Service',
-        'hero_text': 'Bolder Electric serves Murrieta with electrical panel repair, electrical panel upgrades, electrical panel replacement planning, electrical repair, commercial electrical repair, residential troubleshooting, and emergency electrician response delivered with reliable, code-compliant workmanship.',
+        'hero_text': 'Bolder Electric is a local electrician in Murrieta, CA handling electrical panel repair, electrical panel upgrades, electrical panel replacement planning, electrical repair, commercial electrical repair, residential troubleshooting, and emergency electrician response with reliable, code-compliant workmanship.',
         'service_points': [
             'Electrical panel repair in Murrieta, including breaker troubleshooting and overheating or damage diagnostics',
             'Electrical panel replacement and electrical panel upgrade planning for homes and facilities in Murrieta',
@@ -117,7 +117,7 @@ CITY_LANDING_PAGES = {
             'Emergency electrician service with rapid diagnostics and response'
         ],
         'support_heading': 'Electrical Panel Repair and Replacement in Murrieta',
-        'supporting_copy': 'Murrieta property owners often find us when they need an electrician in Murrieta, CA for electrical panel repair, electrical panel replacement, or panel upgrade planning after breaker trips, overheating, or capacity issues. This page now supports those exact needs with clearer language around repair, replacement, upgrades, emergency electrician response, and commercial electrical repair.',
+        'supporting_copy': 'Murrieta property owners often find us when they need an electrician in Murrieta, CA or a Murrieta electrician for electrical panel repair, electrical panel replacement, or panel upgrade planning after breaker trips, overheating, or capacity issues. This page now supports those exact needs with clearer language around repair, replacement, upgrades, emergency electrician response, and commercial electrical repair.',
         'opportunity_sections': [
             {
                 'heading': 'Murrieta electrical panel repair, upgrade, and replacement work',
@@ -129,7 +129,7 @@ CITY_LANDING_PAGES = {
             },
             {
                 'heading': 'Emergency electrician, electrical repair, and commercial repair in Murrieta',
-                'body': 'Murrieta also shows meaningful visibility for emergency electrician, electrician Murrieta CA, electrical repair, and commercial electrical repair terms. The updated copy now reinforces urgent troubleshooting, damaged circuits, failing breakers, and responsive repair service for homes, retail spaces, and commercial properties.',
+                'body': 'Murrieta also shows meaningful visibility for emergency electrician, electrician Murrieta CA, electrician Murrieta, Murrieta electrician, electrical repair, and commercial electrical repair terms. The updated copy now reinforces urgent troubleshooting, damaged circuits, failing breakers, and responsive repair service for homes, retail spaces, and commercial properties.',
                 'service_links': [
                     {'slug': 'residential-electrician-services', 'label': 'Residential electrical repair'},
                     {'slug': 'commercial-electrical-services', 'label': 'Commercial electrical services'}
@@ -166,11 +166,11 @@ CITY_LANDING_PAGES = {
         'county': 'Riverside County',
         'state': 'CA',
         'slug': 'temecula-ca',
-        'title': 'Electrician in Temecula, CA | Panel Repair, Replacement, Upgrades & Emergency Service',
-        'description': 'Bolder Electric delivers electrical panel repair, electrical panel replacement, electrical panel upgrades, emergency electrician service, residential electrician work, and commercial electrical support in Temecula, CA.',
-        'keywords': 'electrician temecula ca, electrical repair temecula ca, electrical panel repair temecula ca, electrical panel replacement temecula, electrical panel upgrades temecula ca, emergency electrician temecula ca',
-        'hero_title': 'Temecula Electrician for Panel Repair, Replacement, Upgrades & Emergency Service',
-        'hero_text': 'Bolder Electric serves Temecula with electrical panel repair, panel replacement planning, panel upgrades, electrical repair, residential electrician work, commercial electrical support, and emergency electrician response backed by safe, code-compliant workmanship.',
+        'title': 'Electrician in Temecula, CA | Local Residential, Panel & Emergency Electrical Service',
+        'description': 'Bolder Electric is an electrician in Temecula, CA providing residential electrician service, electrical panel repair, electrical panel replacement, electrical panel upgrades, electrical repair, and emergency electrician response.',
+        'keywords': 'temecula electrician, electrician temecula, electrician temecula ca, residential electrician temecula, electrical repair temecula ca, electrical panel repair temecula ca, electrical panel replacement temecula, electrical panel upgrades temecula ca, emergency electrician temecula ca',
+        'hero_title': 'Temecula Electrician for Residential, Panel Repair & Emergency Service',
+        'hero_text': 'Bolder Electric is a local electrician in Temecula delivering residential electrician service, electrical panel repair, panel replacement planning, panel upgrades, electrical repair, commercial electrical support, and emergency electrician response backed by safe, code-compliant workmanship.',
         'service_points': [
             'Electrical panel repair and breaker troubleshooting for damaged, overloaded, or outdated service equipment',
             'Electrical panel replacement and panel upgrade planning for homes and commercial facilities in Temecula',
@@ -179,28 +179,29 @@ CITY_LANDING_PAGES = {
             'Emergency electrician support for critical electrical failures'
         ],
         'support_heading': 'Panel Repair and Emergency Electrical Service in Temecula',
-        'supporting_copy': 'The newest Search Console export shows Temecula impressions building around electrical panel repair, electrical panel replacement, panel upgrades, and emergency electrician searches, with room to improve broader electrician Temecula relevance. This page now gives those queries more direct coverage alongside the broader residential and commercial electrical work Bolder Electric already provides.',
+        'supporting_copy': 'The newest Search Console export shows Temecula impressions building around temecula electrician, electrician temecula, electrician temecula ca, residential electrician Temecula, plus existing panel and emergency electrician searches. This page now gives those broader local-electrician queries more direct coverage alongside the residential and commercial electrical work Bolder Electric already provides.',
         'opportunity_sections': [
             {
-                'heading': 'Temecula panel repair, replacement, and upgrade services',
-                'body': 'Customers searching Temecula panel repair terms usually need a clear path from diagnosis to repair or full replacement. We now highlight panel troubleshooting, breaker issues, replacement planning, and capacity upgrades to better align with page-one-adjacent electrical panel replacement Temecula and electrical panel upgrade Temecula search demand.',
+                'heading': 'Temecula electrician and residential service demand',
+                'body': 'The strongest July opportunity is broader Temecula electrician intent. This section now leans into temecula electrician, electrician temecula, electrician temecula ca, and residential electrician Temecula language so the page reads like a true local-service landing page instead of focusing too narrowly on one repair category.',
                 'service_links': [
-                    {'slug': 'electrical-panel-upgrades', 'label': 'Electrical panel upgrades and replacements'},
-                    {'slug': 'residential-electrician-services', 'label': 'Residential electrical repairs'}
+                    {'slug': 'residential-electrician-services', 'label': 'Residential electrical repairs'},
+                    {'slug': 'commercial-electrical-services', 'label': 'Commercial electrical services'}
                 ]
             },
             {
-                'heading': 'Emergency electrician support for Temecula homes and businesses',
-                'body': 'Temecula also has near-page-one visibility for emergency electrician searches. The revised copy ties urgent outage response, unsafe panel conditions, electrical troubleshooting, and local electrician service in Temecula to the exact emergency and repair services available for homes and businesses.',
+                'heading': 'Panel repair, upgrades, and emergency electrician support in Temecula',
+                'body': 'Temecula also has visibility for electrical panel replacement, panel upgrades, and emergency electrician searches. The revised copy ties urgent outage response, unsafe panel conditions, electrical troubleshooting, and local electrician service in Temecula to the exact emergency, panel, and repair services available for homes and businesses.',
                 'service_links': [
-                    {'slug': 'emergency-electrician-services', 'label': 'Emergency electrician services'},
-                    {'slug': 'commercial-electrical-services', 'label': 'Commercial electrical support'}
+                    {'slug': 'electrical-panel-upgrades', 'label': 'Electrical panel upgrades and replacements'},
+                    {'slug': 'emergency-electrician-services', 'label': 'Emergency electrician services'}
                 ]
             }
         ],
         'faq': [
             ('Do you serve both homes and businesses in Temecula?', 'Yes. We provide both residential and commercial electrical services throughout Temecula and nearby areas.'),
             ('Can you help if I need a residential electrician in Temecula?', 'Yes. We provide residential electrician services in Temecula for troubleshooting, repairs, lighting, dedicated circuits, and home electrical upgrades.'),
+            ('Can I hire a local electrician in Temecula, CA for general repairs?', 'Yes. We provide local electrician service in Temecula for home and business repairs, troubleshooting, panel work, and electrical upgrades.'),
             ('Do you provide electrical repair in Temecula, CA?', 'Yes. We provide electrical repair in Temecula for service calls involving breakers, circuits, fixtures, wiring issues, and other troubleshooting needs.'),
             ('Do you handle electrical panel repair in Temecula, CA?', 'Yes. We diagnose panel issues in Temecula and complete repair or replacement work based on safety, condition, and electrical demand.'),
             ('Can you help with electrical panel replacement in Temecula?', 'Yes. We plan and complete electrical panel replacement in Temecula when existing equipment is outdated, damaged, or no longer safe to keep in service.'),
@@ -229,7 +230,7 @@ CITY_LANDING_PAGES = {
         'description': 'Bolder Electric provides dependable electrician services in Lake Elsinore, CA including electrical service, electrical contractor support, commercial electrical services, residential electrician work, and electrical panel upgrades.',
         'keywords': 'electrician lake elsinore, electrician lake elsinore ca, lake elsinore electrician, electricians in lake elsinore ca, electrical panel upgrades lake elsinore ca, electrical service lake elsinore, electrical contractor in lake elsinore',
         'hero_title': 'Lake Elsinore Electrician for Electrical Service, Contractor Work & Panel Upgrades',
-        'hero_text': 'We provide electrician services in Lake Elsinore for commercial facilities and homes, including diagnostics, electrical service, electrical contractor support, electrical panel upgrades, code corrections, and emergency repairs.',
+        'hero_text': 'We provide electrician services in Lake Elsinore for commercial facilities and homes, including diagnostics, electrical service, electrical contractor support, electrical panel upgrades, code corrections, and emergency repairs for customers searching for an electrician in Lake Elsinore.',
         'service_points': [
             'Commercial electrical services for expanding businesses and facilities',
             'Residential electrician support for homes, remodels, repairs, and dedicated circuit work',
@@ -238,7 +239,7 @@ CITY_LANDING_PAGES = {
             'Emergency electrical service for urgent power and safety issues'
         ],
         'support_heading': 'Electrical Service and Contractor Support in Lake Elsinore',
-        'supporting_copy': 'For customers searching for an electrician in Lake Elsinore, electrical service in Lake Elsinore, or an electrical contractor in Lake Elsinore, this page now gives clearer coverage of residential service calls, commercial work, panel upgrades, code corrections, and urgent response.',
+        'supporting_copy': 'For customers searching for an electrician in Lake Elsinore, electrician Lake Elsinore CA, electrical service in Lake Elsinore, or an electrical contractor in Lake Elsinore, this page now gives clearer coverage of residential service calls, commercial work, panel upgrades, code corrections, and urgent response.',
         'opportunity_sections': [
             {
                 'heading': 'Electrician and electrical service in Lake Elsinore',
@@ -370,7 +371,7 @@ CITY_LANDING_PAGES = {
         'description': 'Bolder Electric delivers local electrician service in Wildomar, CA including electrical repairs, residential electrician work, commercial electrical services, emergency response, and panel upgrades.',
         'keywords': 'electrician wildomar, electrician wildomar ca, wildomar electrician, electricians wildomar ca, electrical repairs wildomar ca, residential electrician wildomar',
         'hero_title': 'Local Electrician and Electrical Repair Services in Wildomar, CA',
-        'hero_text': 'Bolder Electric provides safe, reliable electrician services for businesses and homeowners in Wildomar, including electrical repairs, residential service calls, panel upgrades, and responsive local support for customers searching for an electrician in Wildomar.',
+        'hero_text': 'Bolder Electric provides safe, reliable electrician services for businesses and homeowners in Wildomar, including electrical repairs, residential service calls, panel upgrades, and responsive local support for customers searching for an electrician in Wildomar or Wildomar, CA.',
         'service_points': [
             'Commercial electrical services for offices and facilities',
             'Residential electrician support for homes and remodel projects',
@@ -448,7 +449,7 @@ CITY_LANDING_PAGES = {
         'description': 'Bolder Electric offers licensed electrician service in Corona, CA including residential electrician support, 24 hour emergency electrical service, commercial electrical services, electrical repair, and electrical panel upgrades.',
         'keywords': 'electrician corona, electrician corona ca, corona electrician, corona residential electrician, licensed electrician corona ca, 24 hour electrician corona ca, electrical panel upgrade corona ca, emergency electrical services corona',
         'hero_title': 'Licensed Electrician in Corona, CA for 24 Hour, Residential & Panel Service',
-        'hero_text': 'Bolder Electric serves Corona with licensed local electrical services for homes and facilities, including residential electrical upgrades, 24 hour emergency repairs, panel upgrades, troubleshooting, and long-term system improvements for customers comparing electricians near them.',
+        'hero_text': 'Bolder Electric serves Corona with licensed local electrical services for homes and facilities, including residential electrical upgrades, 24 hour emergency repairs, panel upgrades, troubleshooting, and long-term system improvements for customers comparing electricians near them in Corona.',
         'service_points': [
             'Commercial electrical upgrades, tenant improvements, and maintenance',
             'Residential electrician support for service calls and upgrades',
@@ -457,7 +458,7 @@ CITY_LANDING_PAGES = {
             '24 hour emergency electrician service for urgent outages, unsafe equipment, and critical failures'
         ],
         'support_heading': 'Residential Electrician and Panel Upgrade Service in Corona',
-        'supporting_copy': 'The newest Search Console data shows Corona visibility clustering around electrician Corona, electrician near me, residential electrician, panel upgrade, and emergency electrical service terms. This page now gives more direct coverage to those searches while keeping commercial and repair intent visible.',
+        'supporting_copy': 'The newest Search Console data shows Corona visibility clustering around electrician near me, electrician Corona, electrician Corona CA, residential electrician, panel upgrade, and emergency electrical service terms. This page now gives more direct coverage to those searches while keeping commercial and repair intent visible.',
         'opportunity_sections': [
             {
                 'heading': 'Residential electrician and local electrician demand in Corona',
