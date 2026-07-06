@@ -985,11 +985,18 @@
             align-items: center;
             gap: 18px;
             text-align: left;
-            border-right: 1px solid rgba(241, 186, 32, 0.4);
+            border-right: 0;
+            position: relative;
         }
 
-        .service-areas-stat:last-child {
-            border-right: 0;
+        .service-areas-stat:not(:last-child)::after {
+            content: "";
+            position: absolute;
+            top: 18px;
+            right: 0;
+            width: 1px;
+            height: calc(100% - 36px);
+            background: linear-gradient(180deg, rgba(241, 186, 32, 0), rgba(241, 186, 32, 0.34) 12%, rgba(241, 186, 32, 0.34) 88%, rgba(241, 186, 32, 0));
         }
 
         .service-areas-stat-body {
@@ -1054,7 +1061,6 @@
             gap: 18px;
             margin-top: 0;
             padding: 10px 0 8px;
-            border-bottom: 1px solid rgba(241, 186, 32, 0.08);
         }
 
         .service-areas-cities-head h3 {
