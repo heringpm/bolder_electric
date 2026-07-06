@@ -1,7 +1,10 @@
 <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M16 47V24H23V47" stroke="#F1BA20" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M23 47V16H32V47" stroke="#F1BA20" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M32 47V20H41V47" stroke="#F1BA20" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M12 47H45" stroke="#F1BA20" stroke-width="2.2" stroke-linecap="round"/>
-  <path d="M19 29H20.8M19 33.5H20.8M27.2 21H29M27.2 25.7H29M27.2 30.4H29M35.5 24.5H37.3M35.5 29.2H37.3M35.5 34H37.3" stroke="#F1BA20" stroke-width="1.9" stroke-linecap="round"/>
+  <g stroke="#F1BA20" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 48H50" stroke-width="2.1"/>
+    <path d="M17 48V28H24V48" stroke-width="2.2"/>
+    <path d="M24 48V18H33V48" stroke-width="2.2"/>
+    <path d="M33 48V24H41V48" stroke-width="2.2"/>
+    <path d="M41 48V32H46V48" stroke-width="2.2"/>
+    <path d="M19 31H20.7M19 35H20.7M19 39H20.7M28.2 22H30M28.2 26H30M28.2 30H30M28.2 34H30M36.3 27H38M36.3 31H38M36.3 35H38" stroke-width="1.8"/>
+  </g>
 </svg>
