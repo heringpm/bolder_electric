@@ -1,15 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220" fill="none">
-  <g stroke="#F1BA20" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M110 54v96"/>
-    <path d="M110 67c0-11 9-20 21-20-3 6-8 11-13 14"/>
-    <path d="M110 72c0-13-10-23-23-23 3 7 8 12 14 16"/>
-    <path d="M110 77c0-14 11-24 24-24-3 6-8 11-14 15"/>
-    <path d="M110 83c0-13-10-23-23-23 3 6 8 11 14 15"/>
-    <path d="M110 127v20"/>
-    <path d="M128 170l16-16"/>
-    <path d="M144 154l12 12"/>
-    <path d="M110 146c7 0 13 3 18 8"/>
-    <path d="M110 153c-6 0-11 3-16 8"/>
-    <path d="M92 178h38"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" fill="none">
+  <g stroke="#F1BA20" stroke-width="32" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M512 208v592"/>
+    <path d="M512 312c0-74 58-134 136-134-17 40-46 72-86 94"/>
+    <path d="M512 344c0-88-66-158-154-158 20 44 52 78 96 104"/>
+    <path d="M512 380c0-96 78-174 174-174-20 44-54 80-100 108"/>
+    <path d="M512 416c0-88-66-158-154-158 20 44 52 78 96 104"/>
+    <path d="M512 668v112"/>
+    <path d="M628 830l106-106"/>
+    <path d="M734 724l82 82"/>
+    <path d="M512 764c46 0 86 18 118 50"/>
+    <path d="M512 806c-38 0-72 18-102 48"/>
+    <path d="M368 880h248"/>
   </g>
 </svg>
