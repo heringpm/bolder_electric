@@ -1194,9 +1194,10 @@
             display: inline-flex;
             align-items: center;
             font-size: 14px;
-            line-height: 1.2;
+            line-height: 1;
             color: rgba(245, 243, 239, 0.87);
             white-space: nowrap;
+            min-height: 20px;
         }
 
         .service-area-card-cities a {
@@ -2829,7 +2830,16 @@
                         <div class="service-area-grid">
                             <article class="service-area-card" id="los-angeles-county-cities">
                                 <div class="service-area-card-icon" aria-hidden="true">
-                                    <img src="{{ url_for('static', filename='images/home2-service-area-county-la-v4.svg') }}" alt="">
+                                    <svg viewBox="0 0 64 64" aria-hidden="true">
+                                        <g stroke="#F1BA20" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M14 48H50" stroke-width="2.1"/>
+                                            <path d="M18 48V30H24V48" stroke-width="2.2"/>
+                                            <path d="M24 48V20H32V48" stroke-width="2.2"/>
+                                            <path d="M32 48V24H40V48" stroke-width="2.2"/>
+                                            <path d="M40 48V18H46V48" stroke-width="2.2"/>
+                                            <path d="M20 34H21.6M20 38H21.6M28 24H29.8M28 28H29.8M28 32H29.8M36 28H37.8M36 32H37.8M42 24H43.6M42 28H43.6M42 32H43.6" stroke-width="1.8"/>
+                                        </g>
+                                    </svg>
                                 </div>
                                 <h3>Los Angeles County</h3>
                                 <div class="service-area-card-rule"></div>
@@ -2851,7 +2861,14 @@
 
                             <article class="service-area-card" id="san-bernardino-county-cities">
                                 <div class="service-area-card-icon" aria-hidden="true">
-                                    <img src="{{ url_for('static', filename='images/home2-service-area-county-sb-v4.svg') }}" alt="">
+                                    <svg viewBox="0 0 64 64" aria-hidden="true">
+                                        <g stroke="#F1BA20" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M14 46L26 28L32 35L42 22L50 31" stroke-width="2.2"/>
+                                            <path d="M20 46H48" stroke-width="2.1"/>
+                                            <path d="M28 34L32 28L36 34" stroke-width="2.0"/>
+                                            <path d="M31 34L32 32L33 34" stroke-width="1.8"/>
+                                        </g>
+                                    </svg>
                                 </div>
                                 <h3>San Bernardino County</h3>
                                 <div class="service-area-card-rule"></div>
@@ -2873,7 +2890,16 @@
 
                             <article class="service-area-card" id="riverside-county-cities">
                                 <div class="service-area-card-icon" aria-hidden="true">
-                                    <img src="{{ url_for('static', filename='images/home2-service-area-county-riv-v4.svg') }}" alt="">
+                                    <svg viewBox="0 0 64 64" aria-hidden="true">
+                                        <g stroke="#F1BA20" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M31 18V48" stroke-width="2.2"/>
+                                            <path d="M31 20C35 17 38 16 41 16C39 20 36 22 31 22" stroke-width="2.0"/>
+                                            <path d="M31 26C35 24 38 23 41 23" stroke-width="1.9"/>
+                                            <path d="M27 48H39" stroke-width="2.1"/>
+                                            <path d="M37 44C41 40 44 39 49 39" stroke-width="2.0"/>
+                                            <path d="M42 47C45 45 48 44 52 44" stroke-width="2.0"/>
+                                        </g>
+                                    </svg>
                                 </div>
                                 <h3>Riverside County</h3>
                                 <div class="service-area-card-rule"></div>
@@ -2894,7 +2920,14 @@
 
                             <article class="service-area-card" id="orange-county-cities">
                                 <div class="service-area-card-icon" aria-hidden="true">
-                                    <img src="{{ url_for('static', filename='images/home2-service-area-county-oc-v4.svg') }}" alt="">
+                                    <svg viewBox="0 0 64 64" aria-hidden="true">
+                                        <g stroke="#F1BA20" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M16 28C18.5 23 22.2 20 27 20C31.8 20 35.5 23 38 28" stroke-width="2.2"/>
+                                            <path d="M30 31C33 25 37.2 22 42 22C46.8 22 50 25.6 51 31" stroke-width="2.2"/>
+                                            <path d="M13 39C17 39 19.8 37.5 22.4 35.1C25.2 32.5 28.2 31.6 32 31.6C35.8 31.6 38.8 32.7 41.4 35.2C44.3 38 47.2 39 51 39" stroke-width="2.2"/>
+                                            <path d="M14 45H50" stroke-width="2.1"/>
+                                        </g>
+                                    </svg>
                                 </div>
                                 <h3>Orange County</h3>
                                 <div class="service-area-card-rule"></div>
@@ -2916,7 +2949,16 @@
 
                             <article class="service-area-card" id="san-diego-county-cities">
                                 <div class="service-area-card-icon" aria-hidden="true">
-                                    <img src="{{ url_for('static', filename='images/home2-service-area-county-sd-v4.svg') }}" alt="">
+                                    <svg viewBox="0 0 64 64" aria-hidden="true">
+                                        <g stroke="#F1BA20" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M17 48V26H24V48" stroke-width="2.2"/>
+                                            <path d="M24 48V18H35V48" stroke-width="2.2"/>
+                                            <path d="M35 48V28H43V48" stroke-width="2.2"/>
+                                            <path d="M43 48V32H49V48" stroke-width="2.2"/>
+                                            <path d="M14 48H52" stroke-width="2.1"/>
+                                            <path d="M20 30H21.8M20 34H21.8M28.8 23H30.6M28.8 27H30.6M28.8 31H30.6M38.4 31.5H40.2M38.4 36H40.2" stroke-width="1.8"/>
+                                        </g>
+                                    </svg>
                                 </div>
                                 <h3>San Diego County</h3>
                                 <div class="service-area-card-rule"></div>
