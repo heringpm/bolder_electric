@@ -429,6 +429,34 @@
             box-shadow: inset 0 0 0 1px rgba(241, 186, 32, 0.1);
         }
 
+        @media (min-width: 1440px) {
+            .hero-scene::before {
+                width: 58%;
+                background: linear-gradient(90deg, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.8) 30%, rgba(0, 0, 0, 0.5) 58%, rgba(0, 0, 0, 0.18) 82%, rgba(0, 0, 0, 0) 100%);
+            }
+
+            .hero-inner {
+                width: min(calc(100% - 56px), 1540px);
+                padding-top: 118px;
+            }
+
+            .hero-copy {
+                max-width: 920px;
+            }
+
+            .hero-title .white {
+                font-size: clamp(58px, 4.25vw, 92px);
+            }
+
+            .hero-title .gold {
+                font-size: clamp(62px, 4.45vw, 96px);
+            }
+
+            .hero-text {
+                max-width: 620px;
+            }
+        }
+
         .trust-strip {
             display: grid;
             grid-template-columns: repeat(5, minmax(0, 1fr));
