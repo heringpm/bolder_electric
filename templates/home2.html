@@ -1091,6 +1091,7 @@
             margin: 0 auto;
             gap: 0;
             padding-inline: 0;
+            background: transparent;
         }
 
         .mini-card-grid {
@@ -1114,7 +1115,7 @@
         .service-area-card {
             position: relative;
             padding: 28px 18px 16px;
-            border-right: 1px solid rgba(241, 186, 32, 0.18);
+            border-right: 0;
             background: transparent;
             display: grid;
             align-content: start;
@@ -1122,8 +1123,14 @@
             min-height: 348px;
         }
 
-        .service-area-card:last-child {
-            border-right: 0;
+        .service-area-card:not(:last-child)::after {
+            content: "";
+            position: absolute;
+            top: 20px;
+            right: 0;
+            width: 1px;
+            height: calc(100% - 40px);
+            background: linear-gradient(180deg, rgba(241, 186, 32, 0), rgba(241, 186, 32, 0.34) 12%, rgba(241, 186, 32, 0.34) 88%, rgba(241, 186, 32, 0));
         }
 
         .service-area-card-icon {
