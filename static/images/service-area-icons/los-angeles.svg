@@ -1,13 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220" fill="none">
   <g stroke="#F1BA20" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M66 165h88"/>
-    <path d="M74 165V98h18v67"/>
-    <path d="M101 165V67h28v98"/>
-    <path d="M138 165V109h18v56"/>
-    <path d="M79 113h6M79 127h6M79 141h6"/>
-    <path d="M111 82h6M111 96h6M111 110h6M111 124h6M111 138h6"/>
-    <path d="M143 123h6M143 137h6"/>
-    <path d="M109 165v-18h12v18"/>
-    <path d="M156 165l9-9 7 7"/>
+    <path d="M74 162h78"/>
+    <path d="M80 162V103h17v59"/>
+    <path d="M102 162V69h25v93"/>
+    <path d="M132 162V110h17v52"/>
+    <path d="M86 117h5M86 130h5M86 143h5"/>
+    <path d="M111 84h5M111 97h5M111 110h5M111 123h5M111 136h5"/>
+    <path d="M138 124h5M138 137h5"/>
+    <path d="M109 162v-16h11v16"/>
+    <path d="M150 162l7-9 6 6 5-5"/>
   </g>
 </svg>

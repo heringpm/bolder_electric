@@ -1,11 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220" fill="none">
   <g stroke="#F1BA20" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M72 165h86"/>
-    <path d="M79 165V73h26v92"/>
-    <path d="M109 165V120h13v45"/>
-    <path d="M89 88h6M89 102h6M89 116h6M89 130h6"/>
-    <path d="M114 132h5M114 145h5"/>
-    <path d="M137 165v-55l20 10v45"/>
-    <path d="M145 122h5M145 136h5"/>
+    <path d="M78 162h72"/>
+    <path d="M84 162V72h23v90"/>
+    <path d="M111 162V121h11v41"/>
+    <path d="M92 87h5M92 100h5M92 113h5M92 126h5"/>
+    <path d="M115 133h4M115 145h4"/>
+    <path d="M134 162V98l17 9v55"/>
+    <path d="M141 118h4M141 131h4"/>
   </g>
 </svg>
