@@ -1427,13 +1427,19 @@
 
         .about-shell {
             display: grid;
-            grid-template-columns: minmax(250px, 0.27fr) minmax(0, 0.43fr) minmax(340px, 0.3fr);
-            gap: 20px;
+            grid-template-columns: minmax(0, 0.62fr) minmax(340px, 0.38fr);
+            gap: 24px;
             align-items: stretch;
         }
 
+        .about-copy-column {
+            display: grid;
+            gap: 18px;
+            align-content: start;
+        }
+
         .about-intro {
-            padding: 18px 18px 14px 10px;
+            padding: 8px 6px 0 6px;
         }
 
         .about-intro h2 {
@@ -1443,7 +1449,7 @@
             line-height: 0.96;
             letter-spacing: 0.02em;
             text-transform: uppercase;
-            max-width: 320px;
+            max-width: 420px;
         }
 
         .about-intro-rule {
@@ -1456,7 +1462,7 @@
 
         .about-intro p {
             margin: 0;
-            max-width: 340px;
+            max-width: 540px;
             font-size: 15px;
             line-height: 1.6;
             color: rgba(245, 243, 239, 0.84);
@@ -1488,14 +1494,14 @@
 
         .about-main-grid {
             display: grid;
-            grid-template-columns: minmax(0, 1fr) 280px;
+            grid-template-columns: minmax(0, 1fr);
             gap: 18px;
             align-items: start;
         }
 
         .about-main-copy {
-            padding-right: 18px;
-            border-right: 1px solid rgba(241, 186, 32, 0.22);
+            padding-right: 0;
+            border-right: 0;
         }
 
         .about-main-copy p {
@@ -1511,7 +1517,10 @@
 
         .about-values {
             display: grid;
-            gap: 10px;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px 18px;
+            padding-top: 4px;
+            border-top: 1px solid rgba(241, 186, 32, 0.18);
         }
 
         .about-value {
@@ -1567,6 +1576,7 @@
             overflow: hidden;
             background: #000;
             cursor: pointer;
+            min-height: 100%;
         }
 
         .about-video-thumb {
@@ -2544,6 +2554,18 @@
                 height: 62px;
             }
 
+            .about-shell {
+                grid-template-columns: 1fr;
+            }
+
+            .about-copy-column {
+                gap: 16px;
+            }
+
+            .about-values {
+                grid-template-columns: 1fr;
+            }
+
             .about-intro h2 {
                 font-size: clamp(30px, 11vw, 46px);
                 max-width: none;
@@ -3009,66 +3031,68 @@
                         <div class="section-tag">About Bolder</div>
                     </div>
                     <div class="about-shell">
-                        <div class="about-intro">
-                            <h2>Electrical Work Done Safely, Professionally, and Built to Last</h2>
-                            <div class="about-intro-rule"></div>
-                            <p>At Bolder Electric, we take pride in delivering safe, professional, and reliable electrical solutions for commercial and residential projects of every size.</p>
-                        </div>
-
-                        <article class="about-main-card">
-                            <h3>Built for Large-Scale Reliability</h3>
-                            <div class="about-main-rule"></div>
-                            <div class="about-main-grid">
-                                <div class="about-main-copy">
-                                    <p>At Bolder Electric, we believe electrical work should be done one way: safely, professionally, and built to last. We provide reliable service for large-scale commercial projects and residential clients with clean workmanship, clear communication, and dependable results.</p>
-                                    <p>Whether the project is a school district upgrade, a utility site buildout, or a residential service call, our team brings planning, precision, and accountability to every phase.</p>
-                                    <p>We do not just complete jobs. We build long-term trust through reliable execution, transparent communication, and workmanship that holds up over time.</p>
-                                </div>
-                                <div class="about-values">
-                                    <div class="about-value">
-                                        <div class="about-value-icon" aria-hidden="true">
-                                            <svg viewBox="0 0 32 32" aria-hidden="true">
-                                                <path d="M16 4.5 25.6 8v7.1c0 6.1-3.9 10.1-9.6 12.5C10.3 25.2 6.4 21.2 6.4 15.1V8L16 4.5Z" fill="none" stroke="#f1ba20" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                <path d="m12.1 16.5 2.9 3 5.7-6.6" fill="none" stroke="#f1ba20" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                <path d="M16 8.6v1.2M16 22.2v1.2" fill="none" stroke="#f1ba20" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round"></path>
-                                            </svg>
-                                        </div>
-                                        <div><strong>Safety First</strong><span>Every project starts and ends with safety.</span></div>
-                                    </div>
-                                    <div class="about-value">
-                                        <div class="about-value-icon" aria-hidden="true">
-                                            <svg viewBox="0 0 32 32" aria-hidden="true">
-                                                <path d="M12 9.3h8v3.1h4.4v10.3H7.6V12.4H12V9.3Z" fill="none" stroke="#f1ba20" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                <path d="M14.2 9.3V7.6h3.6v1.7" fill="none" stroke="#f1ba20" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                <path d="M13.6 16.2h.01M16 16.2h.01M18.4 16.2h.01" fill="none" stroke="#f1ba20" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                <path d="M11.1 20.1h9.8" fill="none" stroke="#f1ba20" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round"></path>
-                                            </svg>
-                                        </div>
-                                        <div><strong>Experienced Crews</strong><span>Skilled electricians with years of hands-on experience.</span></div>
-                                    </div>
-                                    <div class="about-value">
-                                        <div class="about-value-icon" aria-hidden="true">
-                                            <svg viewBox="0 0 32 32" aria-hidden="true">
-                                                <path d="M7.8 15.3c1.1-1 2.4-1.3 3.7-.9l3.7 1.2c.5.2 1.1.2 1.6 0l3.7-1.2c1.3-.4 2.6-.1 3.7.9l-2.5 2.6c-.7.7-1.7 1-2.6.8l-1.9-.4-.8 1.4c-.7 1.1-2.3 1.1-3 0l-.8-1.4-1.9.4c-.9.2-1.9-.1-2.6-.8l-2.5-2.6Z" fill="none" stroke="#f1ba20" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                <path d="M9.8 18.1 13 21c.8.7 1.8 1.1 2.8 1.1h.4c1 0 2-.4 2.8-1.1l3.2-2.9" fill="none" stroke="#f1ba20" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                <path d="M12.4 13.6c1.3-.9 2.6-1.2 3.6-1.2s2.3.3 3.6 1.2" fill="none" stroke="#f1ba20" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round"></path>
-                                            </svg>
-                                        </div>
-                                        <div><strong>Built on Trust</strong><span>Transparent communication and dependable follow-through.</span></div>
-                                    </div>
-                                    <div class="about-value">
-                                        <div class="about-value-icon" aria-hidden="true">
-                                            <svg viewBox="0 0 32 32" aria-hidden="true">
-                                                <path d="M16 5.1 18.3 10l5.7.8-4.1 4 1 5.8-5-2.7-5 2.7 1-5.8-4.1-4 5.7-.8L16 5.1Z" fill="none" stroke="#f1ba20" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                <path d="M16 13.3v2.7" fill="none" stroke="#f1ba20" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                <path d="M13.7 16.8h4.6" fill="none" stroke="#f1ba20" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round"></path>
-                                            </svg>
-                                        </div>
-                                        <div><strong>Quality That Lasts</strong><span>Work built to meet code and exceed expectations.</span></div>
-                                    </div>
-                                </div>
+                        <div class="about-copy-column">
+                            <div class="about-intro">
+                                <h2>Electrical Work Done Safely, Professionally, and Built to Last</h2>
+                                <div class="about-intro-rule"></div>
+                                <p>At Bolder Electric, we take pride in delivering safe, professional, and reliable electrical solutions for commercial and residential projects of every size.</p>
                             </div>
-                        </article>
+
+                            <article class="about-main-card">
+                                <h3>Built for Large-Scale Reliability</h3>
+                                <div class="about-main-rule"></div>
+                                <div class="about-main-grid">
+                                    <div class="about-main-copy">
+                                        <p>At Bolder Electric, we believe electrical work should be done one way: safely, professionally, and built to last. We provide reliable service for large-scale commercial projects and residential clients with clean workmanship, clear communication, and dependable results.</p>
+                                        <p>Whether the project is a school district upgrade, a utility site buildout, or a residential service call, our team brings planning, precision, and accountability to every phase.</p>
+                                        <p>We do not just complete jobs. We build long-term trust through reliable execution, transparent communication, and workmanship that holds up over time.</p>
+                                    </div>
+                                    <div class="about-values">
+                                        <div class="about-value">
+                                            <div class="about-value-icon" aria-hidden="true">
+                                                <svg viewBox="0 0 32 32" aria-hidden="true">
+                                                    <path d="M16 4.5 25.6 8v7.1c0 6.1-3.9 10.1-9.6 12.5C10.3 25.2 6.4 21.2 6.4 15.1V8L16 4.5Z" fill="none" stroke="#f1ba20" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path d="m12.1 16.5 2.9 3 5.7-6.6" fill="none" stroke="#f1ba20" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path d="M16 8.6v1.2M16 22.2v1.2" fill="none" stroke="#f1ba20" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                </svg>
+                                            </div>
+                                            <div><strong>Safety First</strong><span>Every project starts and ends with safety.</span></div>
+                                        </div>
+                                        <div class="about-value">
+                                            <div class="about-value-icon" aria-hidden="true">
+                                                <svg viewBox="0 0 32 32" aria-hidden="true">
+                                                    <path d="M12 9.3h8v3.1h4.4v10.3H7.6V12.4H12V9.3Z" fill="none" stroke="#f1ba20" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path d="M14.2 9.3V7.6h3.6v1.7" fill="none" stroke="#f1ba20" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path d="M13.6 16.2h.01M16 16.2h.01M18.4 16.2h.01" fill="none" stroke="#f1ba20" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path d="M11.1 20.1h9.8" fill="none" stroke="#f1ba20" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                </svg>
+                                            </div>
+                                            <div><strong>Experienced Crews</strong><span>Skilled electricians with years of hands-on experience.</span></div>
+                                        </div>
+                                        <div class="about-value">
+                                            <div class="about-value-icon" aria-hidden="true">
+                                                <svg viewBox="0 0 32 32" aria-hidden="true">
+                                                    <path d="M7.8 15.3c1.1-1 2.4-1.3 3.7-.9l3.7 1.2c.5.2 1.1.2 1.6 0l3.7-1.2c1.3-.4 2.6-.1 3.7.9l-2.5 2.6c-.7.7-1.7 1-2.6.8l-1.9-.4-.8 1.4c-.7 1.1-2.3 1.1-3 0l-.8-1.4-1.9.4c-.9.2-1.9-.1-2.6-.8l-2.5-2.6Z" fill="none" stroke="#f1ba20" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path d="M9.8 18.1 13 21c.8.7 1.8 1.1 2.8 1.1h.4c1 0 2-.4 2.8-1.1l3.2-2.9" fill="none" stroke="#f1ba20" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path d="M12.4 13.6c1.3-.9 2.6-1.2 3.6-1.2s2.3.3 3.6 1.2" fill="none" stroke="#f1ba20" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                </svg>
+                                            </div>
+                                            <div><strong>Built on Trust</strong><span>Transparent communication and dependable follow-through.</span></div>
+                                        </div>
+                                        <div class="about-value">
+                                            <div class="about-value-icon" aria-hidden="true">
+                                                <svg viewBox="0 0 32 32" aria-hidden="true">
+                                                    <path d="M16 5.1 18.3 10l5.7.8-4.1 4 1 5.8-5-2.7-5 2.7 1-5.8-4.1-4 5.7-.8L16 5.1Z" fill="none" stroke="#f1ba20" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path d="M16 13.3v2.7" fill="none" stroke="#f1ba20" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    <path d="M13.7 16.8h4.6" fill="none" stroke="#f1ba20" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                </svg>
+                                            </div>
+                                            <div><strong>Quality That Lasts</strong><span>Work built to meet code and exceed expectations.</span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
 
                         <button type="button" class="about-video-card" id="aboutVideoTrigger" aria-haspopup="dialog" aria-controls="aboutVideoModal" aria-label="Play About Bolder video">
                             <div class="about-video-thumb">
