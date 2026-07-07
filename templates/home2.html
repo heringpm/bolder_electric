@@ -885,6 +885,17 @@
             overflow: hidden;
         }
 
+        .service-areas-head {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 14px;
+        }
+
+        .service-areas-head .section-tag {
+            font-size: 18px;
+            letter-spacing: 0.11em;
+        }
+
         .sr-only {
             position: absolute;
             width: 1px;
@@ -904,33 +915,14 @@
             gap: 0;
             align-items: center;
             min-height: 418px;
-            padding: 44px 20px 18px 26px;
+            padding: 24px 20px 18px 26px;
             overflow: hidden;
             border-bottom: 1px solid rgba(241, 186, 32, 0.12);
         }
 
         .service-areas-hero-tag {
-            position: absolute;
-            top: 18px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 2;
             margin: 0;
-            font-size: 18px;
-            letter-spacing: 0.11em;
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            width: max-content;
-            pointer-events: none;
-        }
-
-        .service-areas-hero-tag::before,
-        .service-areas-hero-tag::after {
-            content: "";
-            width: 42px;
-            height: 2px;
-            background: linear-gradient(90deg, rgba(241, 186, 32, 0.15), rgba(241, 186, 32, 0.95));
+            display: none;
         }
 
         .service-areas-hero::before {
@@ -2349,6 +2341,10 @@
                 padding: 28px 18px 24px;
             }
 
+            .service-areas-head {
+                margin-bottom: 12px;
+            }
+
             .service-areas-copy {
                 padding-right: 0;
                 max-width: 420px;
@@ -2547,6 +2543,10 @@
                 gap: 20px;
                 min-height: 0;
                 padding: 24px 16px 18px;
+            }
+
+            .service-areas-head {
+                margin-bottom: 10px;
             }
 
             .service-areas-copy {
@@ -2877,6 +2877,10 @@
 
             .service-areas-hero {
                 padding: 22px 14px 16px;
+            }
+
+            .service-areas-head .section-tag {
+                font-size: 16px;
             }
 
             .service-areas-copy {
@@ -3223,9 +3227,11 @@
 
             <section class="section service-areas" id="service-areas">
                 <div class="container">
+                    <div class="service-areas-head">
+                        <div class="section-tag service-areas-hero-tag">Service Areas</div>
+                    </div>
                     <div class="service-areas-shell">
                         <div class="service-areas-hero">
-                            <div class="section-tag service-areas-hero-tag">Service Areas</div>
                             <article class="service-areas-copy">
                                 <h2>Across Southern California</h2>
                                 <div class="service-area-rule"></div>
