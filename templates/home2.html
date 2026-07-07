@@ -1713,28 +1713,59 @@
 
         .crew-layout {
             display: grid;
-            grid-template-columns: 1.08fr 1fr;
-            gap: 24px;
+            grid-template-columns: 1.08fr 0.92fr;
+            gap: 18px;
+            align-items: stretch;
         }
 
         .crew-feature {
             overflow: hidden;
             padding: 0;
+            border-radius: 14px;
         }
 
         .crew-feature-photo {
-            height: 360px;
+            height: 100%;
+            min-height: 320px;
             overflow: hidden;
+            position: relative;
+            border: 1px solid rgba(241, 186, 32, 0.18);
+            border-radius: 14px;
         }
 
         .crew-feature-photo img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            object-position: center top;
+        }
+
+        .crew-feature-mark {
+            position: absolute;
+            left: 20px;
+            bottom: 18px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: rgba(0, 0, 0, 0.55);
+            border: 1px solid rgba(241, 186, 32, 0.18);
+            font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: 16px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--gold-soft);
         }
 
         .crew-feature-body {
-            padding: 26px;
+            padding: 16px 8px 10px 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border: 1px solid rgba(241, 186, 32, 0.18);
+            border-radius: 14px;
+            background: linear-gradient(180deg, rgba(14, 14, 14, 0.96) 0%, rgba(7, 7, 7, 0.96) 100%);
         }
 
         .role-badge,
@@ -1767,9 +1798,9 @@
         }
 
         .crew-feature-body h3 {
-            margin: 16px 0 12px;
+            margin: 12px 0 10px;
             font-family: "Bebas Neue", Arial, sans-serif;
-            font-size: 64px;
+            font-size: 56px;
             line-height: 0.9;
             letter-spacing: 0.03em;
             text-transform: uppercase;
@@ -1777,17 +1808,32 @@
 
         .crew-feature-body p {
             margin: 0;
-            font-size: 24px;
-            line-height: 1.18;
+            font-size: 18px;
+            line-height: 1.4;
             color: var(--muted);
         }
 
+        .crew-feature-link {
+            margin-top: 18px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: 24px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--gold);
+            text-decoration: none;
+        }
+
         .crew-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            margin-top: 18px;
         }
 
         .crew-card {
-            padding: 18px;
+            padding: 14px;
+            border-radius: 14px;
         }
 
         .crew-card button {
@@ -1803,8 +1849,8 @@
         .crew-card-photo {
             position: relative;
             overflow: hidden;
-            border-radius: 14px;
-            aspect-ratio: 0.92;
+            border-radius: 10px;
+            aspect-ratio: 1.05;
             border: 1px solid rgba(241, 186, 32, 0.18);
         }
 
@@ -1839,9 +1885,9 @@
         }
 
         .crew-card h4 {
-            margin: 16px 0 8px;
+            margin: 12px 0 6px;
             font-family: "Bebas Neue", Arial, sans-serif;
-            font-size: 34px;
+            font-size: 22px;
             line-height: 0.95;
             letter-spacing: 0.03em;
             text-transform: uppercase;
@@ -1849,6 +1895,19 @@
 
         .crew-card .role-badge {
             margin-top: 2px;
+        }
+
+        .crew-card-link {
+            margin-top: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: 22px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--gold);
+            text-decoration: none;
         }
 
         .crew-modal-overlay {
@@ -3133,63 +3192,69 @@
                     </div>
 
                     <div class="crew-layout">
-                        <article class="dark-card crew-feature">
+                        <article class="crew-feature">
                             <div class="crew-feature-photo">
                                 <img src="{{ url_for('static', filename='images/nick-team.jpg') }}" alt="Nick - Founder and Lead Electrician" loading="lazy">
-                            </div>
-                            <div class="crew-feature-body">
-                                <span class="founder-badge">Founder</span>
-                                <span class="role-badge">Lead Electrician</span>
-                                <h3>Nick</h3>
-                                <p>Nick is the owner and founder of Bolder Electric, with a strong background in commercial projects and a reputation for quality and efficiency. He takes a hands-on approach, building solid relationships while leading everything from complex installs to large-scale upgrades. Known for his outgoing personality and sense of humor, he keeps jobs running smoothly and enjoyable for both his team and clients.</p>
+                                <div class="crew-feature-mark">Bolder Electric</div>
                             </div>
                         </article>
 
-                        <div class="crew-grid">
-                            <article class="dark-card crew-card">
-                                <button type="button" class="crew-card-photo-btn" data-crew-name="Eric" data-crew-role="Electrician" data-crew-bio="With 7 years at Bolder, Eric specializes in commercial electrical work, consistently delivering high-quality results while maintaining strict safety standards on every project." data-crew-image="{{ url_for('static', filename='images/eric.jpg') }}">
-                                    <div class="crew-card-photo">
-                                        <img src="{{ url_for('static', filename='images/eric.jpg') }}" alt="Eric" loading="lazy">
-                                        <span class="crew-photo-hint">View Bio</span>
-                                    </div>
-                                </button>
-                                <h4>Eric</h4>
-                                <span class="role-badge">Electrician</span>
-                            </article>
+                        <article class="crew-feature-body">
+                            <div class="section-tag" style="justify-content:flex-start; margin-bottom: 8px;">Meet the Team</div>
+                            <div class="btn-row" style="justify-content:flex-start; gap:10px; margin-top:0;">
+                                <span class="founder-badge">Founder</span>
+                                <span class="role-badge">Lead Electrician</span>
+                            </div>
+                            <h3>Nick</h3>
+                            <p>Nick built Bolder Electric on hard work, honesty, and a commitment to doing things the right way. From complex commercial builds to mission critical upgrades, he leads with experience and a hands-on approach.</p>
+                            <a href="#crew" class="crew-feature-link" data-crew-name="Nick" data-crew-role="Founder / Lead Electrician" data-crew-bio="Nick built Bolder Electric on hard work, honesty, and a commitment to doing things the right way. From complex commercial builds to mission critical upgrades, he leads with experience and a hands-on approach." data-crew-image="{{ url_for('static', filename='images/nick-team.jpg') }}">View Full Bio <span aria-hidden="true">→</span></a>
+                        </article>
+                    </div>
 
-                            <article class="dark-card crew-card">
-                                <button type="button" class="crew-card-photo-btn" data-crew-name="Frank" data-crew-role="Electrician" data-crew-bio="Bringing 5 years of experience with Bolder, Frank focuses on solar and residential electrical work, with a strong commitment to quality craftsmanship and safety." data-crew-image="{{ url_for('static', filename='images/frank.jpg') }}">
-                                    <div class="crew-card-photo">
-                                        <img src="{{ url_for('static', filename='images/frank.jpg') }}" alt="Frank" loading="lazy">
-                                        <span class="crew-photo-hint">View Bio</span>
-                                    </div>
-                                </button>
-                                <h4>Frank</h4>
-                                <span class="role-badge">Electrician</span>
-                            </article>
+                    <div class="crew-grid">
+                        <article class="dark-card crew-card">
+                            <button type="button" class="crew-card-photo-btn" data-crew-name="Eric" data-crew-role="Electrician" data-crew-bio="With 7 years at Bolder, Eric specializes in commercial electrical work, consistently delivering high-quality results while maintaining strict safety standards on every project." data-crew-image="{{ url_for('static', filename='images/eric.jpg') }}">
+                                <div class="crew-card-photo">
+                                    <img src="{{ url_for('static', filename='images/eric.jpg') }}" alt="Eric" loading="lazy">
+                                </div>
+                            </button>
+                            <h4>Eric</h4>
+                            <span class="role-badge">Electrician</span>
+                            <a href="#crew" class="crew-card-link" data-crew-name="Eric" data-crew-role="Electrician" data-crew-bio="With 7 years at Bolder, Eric specializes in commercial electrical work, consistently delivering high-quality results while maintaining strict safety standards on every project." data-crew-image="{{ url_for('static', filename='images/eric.jpg') }}">View Bio <span aria-hidden="true">→</span></a>
+                        </article>
 
-                            <article class="dark-card crew-card">
-                                <button type="button" class="crew-card-photo-btn" data-crew-name="Brayden" data-crew-role="Electrician" data-crew-bio="Over his 3 years with Bolder, Brayden serves as the team's technical and research specialist, developing effective troubleshooting solutions while maintaining a strong focus on quality and safety." data-crew-image="{{ url_for('static', filename='images/brayden.jpg') }}">
-                                    <div class="crew-card-photo">
-                                        <img src="{{ url_for('static', filename='images/brayden.jpg') }}" alt="Brayden" loading="lazy">
-                                        <span class="crew-photo-hint">View Bio</span>
-                                    </div>
-                                </button>
-                                <h4>Brayden</h4>
-                                <span class="role-badge">Electrician</span>
-                            </article>
+                        <article class="dark-card crew-card">
+                            <button type="button" class="crew-card-photo-btn" data-crew-name="Frank" data-crew-role="Electrician" data-crew-bio="Bringing 5 years of experience with Bolder, Frank focuses on solar and residential electrical work, with a strong commitment to quality craftsmanship and safety." data-crew-image="{{ url_for('static', filename='images/frank.jpg') }}">
+                                <div class="crew-card-photo">
+                                    <img src="{{ url_for('static', filename='images/frank.jpg') }}" alt="Frank" loading="lazy">
+                                </div>
+                            </button>
+                            <h4>Frank</h4>
+                            <span class="role-badge">Electrician</span>
+                            <a href="#crew" class="crew-card-link" data-crew-name="Frank" data-crew-role="Electrician" data-crew-bio="Bringing 5 years of experience with Bolder, Frank focuses on solar and residential electrical work, with a strong commitment to quality craftsmanship and safety." data-crew-image="{{ url_for('static', filename='images/frank.jpg') }}">View Bio <span aria-hidden="true">→</span></a>
+                        </article>
 
-                            <article class="dark-card crew-card">
-                                <button type="button" class="crew-card-photo-btn" data-crew-name="Allie" data-crew-role="Operations" data-crew-bio="Allie provides administrative and operations support, while also leading marketing efforts to keep Bolder running efficiently and growing its presence." data-crew-image="{{ url_for('static', filename='images/Allie.jpg') }}">
-                                    <div class="crew-card-photo">
-                                        <img src="{{ url_for('static', filename='images/Allie.jpg') }}" alt="Allie" loading="lazy">
-                                        <span class="crew-photo-hint">View Bio</span>
-                                    </div>
-                                </button>
-                                <h4>Allie</h4>
-                                <span class="role-badge">Operations</span>
-                            </article>
-                        </div>
+                        <article class="dark-card crew-card">
+                            <button type="button" class="crew-card-photo-btn" data-crew-name="Brayden" data-crew-role="Electrician" data-crew-bio="Over his 3 years with Bolder, Brayden serves as the team's technical and research specialist, developing effective troubleshooting solutions while maintaining a strong focus on quality and safety." data-crew-image="{{ url_for('static', filename='images/brayden.jpg') }}">
+                                <div class="crew-card-photo">
+                                    <img src="{{ url_for('static', filename='images/brayden.jpg') }}" alt="Brayden" loading="lazy">
+                                </div>
+                            </button>
+                            <h4>Brayden</h4>
+                            <span class="role-badge">Electrician</span>
+                            <a href="#crew" class="crew-card-link" data-crew-name="Brayden" data-crew-role="Electrician" data-crew-bio="Over his 3 years with Bolder, Brayden serves as the team's technical and research specialist, developing effective troubleshooting solutions while maintaining a strong focus on quality and safety." data-crew-image="{{ url_for('static', filename='images/brayden.jpg') }}">View Bio <span aria-hidden="true">→</span></a>
+                        </article>
+
+                        <article class="dark-card crew-card">
+                            <button type="button" class="crew-card-photo-btn" data-crew-name="Allie" data-crew-role="Operations" data-crew-bio="Allie provides administrative and operations support, while also leading marketing efforts to keep Bolder running efficiently and growing its presence." data-crew-image="{{ url_for('static', filename='images/Allie.jpg') }}">
+                                <div class="crew-card-photo">
+                                    <img src="{{ url_for('static', filename='images/Allie.jpg') }}" alt="Allie" loading="lazy">
+                                </div>
+                            </button>
+                            <h4>Allie</h4>
+                            <span class="role-badge">Operations</span>
+                            <a href="#crew" class="crew-card-link" data-crew-name="Allie" data-crew-role="Operations" data-crew-bio="Allie provides administrative and operations support, while also leading marketing efforts to keep Bolder running efficiently and growing its presence." data-crew-image="{{ url_for('static', filename='images/Allie.jpg') }}">View Bio <span aria-hidden="true">→</span></a>
+                        </article>
                     </div>
                 </div>
             </section>
@@ -3487,6 +3552,13 @@
 
         document.querySelectorAll('.crew-card-photo-btn').forEach(button => {
             button.addEventListener('click', () => openCrewModal(button));
+        });
+
+        document.querySelectorAll('.crew-card-link, .crew-feature-link').forEach(link => {
+            link.addEventListener('click', event => {
+                event.preventDefault();
+                openCrewModal(link);
+            });
         });
 
         aboutVideoTrigger?.addEventListener('click', openAboutVideoModal);
