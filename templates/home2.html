@@ -2391,6 +2391,10 @@
         }
 
         @media (max-width: 780px) {
+            .about-bolder .container {
+                width: min(calc(100% - 28px), var(--content-width));
+            }
+
             .section {
                 padding: 52px 0;
             }
@@ -2704,10 +2708,19 @@
 
             .about-shell {
                 grid-template-columns: 1fr;
+                gap: 16px;
             }
 
             .about-copy-column {
                 gap: 16px;
+            }
+
+            .about-intro {
+                padding: 0 2px;
+            }
+
+            .about-main-card {
+                padding: 18px;
             }
 
             .about-values {
@@ -2749,6 +2762,10 @@
         }
 
         @media (max-width: 560px) {
+            .about-bolder .container {
+                width: min(calc(100% - 24px), var(--content-width));
+            }
+
             .topbar-inner {
                 padding: 12px 0;
             }
@@ -2928,6 +2945,14 @@
 
             .about-main-copy p + p {
                 margin-top: 10px;
+            }
+
+            .about-intro {
+                padding: 0;
+            }
+
+            .about-main-card {
+                padding: 16px;
             }
 
             .about-values {
