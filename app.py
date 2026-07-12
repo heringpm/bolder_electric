@@ -1135,6 +1135,12 @@ def gallery():
     photos = db.get_gallery_photos()
     return render_template('gallery.html', photos=photos)
 
+@app.route('/gallery2')
+def gallery2():
+    photos = db.get_gallery_photos()
+    context = _build_home_context()
+    return render_template('gallery2.html', photos=photos, **context)
+
 @app.route('/commercial')
 def commercial():
     return redirect(url_for('service_landing', slug='commercial-electrical-services'), code=301)
@@ -1500,6 +1506,23 @@ def schedule():
         'time_slot': ts[1]
     } for ts in time_slots]
     return render_template('schedule.html', services=services_dict, time_slots=time_slots_dict)
+
+@app.route('/schedule2')
+def schedule2():
+    services = db.get_services()
+    time_slots = db.get_time_slots()
+    services_dict = [{
+        'id': s[0],
+        'name': s[1],
+        'description': s[2],
+        'base_price': s[3]
+    } for s in services]
+    time_slots_dict = [{
+        'id': ts[0],
+        'time_slot': ts[1]
+    } for ts in time_slots]
+    context = _build_home_context()
+    return render_template('schedule2.html', services=services_dict, time_slots=time_slots_dict, **context)
 
 @app.route('/booking-confirmation')
 def booking_confirmation():
