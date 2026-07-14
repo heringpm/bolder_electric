@@ -17,104 +17,415 @@
     <meta name="twitter:description" content="{{ service.description }}">
     <meta name="twitter:image" content="https://bolderelectric.com/static/images/hero-1024.webp">
     <link rel="canonical" href="https://bolderelectric.com/services/{{ service.slug }}">
-
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/privacy-notice.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <script defer src="{{ url_for('static', filename='js/privacy-notice.js') }}" data-ga-measurement-id="G-HPSXGKK99R"></script>
     <style>
-        .service-page {
-            background: #f4f6f8;
-            min-height: calc(100vh - 160px);
-            padding: 120px 0 72px;
+        :root {
+            --bg: #060606;
+            --bg-soft: #0d0d0d;
+            --panel: #101010;
+            --panel-soft: #151515;
+            --line: rgba(241, 186, 32, 0.28);
+            --line-strong: rgba(241, 186, 32, 0.6);
+            --gold: #f1ba20;
+            --gold-soft: #ffd777;
+            --text: #f5f3ef;
+            --muted: rgba(245, 243, 239, 0.74);
+            --content-width: 1280px;
         }
-        .service-shell {
-            max-width: 1120px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        .service-hero {
-            background: linear-gradient(135deg, #0b1626 0%, #23384f 100%);
-            color: #fff;
-            border-radius: 16px;
-            padding: 36px 32px;
-            box-shadow: 0 18px 40px rgba(10, 23, 42, 0.24);
-        }
-        .service-hero h1 {
-            font-size: clamp(2rem, 3.8vw, 2.75rem);
-            margin-bottom: 14px;
-        }
-        .service-hero p {
+
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
             margin: 0;
-            max-width: 860px;
-            line-height: 1.65;
-            color: rgba(255, 255, 255, 0.92);
+            background:
+                radial-gradient(circle at top, rgba(255, 204, 90, 0.08), transparent 26%),
+                linear-gradient(180deg, #040404 0%, #080808 24%, #060606 100%);
+            color: var(--text);
+            font-family: "Barlow Condensed", Arial, sans-serif;
         }
-        .service-layout {
-            margin-top: 24px;
+        a { color: inherit; text-decoration: none; }
+        img { display: block; max-width: 100%; }
+        button, input, select, textarea { font: inherit; }
+        .page-shell { overflow: clip; }
+        .container { width: min(calc(100% - 40px), var(--content-width)); margin: 0 auto; }
+        .section { position: relative; padding: 72px 0; }
+        .section-head {
+            max-width: 860px;
+            margin: 0 auto 34px;
+            text-align: center;
+        }
+        .section-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 12px;
+            color: var(--gold);
+            font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: 22px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+        }
+        .section-tag::before,
+        .section-tag::after {
+            content: "";
+            width: 46px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--line-strong), transparent);
+        }
+        .section-head h2 {
+            margin: 0;
+            font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: clamp(48px, 4.5vw, 72px);
+            line-height: 0.98;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+        }
+        .section-head p {
+            margin: 14px auto 0;
+            font-size: clamp(18px, 1.55vw, 25px);
+            line-height: 1.28;
+            color: var(--muted);
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            min-height: 54px;
+            padding: 0 24px;
+            border-radius: 10px;
+            border: 1px solid var(--line-strong);
+            font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: 23px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease;
+            cursor: pointer;
+        }
+        .btn:hover { transform: translateY(-1px); }
+        .btn-primary {
+            color: #120d00;
+            background: linear-gradient(180deg, #ffd86d 0%, #f1ba20 54%, #c28000 100%);
+            box-shadow: inset 0 1px 0 rgba(255, 240, 193, 0.45), 0 12px 24px rgba(0, 0, 0, 0.22);
+        }
+        .btn-secondary {
+            color: var(--text);
+            background: rgba(0, 0, 0, 0.48);
+            border-color: rgba(241, 186, 32, 0.74);
+        }
+
+        .topbar {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            z-index: 50;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.44) 0%, rgba(0, 0, 0, 0.16) 72%, rgba(0, 0, 0, 0) 100%);
+        }
+        .topbar-inner {
+            width: min(calc(100% - 40px), 1380px);
+            margin: 0 auto;
+            min-height: 72px;
             display: grid;
-            grid-template-columns: 1.25fr 1fr;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 12px;
+        }
+        .brand-link img {
+            width: 122px;
+            filter: drop-shadow(0 0 18px rgba(255, 200, 76, 0.16));
+        }
+        .nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 14px;
+            white-space: nowrap;
+        }
+        .nav a {
+            position: relative;
+            font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: 13px;
+            letter-spacing: 0.06em;
+            color: rgba(255,255,255,0.9);
+            text-transform: uppercase;
+        }
+        .nav a.active,
+        .nav a:hover { color: var(--gold); }
+        .nav a.active::after {
+            content: "";
+            position: absolute;
+            left: 0; right: 0; bottom: -10px;
+            height: 2px;
+            background: var(--gold);
+        }
+        .topbar-actions { display: flex; align-items: center; gap: 12px; }
+        .proposal-link {
+            min-height: 36px;
+            padding: 0 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(241, 186, 32, 0.78);
+            background: rgba(0, 0, 0, 0.56);
+            color: var(--gold);
+            font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: 14px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .phone-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: 18px;
+            color: #fff;
+        }
+        .phone-link i { color: var(--gold); font-size: 0.84em; }
+        .menu-toggle {
+            display: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            border: 1px solid rgba(241, 186, 32, 0.28);
+            background: rgba(0, 0, 0, 0.42);
+            color: #fff;
+            font-size: 18px;
+        }
+
+        .service-hero {
+            position: relative;
+            padding: 140px 0 54px;
+            background:
+                linear-gradient(90deg, rgba(6, 6, 6, 0.92) 0%, rgba(6, 6, 6, 0.62) 40%, rgba(6, 6, 6, 0.72) 100%),
+                url("{{ url_for('static', filename='images/home2-hero-generated.png') }}") center center / cover no-repeat;
+            border-bottom: 1px solid rgba(241, 186, 32, 0.12);
+        }
+        .service-hero .section-head { max-width: 980px; margin-bottom: 0; }
+
+        .service-layout {
+            display: grid;
+            grid-template-columns: 1.05fr 0.95fr;
             gap: 22px;
         }
         .service-card {
-            background: #fff;
-            border: 1px solid #dbe3ec;
+            border: 1px solid rgba(241, 186, 32, 0.2);
             border-radius: 14px;
+            background: linear-gradient(180deg, rgba(17,17,17,0.98) 0%, rgba(10,10,10,0.98) 100%);
             padding: 24px;
-            box-shadow: 0 8px 24px rgba(18, 40, 68, 0.08);
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.2);
         }
-        .service-card h2 {
-            margin-bottom: 14px;
-            font-size: 1.5rem;
-        }
-        .service-card ul {
-            padding-left: 1rem;
+        .service-card h3 {
             margin: 0;
+            font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: 34px;
+            line-height: 1;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
         }
-        .service-card li {
-            margin-bottom: 10px;
-            color: #2f4359;
-            line-height: 1.5;
+        .service-card-rule {
+            width: 34px;
+            height: 2px;
+            margin: 12px 0 16px;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #f1ba20 0%, #be7900 100%);
+        }
+        .service-bullets {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 12px;
+        }
+        .service-bullets li {
+            position: relative;
+            padding-left: 22px;
+            font-size: 16px;
+            line-height: 1.45;
+            color: rgba(245,243,239,0.86);
+        }
+        .service-bullets li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 8px;
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: linear-gradient(180deg, #ffd86d 0%, #f1ba20 54%, #c28000 100%);
         }
         .faq-item + .faq-item {
-            margin-top: 14px;
-            padding-top: 14px;
-            border-top: 1px solid #e4ebf2;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(241, 186, 32, 0.12);
         }
-        .faq-item h3 {
-            font-size: 1.04rem;
-            margin-bottom: 6px;
+        .faq-item h4 {
+            margin: 0 0 8px;
+            font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: 24px;
+            line-height: 1;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
         }
         .faq-item p {
             margin: 0;
-            color: #334a60;
+            font-size: 16px;
             line-height: 1.5;
+            color: rgba(245,243,239,0.76);
         }
         .cta-row {
-            margin-top: 24px;
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 14px;
+            margin-top: 22px;
         }
         .service-area-links {
-            margin-top: 20px;
+            margin-top: 22px;
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
         }
         .service-area-links a {
-            text-decoration: none;
-            border: 1px solid #dbe3ec;
+            border: 1px solid rgba(241, 186, 32, 0.2);
             border-radius: 999px;
-            padding: 6px 12px;
-            color: #1f3b58;
-            background: #fff;
-            font-weight: 600;
-            font-size: 0.9rem;
+            padding: 8px 14px;
+            color: rgba(245,243,239,0.86);
+            background: rgba(255,255,255,0.02);
+            font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: 16px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
         }
-        @media (max-width: 900px) {
-            .service-layout {
-                grid-template-columns: 1fr;
+        .service-area-links a:hover {
+            color: #120d00;
+            background: linear-gradient(180deg, #ffd86d 0%, #f1ba20 54%, #c28000 100%);
+        }
+        .service-side-note {
+            margin-top: 18px;
+            padding: 14px 16px;
+            border: 1px solid rgba(241, 186, 32, 0.16);
+            border-radius: 12px;
+            background: rgba(255,255,255,0.02);
+            font-size: 16px;
+            line-height: 1.45;
+            color: rgba(245,243,239,0.76);
+        }
+
+        footer {
+            border-top: 1px solid rgba(241, 186, 32, 0.14);
+            background: #050505;
+            padding: 40px 0 22px;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 220px minmax(0, 1fr) 220px;
+            gap: 28px;
+            align-items: start;
+        }
+        .footer-brand { display: flex; gap: 16px; align-items: flex-start; }
+        .footer-brand img { width: 84px; }
+        .footer-brand strong,
+        .footer-col h4 {
+            display: block;
+            font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: var(--gold);
+        }
+        .footer-brand p,
+        .footer-col p {
+            margin: 8px 0 0;
+            font-size: 0.85rem;
+            line-height: 1.14;
+            color: var(--muted);
+        }
+        .footer-col ul {
+            list-style: none;
+            padding: 0;
+            margin: 12px 0 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 22px 30px;
+        }
+        .footer-col li, .footer-col a { font-size: 0.85rem; line-height: 1.1; color: var(--muted); }
+        .footer-bottom {
+            margin-top: 28px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(241, 186, 32, 0.12);
+            font-size: 0.85rem;
+            color: rgba(245, 243, 239, 0.5);
+            text-align: center;
+        }
+
+        @media (max-width: 1180px) {
+            .topbar-inner { grid-template-columns: auto auto; padding: 16px 0; align-items: start; }
+            .menu-toggle { display: inline-flex; align-items: center; justify-content: center; justify-self: end; }
+            .topbar-inner.menu-open {
+                padding: 12px 12px 16px;
+                margin-top: 10px;
+                border: 1px solid rgba(241, 186, 32, 0.24);
+                border-radius: 18px;
+                background: linear-gradient(180deg, rgba(8, 8, 8, 0.97) 0%, rgba(10, 10, 10, 0.94) 100%);
+                box-shadow: 0 24px 48px rgba(0, 0, 0, 0.38);
+                backdrop-filter: blur(14px);
             }
+            .nav, .topbar-actions {
+                grid-column: 1 / -1;
+                display: none;
+                justify-content: flex-start;
+                width: 100%;
+            }
+            .topbar-inner.menu-open .nav,
+            .topbar-inner.menu-open .topbar-actions { display: flex; }
+            .nav {
+                gap: 0;
+                padding-top: 14px;
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .nav a {
+                display: block;
+                width: 100%;
+                padding: 10px 4px;
+                border-bottom: 1px solid rgba(241, 186, 32, 0.14);
+                font-size: 18px;
+            }
+            .nav a:last-child { border-bottom: 0; }
+            .nav a.active::after { left: 4px; right: auto; bottom: 6px; width: 36px; }
+            .topbar-actions { padding-top: 12px; flex-wrap: wrap; gap: 12px; }
+            .service-layout, .footer-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 780px) {
+            .container, .topbar-inner { width: min(calc(100% - 28px), var(--content-width)); }
+            .brand-link img { width: 74px; }
+            .service-hero { padding: 108px 0 42px; }
+            .section { padding: 54px 0; }
+            .section-head h2 { font-size: 40px; }
+            .section-head p { font-size: 17px; line-height: 1.35; }
+            .topbar-actions .proposal-link, .topbar-actions .phone-link { width: 100%; justify-content: center; }
+            .service-card { padding: 20px; }
+            .cta-row .btn { width: 100%; }
+        }
+        @media (max-width: 560px) {
+            .topbar-inner.menu-open { padding: 10px 10px 14px; margin-top: 8px; border-radius: 16px; }
+            .brand-link img { width: 66px; }
+            .nav a, .phone-link, .proposal-link { font-size: 14px; }
+            .service-hero { padding: 94px 0 34px; }
+            .section { padding: 46px 0; }
+            .section-head h2 { font-size: 32px; }
+            .section-head p { font-size: 15px; }
+            .service-card { padding: 16px; }
+            .service-card h3 { font-size: 28px; }
+            .faq-item h4 { font-size: 21px; }
+            .footer-brand { gap: 12px; }
+            .footer-brand img { width: 72px; }
+            .footer-col ul { gap: 10px 16px; }
         }
     </style>
     <script type="application/ld+json">
@@ -145,105 +456,133 @@
     </script>
 </head>
 <body>
-    <header>
-        <nav class="navbar">
-            <div class="nav-container">
-                <div class="logo">
-                    <a href="{{ url_for('home') }}" aria-label="Bolder Electric Home">
-                        <img src="{{ url_for('static', filename='images/shield-final-160.png') }}" srcset="{{ url_for('static', filename='images/shield-final-80.png') }} 80w, {{ url_for('static', filename='images/shield-final-160.png') }} 160w, {{ url_for('static', filename='images/shield-final-320.png') }} 320w" sizes="(max-width: 768px) 45px, 80px" alt="Bolder Electric Logo" class="logo-img" width="160" height="160" decoding="async">
+    <div class="page-shell">
+        <header class="topbar">
+            <div class="topbar-inner" id="topbarInner">
+                <a class="brand-link" href="{{ url_for('home2') }}" aria-label="Bolder Electric home">
+                    <img src="{{ url_for('static', filename='images/shield-final-160.png') }}" alt="Bolder Electric logo">
+                </a>
+
+                <button class="menu-toggle" id="menuToggle" type="button" aria-label="Toggle navigation">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+
+                <nav class="nav" aria-label="Primary">
+                    <a href="{{ url_for('home2') }}#home">Home</a>
+                    <a class="active" href="{{ url_for('home2') }}#services">Services</a>
+                    <a href="{{ url_for('home2') }}#service-areas">Service Areas</a>
+                    <a href="{{ url_for('home2') }}#about">About</a>
+                    <a href="{{ url_for('home2') }}#crew">Team</a>
+                    <a href="{{ url_for('home2') }}#contact">Contact</a>
+                    <a href="{{ url_for('gallery2') }}">Projects</a>
+                    <a href="{{ url_for('schedule2') }}">Schedule</a>
+                </nav>
+
+                <div class="topbar-actions">
+                    <a class="proposal-link" href="{{ url_for('schedule2') }}">Request Proposal</a>
+                    <a class="phone-link" href="tel:{{ contact.phone|replace('(', '')|replace(')', '')|replace(' ', '')|replace('-', '') }}">
+                        <i class="fa-solid fa-phone"></i>
+                        <span>{{ contact.phone }}</span>
                     </a>
                 </div>
-                <ul class="nav-menu">
-                    <li><a href="{{ url_for('home') }}" class="nav-link">Home</a></li>
-                    <li><a href="{{ url_for('home') }}#services" class="nav-link">Services</a></li>
-                    <li><a href="{{ url_for('home') }}#about" class="nav-link">About</a></li>
-                    <li><a href="{{ url_for('home') }}#crew" class="nav-link">Team</a></li>
-                    <li><a href="{{ url_for('gallery') }}" class="nav-link">Gallery</a></li>
-                    <li><a href="{{ url_for('home') }}#contact" class="nav-link">Contact</a></li>
-                    <li><a href="{{ url_for('schedule') }}" class="nav-link">Schedule</a></li>
-                </ul>
-                <div class="hamburger">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
             </div>
-        </nav>
-    </header>
+        </header>
 
-    <main class="service-page">
-        <div class="service-shell">
+        <main>
             <section class="service-hero">
-                <h1>{{ service.h1 }}</h1>
-                <p>{{ service.intro }}</p>
-                <div class="cta-row">
-                    <a href="{{ url_for('schedule') }}" class="btn btn-primary">Request Service</a>
-                    <a href="{{ url_for('home') }}#contact" class="btn btn-outline">Contact Our Team</a>
+                <div class="container">
+                    <div class="section-head">
+                        <div class="section-tag">Service Page</div>
+                        <h2>{{ service.h1 }}</h2>
+                        <p>{{ service.intro }}</p>
+                    </div>
+                    <div class="cta-row" style="justify-content:center;">
+                        <a href="{{ url_for('schedule2') }}" class="btn btn-primary">Request Service</a>
+                        <a href="{{ url_for('home2') }}#contact" class="btn btn-secondary">Contact Our Team</a>
+                    </div>
                 </div>
             </section>
 
-            <section class="service-layout" aria-label="Service details">
-                <article class="service-card">
-                    <h2>What We Provide</h2>
-                    <ul>
-                        {% for point in service.bullets %}
-                        <li>{{ point }}</li>
-                        {% endfor %}
-                    </ul>
-                    <div class="service-area-links">
-                        <a href="{{ url_for('city_murrieta') }}">Electrician in Murrieta, CA</a>
-                        <a href="{{ url_for('city_temecula') }}">Electrician in Temecula, CA</a>
-                        <a href="{{ url_for('city_lake_elsinore') }}">Electrician in Lake Elsinore, CA</a>
-                        <a href="{{ url_for('city_menifee') }}">Electrician in Menifee, CA</a>
-                    </div>
-                </article>
-                <article class="service-card">
-                    <h2>Frequently Asked Questions</h2>
-                    {% for question, answer in service.faq %}
-                    <div class="faq-item">
-                        <h3>{{ question }}</h3>
-                        <p>{{ answer }}</p>
-                    </div>
-                    {% endfor %}
-                </article>
-            </section>
-        </div>
-    </main>
+            <section class="section">
+                <div class="container">
+                    <div class="service-layout" aria-label="Service details">
+                        <article class="service-card">
+                            <h3>What We Provide</h3>
+                            <div class="service-card-rule"></div>
+                            <ul class="service-bullets">
+                                {% for point in service.bullets %}
+                                <li>{{ point }}</li>
+                                {% endfor %}
+                            </ul>
+                            <div class="service-area-links">
+                                <a href="{{ url_for('city_murrieta') }}">Murrieta</a>
+                                <a href="{{ url_for('city_temecula') }}">Temecula</a>
+                                <a href="{{ url_for('city_lake_elsinore') }}">Lake Elsinore</a>
+                                <a href="{{ url_for('city_menifee') }}">Menifee</a>
+                            </div>
+                        </article>
 
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-main">
+                        <article class="service-card">
+                            <h3>Frequently Asked Questions</h3>
+                            <div class="service-card-rule"></div>
+                            {% for question, answer in service.faq %}
+                            <div class="faq-item">
+                                <h4>{{ question }}</h4>
+                                <p>{{ answer }}</p>
+                            </div>
+                            {% endfor %}
+                            <div class="service-side-note">
+                                Need a faster answer? Call {{ contact.phone }} or use the new schedule page to send a request and our team will confirm the right next step for your project.
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="container">
+                <div class="footer-grid">
                     <div class="footer-brand">
-                        <img src="{{ url_for('static', filename='images/shield-final-320.png') }}" alt="Bolder Electric Logo" class="footer-logo">
-                        <div class="footer-text">
-                            <p class="footer-tagline">Professional Electrical Services</p>
+                        <img src="{{ url_for('static', filename='images/shield-final-160.png') }}" alt="Bolder Electric logo" loading="lazy">
+                        <div>
+                            <strong>Bolder Electric</strong>
+                            <p>Professional Electrical Services</p>
                         </div>
                     </div>
-                    <div class="footer-links">
+
+                    <div class="footer-col">
                         <h4>Quick Links</h4>
                         <ul>
-                            <li><a href="{{ url_for('home') }}">Home</a></li>
-                            <li><a href="{{ url_for('home') }}#services">Services</a></li>
-                            <li><a href="{{ url_for('gallery') }}">Gallery</a></li>
-                            <li><a href="{{ url_for('schedule') }}">Schedule</a></li>
+                            <li><a href="{{ url_for('home2') }}#home">Home</a></li>
+                            <li><a href="{{ url_for('home2') }}#services">Services</a></li>
+                            <li><a href="{{ url_for('home2') }}#service-areas">Service Areas</a></li>
+                            <li><a href="{{ url_for('home2') }}#about">About</a></li>
+                            <li><a href="{{ url_for('home2') }}#crew">Team</a></li>
+                            <li><a href="{{ url_for('gallery2') }}">Gallery</a></li>
+                            <li><a href="{{ url_for('schedule2') }}">Schedule</a></li>
+                            <li><a href="#" data-open-privacy-notice>Privacy/Cookie Settings</a></li>
                         </ul>
                     </div>
+
+                    <div class="footer-col">
+                        <h4>Contact</h4>
+                        <p>{{ contact.phone }}</p>
+                        <p>{{ contact.email or 'support@bolderelectric.com' }}</p>
+                    </div>
                 </div>
-                <div class="footer-bottom">
-                    <p>&copy; 2026 Bolder Electric. All rights reserved.</p>
-                </div>
+                <div class="footer-bottom">&copy; 2026 Bolder Electric. All rights reserved.</div>
             </div>
-        </div>
-    </footer>
+        </footer>
+    </div>
 
     <script>
-        const hamburger = document.querySelector('.hamburger');
-        const navMenu = document.querySelector('.nav-menu');
-        if (hamburger && navMenu) {
-            hamburger.addEventListener('click', () => {
-                hamburger.classList.toggle('active');
-                navMenu.classList.toggle('active');
+        const topbarInner = document.getElementById('topbarInner');
+        const menuToggle = document.getElementById('menuToggle');
+
+        if (topbarInner && menuToggle) {
+            menuToggle.addEventListener('click', () => {
+                topbarInner.classList.toggle('menu-open');
             });
         }
     </script>

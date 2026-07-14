@@ -1164,7 +1164,8 @@ def _render_service_landing(slug):
     service_data = SERVICE_LANDING_PAGES.get(slug)
     if not service_data:
         return redirect(url_for('home'))
-    return render_template('service_landing.html', service=service_data)
+    context = _build_home_context()
+    return render_template('service_landing.html', service=service_data, **context)
 
 
 @app.route('/electrician/murrieta-ca')
