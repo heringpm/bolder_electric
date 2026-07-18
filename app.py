@@ -1296,6 +1296,67 @@ def admin_blog_upload_image():
     file.save(os.path.join(save_dir, filename))
     return jsonify({'url': f'/static/images/blog/{filename}'})
 
+@app.route('/admin/blog/upload-pdf', methods=['POST'])
+@login_required
+def admin_blog_upload_pdf():
+    file = request.files.get('file')
+    if not file or not file.filename.lower().endswith('.pdf'):
+        return jsonify({'error': 'Please upload a PDF file'}), 400
+
+    import os, tempfile, time
+    from werkzeug.utils import secure_filename
+
+    try:
+        import fitz  # PyMuPDF
+    except ImportError:
+        return jsonify({'error': 'PDF rendering library not installed on server. Run: pip install pymupdf'}), 500
+
+    save_dir = os.path.join('static', 'images', 'blog')
+    os.makedirs(save_dir, exist_ok=True)
+
+    # Save uploaded PDF to a temp file
+    with tempfile.NamedTemporaryFile(suffix='.pdf', delete=False) as tmp:
+        file.save(tmp.name)
+        tmp_path = tmp.name
+
+    try:
+        doc = fitz.open(tmp_path)
+        image_urls = []
+        base_name = secure_filename(os.path.splitext(file.filename)[0])
+        ts = str(int(time.time()))
+
+        for page_num in range(len(doc)):
+            page = doc[page_num]
+            # Render at 2x for crisp display (150 DPI equivalent)
+            mat = fitz.Matrix(2.0, 2.0)
+            pix = page.get_pixmap(matrix=mat)
+            img_filename = f'{base_name}-p{page_num + 1}-{ts}.jpg'
+            img_path = os.path.join(save_dir, img_filename)
+            pix.save(img_path)
+            image_urls.append(f'/static/images/blog/{img_filename}')
+
+        doc.close()
+
+        # Build HTML: each page as a full-width image
+        html_parts = []
+        for i, url in enumerate(image_urls):
+            html_parts.append(
+                f'<img src="{url}" alt="Page {i+1}" style="width:100%;display:block;margin:0 0 4px;">'
+            )
+        content_html = '\n'.join(html_parts)
+
+        # Suggest the first page as hero image
+        first_image = image_urls[0] if image_urls else None
+
+        return jsonify({
+            'html': content_html,
+            'hero_image': first_image,
+            'pages': len(image_urls)
+        })
+
+    finally:
+        os.unlink(tmp_path)
+
 @app.route('/gallery')
 def gallery():
     photos = db.get_gallery_photos()
