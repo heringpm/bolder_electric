@@ -386,55 +386,47 @@
             }
         });
 
-        // PDF upload → convert pages to images → populate content
+        // PDF upload → store PDF → embed in content
         document.getElementById('pdfUpload').addEventListener('change', async function() {
             const file = this.files[0];
             if (!file) return;
 
             const status = document.getElementById('pdfStatus');
             status.style.display = 'block';
-            status.textContent = 'Uploading and converting PDF…';
+            status.style.color = '#f1ba20';
+            status.textContent = 'Uploading PDF…';
 
             const formData = new FormData();
             formData.append('file', file);
 
+            let data;
             try {
                 const res = await csrfFetch('{{ url_for("admin_blog_upload_pdf") }}', formData);
-                const data = await res.json();
-
-                if (data.error) {
-                    status.style.color = '#e05252';
-                    status.textContent = 'Error: ' + data.error;
-                    return;
-                }
-
-                // Set content in Quill
-                quill.root.innerHTML = data.html;
-
-                // Set hero image to first page if not already set
-                const heroInput = document.getElementById('hero_image');
-                if (!heroInput.value && data.hero_image) {
-                    heroInput.value = data.hero_image;
-                    document.getElementById('imagePreview').innerHTML =
-                        `<img src="${data.hero_image}" alt="Hero image" style="max-width:100%;border-radius:8px;margin-top:8px;">`;
-                }
-
-                // Auto-fill title from filename if blank
-                const titleInput = document.getElementById('title');
-                if (!titleInput.value) {
-                    const name = file.name.replace(/\.pdf$/i, '').replace(/[-_]+/g, ' ');
-                    titleInput.value = name;
-                    titleInput.dispatchEvent(new Event('input'));
-                }
-
-                status.style.color = '#4caf82';
-                status.textContent = `✓ Imported ${data.pages} page${data.pages !== 1 ? 's' : ''} from PDF. Review content and publish when ready.`;
+                data = await res.json();
             } catch (e) {
                 status.style.color = '#e05252';
-                status.textContent = 'Upload failed. Please try again.';
+                status.textContent = 'Upload failed — check your connection and try again.';
+                return;
             }
 
-            // Reset file input so same file can be re-uploaded
+            if (data.error) {
+                status.style.color = '#e05252';
+                status.textContent = 'Error: ' + data.error;
+                return;
+            }
+
+            // Set content in Quill
+            quill.root.innerHTML = data.html;
+
+            // Auto-fill title from filename if blank
+            if (!document.getElementById('title').value) {
+                const name = file.name.replace(/\.pdf$/i, '').replace(/[-_]+/g, ' ');
+                document.getElementById('title').value = name;
+                document.getElementById('title').dispatchEvent(new Event('input'));
+            }
+
+            status.style.color = '#4caf82';
+            status.textContent = '✓ PDF uploaded. Add a title and excerpt, then publish.';
             this.value = '';
         });
     </script>
