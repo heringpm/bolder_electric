@@ -198,17 +198,23 @@
                 <div class="field">
                     <label>Content</label>
 
-                    <!-- PDF import bar -->
-                    <div id="pdfBar" style="display:flex;align-items:center;gap:12px;margin-bottom:10px;padding:12px 14px;background:rgba(241,186,32,0.06);border:1px solid rgba(241,186,32,0.22);border-radius:8px;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f1ba20" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/><polyline points="9 9 10 9"/></svg>
-                        <span style="font-size:14px;color:rgba(245,243,239,0.7);flex:1;">Import a PDF — each page becomes a full-width image in the post.</span>
-                        <button type="button" class="upload-btn" onclick="document.getElementById('pdfUpload').click()">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                            Upload PDF
-                        </button>
+                    <!-- PDF import — plain HTML form, no JS required -->
+                    {% if not post %}
+                    <div style="margin-bottom:12px;padding:14px 16px;background:rgba(241,186,32,0.06);border:1px solid rgba(241,186,32,0.22);border-radius:8px;">
+                        <div style="font-family:'Bebas Neue',Arial,sans-serif;font-size:16px;letter-spacing:0.08em;color:#f1ba20;margin-bottom:8px;">IMPORT FROM PDF INSTEAD</div>
+                        <form method="POST" action="{{ url_for('admin_blog_upload_pdf') }}" enctype="multipart/form-data" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <input type="file" name="file" accept=".pdf" required
+                                style="flex:1;min-width:0;padding:8px 10px;background:rgba(0,0,0,0.3);border:1px solid rgba(241,186,32,0.3);border-radius:6px;color:rgba(245,243,239,0.8);font:inherit;font-size:14px;">
+                            <button type="submit"
+                                style="white-space:nowrap;padding:8px 18px;border-radius:8px;border:1px solid rgba(241,186,32,0.7);background:rgba(241,186,32,0.1);color:#f1ba20;font-family:'Bebas Neue',Arial,sans-serif;font-size:17px;letter-spacing:0.06em;cursor:pointer;">
+                                Upload &amp; Create Draft
+                            </button>
+                        </form>
+                        <div style="margin-top:8px;font-size:13px;color:rgba(245,243,239,0.5);">Uploads the PDF and opens a draft post — add your title and excerpt, then publish.</div>
                     </div>
-                    <input type="file" id="pdfUpload" accept=".pdf" style="display:none">
-                    <div id="pdfStatus" style="display:none;margin-bottom:10px;font-size:14px;color:#f1ba20;padding:8px 14px;background:rgba(241,186,32,0.06);border-radius:8px;"></div>
+                    <div style="text-align:center;margin-bottom:12px;font-size:13px;color:rgba(245,243,239,0.4);letter-spacing:0.06em;">— OR WRITE CONTENT BELOW —</div>
+                    {% endif %}
 
                     <div class="quill-wrap">
                         <div id="quill-editor">{{ post.content | safe if post and post.content else '' }}</div>
@@ -386,49 +392,6 @@
             }
         });
 
-        // PDF upload → store PDF → embed in content
-        document.getElementById('pdfUpload').addEventListener('change', async function() {
-            const file = this.files[0];
-            if (!file) return;
-
-            const status = document.getElementById('pdfStatus');
-            status.style.display = 'block';
-            status.style.color = '#f1ba20';
-            status.textContent = 'Uploading PDF…';
-
-            const formData = new FormData();
-            formData.append('file', file);
-
-            let data;
-            try {
-                const res = await csrfFetch('{{ url_for("admin_blog_upload_pdf") }}', formData);
-                data = await res.json();
-            } catch (e) {
-                status.style.color = '#e05252';
-                status.textContent = 'Upload failed — check your connection and try again.';
-                return;
-            }
-
-            if (data.error) {
-                status.style.color = '#e05252';
-                status.textContent = 'Error: ' + data.error;
-                return;
-            }
-
-            // Set content in Quill
-            quill.root.innerHTML = data.html;
-
-            // Auto-fill title from filename if blank
-            if (!document.getElementById('title').value) {
-                const name = file.name.replace(/\.pdf$/i, '').replace(/[-_]+/g, ' ');
-                document.getElementById('title').value = name;
-                document.getElementById('title').dispatchEvent(new Event('input'));
-            }
-
-            status.style.color = '#4caf82';
-            status.textContent = '✓ PDF uploaded. Add a title and excerpt, then publish.';
-            this.value = '';
-        });
     </script>
 </body>
 </html>

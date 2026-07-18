@@ -1301,7 +1301,8 @@ def admin_blog_upload_image():
 def admin_blog_upload_pdf():
     file = request.files.get('file')
     if not file or not file.filename.lower().endswith('.pdf'):
-        return jsonify({'error': 'Please upload a PDF file'}), 400
+        flash('Please select a PDF file.', 'error')
+        return redirect(url_for('admin_blog_new'))
 
     import os, time
     from werkzeug.utils import secure_filename
@@ -1312,21 +1313,26 @@ def admin_blog_upload_pdf():
     base_name = secure_filename(os.path.splitext(file.filename)[0])
     ts = str(int(time.time()))
     filename = f'{base_name}-{ts}.pdf'
-    file_path = os.path.join(save_dir, filename)
-    file.save(file_path)
+    file.save(os.path.join(save_dir, filename))
 
     pdf_url = f'/static/files/blog/{filename}'
     content_html = (
-        f'<div style="width:100%;aspect-ratio:8.5/11;">'
-        f'<embed src="{pdf_url}" type="application/pdf" width="100%" height="100%" '
-        f'style="border:none;border-radius:8px;">'
+        f'<div style="width:100%;min-height:80vh;">'
+        f'<embed src="{pdf_url}" type="application/pdf" width="100%" height="900" '
+        f'style="border:none;border-radius:8px;display:block;">'
         f'</div>'
-        f'<p style="text-align:center;margin-top:12px;">'
-        f'<a href="{pdf_url}" target="_blank" style="color:#f1ba20;">Download PDF</a>'
+        f'<p style="text-align:center;margin-top:16px;">'
+        f'<a href="{pdf_url}" target="_blank" style="color:#f1ba20;">Open / Download PDF</a>'
         f'</p>'
     )
 
-    return jsonify({'html': content_html, 'pdf_url': pdf_url})
+    # Auto-generate title from filename
+    raw_title = base_name.replace('-', ' ').replace('_', ' ').title()
+    import re
+    slug = re.sub(r'[^a-z0-9]+', '-', raw_title.lower()).strip('-') + f'-{ts}'
+
+    post_id = db.create_blog_post(raw_title, slug, '', content_html, '', 1, 'draft')
+    return redirect(url_for('admin_blog_edit', post_id=post_id))
 
 @app.route('/gallery')
 def gallery():
