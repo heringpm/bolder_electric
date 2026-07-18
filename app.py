@@ -1156,7 +1156,8 @@ def _render_city_landing(slug):
     city_data = CITY_LANDING_PAGES.get(slug)
     if not city_data:
         return redirect(url_for('home'))
-    return render_template('city_landing.html', city=city_data)
+    context = _build_home_context()
+    return render_template('city_landing.html', city=city_data, **context)
 
 def _render_service_landing(slug):
     service_data = SERVICE_LANDING_PAGES.get(slug)
