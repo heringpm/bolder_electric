@@ -459,7 +459,7 @@
     <div class="page-shell">
         <header class="topbar">
             <div class="topbar-inner" id="topbarInner">
-                <a class="brand-link" href="{{ url_for('home2') }}" aria-label="Bolder Electric home">
+                <a class="brand-link" href="{{ url_for('home') }}" aria-label="Bolder Electric home">
                     <img src="{{ url_for('static', filename='images/shield-final-160.png') }}" alt="Bolder Electric logo">
                 </a>
 
@@ -468,18 +468,18 @@
                 </button>
 
                 <nav class="nav" aria-label="Primary">
-                    <a href="{{ url_for('home2') }}#home">Home</a>
-                    <a class="active" href="{{ url_for('home2') }}#services">Services</a>
-                    <a href="{{ url_for('home2') }}#service-areas">Service Areas</a>
-                    <a href="{{ url_for('home2') }}#about">About</a>
-                    <a href="{{ url_for('home2') }}#crew">Team</a>
-                    <a href="{{ url_for('home2') }}#contact">Contact</a>
-                    <a href="{{ url_for('gallery2') }}">Projects</a>
-                    <a href="{{ url_for('schedule2') }}">Schedule</a>
+                    <a href="{{ url_for('home') }}#home">Home</a>
+                    <a class="active" href="{{ url_for('home') }}#services">Services</a>
+                    <a href="{{ url_for('home') }}#service-areas">Service Areas</a>
+                    <a href="{{ url_for('home') }}#about">About</a>
+                    <a href="{{ url_for('home') }}#crew">Team</a>
+                    <a href="{{ url_for('home') }}#contact">Contact</a>
+                    <a href="{{ url_for('gallery') }}">Projects</a>
+                    <a href="{{ url_for('schedule') }}">Schedule</a>
                 </nav>
 
                 <div class="topbar-actions">
-                    <a class="proposal-link" href="{{ url_for('schedule2') }}">Request Proposal</a>
+                    <a class="proposal-link" href="{{ url_for('schedule') }}">Request Proposal</a>
                     <a class="phone-link" href="tel:{{ contact.phone|replace('(', '')|replace(')', '')|replace(' ', '')|replace('-', '') }}">
                         <i class="fa-solid fa-phone"></i>
                         <span>{{ contact.phone }}</span>
@@ -497,8 +497,8 @@
                         <p>{{ service.intro }}</p>
                     </div>
                     <div class="cta-row" style="justify-content:center;">
-                        <a href="{{ url_for('schedule2') }}" class="btn btn-primary">Request Service</a>
-                        <a href="{{ url_for('home2') }}#contact" class="btn btn-secondary">Contact Our Team</a>
+                        <a href="{{ url_for('schedule') }}" class="btn btn-primary">Request Service</a>
+                        <a href="{{ url_for('home') }}#contact" class="btn btn-secondary">Contact Our Team</a>
                     </div>
                 </div>
             </section>
@@ -554,13 +554,13 @@
                     <div class="footer-col">
                         <h4>Quick Links</h4>
                         <ul>
-                            <li><a href="{{ url_for('home2') }}#home">Home</a></li>
-                            <li><a href="{{ url_for('home2') }}#services">Services</a></li>
-                            <li><a href="{{ url_for('home2') }}#service-areas">Service Areas</a></li>
-                            <li><a href="{{ url_for('home2') }}#about">About</a></li>
-                            <li><a href="{{ url_for('home2') }}#crew">Team</a></li>
-                            <li><a href="{{ url_for('gallery2') }}">Gallery</a></li>
-                            <li><a href="{{ url_for('schedule2') }}">Schedule</a></li>
+                            <li><a href="{{ url_for('home') }}#home">Home</a></li>
+                            <li><a href="{{ url_for('home') }}#services">Services</a></li>
+                            <li><a href="{{ url_for('home') }}#service-areas">Service Areas</a></li>
+                            <li><a href="{{ url_for('home') }}#about">About</a></li>
+                            <li><a href="{{ url_for('home') }}#crew">Team</a></li>
+                            <li><a href="{{ url_for('gallery') }}">Gallery</a></li>
+                            <li><a href="{{ url_for('schedule') }}">Schedule</a></li>
                             <li><a href="#" data-open-privacy-notice>Privacy/Cookie Settings</a></li>
                         </ul>
                     </div>

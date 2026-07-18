@@ -6,7 +6,7 @@
     <title>Bolder Electric Gallery | Critical Power & Electrical Infrastructure</title>
     <meta name="description" content="Explore Bolder Electric project photography featuring commercial electrical work, generators, UPS systems, lighting infrastructure, residential upgrades, and emergency service across Southern California.">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://bolderelectric.com/gallery2">
+    <link rel="canonical" href="https://bolderelectric.com/gallery">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/privacy-notice.css') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -454,7 +454,7 @@
     <div class="page-shell">
         <header class="topbar">
             <div class="topbar-inner" id="topbarInner">
-                <a class="brand-link" href="{{ url_for('home2') }}" aria-label="Bolder Electric home">
+                <a class="brand-link" href="{{ url_for('home') }}" aria-label="Bolder Electric home">
                     <img src="{{ url_for('static', filename='images/shield-final-160.png') }}" alt="Bolder Electric logo">
                 </a>
 
@@ -463,18 +463,18 @@
                 </button>
 
                 <nav class="nav" aria-label="Primary">
-                    <a href="{{ url_for('home2') }}#home">Home</a>
-                    <a href="{{ url_for('home2') }}#services">Services</a>
-                    <a href="{{ url_for('home2') }}#service-areas">Service Areas</a>
-                    <a href="{{ url_for('home2') }}#about">About</a>
-                    <a href="{{ url_for('home2') }}#crew">Team</a>
-                    <a href="{{ url_for('home2') }}#contact">Contact</a>
-                    <a class="active" href="{{ url_for('gallery2') }}">Projects</a>
-                    <a href="{{ url_for('schedule2') }}">Schedule</a>
+                    <a href="{{ url_for('home') }}#home">Home</a>
+                    <a href="{{ url_for('home') }}#services">Services</a>
+                    <a href="{{ url_for('home') }}#service-areas">Service Areas</a>
+                    <a href="{{ url_for('home') }}#about">About</a>
+                    <a href="{{ url_for('home') }}#crew">Team</a>
+                    <a href="{{ url_for('home') }}#contact">Contact</a>
+                    <a class="active" href="{{ url_for('gallery') }}">Projects</a>
+                    <a href="{{ url_for('schedule') }}">Schedule</a>
                 </nav>
 
                 <div class="topbar-actions">
-                    <a class="proposal-link" href="{{ url_for('schedule2') }}">Request Proposal</a>
+                    <a class="proposal-link" href="{{ url_for('schedule') }}">Request Proposal</a>
                     <a class="phone-link" href="tel:{{ contact.phone|replace('(', '')|replace(')', '')|replace(' ', '')|replace('-', '') }}">
                         <i class="fa-solid fa-phone"></i>
                         <span>{{ contact.phone }}</span>
@@ -489,7 +489,7 @@
                     <div class="section-head">
                         <div class="section-tag">Project Gallery</div>
                         <h1>Featured Electrical Work</h1>
-                        <p>Explore Bolder Electric’s commercial infrastructure, generator, emergency response, residential, EV, and lighting work across Southern California in the same premium presentation as the new `home2` experience.</p>
+                        <p>Explore Bolder Electric’s commercial infrastructure, generator, emergency response, residential, EV, and lighting work across Southern California in the same premium presentation as the main site experience.</p>
                     </div>
                 </div>
             </section>
@@ -528,8 +528,8 @@
                         <h2>Ready To Start Your Project?</h2>
                         <p>Let us bring the same quality, responsiveness, and clean execution shown in the gallery to your facility, property, or critical power upgrade.</p>
                         <div class="btn-row">
-                            <a href="{{ url_for('schedule2') }}" class="btn btn-primary">Schedule Service</a>
-                            <a href="{{ url_for('home2') }}#contact" class="btn btn-secondary">Talk To Bolder</a>
+                            <a href="{{ url_for('schedule') }}" class="btn btn-primary">Schedule Service</a>
+                            <a href="{{ url_for('home') }}#contact" class="btn btn-secondary">Talk To Bolder</a>
                         </div>
                     </div>
                 </div>
@@ -550,13 +550,13 @@
                     <div class="footer-col">
                         <h4>Quick Links</h4>
                         <ul>
-                            <li><a href="{{ url_for('home2') }}#home">Home</a></li>
-                            <li><a href="{{ url_for('home2') }}#services">Services</a></li>
-                            <li><a href="{{ url_for('home2') }}#service-areas">Service Areas</a></li>
-                            <li><a href="{{ url_for('home2') }}#about">About</a></li>
-                            <li><a href="{{ url_for('home2') }}#crew">Team</a></li>
-                            <li><a href="{{ url_for('gallery2') }}">Gallery</a></li>
-                            <li><a href="{{ url_for('schedule2') }}">Schedule</a></li>
+                            <li><a href="{{ url_for('home') }}#home">Home</a></li>
+                            <li><a href="{{ url_for('home') }}#services">Services</a></li>
+                            <li><a href="{{ url_for('home') }}#service-areas">Service Areas</a></li>
+                            <li><a href="{{ url_for('home') }}#about">About</a></li>
+                            <li><a href="{{ url_for('home') }}#crew">Team</a></li>
+                            <li><a href="{{ url_for('gallery') }}">Gallery</a></li>
+                            <li><a href="{{ url_for('schedule') }}">Schedule</a></li>
                             <li><a href="#" data-open-privacy-notice>Privacy/Cookie Settings</a></li>
                         </ul>
                     </div>

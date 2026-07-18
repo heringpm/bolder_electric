@@ -1019,7 +1019,7 @@ Bolder Electric
 @app.route('/')
 def home():
     context = _build_home_context()
-    return render_template('index.html', **context)
+    return render_template('home2.html', **context)
 
 
 def _build_home_context():
@@ -1127,19 +1127,17 @@ def _build_home_context():
 
 @app.route('/home2')
 def home2():
-    context = _build_home_context()
-    return render_template('home2.html', **context)
+    return redirect(url_for('home'), code=301)
 
 @app.route('/gallery')
 def gallery():
     photos = db.get_gallery_photos()
-    return render_template('gallery.html', photos=photos)
+    context = _build_home_context()
+    return render_template('gallery2.html', photos=photos, **context)
 
 @app.route('/gallery2')
 def gallery2():
-    photos = db.get_gallery_photos()
-    context = _build_home_context()
-    return render_template('gallery2.html', photos=photos, **context)
+    return redirect(url_for('gallery'), code=301)
 
 @app.route('/commercial')
 def commercial():
@@ -1495,23 +1493,6 @@ def allowed_file(filename):
 def schedule():
     services = db.get_services()
     time_slots = db.get_time_slots()
-    # Convert tuples to dictionaries for template
-    services_dict = [{
-        'id': s[0],
-        'name': s[1],
-        'description': s[2],
-        'base_price': s[3]
-    } for s in services]
-    time_slots_dict = [{
-        'id': ts[0],
-        'time_slot': ts[1]
-    } for ts in time_slots]
-    return render_template('schedule.html', services=services_dict, time_slots=time_slots_dict)
-
-@app.route('/schedule2')
-def schedule2():
-    services = db.get_services()
-    time_slots = db.get_time_slots()
     services_dict = [{
         'id': s[0],
         'name': s[1],
@@ -1524,6 +1505,10 @@ def schedule2():
     } for ts in time_slots]
     context = _build_home_context()
     return render_template('schedule2.html', services=services_dict, time_slots=time_slots_dict, **context)
+
+@app.route('/schedule2')
+def schedule2():
+    return redirect(url_for('schedule'), code=301)
 
 @app.route('/booking-confirmation')
 def booking_confirmation():
