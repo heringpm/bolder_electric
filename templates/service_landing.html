@@ -469,6 +469,26 @@
       ]
     }
     </script>
+    {% if service.faq %}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {% for question, answer in service.faq %}
+        {
+          "@type": "Question",
+          "name": {{ question | tojson }},
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": {{ answer | tojson }}
+          }
+        }{% if not loop.last %},{% endif %}
+        {% endfor %}
+      ]
+    }
+    </script>
+    {% endif %}
 </head>
 <body>
     <div class="page-shell">

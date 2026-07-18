@@ -1223,10 +1223,6 @@ def _build_home_context():
     }
 
 
-@app.route('/home2')
-def home2():
-    return redirect(url_for('home'), code=301)
-
 @app.route('/gallery')
 def gallery():
     photos = db.get_gallery_photos()
