@@ -195,11 +195,25 @@
                     <textarea id="excerpt" name="excerpt" placeholder="Short summary shown on the blog index and in search results…">{{ post.excerpt if post else '' }}</textarea>
                 </div>
 
+                <!-- PDF attached to this post -->
+                {% if post and post.pdf_url %}
+                <div style="margin-bottom:20px;padding:16px;background:rgba(76,175,130,0.08);border:1px solid rgba(76,175,130,0.3);border-radius:10px;">
+                    <div style="font-family:'Bebas Neue',Arial,sans-serif;font-size:16px;letter-spacing:0.08em;color:#4caf82;margin-bottom:10px;">✓ PDF ATTACHED</div>
+                    <div style="font-size:13px;color:rgba(245,243,239,0.6);margin-bottom:12px;">{{ post.pdf_url.split('/')[-1] }}</div>
+                    <iframe src="{{ post.pdf_url }}" style="width:100%;height:500px;border:1px solid rgba(241,186,32,0.2);border-radius:8px;background:#111;"></iframe>
+                    <div style="margin-top:10px;font-size:13px;color:rgba(245,243,239,0.5);">
+                        The PDF above will be displayed in the published post.
+                        You can optionally add extra written content below.
+                        <a href="{{ post.pdf_url }}" target="_blank" style="color:#f1ba20;margin-left:8px;">Open in new tab →</a>
+                    </div>
+                </div>
+                {% endif %}
+
                 <div class="field">
-                    <label>Content</label>
+                    <label>{% if post and post.pdf_url %}Additional Content (optional){% else %}Content{% endif %}</label>
 
                     <!-- PDF import — plain HTML form, no JS required -->
-                    {% if not post %}
+                    {% if not post or not post.pdf_url %}
                     <div style="margin-bottom:12px;padding:14px 16px;background:rgba(241,186,32,0.06);border:1px solid rgba(241,186,32,0.22);border-radius:8px;">
                         <div style="font-family:'Bebas Neue',Arial,sans-serif;font-size:16px;letter-spacing:0.08em;color:#f1ba20;margin-bottom:8px;">IMPORT FROM PDF INSTEAD</div>
                         <form method="POST" action="{{ url_for('admin_blog_upload_pdf') }}" enctype="multipart/form-data" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">

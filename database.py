@@ -201,6 +201,7 @@ class DatabaseManager:
                         excerpt TEXT,
                         content TEXT,
                         hero_image TEXT,
+                        pdf_url TEXT,
                         template INTEGER DEFAULT 1,
                         status TEXT DEFAULT 'draft',
                         published_at TIMESTAMP,
@@ -360,6 +361,7 @@ class DatabaseManager:
                         excerpt TEXT,
                         content TEXT,
                         hero_image TEXT,
+                        pdf_url TEXT,
                         template INTEGER DEFAULT 1,
                         status TEXT DEFAULT 'draft',
                         published_at TIMESTAMP,
@@ -1356,21 +1358,21 @@ class DatabaseManager:
         conn.close()
         return result
 
-    def create_blog_post(self, title, slug, excerpt, content, hero_image, template, status):
+    def create_blog_post(self, title, slug, excerpt, content, hero_image, template, status, pdf_url=None):
         import datetime
         conn = self.get_connection()
         cursor = conn.cursor()
         published_at = datetime.datetime.utcnow().isoformat() if status == 'published' else None
         cursor.execute(self._prepare_query('''
-            INSERT INTO blog_posts (title, slug, excerpt, content, hero_image, template, status, published_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        '''), (title, slug, excerpt, content, hero_image, template, status, published_at))
+            INSERT INTO blog_posts (title, slug, excerpt, content, hero_image, pdf_url, template, status, published_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        '''), (title, slug, excerpt, content, hero_image, pdf_url, template, status, published_at))
         post_id = cursor.lastrowid
         conn.commit()
         conn.close()
         return post_id
 
-    def update_blog_post(self, post_id, title, slug, excerpt, content, hero_image, template, status):
+    def update_blog_post(self, post_id, title, slug, excerpt, content, hero_image, template, status, pdf_url=None):
         import datetime
         conn = self.get_connection()
         cursor = conn.cursor()
@@ -1378,11 +1380,14 @@ class DatabaseManager:
         published_at = existing.get('published_at') if existing else None
         if status == 'published' and not published_at:
             published_at = datetime.datetime.utcnow().isoformat()
+        # Keep existing pdf_url if not explicitly passed
+        if pdf_url is None and existing:
+            pdf_url = existing.get('pdf_url')
         cursor.execute(self._prepare_query('''
             UPDATE blog_posts
-            SET title=?, slug=?, excerpt=?, content=?, hero_image=?, template=?, status=?, published_at=?, updated_at=CURRENT_TIMESTAMP
+            SET title=?, slug=?, excerpt=?, content=?, hero_image=?, pdf_url=?, template=?, status=?, published_at=?, updated_at=CURRENT_TIMESTAMP
             WHERE id=?
-        '''), (title, slug, excerpt, content, hero_image, template, status, published_at, post_id))
+        '''), (title, slug, excerpt, content, hero_image, pdf_url, template, status, published_at, post_id))
         conn.commit()
         conn.close()
 

@@ -1273,7 +1273,7 @@ def admin_blog_edit(post_id):
         template = int(request.form.get('template', 1))
         status = request.form.get('status', 'draft')
         db.update_blog_post(post_id, title, slug, excerpt, content, hero_image, template, status)
-        return redirect(url_for('admin') + '#blog')
+        return redirect(url_for('admin_blog_edit', post_id=post_id) + '?saved=1')
     return render_template('admin_blog_edit.html', post=post)
 
 @app.route('/admin/blog/<int:post_id>/delete', methods=['POST'])
@@ -1316,22 +1316,13 @@ def admin_blog_upload_pdf():
     file.save(os.path.join(save_dir, filename))
 
     pdf_url = f'/static/files/blog/{filename}'
-    content_html = (
-        f'<div style="width:100%;min-height:80vh;">'
-        f'<embed src="{pdf_url}" type="application/pdf" width="100%" height="900" '
-        f'style="border:none;border-radius:8px;display:block;">'
-        f'</div>'
-        f'<p style="text-align:center;margin-top:16px;">'
-        f'<a href="{pdf_url}" target="_blank" style="color:#f1ba20;">Open / Download PDF</a>'
-        f'</p>'
-    )
 
     # Auto-generate title from filename
     raw_title = base_name.replace('-', ' ').replace('_', ' ').title()
     import re
     slug = re.sub(r'[^a-z0-9]+', '-', raw_title.lower()).strip('-') + f'-{ts}'
 
-    post_id = db.create_blog_post(raw_title, slug, '', content_html, '', 1, 'draft')
+    post_id = db.create_blog_post(raw_title, slug, '', '', '', 1, 'draft', pdf_url=pdf_url)
     return redirect(url_for('admin_blog_edit', post_id=post_id))
 
 @app.route('/gallery')

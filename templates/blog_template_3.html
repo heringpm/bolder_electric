@@ -268,7 +268,15 @@
         <div class="post-body">
             <div class="container">
                 <article class="post-content">
-                    {{ post.content | safe }}
+                        {% if post.pdf_url %}
+                        <div style="width:100%;margin-bottom:28px;">
+                            <iframe src="{{ post.pdf_url }}" style="width:100%;height:90vh;border:none;border-radius:10px;display:block;" title="{{ post.title }}"></iframe>
+                            <p style="text-align:center;margin-top:12px;font-size:15px;">
+                                <a href="{{ post.pdf_url }}" target="_blank" style="color:var(--gold);">Download / Open PDF →</a>
+                            </p>
+                        </div>
+                        {% endif %}
+                        {{ post.content | safe }}
                 </article>
             </div>
         </div>
