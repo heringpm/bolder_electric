@@ -193,6 +193,22 @@ class DatabaseManager:
                     )
                 ''')
 
+                cursor.execute('''
+                    CREATE TABLE IF NOT EXISTS blog_posts (
+                        id SERIAL PRIMARY KEY,
+                        title TEXT NOT NULL,
+                        slug TEXT NOT NULL UNIQUE,
+                        excerpt TEXT,
+                        content TEXT,
+                        hero_image TEXT,
+                        template INTEGER DEFAULT 1,
+                        status TEXT DEFAULT 'draft',
+                        published_at TIMESTAMP,
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    )
+                ''')
+
             else:
                 cursor.execute('''
                     CREATE TABLE IF NOT EXISTS admin_users (
