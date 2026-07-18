@@ -1313,6 +1313,13 @@ class DatabaseManager:
 
     # ── Blog ──────────────────────────────────────────────────────────────────
 
+    def _row_to_dict(self, cursor, row):
+        """Convert a DB row to a dict using cursor.description (works for both SQLite and Postgres)."""
+        if row is None:
+            return None
+        cols = [d[0] for d in cursor.description]
+        return dict(zip(cols, row))
+
     def get_blog_posts(self, status=None, limit=None):
         conn = self.get_connection()
         cursor = conn.cursor()
@@ -1327,24 +1334,27 @@ class DatabaseManager:
             params.append(limit)
         cursor.execute(self._prepare_query(q), params)
         rows = cursor.fetchall()
+        result = [self._row_to_dict(cursor, r) for r in rows]
         conn.close()
-        return [dict(r) for r in rows]
+        return result
 
     def get_blog_post_by_slug(self, slug):
         conn = self.get_connection()
         cursor = conn.cursor()
         cursor.execute(self._prepare_query('SELECT * FROM blog_posts WHERE slug = ? AND status = ?'), (slug, 'published'))
         row = cursor.fetchone()
+        result = self._row_to_dict(cursor, row)
         conn.close()
-        return dict(row) if row else None
+        return result
 
     def get_blog_post_by_id(self, post_id):
         conn = self.get_connection()
         cursor = conn.cursor()
         cursor.execute(self._prepare_query('SELECT * FROM blog_posts WHERE id = ?'), (post_id,))
         row = cursor.fetchone()
+        result = self._row_to_dict(cursor, row)
         conn.close()
-        return dict(row) if row else None
+        return result
 
     def create_blog_post(self, title, slug, excerpt, content, hero_image, template, status):
         import datetime
