@@ -1117,7 +1117,7 @@ Bolder Electric
 @app.route('/')
 def home():
     context = _build_home_context()
-    return render_template('home2.html', **context)
+    return render_template('index.html', **context)
 
 
 def _build_home_context():
@@ -1227,7 +1227,7 @@ def _build_home_context():
 def gallery():
     photos = db.get_gallery_photos()
     context = _build_home_context()
-    return render_template('gallery2.html', photos=photos, **context)
+    return render_template('gallery.html', photos=photos, **context)
 
 @app.route('/gallery2')
 def gallery2():
@@ -1599,7 +1599,7 @@ def schedule():
         'time_slot': ts[1]
     } for ts in time_slots]
     context = _build_home_context()
-    return render_template('schedule2.html', services=services_dict, time_slots=time_slots_dict, **context)
+    return render_template('schedule.html', services=services_dict, time_slots=time_slots_dict, **context)
 
 @app.route('/schedule2')
 def schedule2():

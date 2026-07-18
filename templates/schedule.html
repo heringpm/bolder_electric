@@ -3,224 +3,634 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
-    <title>Request an Electrician in Menifee, CA & Riverside County | Bolder Electric</title>
-    <meta name="description" content="Request a licensed electrician in Menifee, CA for commercial electrical services, residential electrician work, emergency electrical services, electrical panel upgrades, EV charger installation, and lighting services. All scheduling requests are reviewed and confirmed by our team.">
-    <meta name="keywords" content="schedule electrician menifee ca, emergency electrical services menifee, commercial electrical services menifee ca, residential electrician menifee ca, electrical panel upgrades menifee ca">
+    <title>Schedule Electrical Service | Bolder Electric</title>
+    <meta name="description" content="Submit a scheduling request for commercial, residential, emergency, panel, EV charger, and lighting electrician services across Riverside County and Southern California.">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://bolderelectric.com/schedule">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Request Electrical Service | Bolder Electric">
-    <meta property="og:description" content="Submit a scheduling request for commercial, residential, emergency, panel, EV charger, and lighting electrical work across Riverside County and Southern California.">
-    <meta property="og:url" content="https://bolderelectric.com/schedule">
-    <meta property="og:image" content="https://bolderelectric.com/static/images/hero-1024.webp">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Request Electrical Service | Bolder Electric">
-    <meta name="twitter:description" content="Schedule request page for commercial, residential, emergency, panel, EV charger, and lighting electrician services across Riverside County and Southern California.">
-    <meta name="twitter:image" content="https://bolderelectric.com/static/images/hero-1024.webp">
-
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.min.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/privacy-notice.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <script defer src="{{ url_for('static', filename='js/privacy-notice.js') }}" data-ga-measurement-id="G-HPSXGKK99R"></script>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebPage",
-      "@id": "https://bolderelectric.com/schedule#webpage",
-      "url": "https://bolderelectric.com/schedule",
-      "name": "Request Electrical Service - Bolder Electric",
-      "description": "Online service request page for commercial electrical, residential electrician, emergency electrician, and panel upgrade requests across Riverside County and Southern California.",
-      "about": {
-        "@id": "https://bolderelectric.com#business"
-      },
-      "isPartOf": {
-        "@id": "https://bolderelectric.com#website"
-      }
-    }
-    </script>
     <style>
-        .schedule-container { max-width: 1200px; margin: 0 auto; padding: 100px 20px; }
-        .schedule-header { text-align: center; margin-bottom: 2rem; }
-        .schedule-content { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
-        .card { background: var(--white); padding: 1.5rem; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.4rem; }
-        .calendar-day-header { text-align: center; font-weight: 600; color: var(--primary-black); padding: 0.5rem; }
-        .calendar-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border: 1px solid #ddd; border-radius: 5px; cursor: pointer; }
-        .calendar-day.disabled { color: #bbb; cursor: not-allowed; background: #fafafa; }
-        .calendar-day.selected { background: var(--primary-gold); border-color: var(--primary-gold); font-weight: 700; }
-        .calendar-nav { display: flex; gap: 0.6rem; align-items: center; }
-        .calendar-btn { background: var(--primary-gold); color: var(--primary-black); border: none; padding: 0.45rem 0.8rem; border-radius: 4px; cursor: pointer; }
-        .time-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-top: 1rem; }
-        .time-slot { padding: 0.7rem; border: 1px solid #ddd; border-radius: 5px; text-align: center; cursor: pointer; }
-        .time-slot.selected { background: var(--primary-red); color: var(--white); border-color: var(--primary-red); }
-        .service-cards { display: grid; gap: 0.8rem; margin-top: 1rem; }
-        .service-card { border: 2px solid #ddd; border-radius: 6px; padding: 0.9rem; cursor: pointer; }
-        .service-card.selected { border-color: var(--primary-gold); background: #fffaf0; }
-        .service-name { font-weight: 700; color: var(--primary-black); }
-        .service-price { color: var(--primary-red); font-weight: 700; margin-top: 0.25rem; }
-        .service-description { color: var(--dark-gray); font-size: 0.93rem; margin-top: 0.35rem; line-height: 1.45; }
-        .service-note { color: var(--dark-gray); font-size: 0.92rem; margin-top: 0.35rem; }
-        .form-group { margin-bottom: 1rem; }
-        .form-group label { display: block; margin-bottom: 0.4rem; font-weight: 600; }
-        .form-group input, .form-group textarea { width: 100%; padding: 0.75rem; border: 2px solid #e0e0e0; border-radius: 5px; font-family: 'Montserrat', sans-serif; }
-        .summary { background: var(--light-gray); border-radius: 6px; padding: 1rem; margin: 1rem 0; }
-        .summary-item { display: flex; justify-content: space-between; margin-bottom: 0.4rem; }
-        .summary-total { display: flex; justify-content: space-between; border-top: 2px solid var(--primary-gold); padding-top: 0.7rem; font-weight: 700; }
-        .schedule-note { background: #fff3cd; border: 1px solid #ffeaa7; color: #856404; padding: 0.8rem; border-radius: 6px; margin-top: 0.9rem; display: none; }
-        .submit-btn { width: 100%; padding: 1rem; background: var(--primary-red); color: var(--white); border: none; border-radius: 6px; font-weight: 700; cursor: pointer; }
-        .submit-btn:disabled { background: #c7c7c7; cursor: not-allowed; }
-        @media (max-width: 900px) { .schedule-content { grid-template-columns: 1fr; } .time-grid { grid-template-columns: repeat(2, 1fr); } }
+        :root {
+            --bg: #060606;
+            --bg-soft: #0d0d0d;
+            --panel: #101010;
+            --panel-soft: #151515;
+            --line: rgba(241, 186, 32, 0.28);
+            --line-strong: rgba(241, 186, 32, 0.6);
+            --gold: #f1ba20;
+            --gold-soft: #ffd777;
+            --text: #f5f3ef;
+            --muted: rgba(245, 243, 239, 0.74);
+            --content-width: 1280px;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            background:
+                radial-gradient(circle at top, rgba(255, 204, 90, 0.08), transparent 26%),
+                linear-gradient(180deg, #040404 0%, #080808 24%, #060606 100%);
+            color: var(--text);
+            font-family: "Barlow Condensed", Arial, sans-serif;
+        }
+        a { color: inherit; text-decoration: none; }
+        img { display: block; max-width: 100%; }
+        button, input, select, textarea { font: inherit; }
+        .page-shell { overflow: clip; }
+        .container { width: min(calc(100% - 40px), var(--content-width)); margin: 0 auto; }
+        .section { position: relative; padding: 72px 0; }
+        .section-head { max-width: 960px; margin: 0 auto 34px; text-align: center; }
+        .section-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 12px;
+            color: var(--gold);
+            font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: 22px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+        }
+        .section-tag::before,
+        .section-tag::after {
+            content: "";
+            width: 46px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--line-strong), transparent);
+        }
+        .section-head h1,
+        .section-head h2 {
+            margin: 0;
+            font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: clamp(48px, 4.5vw, 72px);
+            line-height: 0.98;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+        }
+        .section-head p {
+            margin: 14px auto 0;
+            font-size: clamp(18px, 1.65vw, 26px);
+            line-height: 1.28;
+            color: var(--muted);
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            min-height: 54px;
+            padding: 0 24px;
+            border-radius: 10px;
+            border: 1px solid var(--line-strong);
+            font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: 23px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease;
+            cursor: pointer;
+        }
+        .btn:hover { transform: translateY(-1px); }
+        .btn-primary {
+            color: #120d00;
+            background: linear-gradient(180deg, #ffd86d 0%, #f1ba20 54%, #c28000 100%);
+            box-shadow: inset 0 1px 0 rgba(255, 240, 193, 0.45), 0 12px 24px rgba(0, 0, 0, 0.22);
+        }
+
+        .topbar {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            z-index: 50;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.44) 0%, rgba(0, 0, 0, 0.16) 72%, rgba(0, 0, 0, 0) 100%);
+        }
+        .topbar-inner {
+            width: min(calc(100% - 40px), 1380px);
+            margin: 0 auto;
+            min-height: 72px;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 12px;
+        }
+        .brand-link img { width: 122px; filter: drop-shadow(0 0 18px rgba(255, 200, 76, 0.16)); }
+        .nav { display: flex; justify-content: center; align-items: center; gap: 14px; white-space: nowrap; }
+        .nav a {
+            position: relative;
+            font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: 13px;
+            letter-spacing: 0.06em;
+            color: rgba(255,255,255,0.9);
+            text-transform: uppercase;
+        }
+        .nav a.active, .nav a:hover { color: var(--gold); }
+        .nav a.active::after {
+            content: "";
+            position: absolute;
+            left: 0; right: 0; bottom: -10px;
+            height: 2px;
+            background: var(--gold);
+        }
+        .topbar-actions { display: flex; align-items: center; gap: 12px; }
+        .proposal-link {
+            min-height: 36px;
+            padding: 0 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(241, 186, 32, 0.78);
+            background: rgba(0, 0, 0, 0.56);
+            color: var(--gold);
+            font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: 14px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .phone-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: 18px;
+            color: #fff;
+        }
+        .phone-link i { color: var(--gold); font-size: 0.84em; }
+        .menu-toggle {
+            display: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            border: 1px solid rgba(241, 186, 32, 0.28);
+            background: rgba(0, 0, 0, 0.42);
+            color: #fff;
+            font-size: 18px;
+        }
+
+        .schedule-hero {
+            position: relative;
+            padding: 140px 0 54px;
+            background:
+                linear-gradient(90deg, rgba(6, 6, 6, 0.92) 0%, rgba(6, 6, 6, 0.68) 38%, rgba(6, 6, 6, 0.72) 100%),
+                url("{{ url_for('static', filename='images/home2-service-ups.png') }}") center center / cover no-repeat;
+            border-bottom: 1px solid rgba(241, 186, 32, 0.12);
+        }
+
+        .schedule-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+        }
+        .schedule-card {
+            border: 1px solid rgba(241, 186, 32, 0.2);
+            border-radius: 14px;
+            background: linear-gradient(180deg, rgba(17,17,17,0.98) 0%, rgba(10,10,10,0.98) 100%);
+            padding: 22px;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.2);
+        }
+        .schedule-card h3 {
+            margin: 0;
+            font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: 34px;
+            line-height: 1;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+        }
+        .schedule-card-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .calendar-nav { display: flex; gap: 8px; align-items: center; }
+        .calendar-btn {
+            width: 40px; height: 40px;
+            border-radius: 10px;
+            border: 1px solid rgba(241, 186, 32, 0.34);
+            background: rgba(0,0,0,0.36);
+            color: var(--gold);
+            cursor: pointer;
+        }
+        #current-month {
+            font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: 24px;
+            letter-spacing: 0.04em;
+        }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+        .calendar-day-header {
+            text-align: center;
+            font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: 15px;
+            letter-spacing: 0.06em;
+            color: rgba(245,243,239,0.72);
+            padding: 8px 0;
+        }
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(241, 186, 32, 0.16);
+            border-radius: 10px;
+            background: rgba(255,255,255,0.02);
+            cursor: pointer;
+        }
+        .calendar-day.disabled {
+            color: rgba(245,243,239,0.25);
+            cursor: not-allowed;
+            background: rgba(255,255,255,0.01);
+        }
+        .calendar-day.selected {
+            background: linear-gradient(180deg, #ffd86d 0%, #f1ba20 54%, #c28000 100%);
+            color: #120d00;
+            border-color: rgba(241,186,32,0.95);
+            font-weight: 700;
+        }
+        .time-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 16px; }
+        .time-slot {
+            padding: 12px 8px;
+            border: 1px solid rgba(241, 186, 32, 0.16);
+            border-radius: 10px;
+            text-align: center;
+            background: rgba(255,255,255,0.02);
+            cursor: pointer;
+        }
+        .time-slot.selected {
+            background: linear-gradient(180deg, #ffd86d 0%, #f1ba20 54%, #c28000 100%);
+            color: #120d00;
+            border-color: rgba(241,186,32,0.95);
+            font-weight: 700;
+        }
+        .service-cards { display: grid; gap: 12px; margin-top: 16px; }
+        .service-card {
+            border: 1px solid rgba(241, 186, 32, 0.16);
+            border-radius: 12px;
+            padding: 14px;
+            background: rgba(255,255,255,0.02);
+            cursor: pointer;
+        }
+        .service-card.selected {
+            border-color: rgba(241, 186, 32, 0.9);
+            background: linear-gradient(180deg, rgba(241,186,32,0.12) 0%, rgba(241,186,32,0.05) 100%);
+        }
+        .service-name {
+            font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: 26px;
+            line-height: 1;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+        .service-price {
+            margin-top: 6px;
+            font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: 20px;
+            color: var(--gold);
+            letter-spacing: 0.04em;
+        }
+        .service-description, .service-note {
+            margin-top: 8px;
+            font-size: 15px;
+            line-height: 1.4;
+            color: rgba(245,243,239,0.76);
+        }
+        .form-group { margin-bottom: 14px; }
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: 18px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: rgba(245,243,239,0.9);
+        }
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px 14px;
+            border-radius: 10px;
+            border: 1px solid rgba(241,186,32,0.18);
+            background: rgba(255,255,255,0.03);
+            color: var(--text);
+        }
+        .summary {
+            border: 1px solid rgba(241,186,32,0.16);
+            border-radius: 12px;
+            padding: 14px;
+            background: rgba(255,255,255,0.02);
+            margin: 16px 0;
+        }
+        .summary-item, .summary-total {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+        }
+        .summary-item { margin-bottom: 8px; color: rgba(245,243,239,0.82); }
+        .summary-total {
+            border-top: 1px solid rgba(241,186,32,0.22);
+            padding-top: 10px;
+            font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: 22px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+        .schedule-note {
+            background: rgba(241, 186, 32, 0.1);
+            border: 1px solid rgba(241, 186, 32, 0.26);
+            color: #f6df9a;
+            padding: 12px 14px;
+            border-radius: 10px;
+            margin-top: 14px;
+            display: none;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            border: 0;
+            border-radius: 10px;
+            font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: 23px;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            background: linear-gradient(180deg, #ffd86d 0%, #f1ba20 54%, #c28000 100%);
+            color: #120d00;
+            cursor: pointer;
+        }
+        .submit-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+        footer {
+            border-top: 1px solid rgba(241, 186, 32, 0.14);
+            background: #050505;
+            padding: 40px 0 22px;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 220px minmax(0, 1fr) 220px;
+            gap: 28px;
+            align-items: start;
+        }
+        .footer-brand { display: flex; gap: 16px; align-items: flex-start; }
+        .footer-brand img { width: 84px; }
+        .footer-brand strong,
+        .footer-col h4 {
+            display: block;
+            font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: var(--gold);
+        }
+        .footer-brand p,
+        .footer-col p { margin: 8px 0 0; font-size: 0.85rem; line-height: 1.14; color: var(--muted); }
+        .footer-col ul {
+            list-style: none;
+            padding: 0;
+            margin: 12px 0 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 22px 30px;
+        }
+        .footer-col li, .footer-col a { font-size: 0.85rem; line-height: 1.1; color: var(--muted); }
+        .footer-bottom {
+            margin-top: 28px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(241, 186, 32, 0.12);
+            font-size: 0.85rem;
+            color: rgba(245, 243, 239, 0.5);
+            text-align: center;
+        }
+
+        @media (max-width: 1180px) {
+            .topbar-inner { grid-template-columns: auto auto; padding: 16px 0; align-items: start; }
+            .menu-toggle { display: inline-flex; align-items: center; justify-content: center; justify-self: end; }
+            .topbar-inner.menu-open {
+                padding: 12px 12px 16px;
+                margin-top: 10px;
+                border: 1px solid rgba(241, 186, 32, 0.24);
+                border-radius: 18px;
+                background: linear-gradient(180deg, rgba(8, 8, 8, 0.97) 0%, rgba(10, 10, 10, 0.94) 100%);
+                box-shadow: 0 24px 48px rgba(0, 0, 0, 0.38);
+                backdrop-filter: blur(14px);
+            }
+            .nav, .topbar-actions {
+                grid-column: 1 / -1;
+                display: none;
+                justify-content: flex-start;
+                width: 100%;
+            }
+            .topbar-inner.menu-open .nav,
+            .topbar-inner.menu-open .topbar-actions { display: flex; }
+            .nav {
+                gap: 0;
+                padding-top: 14px;
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .nav a {
+                display: block;
+                width: 100%;
+                padding: 10px 4px;
+                border-bottom: 1px solid rgba(241, 186, 32, 0.14);
+                font-size: 18px;
+            }
+            .nav a:last-child { border-bottom: 0; }
+            .nav a.active::after { left: 4px; right: auto; bottom: 6px; width: 36px; }
+            .topbar-actions { padding-top: 12px; flex-wrap: wrap; gap: 12px; }
+            .schedule-layout, .footer-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 780px) {
+            .container, .topbar-inner { width: min(calc(100% - 28px), var(--content-width)); }
+            .brand-link img { width: 74px; }
+            .schedule-hero { padding: 108px 0 42px; }
+            .section { padding: 54px 0; }
+            .section-head h1, .section-head h2 { font-size: 40px; }
+            .section-head p { font-size: 17px; line-height: 1.35; }
+            .topbar-actions .proposal-link, .topbar-actions .phone-link { width: 100%; justify-content: center; }
+            .schedule-card { padding: 18px; }
+            .schedule-card-top { flex-direction: column; align-items: flex-start; }
+            .time-grid { grid-template-columns: repeat(2, 1fr); }
+            .btn { width: 100%; }
+        }
+        @media (max-width: 560px) {
+            .topbar-inner.menu-open { padding: 10px 10px 14px; margin-top: 8px; border-radius: 16px; }
+            .brand-link img { width: 66px; }
+            .nav a, .phone-link, .proposal-link { font-size: 14px; }
+            .schedule-hero { padding: 94px 0 34px; }
+            .section { padding: 46px 0; }
+            .section-head h1, .section-head h2 { font-size: 32px; }
+            .section-head p { font-size: 15px; }
+            .schedule-card { padding: 16px; }
+            .schedule-card h3 { font-size: 28px; }
+            #current-month { font-size: 20px; }
+            .time-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+            .footer-brand { gap: 12px; }
+            .footer-brand img { width: 72px; }
+            .footer-col ul { gap: 10px 16px; }
+        }
     </style>
 </head>
 <body>
-    <header>
-        <nav class="navbar">
-            <div class="nav-container">
-                <div class="logo">
-                    <a href="{{ url_for('home') }}" aria-label="Bolder Electric Home">
-                        <img src="{{ url_for('static', filename='images/shield-final-320.png') }}" alt="Bolder Electric Logo" class="logo-img">
+    <div class="page-shell">
+        <header class="topbar">
+            <div class="topbar-inner" id="topbarInner">
+                <a class="brand-link" href="{{ url_for('home') }}" aria-label="Bolder Electric home">
+                    <img src="{{ url_for('static', filename='images/shield-final-160.png') }}" alt="Bolder Electric logo">
+                </a>
+
+                <button class="menu-toggle" id="menuToggle" type="button" aria-label="Toggle navigation">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+
+                <nav class="nav" aria-label="Primary">
+                    <a href="{{ url_for('home') }}#home">Home</a>
+                    <a href="{{ url_for('home') }}#services">Services</a>
+                    <a href="{{ url_for('home') }}#service-areas">Service Areas</a>
+                    <a href="{{ url_for('home') }}#about">About</a>
+                    <a href="{{ url_for('home') }}#crew">Team</a>
+                    <a href="{{ url_for('home') }}#contact">Contact</a>
+                    <a href="{{ url_for('gallery') }}">Projects</a>
+                    <a class="active" href="{{ url_for('schedule') }}">Schedule</a>
+                </nav>
+
+                <div class="topbar-actions">
+                    <a class="proposal-link" href="{{ url_for('schedule') }}">Request Proposal</a>
+                    <a class="phone-link" href="tel:{{ contact.phone|replace('(', '')|replace(')', '')|replace(' ', '')|replace('-', '') }}">
+                        <i class="fa-solid fa-phone"></i>
+                        <span>{{ contact.phone }}</span>
                     </a>
                 </div>
-                <ul class="nav-menu">
-                    <li><a href="{{ url_for('home') }}" class="nav-link">Home</a></li>
-                    <li><a href="{{ url_for('home') }}#services" class="nav-link">Services</a></li>
-                    <li><a href="{{ url_for('home') }}#about" class="nav-link">About</a></li>
-                    <li><a href="{{ url_for('home') }}#crew" class="nav-link">Team</a></li>
-                    <li><a href="{{ url_for('gallery') }}" class="nav-link">Gallery</a></li>
-                    <li><a href="{{ url_for('home') }}#contact" class="nav-link">Contact</a></li>
-                    <li><a href="{{ url_for('schedule') }}" class="nav-link active">Schedule</a></li>
-                </ul>
-                <div class="hamburger"><span></span><span></span><span></span></div>
             </div>
-        </nav>
-    </header>
+        </header>
 
-    <div class="schedule-container">
-        <div class="schedule-header">
-            <h2 class="section-title">Request Electrical Service</h2>
-            <p class="schedule-subtitle">Submitting this form creates a scheduling request only. Your appointment is not booked until our team contacts you and confirms your date/time.</p>
-            <p class="schedule-subtitle" style="margin-top:0.6rem;">
-                Popular services:
-                <a href="{{ url_for('service_landing', slug='commercial-electrical-services') }}">Commercial Electrical</a>,
-                <a href="{{ url_for('service_landing', slug='emergency-electrician-services') }}">Emergency Electrician</a>,
-                <a href="{{ url_for('service_landing', slug='electrical-panel-upgrades') }}">Panel Upgrades</a>,
-                <a href="{{ url_for('service_landing', slug='ev-charger-installation') }}">EV Charger Installation</a>.
-            </p>
-            <p class="schedule-subtitle" style="margin-top:0.6rem;">
-                Looking for an electrician in Menifee or Murrieta? Review our <a href="{{ url_for('city_menifee') }}">Menifee electrician services</a>, <a href="{{ url_for('city_murrieta') }}">Murrieta electrician services</a>, or <a href="{{ url_for('service_landing', slug='emergency-electrician-services') }}">emergency electrical services</a> page before submitting your request.
-            </p>
-        </div>
-
-        <div class="schedule-content">
-            <div class="card">
-                <div style="display:flex;justify-content:space-between;align-items:center;">
-                    <h3>Select Date</h3>
-                    <div class="calendar-nav">
-                        <button class="calendar-btn" type="button" onclick="changeMonth(-1)">←</button>
-                        <span id="current-month">Month</span>
-                        <button class="calendar-btn" type="button" onclick="changeMonth(1)">→</button>
+        <main>
+            <section class="schedule-hero">
+                <div class="container">
+                    <div class="section-head">
+                        <div class="section-tag">Schedule Service</div>
+                        <h1>Request Electrical Service</h1>
+                        <p>Submit a scheduling request for commercial electrical, emergency response, panel upgrades, EV charging, lighting, and residential work. Your appointment is only confirmed after our team contacts you directly.</p>
                     </div>
                 </div>
-                <div class="calendar-grid" id="calendar"></div>
+            </section>
 
-                <h3 style="margin-top:1rem;">Available Time Slots</h3>
-                <div class="time-grid" id="time-slots">
-                    {% for ts in time_slots %}
-                    <div class="time-slot" onclick="selectTime(this)">{{ ts.time_slot }}</div>
-                    {% endfor %}
-                </div>
-            </div>
+            <section class="section">
+                <div class="container">
+                    <div class="schedule-layout">
+                        <div class="schedule-card">
+                            <div class="schedule-card-top">
+                                <h3>Select Date</h3>
+                                <div class="calendar-nav">
+                                    <button class="calendar-btn" type="button" onclick="changeMonth(-1)">←</button>
+                                    <span id="current-month">Month</span>
+                                    <button class="calendar-btn" type="button" onclick="changeMonth(1)">→</button>
+                                </div>
+                            </div>
+                            <div class="calendar-grid" id="calendar"></div>
 
-            <div class="card">
-                <h3>Select Service Type</h3>
-                <div class="service-cards">
-                    {% for service in services %}
-                    {% set lname = service.name|lower %}
-                    {% set service_type = 'standard' %}
-                    {% set display_price = service.base_price %}
-                    {% set note = '' %}
-                    {% if 'commercial' in lname %}
-                        {% set service_type = 'commercial' %}
-                        {% set note = 'Commercial projects are contact-to-schedule and require scope review before confirmation.' %}
-                    {% elif 'emergency' in lname %}
-                        {% set service_type = 'emergency' %}
-                        {% set note = 'Emergency requests are reviewed immediately, and your service time is confirmed by our team.' %}
-                    {% elif 'panel' in lname %}
-                        {% set service_type = 'panel' %}
-                        {% set note = 'Panel upgrade requests require confirmation after equipment and project scope review.' %}
-                    {% elif 'residential' in lname %}
-                        {% set service_type = 'residential' %}
-                        {% set note = 'Residential requests are reviewed and confirmed by our team before the appointment is finalized.' %}
-                    {% endif %}
-                    <div class="service-card"
-                        data-id="{{ service.id }}"
-                        data-name="{{ service.name|e }}"
-                        data-type="{{ service_type }}"
-                        data-price="{{ display_price }}"
-                        data-note="{{ note|e }}"
-                        onclick="selectService(this)">
-                        <div class="service-name">{{ service.name }}</div>
-                        <div class="service-price">Starting at ${{ '%.2f'|format(display_price) }}</div>
-                        {% if service.description %}<div class="service-description">{{ service.description }}</div>{% endif %}
-                        {% if note %}<div class="service-note">{{ note }}</div>{% endif %}
+                            <h3 style="margin-top:18px;">Available Time Slots</h3>
+                            <div class="time-grid" id="time-slots">
+                                {% for ts in time_slots %}
+                                <div class="time-slot" onclick="selectTime(this)">{{ ts.time_slot }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="schedule-card">
+                            <h3>Select Service Type</h3>
+                            <div class="service-cards">
+                                {% for service in services %}
+                                {% set lname = service.name|lower %}
+                                {% set service_type = 'standard' %}
+                                {% set display_price = service.base_price %}
+                                {% set note = '' %}
+                                {% if 'commercial' in lname %}
+                                    {% set service_type = 'commercial' %}
+                                    {% set note = 'Commercial projects are contact-to-schedule and require scope review before confirmation.' %}
+                                {% elif 'emergency' in lname %}
+                                    {% set service_type = 'emergency' %}
+                                    {% set note = 'Emergency requests are reviewed immediately, and your service time is confirmed by our team.' %}
+                                {% elif 'panel' in lname %}
+                                    {% set service_type = 'panel' %}
+                                    {% set note = 'Panel upgrade requests require confirmation after equipment and project scope review.' %}
+                                {% elif 'residential' in lname %}
+                                    {% set service_type = 'residential' %}
+                                    {% set note = 'Residential requests are reviewed and confirmed by our team before the appointment is finalized.' %}
+                                {% endif %}
+                                <div class="service-card"
+                                    data-id="{{ service.id }}"
+                                    data-name="{{ service.name|e }}"
+                                    data-type="{{ service_type }}"
+                                    data-price="{{ display_price }}"
+                                    data-note="{{ note|e }}"
+                                    onclick="selectService(this)">
+                                    <div class="service-name">{{ service.name }}</div>
+                                    <div class="service-price">Starting at ${{ '%.2f'|format(display_price) }}</div>
+                                    {% if service.description %}<div class="service-description">{{ service.description }}</div>{% endif %}
+                                    {% if note %}<div class="service-note">{{ note }}</div>{% endif %}
+                                </div>
+                                {% endfor %}
+                            </div>
+
+                            <div id="schedule-note" class="schedule-note"></div>
+
+                            <div class="form-group" style="margin-top:18px;"><label for="name">Full Name *</label><input id="name" type="text" required></div>
+                            <div class="form-group"><label for="phone">Phone *</label><input id="phone" type="tel" required></div>
+                            <div class="form-group"><label for="email">Email *</label><input id="email" type="email" required></div>
+                            <div class="form-group"><label for="address">Service Address *</label><input id="address" type="text" required></div>
+                            <div class="form-group"><label for="description">Project Details</label><textarea id="description" rows="4" placeholder="Tell us about your project..."></textarea></div>
+
+                            <div class="summary">
+                                <div class="summary-item"><span>Service:</span><span id="summary-service">Not selected</span></div>
+                                <div class="summary-item"><span>Date:</span><span id="summary-date">Not selected</span></div>
+                                <div class="summary-item"><span>Time:</span><span id="summary-time">Not selected</span></div>
+                                <div class="summary-total"><span>Estimated Cost:</span><span id="summary-price">$0</span></div>
+                            </div>
+
+                            <button class="submit-btn" id="submit-btn" type="button" onclick="submitBooking()" disabled>Submit Scheduling Request</button>
+                        </div>
                     </div>
-                    {% endfor %}
                 </div>
+            </section>
+        </main>
 
-                <div id="schedule-note" class="schedule-note"></div>
-
-                <div class="form-group" style="margin-top:1rem;"><label for="name">Full Name *</label><input id="name" type="text" required></div>
-                <div class="form-group"><label for="phone">Phone *</label><input id="phone" type="tel" required></div>
-                <div class="form-group"><label for="email">Email *</label><input id="email" type="email" required></div>
-                <div class="form-group"><label for="address">Service Address *</label><input id="address" type="text" required></div>
-                <div class="form-group"><label for="description">Project Details</label><textarea id="description" rows="4" placeholder="Tell us about your project..."></textarea></div>
-
-                <div class="summary">
-                    <div class="summary-item"><span>Service:</span><span id="summary-service">Not selected</span></div>
-                    <div class="summary-item"><span>Date:</span><span id="summary-date">Not selected</span></div>
-                    <div class="summary-item"><span>Time:</span><span id="summary-time">Not selected</span></div>
-                    <div class="summary-total"><span>Estimated Cost:</span><span id="summary-price">$0</span></div>
-                </div>
-
-                <button class="submit-btn" id="submit-btn" type="button" onclick="submitBooking()" disabled>Submit Scheduling Request</button>
-            </div>
-        </div>
-    </div>
-
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-main">
+        <footer>
+            <div class="container">
+                <div class="footer-grid">
                     <div class="footer-brand">
-                        <img src="{{ url_for('static', filename='images/shield-final-320.png') }}" alt="Bolder Electric Logo" class="footer-logo">
-                        <div class="footer-text"><p class="footer-tagline">Professional Electrical Services</p></div>
+                        <img src="{{ url_for('static', filename='images/shield-final-160.png') }}" alt="Bolder Electric logo" loading="lazy">
+                        <div>
+                            <strong>Bolder Electric</strong>
+                            <p>Professional Electrical Services</p>
+                        </div>
                     </div>
-                    <div class="footer-info">
-                        <div class="footer-links">
-                            <h4>Quick Links</h4>
-                            <ul>
-                                <li><a href="{{ url_for('home') }}">Home</a></li>
-                                <li><a href="{{ url_for('home') }}#services">Services</a></li>
-                                <li><a href="{{ url_for('home') }}#about">About</a></li>
-                                <li><a href="{{ url_for('home') }}#crew">Team</a></li>
-                                <li><a href="{{ url_for('gallery') }}">Gallery</a></li>
-                                <li><a href="{{ url_for('home') }}#contact">Contact</a></li>
-                                <li><a href="{{ url_for('schedule') }}">Schedule</a></li>
-                                <li><a href="#" data-open-privacy-notice>Privacy/Cookie Settings</a></li>
-                            </ul>
-                        </div>
-                        <div class="footer-contact">
-                            <h4>Contact</h4>
-                            <p>(951) 397-4025</p>
-                            <p>support@bolderelectric.com</p>
-                        </div>
+
+                    <div class="footer-col">
+                        <h4>Quick Links</h4>
+                        <ul>
+                            <li><a href="{{ url_for('home') }}#home">Home</a></li>
+                            <li><a href="{{ url_for('home') }}#services">Services</a></li>
+                            <li><a href="{{ url_for('home') }}#service-areas">Service Areas</a></li>
+                            <li><a href="{{ url_for('home') }}#about">About</a></li>
+                            <li><a href="{{ url_for('home') }}#crew">Team</a></li>
+                            <li><a href="{{ url_for('gallery') }}">Gallery</a></li>
+                            <li><a href="{{ url_for('schedule') }}">Schedule</a></li>
+                            <li><a href="#" data-open-privacy-notice>Privacy/Cookie Settings</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-col">
+                        <h4>Contact</h4>
+                        <p>{{ contact.phone }}</p>
+                        <p>{{ contact.email or 'support@bolderelectric.com' }}</p>
                     </div>
                 </div>
-                <div class="footer-bottom"><p>&copy; 2026 Bolder Electric. All rights reserved.</p></div>
+                <div class="footer-bottom">&copy; 2026 Bolder Electric. All rights reserved.</div>
             </div>
-        </div>
-    </footer>
+        </footer>
+    </div>
 
     <script>
         (function () {
@@ -239,12 +649,11 @@
             };
         })();
 
-        const hamburger = document.querySelector('.hamburger');
-        const navMenu = document.querySelector('.nav-menu');
-        if (hamburger && navMenu) {
-            hamburger.addEventListener('click', () => {
-                hamburger.classList.toggle('active');
-                navMenu.classList.toggle('active');
+        const topbarInner = document.getElementById('topbarInner');
+        const menuToggle = document.getElementById('menuToggle');
+        if (topbarInner && menuToggle) {
+            menuToggle.addEventListener('click', () => {
+                topbarInner.classList.toggle('menu-open');
             });
         }
 
