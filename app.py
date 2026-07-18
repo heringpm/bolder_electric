@@ -1215,13 +1215,86 @@ def _build_home_context():
     session['contact_captcha_answer'] = str(captcha_left + captcha_right)
     session['contact_captcha_issued_at'] = int(time.time())
 
+    latest_posts = db.get_blog_posts(status='published', limit=3)
+
     return {
         'contact': contact_data,
         'service_descriptions': service_descriptions,
         'service_prices': service_prices,
-        'contact_captcha_question': f'{captcha_left} + {captcha_right}'
+        'contact_captcha_question': f'{captcha_left} + {captcha_right}',
+        'latest_posts': latest_posts,
     }
 
+
+@app.route('/blog')
+def blog_index():
+    posts = db.get_blog_posts(status='published')
+    return render_template('blog_index.html', posts=posts)
+
+@app.route('/blog/<slug>')
+def blog_post(slug):
+    post = db.get_blog_post_by_slug(slug)
+    if not post:
+        abort(404)
+    return render_template(f'blog_template_{post["template"]}.html', post=post)
+
+# ── Admin blog routes ─────────────────────────────────────────────────────────
+
+@app.route('/admin/blog/new', methods=['GET', 'POST'])
+@login_required
+def admin_blog_new():
+    if request.method == 'POST':
+        title = request.form.get('title', '').strip()
+        slug = request.form.get('slug', '').strip()
+        excerpt = request.form.get('excerpt', '').strip()
+        content = request.form.get('content', '').strip()
+        hero_image = request.form.get('hero_image', '').strip()
+        template = int(request.form.get('template', 1))
+        status = request.form.get('status', 'draft')
+        if not slug:
+            import re
+            slug = re.sub(r'[^a-z0-9]+', '-', title.lower()).strip('-')
+        db.create_blog_post(title, slug, excerpt, content, hero_image, template, status)
+        return redirect(url_for('admin') + '#blog')
+    return render_template('admin_blog_edit.html', post=None)
+
+@app.route('/admin/blog/<int:post_id>/edit', methods=['GET', 'POST'])
+@login_required
+def admin_blog_edit(post_id):
+    post = db.get_blog_post_by_id(post_id)
+    if not post:
+        abort(404)
+    if request.method == 'POST':
+        title = request.form.get('title', '').strip()
+        slug = request.form.get('slug', '').strip()
+        excerpt = request.form.get('excerpt', '').strip()
+        content = request.form.get('content', '').strip()
+        hero_image = request.form.get('hero_image', '').strip()
+        template = int(request.form.get('template', 1))
+        status = request.form.get('status', 'draft')
+        db.update_blog_post(post_id, title, slug, excerpt, content, hero_image, template, status)
+        return redirect(url_for('admin') + '#blog')
+    return render_template('admin_blog_edit.html', post=post)
+
+@app.route('/admin/blog/<int:post_id>/delete', methods=['POST'])
+@login_required
+def admin_blog_delete(post_id):
+    db.delete_blog_post(post_id)
+    return redirect(url_for('admin') + '#blog')
+
+@app.route('/admin/blog/upload-image', methods=['POST'])
+@login_required
+def admin_blog_upload_image():
+    file = request.files.get('file')
+    if not file or file.filename == '':
+        return jsonify({'error': 'No file'}), 400
+    import os
+    from werkzeug.utils import secure_filename
+    filename = secure_filename(file.filename)
+    save_dir = os.path.join('static', 'images', 'blog')
+    os.makedirs(save_dir, exist_ok=True)
+    file.save(os.path.join(save_dir, filename))
+    return jsonify({'url': f'/static/images/blog/{filename}'})
 
 @app.route('/gallery')
 def gallery():
@@ -1707,7 +1780,8 @@ def logout():
 @app.route('/admin')
 @login_required
 def admin():
-    return render_template('admin.html', current_user=session.get('admin_username'), current_role=session.get('user_role', 'admin'))
+    blog_posts = db.get_blog_posts()
+    return render_template('admin.html', current_user=session.get('admin_username'), current_role=session.get('user_role', 'admin'), blog_posts=blog_posts)
 
 @app.route('/account', methods=['GET', 'POST'])
 @login_required
@@ -2156,6 +2230,8 @@ def sitemap():
     ]
     entries.extend([(f"/electrician/{slug}", 'weekly', '0.8') for slug in CITY_LANDING_PAGES.keys()])
     entries.extend([(f"/services/{slug}", 'weekly', '0.8') for slug in SERVICE_LANDING_PAGES.keys()])
+    published_posts = db.get_blog_posts(status='published')
+    entries.extend([(f"/blog/{p['slug']}", 'monthly', '0.7') for p in published_posts])
     lines = [
         '<?xml version="1.0" encoding="UTF-8"?>',
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'

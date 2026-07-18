@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if post %}Edit Post{% else %}New Post{% endif %} | Bolder Electric Admin</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Quill rich text editor -->
+    <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0a; --panel: #111; --panel2: #161616;
+            --line: rgba(241,186,32,0.22); --gold: #f1ba20;
+            --text: #f5f3ef; --muted: rgba(245,243,239,0.6);
+            --red: #e05252;
+        }
+        * { box-sizing: border-box; }
+        body { margin: 0; background: var(--bg); color: var(--text); font-family: "Barlow Condensed", Arial, sans-serif; font-size: 16px; }
+        a { color: inherit; text-decoration: none; }
+
+        /* Header */
+        .admin-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 28px; height: 64px;
+            background: var(--panel); border-bottom: 1px solid var(--line);
+            position: sticky; top: 0; z-index: 100;
+        }
+        .admin-header-left { display: flex; align-items: center; gap: 18px; }
+        .admin-header-left img { width: 80px; }
+        .admin-header-title {
+            font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: 22px; letter-spacing: 0.06em; color: var(--gold);
+        }
+        .back-link {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 14px; color: var(--muted);
+            border: 1px solid var(--line); border-radius: 8px; padding: 6px 14px;
+        }
+        .back-link:hover { color: var(--text); border-color: rgba(241,186,32,0.5); }
+
+        /* Layout */
+        .editor-shell {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 0;
+            min-height: calc(100vh - 64px);
+        }
+        .editor-main { padding: 32px 36px; border-right: 1px solid var(--line); }
+        .editor-sidebar { padding: 28px 24px; background: var(--panel); }
+
+        /* Form fields */
+        .field { margin-bottom: 22px; }
+        .field label {
+            display: block; margin-bottom: 7px;
+            font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: 16px; letter-spacing: 0.1em; text-transform: uppercase;
+            color: var(--gold);
+        }
+        .field input[type="text"],
+        .field input[type="url"],
+        .field textarea,
+        .field select {
+            width: 100%; padding: 10px 14px;
+            background: var(--panel2); color: var(--text);
+            border: 1px solid var(--line); border-radius: 8px;
+            font: inherit; font-size: 15px;
+            transition: border-color 0.15s;
+        }
+        .field input:focus, .field textarea:focus, .field select:focus {
+            outline: none; border-color: rgba(241,186,32,0.7);
+        }
+        .field textarea { min-height: 90px; resize: vertical; }
+        .field-hint { margin-top: 5px; font-size: 13px; color: var(--muted); }
+
+        /* Quill editor */
+        .quill-wrap { border-radius: 8px; overflow: hidden; border: 1px solid var(--line); }
+        #quill-editor { background: var(--panel2); color: var(--text); min-height: 420px; font-size: 16px; font-family: "Barlow Condensed", Arial, sans-serif; }
+        .ql-toolbar { background: #1a1a1a; border: none !important; border-bottom: 1px solid var(--line) !important; }
+        .ql-toolbar .ql-stroke { stroke: rgba(245,243,239,0.7); }
+        .ql-toolbar .ql-fill { fill: rgba(245,243,239,0.7); }
+        .ql-toolbar .ql-picker { color: rgba(245,243,239,0.7); }
+        .ql-toolbar button:hover .ql-stroke, .ql-toolbar button.ql-active .ql-stroke { stroke: var(--gold); }
+        .ql-toolbar button:hover .ql-fill, .ql-toolbar button.ql-active .ql-fill { fill: var(--gold); }
+        .ql-toolbar .ql-picker-label:hover, .ql-toolbar .ql-picker-item:hover { color: var(--gold); }
+        .ql-container { border: none !important; }
+        .ql-editor { min-height: 420px; }
+        .ql-editor.ql-blank::before { color: var(--muted); font-style: normal; }
+
+        /* Template preview cards */
+        .template-grid { display: flex; flex-direction: column; gap: 10px; }
+        .template-option { position: relative; }
+        .template-option input[type="radio"] { position: absolute; opacity: 0; }
+        .template-card {
+            border: 2px solid var(--line); border-radius: 10px;
+            padding: 14px 16px; cursor: pointer;
+            transition: border-color 0.15s, background 0.15s;
+        }
+        .template-option input:checked + .template-card {
+            border-color: var(--gold);
+            background: rgba(241,186,32,0.06);
+        }
+        .template-card:hover { border-color: rgba(241,186,32,0.5); }
+        .template-card-name {
+            font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: 18px; letter-spacing: 0.06em; text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        .template-card-desc { font-size: 13px; color: var(--muted); line-height: 1.4; }
+
+        /* Status */
+        .status-select { display: flex; gap: 10px; }
+        .status-btn {
+            flex: 1; padding: 10px 0; border-radius: 8px;
+            border: 2px solid var(--line); background: var(--panel2);
+            color: var(--muted); font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: 17px; letter-spacing: 0.08em; text-transform: uppercase;
+            cursor: pointer; transition: all 0.15s;
+        }
+        .status-btn:hover { border-color: rgba(241,186,32,0.5); color: var(--text); }
+        .status-btn.active-draft { border-color: rgba(241,186,32,0.6); color: var(--gold); background: rgba(241,186,32,0.06); }
+        .status-btn.active-published { border-color: #4caf82; color: #4caf82; background: rgba(76,175,130,0.06); }
+
+        /* Image upload */
+        .image-preview { margin-top: 10px; }
+        .image-preview img { max-width: 100%; border-radius: 8px; border: 1px solid var(--line); }
+        .upload-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 8px 14px; border-radius: 8px;
+            border: 1px solid var(--line); background: var(--panel2);
+            color: var(--muted); font-size: 14px; cursor: pointer;
+            transition: border-color 0.15s, color 0.15s;
+        }
+        .upload-btn:hover { border-color: rgba(241,186,32,0.5); color: var(--text); }
+
+        /* Action buttons */
+        .sidebar-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 28px; }
+        .btn {
+            display: flex; align-items: center; justify-content: center;
+            min-height: 48px; padding: 0 20px; border-radius: 10px;
+            border: 1px solid var(--line);
+            font-family: "Bebas Neue", Arial, sans-serif; font-size: 20px;
+            letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer;
+            transition: transform 0.15s ease, opacity 0.15s;
+        }
+        .btn:hover { transform: translateY(-1px); }
+        .btn-publish {
+            color: #120d00;
+            background: linear-gradient(180deg, #ffd86d 0%, #f1ba20 54%, #c28000 100%);
+            border-color: transparent;
+        }
+        .btn-draft { color: var(--text); background: var(--panel2); }
+        .btn-delete { color: var(--red); background: rgba(224,82,82,0.08); border-color: rgba(224,82,82,0.3); }
+        .btn-delete:hover { background: rgba(224,82,82,0.14); }
+
+        /* Divider */
+        .sidebar-divider { border: none; border-top: 1px solid var(--line); margin: 20px 0; }
+
+        @media (max-width: 900px) {
+            .editor-shell { grid-template-columns: 1fr; }
+            .editor-main { padding: 24px 20px; }
+            .editor-sidebar { border-top: 1px solid var(--line); }
+        }
+    </style>
+</head>
+<body>
+    <header class="admin-header">
+        <div class="admin-header-left">
+            <img src="{{ url_for('static', filename='images/shield-final-160.png') }}" alt="Bolder Electric">
+            <span class="admin-header-title">{% if post %}Edit Post{% else %}New Blog Post{% endif %}</span>
+        </div>
+        <a class="back-link" href="{{ url_for('admin') }}">← Back to Admin</a>
+    </header>
+
+    <form id="postForm" method="POST">
+        <div class="editor-shell">
+            <!-- Main editor area -->
+            <div class="editor-main">
+                <div class="field">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" name="title" value="{{ post.title if post else '' }}" placeholder="Post title" required>
+                </div>
+
+                <div class="field">
+                    <label for="slug">URL Slug</label>
+                    <input type="text" id="slug" name="slug" value="{{ post.slug if post else '' }}" placeholder="auto-generated-from-title">
+                    <div class="field-hint">bolderelectric.com/blog/<strong id="slug-preview">{{ post.slug if post else '...' }}</strong></div>
+                </div>
+
+                <div class="field">
+                    <label for="excerpt">Excerpt</label>
+                    <textarea id="excerpt" name="excerpt" placeholder="Short summary shown on the blog index and in search results…">{{ post.excerpt if post else '' }}</textarea>
+                </div>
+
+                <div class="field">
+                    <label>Content</label>
+                    <div class="quill-wrap">
+                        <div id="quill-editor">{{ post.content | safe if post and post.content else '' }}</div>
+                    </div>
+                    <input type="hidden" id="content" name="content" value="{{ post.content if post else '' }}">
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <aside class="editor-sidebar">
+                <!-- Status -->
+                <div class="field">
+                    <label>Status</label>
+                    <div class="status-select">
+                        <button type="button" class="status-btn {% if not post or post.status == 'draft' %}active-draft{% endif %}"
+                                id="btn-draft" onclick="setStatus('draft')">Draft</button>
+                        <button type="button" class="status-btn {% if post and post.status == 'published' %}active-published{% endif %}"
+                                id="btn-published" onclick="setStatus('published')">Published</button>
+                    </div>
+                    <input type="hidden" id="status" name="status" value="{{ post.status if post else 'draft' }}">
+                </div>
+
+                <hr class="sidebar-divider">
+
+                <!-- Template selection -->
+                <div class="field">
+                    <label>Layout Template</label>
+                    <div class="template-grid">
+                        <label class="template-option">
+                            <input type="radio" name="template" value="1" {% if not post or post.template == 1 %}checked{% endif %}>
+                            <div class="template-card">
+                                <div class="template-card-name">Template 1 — Sidebar</div>
+                                <div class="template-card-desc">Dark hero with article + right sidebar. Best for how-to guides.</div>
+                            </div>
+                        </label>
+                        <label class="template-option">
+                            <input type="radio" name="template" value="2" {% if post and post.template == 2 %}checked{% endif %}>
+                            <div class="template-card">
+                                <div class="template-card-name">Template 2 — Full Width</div>
+                                <div class="template-card-desc">Wide hero image, centered editorial content. Best for visual posts.</div>
+                            </div>
+                        </label>
+                        <label class="template-option">
+                            <input type="radio" name="template" value="3" {% if post and post.template == 3 %}checked{% endif %}>
+                            <div class="template-card">
+                                <div class="template-card-name">Template 3 — Split</div>
+                                <div class="template-card-desc">Title left, hero image right. Magazine-style intro layout.</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <hr class="sidebar-divider">
+
+                <!-- Hero image -->
+                <div class="field">
+                    <label>Hero Image</label>
+                    <input type="text" id="hero_image" name="hero_image" value="{{ post.hero_image if post else '' }}" placeholder="/static/images/blog/photo.jpg">
+                    <div class="field-hint" style="margin-bottom:8px;">Paste a URL or upload below</div>
+                    <label class="upload-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                        Upload Image
+                        <input type="file" id="imageUpload" accept="image/*" style="display:none">
+                    </label>
+                    <div class="image-preview" id="imagePreview">
+                        {% if post and post.hero_image %}
+                        <img src="{{ post.hero_image }}" alt="Hero image" id="heroPreviewImg">
+                        {% endif %}
+                    </div>
+                </div>
+
+                <hr class="sidebar-divider">
+
+                <!-- Actions -->
+                <div class="sidebar-actions">
+                    <button type="button" class="btn btn-publish" onclick="submitPost('published')">
+                        {% if post and post.status == 'published' %}Update Published{% else %}Publish Now{% endif %}
+                    </button>
+                    <button type="button" class="btn btn-draft" onclick="submitPost('draft')">Save as Draft</button>
+                    {% if post %}
+                    <hr class="sidebar-divider" style="margin:4px 0">
+                    <form method="POST" action="{{ url_for('admin_blog_delete', post_id=post.id) }}" onsubmit="return confirm('Delete this post permanently?')">
+                        <button type="submit" class="btn btn-delete" style="width:100%">Delete Post</button>
+                    </form>
+                    {% endif %}
+                </div>
+            </aside>
+        </div>
+    </form>
+
+    <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+    <script>
+        // Quill setup
+        const quill = new Quill('#quill-editor', {
+            theme: 'snow',
+            placeholder: 'Write your post content here…',
+            modules: {
+                toolbar: [
+                    [{ header: [2, 3, false] }],
+                    ['bold', 'italic', 'underline'],
+                    [{ list: 'ordered' }, { list: 'bullet' }],
+                    ['blockquote', 'link', 'image'],
+                    ['clean']
+                ]
+            }
+        });
+
+        // Sync Quill content to hidden input on submit
+        document.getElementById('postForm').addEventListener('formdata', () => {});
+        function getContent() {
+            return quill.root.innerHTML;
+        }
+
+        // Auto-slug from title
+        const titleInput = document.getElementById('title');
+        const slugInput = document.getElementById('slug');
+        const slugPreview = document.getElementById('slug-preview');
+        let slugManuallyEdited = !!slugInput.value;
+
+        titleInput.addEventListener('input', () => {
+            if (!slugManuallyEdited) {
+                const slug = titleInput.value.toLowerCase()
+                    .replace(/[^a-z0-9\s-]/g, '')
+                    .trim().replace(/\s+/g, '-');
+                slugInput.value = slug;
+                slugPreview.textContent = slug || '...';
+            }
+        });
+        slugInput.addEventListener('input', () => {
+            slugManuallyEdited = true;
+            slugPreview.textContent = slugInput.value || '...';
+        });
+
+        // Status toggle
+        function setStatus(status) {
+            document.getElementById('status').value = status;
+            document.getElementById('btn-draft').className = 'status-btn' + (status === 'draft' ? ' active-draft' : '');
+            document.getElementById('btn-published').className = 'status-btn' + (status === 'published' ? ' active-published' : '');
+        }
+
+        // Submit with chosen status
+        function submitPost(status) {
+            setStatus(status);
+            document.getElementById('content').value = getContent();
+            document.getElementById('postForm').submit();
+        }
+
+        // Image upload
+        document.getElementById('imageUpload').addEventListener('change', async function() {
+            const file = this.files[0];
+            if (!file) return;
+            const formData = new FormData();
+            formData.append('file', file);
+            const res = await fetch('{{ url_for("admin_blog_upload_image") }}', { method: 'POST', body: formData });
+            const data = await res.json();
+            if (data.url) {
+                document.getElementById('hero_image').value = data.url;
+                const preview = document.getElementById('imagePreview');
+                preview.innerHTML = `<img src="${data.url}" alt="Hero image" id="heroPreviewImg" style="max-width:100%;border-radius:8px;margin-top:8px;">`;
+            }
+        });
+
+        // Preview hero image URL typed manually
+        document.getElementById('hero_image').addEventListener('change', function() {
+            const url = this.value.trim();
+            const preview = document.getElementById('imagePreview');
+            if (url) {
+                preview.innerHTML = `<img src="${url}" alt="Hero image" style="max-width:100%;border-radius:8px;margin-top:8px;">`;
+            } else {
+                preview.innerHTML = '';
+            }
+        });
+    </script>
+</body>
+</html>

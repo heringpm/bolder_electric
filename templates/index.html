@@ -3098,6 +3098,7 @@
                     <a href="#crew">Team</a>
                     <a href="#contact">Contact</a>
                     <a href="{{ url_for('gallery') }}">Projects</a>
+                    <a href="{{ url_for('blog_index') }}">Blog</a>
                     <a href="{{ url_for('schedule') }}">Schedule</a>
                 </nav>
 
@@ -3727,6 +3728,42 @@
                     <div class="about-video-player" id="aboutVideoPlayer"></div>
                 </div>
             </div>
+
+            {% if latest_posts %}
+            <section class="section" id="blog" style="border-top: 1px solid rgba(241,186,32,0.12);">
+                <div class="container">
+                    <div class="section-head">
+                        <div class="section-tag">Latest from Bolder</div>
+                        <h2>Electrical Tips &amp; Insights</h2>
+                        <p>Expert guides on commercial power, generators, and electrical safety from our licensed team.</p>
+                    </div>
+                    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;">
+                        {% for post in latest_posts %}
+                        <a href="{{ url_for('blog_post', slug=post.slug) }}" style="display:flex;flex-direction:column;border:1px solid rgba(241,186,32,0.18);border-radius:14px;background:linear-gradient(180deg,rgba(17,17,17,0.98) 0%,rgba(10,10,10,0.98) 100%);overflow:hidden;text-decoration:none;transition:transform 0.18s ease,border-color 0.18s ease;" onmouseover="this.style.transform='translateY(-3px)';this.style.borderColor='rgba(241,186,32,0.42)'" onmouseout="this.style.transform='';this.style.borderColor='rgba(241,186,32,0.18)'">
+                            {% if post.hero_image %}
+                            <div style="aspect-ratio:16/9;overflow:hidden;">
+                                <img src="{{ post.hero_image }}" alt="{{ post.title }}" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
+                            </div>
+                            {% else %}
+                            <div style="aspect-ratio:16/9;background:linear-gradient(135deg,rgba(241,186,32,0.07) 0%,rgba(0,0,0,0) 100%);display:flex;align-items:center;justify-content:center;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="rgba(241,186,32,0.25)" stroke-width="1.5"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+                            </div>
+                            {% endif %}
+                            <div style="padding:20px 20px 22px;flex:1;display:flex;flex-direction:column;">
+                                {% if post.published_at %}<div style="font-size:13px;color:#f1ba20;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;">{{ post.published_at[:10] }}</div>{% endif %}
+                                <div style="margin:0 0 10px;font-family:'Bebas Neue',Arial,sans-serif;font-size:24px;line-height:1.05;letter-spacing:0.02em;text-transform:uppercase;">{{ post.title }}</div>
+                                {% if post.excerpt %}<p style="margin:0 0 16px;font-size:15px;line-height:1.5;color:rgba(245,243,239,0.68);flex:1;">{{ post.excerpt }}</p>{% endif %}
+                                <span style="color:#f1ba20;font-family:'Bebas Neue',Arial,sans-serif;font-size:15px;letter-spacing:0.06em;text-transform:uppercase;">Read Article →</span>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                    <div style="text-align:center;margin-top:32px;">
+                        <a href="{{ url_for('blog_index') }}" class="btn btn-secondary">View All Articles</a>
+                    </div>
+                </div>
+            </section>
+            {% endif %}
 
             <section class="section gallery-cta">
                 <div class="container">

@@ -336,6 +336,22 @@ class DatabaseManager:
                     )
                 ''')
 
+                cursor.execute('''
+                    CREATE TABLE IF NOT EXISTS blog_posts (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        title TEXT NOT NULL,
+                        slug TEXT NOT NULL UNIQUE,
+                        excerpt TEXT,
+                        content TEXT,
+                        hero_image TEXT,
+                        template INTEGER DEFAULT 1,
+                        status TEXT DEFAULT 'draft',
+                        published_at TIMESTAMP,
+                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                    )
+                ''')
+
             self._ensure_admin_user_security_columns(cursor)
             self._ensure_contact_submission_columns(cursor)
             conn.commit()
@@ -1276,5 +1292,77 @@ class DatabaseManager:
         conn = self.get_connection()
         cursor = conn.cursor()
         cursor.execute(self._prepare_query('DELETE FROM bookings WHERE id = ?'), (booking_id,))
+        conn.commit()
+        conn.close()
+
+    # ── Blog ──────────────────────────────────────────────────────────────────
+
+    def get_blog_posts(self, status=None, limit=None):
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        if status:
+            q = 'SELECT * FROM blog_posts WHERE status = ? ORDER BY published_at DESC, created_at DESC'
+            params = [status]
+        else:
+            q = 'SELECT * FROM blog_posts ORDER BY created_at DESC'
+            params = []
+        if limit:
+            q += ' LIMIT ?'
+            params.append(limit)
+        cursor.execute(self._prepare_query(q), params)
+        rows = cursor.fetchall()
+        conn.close()
+        return [dict(r) for r in rows]
+
+    def get_blog_post_by_slug(self, slug):
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        cursor.execute(self._prepare_query('SELECT * FROM blog_posts WHERE slug = ? AND status = ?'), (slug, 'published'))
+        row = cursor.fetchone()
+        conn.close()
+        return dict(row) if row else None
+
+    def get_blog_post_by_id(self, post_id):
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        cursor.execute(self._prepare_query('SELECT * FROM blog_posts WHERE id = ?'), (post_id,))
+        row = cursor.fetchone()
+        conn.close()
+        return dict(row) if row else None
+
+    def create_blog_post(self, title, slug, excerpt, content, hero_image, template, status):
+        import datetime
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        published_at = datetime.datetime.utcnow().isoformat() if status == 'published' else None
+        cursor.execute(self._prepare_query('''
+            INSERT INTO blog_posts (title, slug, excerpt, content, hero_image, template, status, published_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        '''), (title, slug, excerpt, content, hero_image, template, status, published_at))
+        post_id = cursor.lastrowid
+        conn.commit()
+        conn.close()
+        return post_id
+
+    def update_blog_post(self, post_id, title, slug, excerpt, content, hero_image, template, status):
+        import datetime
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        existing = self.get_blog_post_by_id(post_id)
+        published_at = existing.get('published_at') if existing else None
+        if status == 'published' and not published_at:
+            published_at = datetime.datetime.utcnow().isoformat()
+        cursor.execute(self._prepare_query('''
+            UPDATE blog_posts
+            SET title=?, slug=?, excerpt=?, content=?, hero_image=?, template=?, status=?, published_at=?, updated_at=CURRENT_TIMESTAMP
+            WHERE id=?
+        '''), (title, slug, excerpt, content, hero_image, template, status, published_at, post_id))
+        conn.commit()
+        conn.close()
+
+    def delete_blog_post(self, post_id):
+        conn = self.get_connection()
+        cursor = conn.cursor()
+        cursor.execute(self._prepare_query('DELETE FROM blog_posts WHERE id = ?'), (post_id,))
         conn.commit()
         conn.close()
