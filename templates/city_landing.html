@@ -82,7 +82,7 @@
         .section-head h2 {
             margin: 0;
             font-family: "Bebas Neue", Arial, sans-serif;
-            font-size: clamp(44px, 4.4vw, 72px);
+            font-size: clamp(48px, 4.5vw, 72px);
             line-height: 0.98;
             letter-spacing: 0.03em;
             text-transform: uppercase;
@@ -270,8 +270,7 @@
         }
         .support-block h4,
         .link-group h4,
-        .opportunity-card h4,
-        .faq-item h4 {
+        .opportunity-card h4 {
             margin: 0 0 8px;
             font-family: "Bebas Neue", Arial, sans-serif;
             font-size: 24px;
@@ -280,9 +279,42 @@
             text-transform: uppercase;
         }
         .support-block p,
-        .opportunity-card p,
-        .faq-item p {
+        .opportunity-card p {
             margin: 0;
+            font-size: 16px;
+            line-height: 1.5;
+            color: rgba(245,243,239,0.76);
+        }
+        .faq-item {
+            border-top: 1px solid rgba(241, 186, 32, 0.12);
+        }
+        .faq-item:first-of-type { border-top: none; }
+        .faq-item summary {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 14px 2px;
+            cursor: pointer;
+            list-style: none;
+            font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: 22px;
+            line-height: 1.1;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            color: var(--text);
+        }
+        .faq-item summary::-webkit-details-marker { display: none; }
+        .faq-item summary::after {
+            content: "+";
+            color: var(--gold);
+            font-size: 24px;
+            font-weight: 300;
+            flex-shrink: 0;
+        }
+        .faq-item[open] summary::after { content: "−"; }
+        .faq-item p {
+            margin: 0 0 14px;
             font-size: 16px;
             line-height: 1.5;
             color: rgba(245,243,239,0.76);
@@ -322,11 +354,6 @@
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
-        }
-        .faq-item + .faq-item {
-            margin-top: 16px;
-            padding-top: 16px;
-            border-top: 1px solid rgba(241, 186, 32, 0.12);
         }
         .cta-row {
             display: flex;
@@ -443,8 +470,8 @@
             .city-card h3 { font-size: 28px; }
             .support-block h4,
             .link-group h4,
-            .opportunity-card h4,
-            .faq-item h4 { font-size: 21px; }
+            .opportunity-card h4 { font-size: 21px; }
+            .faq-item summary { font-size: 19px; }
             .footer-brand { gap: 12px; }
             .footer-brand img { width: 72px; }
             .footer-col ul { gap: 10px 16px; }
@@ -589,10 +616,10 @@
                             <h3>Frequently Asked Questions</h3>
                             <div class="city-card-rule"></div>
                             {% for question, answer in city.faq %}
-                            <div class="faq-item">
-                                <h4>{{ question }}</h4>
+                            <details class="faq-item">
+                                <summary>{{ question }}</summary>
                                 <p>{{ answer }}</p>
-                            </div>
+                            </details>
                             {% endfor %}
                         </article>
                     </div>

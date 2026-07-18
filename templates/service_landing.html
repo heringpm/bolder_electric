@@ -259,21 +259,36 @@
             border-radius: 50%;
             background: linear-gradient(180deg, #ffd86d 0%, #f1ba20 54%, #c28000 100%);
         }
-        .faq-item + .faq-item {
-            margin-top: 16px;
-            padding-top: 16px;
+        .faq-item {
             border-top: 1px solid rgba(241, 186, 32, 0.12);
         }
-        .faq-item h4 {
-            margin: 0 0 8px;
+        .faq-item:first-of-type { border-top: none; }
+        .faq-item summary {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 14px 2px;
+            cursor: pointer;
+            list-style: none;
             font-family: "Bebas Neue", Arial, sans-serif;
-            font-size: 24px;
-            line-height: 1;
+            font-size: 22px;
+            line-height: 1.1;
             letter-spacing: 0.03em;
             text-transform: uppercase;
+            color: var(--text);
         }
+        .faq-item summary::-webkit-details-marker { display: none; }
+        .faq-item summary::after {
+            content: "+";
+            color: var(--gold);
+            font-size: 24px;
+            font-weight: 300;
+            flex-shrink: 0;
+        }
+        .faq-item[open] summary::after { content: "−"; }
         .faq-item p {
-            margin: 0;
+            margin: 0 0 14px;
             font-size: 16px;
             line-height: 1.5;
             color: rgba(245,243,239,0.76);
@@ -422,7 +437,7 @@
             .section-head p { font-size: 15px; }
             .service-card { padding: 16px; }
             .service-card h3 { font-size: 28px; }
-            .faq-item h4 { font-size: 21px; }
+            .faq-item summary { font-size: 19px; }
             .footer-brand { gap: 12px; }
             .footer-brand img { width: 72px; }
             .footer-col ul { gap: 10px 16px; }
@@ -526,10 +541,10 @@
                             <h3>Frequently Asked Questions</h3>
                             <div class="service-card-rule"></div>
                             {% for question, answer in service.faq %}
-                            <div class="faq-item">
-                                <h4>{{ question }}</h4>
+                            <details class="faq-item">
+                                <summary>{{ question }}</summary>
                                 <p>{{ answer }}</p>
-                            </div>
+                            </details>
                             {% endfor %}
                             <div class="service-side-note">
                                 Need a faster answer? Call {{ contact.phone }} or use the new schedule page to send a request and our team will confirm the right next step for your project.
