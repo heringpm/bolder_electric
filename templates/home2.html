@@ -3007,10 +3007,11 @@
                     <a href="#crew">Team</a>
                     <a href="#contact">Contact</a>
                     <a href="{{ url_for('gallery') }}">Projects</a>
+                    <a href="{{ url_for('schedule') }}">Schedule</a>
                 </nav>
 
                 <div class="topbar-actions">
-                    <a class="proposal-link" href="#contact">Request Proposal</a>
+                    <a class="proposal-link" href="{{ url_for('schedule') }}">Request Proposal</a>
                     <a class="phone-link" href="tel:{{ contact.phone|replace('(', '')|replace(')', '')|replace(' ', '')|replace('-', '') }}">
                         <i class="fa-solid fa-phone"></i>
                         <span>{{ contact.phone }}</span>
