@@ -1363,7 +1363,7 @@ class DatabaseManager:
         conn = self.get_connection()
         cursor = conn.cursor()
         published_at = datetime.datetime.utcnow().isoformat() if status == 'published' else None
-        if self.db_type == 'postgres':
+        if self.use_postgres:
             cursor.execute('''
                 INSERT INTO blog_posts (title, slug, excerpt, content, hero_image, pdf_url, template, status, published_at)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id
