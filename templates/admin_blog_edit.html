@@ -330,25 +330,34 @@
         function csrfFetch(url, formData) {
             return fetch(url, { method: 'POST', headers: { 'X-CSRF-Token': csrfToken }, body: formData });
         }
-        // Quill setup
-        const quill = new Quill('#quill-editor', {
-            theme: 'snow',
-            placeholder: 'Write your post content here…',
-            modules: {
-                toolbar: [
-                    [{ header: [2, 3, false] }],
-                    ['bold', 'italic', 'underline'],
-                    [{ list: 'ordered' }, { list: 'bullet' }],
-                    ['blockquote', 'link', 'image'],
-                    ['clean']
-                ]
-            }
-        });
 
-        // Sync Quill content to hidden input on submit
-        document.getElementById('postForm').addEventListener('formdata', () => {});
+        // Quill setup — wrapped so a CDN failure doesn't break the whole page
+        let quill = null;
+        try {
+            quill = new Quill('#quill-editor', {
+                theme: 'snow',
+                placeholder: 'Write your post content here…',
+                modules: {
+                    toolbar: [
+                        [{ header: [2, 3, false] }],
+                        ['bold', 'italic', 'underline'],
+                        [{ list: 'ordered' }, { list: 'bullet' }],
+                        ['blockquote', 'link', 'image'],
+                        ['clean']
+                    ]
+                }
+            });
+            // Keep hidden input in sync as user types
+            quill.on('text-change', () => {
+                document.getElementById('content').value = quill.root.innerHTML;
+            });
+        } catch(e) {
+            console.warn('Quill failed to load, falling back to plain textarea', e);
+        }
+
         function getContent() {
-            return quill.root.innerHTML;
+            if (quill) return quill.root.innerHTML;
+            return document.getElementById('content').value;
         }
 
         // Auto-slug from title
