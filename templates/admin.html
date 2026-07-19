@@ -715,13 +715,16 @@
                         </td>
                         <td>Template {{ post.template }}</td>
                         <td>{{ post.published_at[:10] if post.published_at else '—' }}</td>
-                        <td>
+                        <td style="white-space:nowrap;">
                             <a href="{{ url_for('admin_blog_edit', post_id=post.id) }}"
                                style="color:var(--primary-gold);margin-right:12px;">Edit</a>
-                            {% if post.status == 'published' %}
                             <a href="{{ url_for('blog_post', slug=post.slug) }}" target="_blank"
-                               style="color:rgba(245,243,239,0.5);">View →</a>
-                            {% endif %}
+                               style="color:rgba(245,243,239,0.6);margin-right:12px;">View →</a>
+                            <form method="POST" action="{{ url_for('admin_blog_delete', post_id=post.id) }}"
+                                  style="display:inline;" onsubmit="return confirm('Delete this post permanently?')">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" style="background:none;border:none;color:rgba(220,80,80,0.7);cursor:pointer;font-size:13px;padding:0;">Delete</button>
+                            </form>
                         </td>
                     </tr>
                     {% else %}

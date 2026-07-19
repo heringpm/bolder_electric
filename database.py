@@ -1363,11 +1363,18 @@ class DatabaseManager:
         conn = self.get_connection()
         cursor = conn.cursor()
         published_at = datetime.datetime.utcnow().isoformat() if status == 'published' else None
-        cursor.execute(self._prepare_query('''
-            INSERT INTO blog_posts (title, slug, excerpt, content, hero_image, pdf_url, template, status, published_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-        '''), (title, slug, excerpt, content, hero_image, pdf_url, template, status, published_at))
-        post_id = cursor.lastrowid
+        if self.db_type == 'postgres':
+            cursor.execute('''
+                INSERT INTO blog_posts (title, slug, excerpt, content, hero_image, pdf_url, template, status, published_at)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id
+            ''', (title, slug, excerpt, content, hero_image, pdf_url, template, status, published_at))
+            post_id = cursor.fetchone()[0]
+        else:
+            cursor.execute('''
+                INSERT INTO blog_posts (title, slug, excerpt, content, hero_image, pdf_url, template, status, published_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ''', (title, slug, excerpt, content, hero_image, pdf_url, template, status, published_at))
+            post_id = cursor.lastrowid
         conn.commit()
         conn.close()
         return post_id
