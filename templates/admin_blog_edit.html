@@ -175,6 +175,26 @@
         <a class="back-link" href="{{ url_for('admin') }}">← Back to Admin</a>
     </header>
 
+    <!-- PDF upload — must be OUTSIDE the main post form (browsers ignore nested forms) -->
+    {% if not post or not post.pdf_url %}
+    <div style="max-width:900px;margin:24px auto 0;padding:0 24px;">
+        <div style="padding:16px 20px;background:rgba(241,186,32,0.06);border:1px solid rgba(241,186,32,0.25);border-radius:10px;">
+            <div style="font-family:'Bebas Neue',Arial,sans-serif;font-size:17px;letter-spacing:0.08em;color:#f1ba20;margin-bottom:10px;">UPLOAD A PDF INSTEAD OF WRITING</div>
+            <form method="POST" action="{{ url_for('admin_blog_upload_pdf') }}" enctype="multipart/form-data" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <input type="file" name="file" accept=".pdf" required
+                    style="flex:1;min-width:200px;padding:8px 10px;background:rgba(0,0,0,0.3);border:1px solid rgba(241,186,32,0.3);border-radius:6px;color:rgba(245,243,239,0.8);font:inherit;font-size:14px;">
+                <button type="submit"
+                    style="white-space:nowrap;padding:9px 22px;border-radius:8px;border:1px solid rgba(241,186,32,0.7);background:rgba(241,186,32,0.12);color:#f1ba20;font-family:'Bebas Neue',Arial,sans-serif;font-size:17px;letter-spacing:0.06em;cursor:pointer;">
+                    Upload &amp; Create Draft
+                </button>
+            </form>
+            <div style="margin-top:8px;font-size:13px;color:rgba(245,243,239,0.45);">Saves the PDF and opens a draft — add title, excerpt, then publish.</div>
+        </div>
+        <div style="text-align:center;margin:16px 0 0;font-size:13px;color:rgba(245,243,239,0.35);letter-spacing:0.06em;">— OR WRITE A POST BELOW —</div>
+    </div>
+    {% endif %}
+
     <form id="postForm" method="POST">
         <div class="editor-shell">
             <!-- Main editor area -->
@@ -211,24 +231,6 @@
 
                 <div class="field">
                     <label>{% if post and post.pdf_url %}Additional Content (optional){% else %}Content{% endif %}</label>
-
-                    <!-- PDF import — plain HTML form, no JS required -->
-                    {% if not post or not post.pdf_url %}
-                    <div style="margin-bottom:12px;padding:14px 16px;background:rgba(241,186,32,0.06);border:1px solid rgba(241,186,32,0.22);border-radius:8px;">
-                        <div style="font-family:'Bebas Neue',Arial,sans-serif;font-size:16px;letter-spacing:0.08em;color:#f1ba20;margin-bottom:8px;">IMPORT FROM PDF INSTEAD</div>
-                        <form method="POST" action="{{ url_for('admin_blog_upload_pdf') }}" enctype="multipart/form-data" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                            <input type="file" name="file" accept=".pdf" required
-                                style="flex:1;min-width:0;padding:8px 10px;background:rgba(0,0,0,0.3);border:1px solid rgba(241,186,32,0.3);border-radius:6px;color:rgba(245,243,239,0.8);font:inherit;font-size:14px;">
-                            <button type="submit"
-                                style="white-space:nowrap;padding:8px 18px;border-radius:8px;border:1px solid rgba(241,186,32,0.7);background:rgba(241,186,32,0.1);color:#f1ba20;font-family:'Bebas Neue',Arial,sans-serif;font-size:17px;letter-spacing:0.06em;cursor:pointer;">
-                                Upload &amp; Create Draft
-                            </button>
-                        </form>
-                        <div style="margin-top:8px;font-size:13px;color:rgba(245,243,239,0.5);">Uploads the PDF and opens a draft post — add your title and excerpt, then publish.</div>
-                    </div>
-                    <div style="text-align:center;margin-bottom:12px;font-size:13px;color:rgba(245,243,239,0.4);letter-spacing:0.06em;">— OR WRITE CONTENT BELOW —</div>
-                    {% endif %}
 
                     <div class="quill-wrap">
                         <div id="quill-editor">{{ post.content | safe if post and post.content else '' }}</div>
