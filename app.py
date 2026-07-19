@@ -1299,30 +1299,48 @@ def admin_blog_upload_image():
 @app.route('/admin/blog/upload-pdf', methods=['POST'])
 @login_required
 def admin_blog_upload_pdf():
+    import os, re, time, tempfile
+    import fitz  # PyMuPDF
+    from werkzeug.utils import secure_filename
+
     file = request.files.get('file')
     if not file or not file.filename.lower().endswith('.pdf'):
         flash('Please select a PDF file.', 'error')
         return redirect(url_for('admin_blog_new'))
 
-    import os, time
-    from werkzeug.utils import secure_filename
-
-    save_dir = os.path.join('static', 'files', 'blog')
-    os.makedirs(save_dir, exist_ok=True)
-
     base_name = secure_filename(os.path.splitext(file.filename)[0])
     ts = str(int(time.time()))
-    filename = f'{base_name}-{ts}.pdf'
-    file.save(os.path.join(save_dir, filename))
 
-    pdf_url = f'/static/files/blog/{filename}'
-
-    # Auto-generate title from filename
+    # Parse PDF into HTML content
+    pdf_bytes = file.read()
+    content_html = ''
     raw_title = base_name.replace('-', ' ').replace('_', ' ').title()
-    import re
-    slug = re.sub(r'[^a-z0-9]+', '-', raw_title.lower()).strip('-') + f'-{ts}'
+    try:
+        with fitz.open(stream=pdf_bytes, filetype='pdf') as doc:
+            # Use first page's first non-empty line as title if available
+            first_page_text = doc[0].get_text() if len(doc) > 0 else ''
+            lines = [l.strip() for l in first_page_text.splitlines() if l.strip()]
+            if lines:
+                raw_title = lines[0]
 
-    post_id = db.create_blog_post(raw_title, slug, '', '', '', 1, 'draft', pdf_url=pdf_url)
+            paragraphs = []
+            for page in doc:
+                blocks = page.get_text('blocks')
+                for block in blocks:
+                    text = block[4].strip()
+                    if text:
+                        # Each block becomes a paragraph; preserve line breaks within
+                        inner = '<br>'.join(l.strip() for l in text.splitlines() if l.strip())
+                        paragraphs.append(f'<p>{inner}</p>')
+
+            content_html = '\n'.join(paragraphs)
+    except Exception as e:
+        app.logger.error(f'PDF parse error: {e}')
+        flash('Could not parse the PDF — please copy and paste the content manually.', 'error')
+        return redirect(url_for('admin_blog_new'))
+
+    slug = re.sub(r'[^a-z0-9]+', '-', raw_title.lower()).strip('-') + f'-{ts}'
+    post_id = db.create_blog_post(raw_title, slug, '', content_html, '', 1, 'draft')
     return redirect(url_for('admin_blog_edit', post_id=post_id))
 
 @app.route('/gallery')
