@@ -28,7 +28,7 @@
       "headline": {{ post.title | tojson }},
       "description": {{ (post.excerpt or '') | tojson }},
       "url": "https://bolderelectric.com/blog/{{ post.slug }}",
-      {% if post.published_at %}"datePublished": {{ post.published_at[:10] | tojson }},{% endif %}
+      {% if post.published_at %}"datePublished": {{ post.published_at | string | truncate(10, killwords=True, end="") | tojson }},{% endif %}
       {% if post.hero_image %}"image": "https://bolderelectric.com{{ post.hero_image }}",{% endif %}
       "publisher": {
         "@type": "Organization",
@@ -245,7 +245,7 @@
                     <div class="gold-rule"></div>
                     {% if post.published_at %}
                     <div class="post-meta">
-                        <span class="date">{{ post.published_at[:10] }}</span>
+                        <span class="date">{{ post.published_at | string | truncate(10, killwords=True, end="") }}</span>
                         <span>Bolder Electric</span>
                     </div>
                     {% endif %}

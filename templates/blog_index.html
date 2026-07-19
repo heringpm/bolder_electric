@@ -248,7 +248,7 @@
                         </div>
                         <div class="blog-card-body">
                             {% if post.published_at %}
-                            <div class="blog-card-date">{{ post.published_at[:10] }}</div>
+                            <div class="blog-card-date">{{ post.published_at | string | truncate(10, killwords=True, end="") }}</div>
                             {% endif %}
                             <h2 class="blog-card-title">{{ post.title }}</h2>
                             {% if post.excerpt %}
