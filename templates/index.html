@@ -3750,7 +3750,7 @@
                             </div>
                             {% endif %}
                             <div style="padding:20px 20px 22px;flex:1;display:flex;flex-direction:column;">
-                                {% if post.published_at %}<div style="font-size:13px;color:#f1ba20;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;">{{ post.published_at[:10] }}</div>{% endif %}
+                                {% if post.published_at %}<div style="font-size:13px;color:#f1ba20;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px;">{{ post.published_at | string | truncate(10, killwords=True, end="") }}</div>{% endif %}
                                 <div style="margin:0 0 10px;font-family:'Bebas Neue',Arial,sans-serif;font-size:24px;line-height:1.05;letter-spacing:0.02em;text-transform:uppercase;">{{ post.title }}</div>
                                 {% if post.excerpt %}<p style="margin:0 0 16px;font-size:15px;line-height:1.5;color:rgba(245,243,239,0.68);flex:1;">{{ post.excerpt }}</p>{% endif %}
                                 <span style="color:#f1ba20;font-family:'Bebas Neue',Arial,sans-serif;font-size:15px;letter-spacing:0.06em;text-transform:uppercase;">Read Article →</span>
