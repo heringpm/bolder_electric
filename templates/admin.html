@@ -929,6 +929,7 @@
             }
 
             currentSection = section;
+            history.replaceState(null, '', '#' + section);
             if (section === 'services') loadServices();
             if (section === 'availability') loadTimeSlots();
             if (section === 'bookings') loadBookings();
@@ -1754,12 +1755,14 @@
         document.addEventListener('DOMContentLoaded', function() {
             setupGalleryHandlers();
             setupUserHandlers();
-            const tab = new URLSearchParams(window.location.search).get('tab');
-            const adminTabs = ['services', 'availability', 'bookings', 'contacts', 'settings', 'gallery', 'users', 'logs'];
+            const adminTabs = ['services', 'availability', 'bookings', 'contacts', 'settings', 'gallery', 'blog', 'users', 'logs'];
             const limitedTabs = ['bookings', 'contacts'];
             const validTabs = currentUserRole === 'admin' ? adminTabs : limitedTabs;
-            if (tab && validTabs.includes(tab)) {
-                showSection(tab);
+            const hash = window.location.hash.replace('#', '');
+            const tab = new URLSearchParams(window.location.search).get('tab');
+            const target = (hash && validTabs.includes(hash)) ? hash : (tab && validTabs.includes(tab)) ? tab : null;
+            if (target) {
+                showSection(target);
             } else {
                 showSection(currentSection);
             }
