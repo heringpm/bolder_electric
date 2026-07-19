@@ -311,8 +311,11 @@
                     </button>
                     <button type="button" class="btn btn-draft" onclick="submitPost('draft')">Save as Draft</button>
                     {% if post %}
+                    <button type="button" class="btn btn-draft" style="background:rgba(241,186,32,0.07);color:var(--gold);border:1px solid rgba(241,186,32,0.4);"
+                            onclick="saveAndPreview()">Preview →</button>
                     <hr class="sidebar-divider" style="margin:4px 0">
                     <form method="POST" action="{{ url_for('admin_blog_delete', post_id=post.id) }}" onsubmit="return confirm('Delete this post permanently?')">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                         <button type="submit" class="btn btn-delete" style="width:100%">Delete Post</button>
                     </form>
                     {% endif %}
@@ -380,6 +383,20 @@
             setStatus(status);
             document.getElementById('content').value = getContent();
             document.getElementById('postForm').submit();
+        }
+
+        function saveAndPreview() {
+            document.getElementById('content').value = getContent();
+            const form = document.getElementById('postForm');
+            const prev = form.target;
+            form.target = '_blank';
+            // Temporarily add a hidden field to signal preview redirect
+            const h = document.createElement('input');
+            h.type = 'hidden'; h.name = '_preview'; h.value = '1';
+            form.appendChild(h);
+            form.submit();
+            form.target = prev;
+            form.removeChild(h);
         }
 
         // Image upload

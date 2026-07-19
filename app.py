@@ -1238,6 +1238,14 @@ def blog_post(slug):
         abort(404)
     return render_template(f'blog_template_{post["template"]}.html', post=post)
 
+@app.route('/admin/blog/<int:post_id>/preview')
+@login_required
+def admin_blog_preview(post_id):
+    post = db.get_blog_post_by_id(post_id)
+    if not post:
+        abort(404)
+    return render_template(f'blog_template_{post["template"]}.html', post=post)
+
 # ── Admin blog routes ─────────────────────────────────────────────────────────
 
 @app.route('/admin/blog/new', methods=['GET', 'POST'])
@@ -1254,8 +1262,8 @@ def admin_blog_new():
         if not slug:
             import re
             slug = re.sub(r'[^a-z0-9]+', '-', title.lower()).strip('-')
-        db.create_blog_post(title, slug, excerpt, content, hero_image, template, status)
-        return redirect(url_for('admin') + '#blog')
+        post_id = db.create_blog_post(title, slug, excerpt, content, hero_image, template, status)
+        return redirect(url_for('admin_blog_edit', post_id=post_id) + '?saved=1')
     return render_template('admin_blog_edit.html', post=None)
 
 @app.route('/admin/blog/<int:post_id>/edit', methods=['GET', 'POST'])
@@ -1273,6 +1281,8 @@ def admin_blog_edit(post_id):
         template = int(request.form.get('template', 1))
         status = request.form.get('status', 'draft')
         db.update_blog_post(post_id, title, slug, excerpt, content, hero_image, template, status)
+        if request.form.get('_preview'):
+            return redirect(url_for('admin_blog_preview', post_id=post_id))
         return redirect(url_for('admin_blog_edit', post_id=post_id) + '?saved=1')
     return render_template('admin_blog_edit.html', post=post)
 
