@@ -459,11 +459,11 @@
             blockEl.draggable = true;
             blockEl.style.gridColumn = `span ${block.colSpan || 1}`;
 
-            // For images, use block display without flex to avoid spacing issues
+            // For images, align to top with no padding or minimum height
             if (block.type === 'image') {
-                blockEl.style.display = 'block';
                 blockEl.style.padding = '0';
-                blockEl.style.position = 'relative';
+                blockEl.style.minHeight = 'auto';
+                blockEl.style.justifyContent = 'flex-start';
             }
 
             const content = document.createElement('div');
@@ -504,11 +504,7 @@
                 img.style.margin = '0';
                 if (block.align === 'center') img.style.margin = '0 auto';
 
-                // Position image content at the very top
-                content.style.position = 'absolute';
-                content.style.top = '0';
-                content.style.left = '0';
-                content.style.right = '0';
+                // Remove all spacing from image content
                 content.style.margin = '0';
                 content.style.padding = '0';
                 content.style.lineHeight = '0';
