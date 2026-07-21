@@ -263,7 +263,10 @@
                             fontSize: parseInt(node.style.fontSize) || 16,
                             align: node.style.textAlign || 'left',
                             bold: node.style.fontWeight === 'bold',
-                            colSpan: 1
+                            colSpan: 1,
+                            fontFamily: node.style.fontFamily || 'inherit',
+                            color: node.style.color || '#f5f3ef',
+                            marginBottom: parseInt(node.style.marginBottom) || 16
                         });
                     } else if (node.tagName === 'IMG') {
                         blocks.push({
@@ -272,7 +275,8 @@
                             alt: node.alt || 'Image',
                             maxWidth: parseInt(node.style.maxWidth) || 100,
                             align: 'center',
-                            colSpan: 1
+                            colSpan: 1,
+                            marginBottom: parseInt(node.style.marginBottom) || 16
                         });
                     }
                 }
@@ -323,6 +327,9 @@
                 content.innerHTML = block.content;
                 content.style.fontSize = block.fontSize + 'px';
                 content.style.textAlign = block.align;
+                content.style.fontFamily = block.fontFamily || 'inherit';
+                content.style.color = block.color || '#f5f3ef';
+                content.style.marginBottom = (block.marginBottom || 16) + 'px';
                 if (block.bold) content.style.fontWeight = 'bold';
             } else if (block.type === 'image') {
                 const img = document.createElement('img');
@@ -403,7 +410,36 @@
                 controls.innerHTML = `
                     <div class="control-group">
                         <label class="control-label">Content (HTML)</label>
-                        <textarea id="textEditor" style="width:100%;height:200px;padding:10px;background:rgba(0,0,0,0.3);border:1px solid rgba(241,186,32,0.3);border-radius:6px;color:#f5f3ef;font-family:monospace;font-size:12px;resize:vertical;" placeholder="Edit text here...">${block.content}</textarea>
+                        <textarea id="textEditor" style="width:100%;height:150px;padding:10px;background:rgba(0,0,0,0.3);border:1px solid rgba(241,186,32,0.3);border-radius:6px;color:#f5f3ef;font-family:monospace;font-size:12px;resize:vertical;" placeholder="Edit text here...">${block.content}</textarea>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Font Size</label>
+                        <div class="slider-group">
+                            <input type="range" min="12" max="48" value="${block.fontSize}" oninput="updateFontSize(this.value)" id="fontSizeSlider">
+                            <span class="slider-value" id="fontSizeValue">${block.fontSize}px</span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Font Family</label>
+                        <select class="control-input" onchange="updateFontFamily(this.value)" style="padding:8px;">
+                            <option value="inherit" ${block.fontFamily === 'inherit' ? 'selected' : ''}>Default</option>
+                            <option value="Georgia, serif" ${block.fontFamily === 'Georgia, serif' ? 'selected' : ''}>Georgia (Serif)</option>
+                            <option value="Arial, sans-serif" ${block.fontFamily === 'Arial, sans-serif' ? 'selected' : ''}>Arial (Sans)</option>
+                            <option value="'Courier New', monospace" ${block.fontFamily === "'Courier New', monospace" ? 'selected' : ''}>Courier (Mono)</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Text Color</label>
+                        <div style="display:flex;gap:8px;align-items:center;">
+                            <input type="color" id="colorPicker" value="${block.color}" onchange="updateTextColor(this.value)" style="width:100%;height:40px;border:1px solid rgba(241,186,32,0.3);border-radius:4px;cursor:pointer;">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Bottom Spacing (px)</label>
+                        <div class="slider-group">
+                            <input type="range" min="0" max="60" value="${block.marginBottom}" oninput="updateMargin(this.value)" id="marginSlider">
+                            <span class="slider-value" id="marginValue">${block.marginBottom}px</span>
+                        </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label">Formatting</label>
@@ -417,17 +453,13 @@
                             <button class="align-btn ${block.align === 'right' ? 'active' : ''}" onclick="setAlign('right')">Right</button>
                         </div>
                     </div>
-                    <div class="control-group">
-                        <label class="control-label">Font Size</label>
-                        <div class="slider-group">
-                            <input type="range" min="12" max="48" value="${block.fontSize}" oninput="updateFontSize(this.value)">
-                            <span class="slider-value">${block.fontSize}px</span>
-                        </div>
-                    </div>
                 `;
 
                 setTimeout(() => {
                     const textEditor = document.getElementById('textEditor');
+                    const fontSlider = document.getElementById('fontSizeSlider');
+                    const marginSlider = document.getElementById('marginSlider');
+
                     if (textEditor) {
                         textEditor.addEventListener('input', () => {
                             block.content = textEditor.value;
@@ -436,6 +468,18 @@
                             block.content = textEditor.value;
                         });
                         textEditor.focus();
+                    }
+
+                    if (fontSlider) {
+                        fontSlider.addEventListener('input', (e) => {
+                            document.getElementById('fontSizeValue').textContent = e.target.value + 'px';
+                        });
+                    }
+
+                    if (marginSlider) {
+                        marginSlider.addEventListener('input', (e) => {
+                            document.getElementById('marginValue').textContent = e.target.value + 'px';
+                        });
                     }
                 }, 50);
             } else if (block.type === 'image') {
@@ -512,6 +556,24 @@
             renderCanvas();
         }
 
+        function updateFontFamily(val) {
+            const block = blocks.find(b => b.id === selectedBlockId);
+            block.fontFamily = val;
+            renderCanvas();
+        }
+
+        function updateTextColor(val) {
+            const block = blocks.find(b => b.id === selectedBlockId);
+            block.color = val;
+            renderCanvas();
+        }
+
+        function updateMargin(val) {
+            const block = blocks.find(b => b.id === selectedBlockId);
+            block.marginBottom = parseInt(val);
+            renderCanvas();
+        }
+
         function toggleBold() {
             const block = blocks.find(b => b.id === selectedBlockId);
             block.bold = !block.bold;
@@ -558,9 +620,9 @@
 
             const html = blocks.map(block => {
                 if (block.type === 'text') {
-                    return `<p style="text-align:${block.align};font-size:${block.fontSize}px;${block.bold ? 'font-weight:bold;' : ''}">${block.content}</p>`;
+                    return `<p style="text-align:${block.align};font-size:${block.fontSize}px;font-family:${block.fontFamily || 'inherit'};color:${block.color || '#f5f3ef'};margin-bottom:${block.marginBottom || 16}px;${block.bold ? 'font-weight:bold;' : ''}">${block.content}</p>`;
                 } else {
-                    return `<img src="${block.src}" alt="${block.alt}" style="max-width:${block.maxWidth}%;height:auto;${block.align === 'center' ? 'display:block;margin:0 auto;' : ''}border-radius:8px;">`;
+                    return `<img src="${block.src}" alt="${block.alt}" style="max-width:${block.maxWidth}%;height:auto;margin-bottom:${block.marginBottom || 16}px;${block.align === 'center' ? 'display:block;margin-left:auto;margin-right:auto;' : ''}border-radius:8px;">`;
                 }
             }).join('\n');
 
