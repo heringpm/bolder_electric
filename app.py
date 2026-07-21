@@ -1263,8 +1263,9 @@ def admin_blog_new():
             import re
             slug = re.sub(r'[^a-z0-9]+', '-', title.lower()).strip('-')
         post_id = db.create_blog_post(title, slug, excerpt, content, hero_image, template, status)
-        return redirect(url_for('admin_blog_edit', post_id=post_id) + '?saved=1')
-    return render_template('admin_blog_edit.html', post=None)
+        return redirect(url_for('admin_blog_edit_blocks', post_id=post_id) + '?saved=1')
+    empty_post = {'id': 0, 'title': '', 'slug': '', 'excerpt': '', 'content': '', 'hero_image': '', 'template': 1, 'status': 'draft'}
+    return render_template('admin_blog_edit_blocks.html', post=empty_post)
 
 @app.route('/admin/blog/<int:post_id>/edit-blocks')
 @login_required
@@ -1289,10 +1290,8 @@ def admin_blog_edit(post_id):
         template = int(request.form.get('template', 1))
         status = request.form.get('status', 'draft')
         db.update_blog_post(post_id, title, slug, excerpt, content, hero_image, template, status)
-        if request.form.get('_preview'):
-            return redirect(url_for('admin_blog_preview', post_id=post_id))
         return redirect(url_for('admin_blog_edit', post_id=post_id) + '?saved=1')
-    return render_template('admin_blog_edit.html', post=post)
+    return render_template('admin_blog_edit_blocks.html', post=post)
 
 @app.route('/admin/blog/<int:post_id>/delete', methods=['POST'])
 @login_required
