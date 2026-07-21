@@ -504,10 +504,12 @@
                 img.style.margin = '0';
                 if (block.align === 'center') img.style.margin = '0 auto';
 
-                // Remove default spacing from content container for images
+                // Make content div block-level with no spacing or growth
+                content.style.display = 'block';
                 content.style.margin = '0';
                 content.style.padding = '0';
                 content.style.lineHeight = '0';
+                content.style.height = 'auto';
 
                 // Apply crop using clip-path if crop values are set
                 const cropTop = block.cropTop || 0;
