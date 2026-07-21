@@ -419,8 +419,12 @@
                 `;
 
                 setTimeout(() => {
+                    const editorDiv = document.getElementById('editor');
+                    if (!editorDiv) return;
+
                     const editor = new Quill('#editor', {
                         theme: 'snow',
+                        placeholder: 'Start typing...',
                         modules: {
                             toolbar: [
                                 [{ 'header': [2, 3, false] }],
@@ -430,11 +434,22 @@
                             ]
                         }
                     });
-                    editor.root.innerHTML = block.content;
+
+                    // Set initial content
+                    setTimeout(() => {
+                        editor.root.innerHTML = block.content;
+                    }, 50);
+
+                    // Track changes
                     editor.on('text-change', () => {
                         block.content = editor.root.innerHTML;
                     });
-                }, 0);
+
+                    // Also save when editor loses focus
+                    editor.root.addEventListener('blur', () => {
+                        block.content = editor.root.innerHTML;
+                    }, true);
+                }, 100);
             } else if (block.type === 'image') {
                 controls.innerHTML = `
                     <div class="control-group">
