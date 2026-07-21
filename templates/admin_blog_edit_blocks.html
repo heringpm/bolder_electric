@@ -467,6 +467,59 @@
             const content = document.createElement('div');
             content.className = 'block-content';
 
+            // For images, skip the content wrapper and add image directly to blockEl
+            if (block.type === 'image') {
+                const img = document.createElement('img');
+                img.src = block.src;
+                img.alt = block.alt;
+                img.style.maxWidth = block.maxWidth + '%';
+                img.style.height = block.height ? block.height + 'px' : 'auto';
+                img.style.display = 'block';
+                img.style.margin = '0';
+                if (block.align === 'center') img.style.margin = '0 auto';
+
+                // Apply crop using clip-path if crop values are set
+                const cropTop = block.cropTop || 0;
+                const cropBottom = block.cropBottom || 0;
+                const cropLeft = block.cropLeft || 0;
+                const cropRight = block.cropRight || 0;
+                if (cropTop || cropBottom || cropLeft || cropRight) {
+                    img.style.clipPath = `inset(${cropTop}% ${cropRight}% ${cropBottom}% ${cropLeft}%)`;
+                }
+
+                // Create resize handle
+                const resizeHandle = document.createElement('div');
+                resizeHandle.style.position = 'absolute';
+                resizeHandle.style.bottom = '4px';
+                resizeHandle.style.right = '4px';
+                resizeHandle.style.width = '16px';
+                resizeHandle.style.height = '16px';
+                resizeHandle.style.background = 'rgba(241,186,32,0.5)';
+                resizeHandle.style.cursor = 'se-resize';
+                resizeHandle.style.borderRadius = '2px';
+                resizeHandle.title = 'Drag to resize';
+
+                blockEl.style.position = 'relative';
+                blockEl.appendChild(img);
+                blockEl.appendChild(resizeHandle);
+                blockEl.appendChild(overlay);
+                blockEl.addEventListener('click', () => selectBlock(block.id));
+
+                block._img = img;
+
+                resizeHandle.addEventListener('mousedown', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    isResizingImage = true;
+                    resizeStartY = e.clientY;
+                    resizeStartHeight = block.height || 200;
+                    resizeBlockId = block.id;
+                    document.body.style.cursor = 'se-resize';
+                });
+
+                return blockEl;
+            }
+
             if (block.type === 'text') {
                 content.contentEditable = true;
                 content.innerHTML = block.content;
@@ -491,76 +544,6 @@
                 content.addEventListener('click', (e) => {
                     e.stopPropagation();
                     selectBlock(block.id);
-                });
-            } else if (block.type === 'image') {
-                const img = document.createElement('img');
-                img.src = block.src;
-                img.alt = block.alt;
-                img.style.maxWidth = block.maxWidth + '%';
-                img.style.height = block.height ? block.height + 'px' : 'auto';
-                img.style.display = 'block';
-                img.style.margin = '0';
-                img.style.verticalAlign = 'top';
-                if (block.align === 'center') img.style.margin = '0 auto';
-
-                // Minimal styling for image content
-                content.style.margin = '0';
-                content.style.padding = '0';
-
-                // Apply crop using clip-path if crop values are set
-                const cropTop = block.cropTop || 0;
-                const cropBottom = block.cropBottom || 0;
-                const cropLeft = block.cropLeft || 0;
-                const cropRight = block.cropRight || 0;
-                if (cropTop || cropBottom || cropLeft || cropRight) {
-                    img.style.clipPath = `inset(${cropTop}% ${cropRight}% ${cropBottom}% ${cropLeft}%)`;
-
-                    // Adjust container height to hide the padding from cropped areas
-                    if (block.height) {
-                        const visibleHeightPercent = 100 - cropTop - cropBottom;
-                        content.style.height = (block.height * visibleHeightPercent / 100) + 'px';
-                    }
-                }
-
-                content.appendChild(img);
-
-                // Add resize handle
-                const resizeHandle = document.createElement('div');
-                resizeHandle.style.position = 'absolute';
-                resizeHandle.style.bottom = '4px';
-                resizeHandle.style.right = '4px';
-                resizeHandle.style.width = '16px';
-                resizeHandle.style.height = '16px';
-                resizeHandle.style.background = 'rgba(241,186,32,0.5)';
-                resizeHandle.style.cursor = 'se-resize';
-                resizeHandle.style.borderRadius = '2px';
-                resizeHandle.title = 'Drag to resize';
-
-                // Position content as relative for the resize handle, with overflow hidden
-                content.style.position = 'relative';
-                content.style.display = 'inline-block';
-                content.style.overflow = 'hidden';
-                if (block.align === 'center') {
-                    content.style.display = 'block';
-                    content.style.width = block.maxWidth + '%';
-                    content.style.margin = '0 auto';
-                }
-
-                content.appendChild(resizeHandle);
-
-                // Store reference for resize handler
-                block._contentElement = content;
-                block._img = img;
-
-                // Mouse down on resize handle
-                resizeHandle.addEventListener('mousedown', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    isResizingImage = true;
-                    resizeStartY = e.clientY;
-                    resizeStartHeight = block.height || img.naturalHeight || 200;
-                    resizeBlockId = block.id;
-                    document.body.style.cursor = 'se-resize';
                 });
             }
 
