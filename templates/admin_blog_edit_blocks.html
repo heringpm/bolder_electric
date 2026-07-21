@@ -6,22 +6,20 @@
     <title>Blog Editor | Bolder Electric Admin</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
-
-    <!-- GrapesJS CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/grapesjs@0.21.13/dist/css/grapes.min.css">
     <style>
         :root {
             --bg: #0a0a0a;
             --panel: #111;
-            --panel2: #161616;
-            --line: rgba(241,186,32,0.22);
             --gold: #f1ba20;
             --text: #f5f3ef;
             --muted: rgba(245,243,239,0.6);
+            --line: rgba(241,186,32,0.22);
         }
 
         * { box-sizing: border-box; }
         body { margin: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; }
+
+        .container { display: flex; height: 100vh; flex-direction: column; }
 
         .header {
             background: var(--panel);
@@ -39,6 +37,7 @@
             border: none;
             color: var(--text);
             flex: 1;
+            padding: 8px 0;
         }
 
         .title-input:focus { outline: none; color: var(--gold); }
@@ -52,180 +51,245 @@
             cursor: pointer;
             font-size: 12px;
             font-weight: bold;
+            white-space: nowrap;
         }
 
         .btn:hover { background: rgba(241,186,32,0.2); }
         .btn.primary { background: rgba(241,186,32,0.25); }
 
-        #editor { height: calc(100vh - 60px); }
+        .editor-area { display: flex; flex: 1; overflow: hidden; }
 
-        /* Theme customization for GrapesJS */
-        .gjs-editor-cont {
-            background: var(--bg) !important;
+        .sidebar {
+            width: 220px;
+            background: rgba(0,0,0,0.3);
+            border-right: 1px solid var(--line);
+            padding: 20px 16px;
+            overflow-y: auto;
         }
 
-        .gjs-panel__top {
-            background: var(--panel) !important;
-            border-bottom: 1px solid var(--line) !important;
+        .sidebar-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--gold);
+            margin-bottom: 12px;
+            font-weight: bold;
         }
 
-        .gjs-pn-panel {
-            background: var(--panel2) !important;
-            border-color: var(--line) !important;
+        .add-btn {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 8px;
+            background: rgba(241,186,32,0.15);
+            border: 1px solid rgba(241,186,32,0.3);
+            color: var(--gold);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            transition: all 0.2s;
         }
 
-        .gjs-pn-btn {
-            color: var(--muted) !important;
+        .add-btn:hover { background: rgba(241,186,32,0.25); border-color: rgba(241,186,32,0.5); }
+
+        .canvas {
+            flex: 1;
+            background: linear-gradient(135deg, rgba(241,186,32,0.02) 0%, transparent 100%);
+            overflow-y: auto;
+            padding: 40px;
         }
 
-        .gjs-pn-btn:hover {
-            background: rgba(241,186,32,0.1) !important;
-            color: var(--gold) !important;
+        .blocks-container {
+            max-width: 900px;
+            margin: 0 auto;
         }
 
-        .gjs-pn-btn.gjs-pn-active {
-            background: rgba(241,186,32,0.2) !important;
-            color: var(--gold) !important;
+        .block {
+            background: var(--panel);
+            border: 2px solid transparent;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            padding: 20px;
+            cursor: move;
+            transition: all 0.2s;
+            position: relative;
+            user-select: none;
         }
 
-        .gjs-pn-input {
-            background: rgba(0,0,0,0.3) !important;
-            border: 1px solid var(--line) !important;
-            color: var(--text) !important;
+        .block:hover { border-color: var(--gold); background: rgba(241,186,32,0.08); }
+        .block.selected { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(241,186,32,0.3); }
+
+        .block-controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 4px;
+            opacity: 0;
+            transition: opacity 0.2s;
         }
 
-        .gjs-pn-input:focus {
-            border-color: var(--gold) !important;
+        .block:hover .block-controls { opacity: 1; }
+
+        .control-btn {
+            padding: 4px 8px;
+            background: rgba(241,186,32,0.2);
+            border: 1px solid rgba(241,186,32,0.3);
+            color: var(--gold);
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 11px;
         }
 
-        .gjs-pn-label {
-            color: var(--muted) !important;
-        }
+        .control-btn:hover { background: rgba(241,186,32,0.3); }
+        .control-btn.delete { color: #e05252; border-color: rgba(224,82,82,0.3); background: rgba(224,82,82,0.05); }
+        .control-btn.delete:hover { background: rgba(224,82,82,0.15); }
 
-        .gjs-block {
-            background: rgba(241,186,32,0.1) !important;
-            border: 1px solid rgba(241,186,32,0.2) !important;
-            color: var(--text) !important;
-        }
+        .text-block { min-height: 60px; }
+        .text-block p { margin: 0; line-height: 1.6; }
+        .text-block[contenteditable] { outline: none; }
+        .text-block[contenteditable]:focus { background: rgba(241,186,32,0.1); padding: 4px; border-radius: 4px; }
 
-        .gjs-block:hover {
-            background: rgba(241,186,32,0.2) !important;
-        }
+        .image-block img { width: 100%; max-height: 500px; object-fit: cover; border-radius: 4px; }
 
-        .gjs-canvas {
-            background: linear-gradient(135deg, rgba(241,186,32,0.02) 0%, transparent 100%) !important;
-        }
-
-        .gjs-frame {
-            background: var(--panel) !important;
-        }
+        .empty-state { text-align: center; padding: 60px 20px; color: var(--muted); }
+        .empty-state p { margin: 0; }
     </style>
 </head>
 <body>
-    <div class="header">
-        <input type="text" class="title-input" id="titleInput" placeholder="Post Title" value="{{ post.title }}">
-        <button class="btn" onclick="goBack()">← Discard</button>
-        <button class="btn primary" onclick="savePost()">Save & Publish</button>
+    <div class="container">
+        <div class="header">
+            <input type="text" class="title-input" id="titleInput" placeholder="Post Title" value="{{ post.title or '' }}">
+            <button class="btn" onclick="goBack()">← Discard</button>
+            <button class="btn primary" onclick="savePost()">Save & Publish</button>
+        </div>
+
+        <div class="editor-area">
+            <div class="sidebar">
+                <div class="sidebar-title">Add Blocks</div>
+                <button class="add-btn" onclick="addTextBlock()">+ Text</button>
+                <button class="add-btn" onclick="addImageBlock()">+ Image</button>
+            </div>
+
+            <div class="canvas">
+                <div class="blocks-container" id="blocksContainer"></div>
+            </div>
+        </div>
     </div>
 
-    <div id="editor"></div>
-
-    <!-- GrapesJS -->
-    <script src="https://unpkg.com/grapesjs@0.21.13/dist/grapes.min.js"></script>
     <script>
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
         const postId = {{ post.id }};
         const postContent = `{{ post.content | safe }}`;
 
-        // Initialize GrapesJS
-        const editor = grapesjs.init({
-            container: '#editor',
-            fromElement: false,
-            height: '100%',
-            showOffsets: 1,
-            noticeOnUnload: 0,
-            storageManager: false,
-            canvas: {
-                styles: [
-                    'https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap'
-                ]
-            },
-            blocks: [
-                {
-                    id: 'section-text',
-                    label: 'Text Section',
-                    content: '<div style="padding: 20px; background: #f5f3ef; color: #0a0a0a; border-radius: 4px;"><p>Add your text here</p></div>',
-                    category: 'Basic'
-                },
-                {
-                    id: 'section-image',
-                    label: 'Image Section',
-                    content: '<img src="https://via.placeholder.com/600x400" alt="Image" style="width: 100%; border-radius: 4px; display: block;">',
-                    category: 'Basic'
-                },
-                {
-                    id: 'section-two-col',
-                    label: 'Two Column',
-                    content: '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;"><div style="padding: 20px; background: #f5f3ef; color: #0a0a0a; border-radius: 4px;"><p>Column 1</p></div><div style="padding: 20px; background: #f5f3ef; color: #0a0a0a; border-radius: 4px;"><p>Column 2</p></div></div>',
-                    category: 'Layout'
-                }
-            ],
-            styleManager: {
-                sectors: [
-                    {
-                        name: 'Dimension',
-                        open: false,
-                        properties: [
-                            'width',
-                            'height',
-                            'max-width',
-                            'margin',
-                            'padding'
-                        ]
-                    },
-                    {
-                        name: 'Typography',
-                        open: false,
-                        properties: [
-                            'font-family',
-                            'font-size',
-                            'font-weight',
-                            'line-height',
-                            'color'
-                        ]
-                    },
-                    {
-                        name: 'Decorations',
-                        open: false,
-                        properties: [
-                            'background-color',
-                            'border',
-                            'border-radius'
-                        ]
-                    }
-                ]
-            }
-        });
+        let blocks = [];
+        let blockIdCounter = 0;
+        let selectedBlockId = null;
 
-        // Load existing content
-        if (postContent && postContent.trim()) {
-            editor.setComponents(postContent);
-        } else {
-            editor.setComponents('<div style="padding: 40px; text-align: center; color: #999;"><p>Start by adding sections from the left panel</p></div>');
+        class Block {
+            constructor(id, type, content = '') {
+                this.id = id;
+                this.type = type;
+                this.content = content;
+            }
         }
 
-        // Add commands
-        editor.Commands.add('export-template', {
-            run: () => {
-                console.log(editor.getHtml());
-            }
-        });
+        function parseContent() {
+            if (!postContent || !postContent.trim()) return;
 
-        editor.Commands.add('show-json', {
-            run: () => {
-                alert(JSON.stringify(editor.getComponents(), null, 2));
+            const div = document.createElement('div');
+            div.innerHTML = postContent;
+
+            div.querySelectorAll('*').forEach(el => {
+                if (el.tagName === 'P') {
+                    blocks.push(new Block(blockIdCounter++, 'text', el.innerHTML));
+                } else if (el.tagName === 'IMG') {
+                    blocks.push(new Block(blockIdCounter++, 'image', el.src));
+                }
+            });
+        }
+
+        function render() {
+            const container = document.getElementById('blocksContainer');
+
+            if (blocks.length === 0) {
+                container.innerHTML = '<div class="empty-state"><p>Click + Text or + Image to get started</p></div>';
+                return;
             }
-        });
+
+            container.innerHTML = blocks.map(block => {
+                const isSelected = block.id === selectedBlockId;
+                return `
+                    <div class="block ${isSelected ? 'selected' : ''}" data-id="${block.id}" onclick="selectBlock(${block.id})">
+                        <div class="block-controls">
+                            <button class="control-btn delete" onclick="deleteBlock(${block.id}); return false;">Delete</button>
+                        </div>
+                        ${block.type === 'text' ? `
+                            <p class="text-block" contenteditable="true" onblur="updateBlockContent(${block.id}, this.innerHTML)" onkeydown="handleEnter(event, ${block.id})">${block.content}</p>
+                        ` : `
+                            <div class="image-block">
+                                <img src="${block.content}" alt="Block image" style="width: 100%; border-radius: 4px;">
+                            </div>
+                        `}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function selectBlock(id) {
+            selectedBlockId = id;
+            render();
+        }
+
+        function addTextBlock() {
+            blocks.push(new Block(blockIdCounter++, 'text', '<p>Add your text here</p>'));
+            render();
+            setTimeout(() => {
+                const p = document.querySelector('[data-id="' + (blockIdCounter - 1) + '"] p');
+                if (p) p.focus();
+            }, 0);
+        }
+
+        function addImageBlock() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                const formData = new FormData();
+                formData.append('file', file);
+
+                fetch('/admin/blog/upload-image', {
+                    method: 'POST',
+                    headers: { 'X-CSRF-Token': csrfToken },
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(data => {
+                    blocks.push(new Block(blockIdCounter++, 'image', data.url));
+                    render();
+                })
+                .catch(err => alert('Error uploading image'));
+            };
+            input.click();
+        }
+
+        function deleteBlock(id) {
+            blocks = blocks.filter(b => b.id !== id);
+            selectedBlockId = null;
+            render();
+        }
+
+        function updateBlockContent(id, content) {
+            const block = blocks.find(b => b.id === id);
+            if (block) block.content = content;
+        }
+
+        function handleEnter(e, id) {
+            // Let default enter behavior work
+        }
 
         function goBack() {
             if (confirm('Discard all changes?')) {
@@ -240,17 +304,21 @@
                 return;
             }
 
-            const html = editor.getHtml();
-            const css = editor.getCss();
-            const content = html + '<style>' + css + '</style>';
+            const html = blocks.map(block => {
+                if (block.type === 'text') {
+                    return `<p>${block.content}</p>`;
+                } else {
+                    return `<img src="${block.content}" alt="Image" style="width: 100%; border-radius: 4px;">`;
+                }
+            }).join('\n');
 
             const formData = new URLSearchParams({
                 title,
                 slug: title.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-                excerpt: '{{ post.excerpt }}',
-                content: content,
-                hero_image: '{{ post.hero_image }}',
-                template: '{{ post.template }}',
+                excerpt: '{{ post.excerpt or '' }}',
+                content: html,
+                hero_image: '{{ post.hero_image or '' }}',
+                template: '{{ post.template or 1 }}',
                 status: 'published'
             });
 
@@ -270,13 +338,9 @@
             });
         }
 
-        // Add image upload capability
-        editor.on('component:update', function() {
-            const selected = editor.getSelected();
-            if (selected && selected.get('tagName') === 'img') {
-                console.log('Image selected');
-            }
-        });
+        // Initialize
+        parseContent();
+        render();
     </script>
 </body>
 </html>
