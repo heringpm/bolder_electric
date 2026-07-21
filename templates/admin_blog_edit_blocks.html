@@ -392,6 +392,8 @@
                 else targetRow.blocks.push(draggedBlock);
 
                 draggedId = null;
+                // Rebuild blocks array from updated rows to preserve drag order
+                blocks = rows.flatMap(r => r.blocks);
                 renderCanvas();
             });
 
