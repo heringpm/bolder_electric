@@ -278,6 +278,7 @@
                             src: node.src,
                             alt: node.alt || 'Image',
                             maxWidth: parseInt(node.style.maxWidth) || 100,
+                            height: parseInt(node.style.height) || null,
                             align: 'center',
                             colSpan: 1,
                             marginBottom: parseInt(node.style.marginBottom) || 16
@@ -357,8 +358,58 @@
                 img.src = block.src;
                 img.alt = block.alt;
                 img.style.maxWidth = block.maxWidth + '%';
+                img.style.height = block.height ? block.height + 'px' : 'auto';
+                img.style.objectFit = 'cover';
                 if (block.align === 'center') img.style.margin = '0 auto';
+
+                // Create a resize handle for the image
+                const resizeHandle = document.createElement('div');
+                resizeHandle.className = 'image-resize-handle';
+                resizeHandle.style.position = 'absolute';
+                resizeHandle.style.bottom = '0';
+                resizeHandle.style.right = '0';
+                resizeHandle.style.width = '20px';
+                resizeHandle.style.height = '20px';
+                resizeHandle.style.background = 'rgba(241,186,32,0.4)';
+                resizeHandle.style.cursor = 'se-resize';
+                resizeHandle.style.borderRadius = '0 0 8px 0';
+                resizeHandle.title = 'Drag to resize image height';
+
+                // Make content position relative for absolute positioning of handle
+                content.style.position = 'relative';
+                content.style.display = 'inline-block';
+
                 content.appendChild(img);
+                content.appendChild(resizeHandle);
+
+                // Add resize drag handler
+                let isResizing = false;
+                let startY = 0;
+                let startHeight = block.height || img.naturalHeight || 200;
+
+                resizeHandle.addEventListener('mousedown', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    isResizing = true;
+                    startY = e.clientY;
+                    startHeight = block.height || img.naturalHeight || 200;
+                    document.body.style.cursor = 'se-resize';
+                });
+
+                document.addEventListener('mousemove', (e) => {
+                    if (!isResizing || selectedBlockId !== block.id) return;
+                    const deltaY = e.clientY - startY;
+                    const newHeight = Math.max(50, startHeight + deltaY);
+                    block.height = newHeight;
+                    img.style.height = newHeight + 'px';
+                });
+
+                document.addEventListener('mouseup', () => {
+                    if (isResizing) {
+                        isResizing = false;
+                        document.body.style.cursor = 'default';
+                    }
+                });
             }
 
             const overlay = document.createElement('div');
@@ -505,6 +556,13 @@
                         </div>
                     </div>
                     <div class="control-group">
+                        <label class="control-label">Image Height (px)</label>
+                        <div class="slider-group">
+                            <input type="range" min="50" max="600" value="${block.height || 200}" oninput="updateImageHeight(this.value)" id="heightSlider">
+                            <span class="slider-value" id="heightValue">${block.height || 200}px</span>
+                        </div>
+                    </div>
+                    <div class="control-group">
                         <label class="control-label">Alignment</label>
                         <div class="align-buttons">
                             <button class="align-btn ${block.align === 'left' ? 'active' : ''}" onclick="setImageAlign('left')">Left</button>
@@ -513,6 +571,15 @@
                         </div>
                     </div>
                 `;
+
+                setTimeout(() => {
+                    const heightSlider = document.getElementById('heightSlider');
+                    if (heightSlider) {
+                        heightSlider.addEventListener('input', (e) => {
+                            document.getElementById('heightValue').textContent = e.target.value + 'px';
+                        });
+                    }
+                }, 50);
             }
         }
 
@@ -564,6 +631,12 @@
         function updateImageWidth(val) {
             const block = blocks.find(b => b.id === selectedBlockId);
             block.maxWidth = parseInt(val);
+            renderCanvas();
+        }
+
+        function updateImageHeight(val) {
+            const block = blocks.find(b => b.id === selectedBlockId);
+            block.height = parseInt(val);
             renderCanvas();
         }
 
@@ -638,7 +711,7 @@
                 if (block.type === 'text') {
                     return `<p style="text-align:${block.align};font-size:${block.fontSize}px;font-family:${block.fontFamily || 'inherit'};color:${block.color || '#f5f3ef'};margin-bottom:${block.marginBottom || 16}px;${block.bold ? 'font-weight:bold;' : ''}">${block.content}</p>`;
                 } else {
-                    return `<img src="${block.src}" alt="${block.alt}" style="max-width:${block.maxWidth}%;height:auto;margin-bottom:${block.marginBottom || 16}px;${block.align === 'center' ? 'display:block;margin-left:auto;margin-right:auto;' : ''}border-radius:8px;">`;
+                    return `<img src="${block.src}" alt="${block.alt}" style="max-width:${block.maxWidth}%;${block.height ? 'height:' + block.height + 'px;' : 'height:auto;'}margin-bottom:${block.marginBottom || 16}px;${block.align === 'center' ? 'display:block;margin-left:auto;margin-right:auto;' : ''}border-radius:8px;">`;
                 }
             }).join('\n');
 
