@@ -55,25 +55,25 @@
         }
 
         .layout-block {
-            margin-bottom: 28px; position: relative; cursor: grab;
-            padding: 16px; border: 2px solid transparent; border-radius: 8px;
-            transition: all 0.2s;
+            margin-bottom: 28px; position: relative; cursor: grab; padding: 16px;
+            border: 2px solid transparent; border-radius: 8px; transition: all 0.2s;
         }
         .layout-block:hover { border-color: rgba(241,186,32,0.3); background: rgba(241,186,32,0.03); }
         .layout-block.selected { border-color: var(--gold); background: rgba(241,186,32,0.08); }
+        .layout-block.dragging { opacity: 0.6; background: rgba(241,186,32,0.15); }
 
         .block-content {
-            line-height: 1.6;
+            line-height: 1.6; word-wrap: break-word;
         }
         .block-content p { margin: 0 0 16px 0; }
         .block-content p:last-child { margin-bottom: 0; }
         .block-content img {
-            max-width: 100%; height: auto; border-radius: 8px; display: block;
+            max-width: 100%; height: auto; border-radius: 8px;
             margin: 16px 0;
         }
 
         .block-overlay {
-            position: absolute; top: 8px; right: 8px; display: none; gap: 6px;
+            position: absolute; top: 8px; right: 8px; display: none; gap: 6px; z-index: 10;
         }
         .layout-block:hover .block-overlay { display: flex; }
         .block-btn {
@@ -86,7 +86,7 @@
         .block-btn.delete:hover { background: rgba(224,82,82,0.1); }
 
         .controls-panel {
-            width: 300px; background: var(--panel2); border-left: 1px solid var(--line);
+            width: 320px; background: var(--panel2); border-left: 1px solid var(--line);
             padding: 20px; overflow-y: auto; font-size: 13px;
         }
         .control-group {
@@ -102,6 +102,26 @@
             font-family: inherit; font-size: 13px;
         }
         .control-input:focus { outline: none; border-color: var(--gold); }
+
+        .slider-group {
+            display: flex; gap: 8px; align-items: center;
+        }
+        .slider-group input[type="range"] {
+            flex: 1; height: 4px; background: rgba(241,186,32,0.2);
+            border-radius: 2px; -webkit-appearance: none; appearance: none;
+        }
+        .slider-group input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none; appearance: none;
+            width: 16px; height: 16px; border-radius: 50%;
+            background: var(--gold); cursor: pointer;
+        }
+        .slider-group input[type="range"]::-moz-range-thumb {
+            width: 16px; height: 16px; border-radius: 50%;
+            background: var(--gold); cursor: pointer; border: none;
+        }
+        .slider-value {
+            min-width: 40px; text-align: right; color: var(--gold);
+        }
 
         .format-toolbar {
             display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;
@@ -124,7 +144,7 @@
         .align-btn.active { background: rgba(241,186,32,0.25); color: var(--gold); }
 
         .quill-wrap { background: rgba(0,0,0,0.2); border-radius: 6px; overflow: hidden; }
-        .ql-toolbar { background: var(--panel2); border: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+        .ql-toolbar { background: var(--panel2); border: 1px solid var(--line); }
         .ql-container { background: rgba(0,0,0,0.2); border: 1px solid var(--line); border-top: none; }
         .ql-editor { color: var(--text); min-height: 100px; }
 
@@ -152,7 +172,7 @@
             <!-- Canvas -->
             <div class="canvas-area">
                 <div class="canvas-toolbar">
-                    Click any element to edit. Drag to reorder.
+                    Click to edit · Drag to reorder · Adjust width and formatting on the right
                 </div>
                 <div class="canvas">
                     <div class="canvas-content" id="canvas"></div>
@@ -183,7 +203,7 @@
 
         let selectedBlockId = null;
         let blockIdCounter = 0;
-        let activeEditor = null;
+        let draggedId = null;
 
         function parseHTML(html) {
             const div = document.createElement('div');
@@ -200,7 +220,8 @@
                             content: node.innerHTML,
                             fontSize: parseInt(node.style.fontSize) || 16,
                             align: node.style.textAlign || 'left',
-                            bold: node.style.fontWeight === 'bold' ? true : false
+                            bold: node.style.fontWeight === 'bold',
+                            width: 100
                         });
                     } else if (node.tagName === 'IMG') {
                         blocks.push({
@@ -208,7 +229,8 @@
                             src: node.src,
                             alt: node.alt || 'Image',
                             maxWidth: parseInt(node.style.maxWidth) || 100,
-                            align: 'center'
+                            align: 'center',
+                            width: 100
                         });
                     }
                 }
@@ -222,11 +244,15 @@
             const canvas = document.getElementById('canvas');
             canvas.innerHTML = '';
 
-            blocks.forEach((block, idx) => {
+            blocks.forEach((block) => {
                 const blockEl = document.createElement('div');
                 blockEl.className = 'layout-block';
                 blockEl.dataset.blockId = block.id;
                 if (selectedBlockId === block.id) blockEl.classList.add('selected');
+
+                blockEl.draggable = true;
+                blockEl.style.maxWidth = block.width + '%';
+                blockEl.style.margin = block.align === 'center' ? '28px auto' : '28px 0';
 
                 const content = document.createElement('div');
                 content.className = 'block-content';
@@ -249,41 +275,51 @@
                 const overlay = document.createElement('div');
                 overlay.className = 'block-overlay';
                 overlay.innerHTML = `
-                    <button class="block-btn" onclick="selectBlock(${block.id})">Edit</button>
-                    <button class="block-btn delete" onclick="deleteBlock(${block.id})">Remove</button>
+                    <button class="block-btn" onclick="selectBlock(${block.id}, event)">Edit</button>
+                    <button class="block-btn delete" onclick="deleteBlock(${block.id}, event)">Remove</button>
                 `;
 
                 blockEl.appendChild(content);
                 blockEl.appendChild(overlay);
-                blockEl.addEventListener('click', () => selectBlock(block.id));
-                blockEl.draggable = true;
 
-                let draggedId = null;
+                blockEl.addEventListener('click', (e) => {
+                    if (!e.target.closest('.block-overlay')) selectBlock(block.id, e);
+                });
+
                 blockEl.addEventListener('dragstart', (e) => {
                     draggedId = block.id;
+                    blockEl.classList.add('dragging');
                     e.dataTransfer.effectAllowed = 'move';
-                    blockEl.style.opacity = '0.5';
                 });
-                blockEl.addEventListener('dragend', () => blockEl.style.opacity = '1');
-                blockEl.addEventListener('dragover', (e) => e.preventDefault());
+
+                blockEl.addEventListener('dragend', () => {
+                    blockEl.classList.remove('dragging');
+                });
+
+                blockEl.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+                });
+
                 blockEl.addEventListener('drop', (e) => {
                     e.preventDefault();
-                    const draggedBlock = blocks.find(b => b.id === draggedId);
-                    const currentBlock = blocks.find(b => b.id === block.id);
-                    const dragIdx = blocks.indexOf(draggedBlock);
-                    const currentIdx = blocks.indexOf(currentBlock);
-                    if (dragIdx !== currentIdx) {
-                        blocks.splice(dragIdx, 1);
-                        blocks.splice(currentIdx, 0, draggedBlock);
-                        renderCanvas();
-                    }
+                    if (draggedId === null || draggedId === block.id) return;
+
+                    const draggedIdx = blocks.findIndex(b => b.id === draggedId);
+                    const targetIdx = blocks.findIndex(b => b.id === block.id);
+
+                    const [dragged] = blocks.splice(draggedIdx, 1);
+                    blocks.splice(targetIdx, 0, dragged);
+                    draggedId = null;
+                    renderCanvas();
                 });
 
                 canvas.appendChild(blockEl);
             });
         }
 
-        function selectBlock(blockId) {
+        function selectBlock(blockId, e) {
+            if (e) e.stopPropagation();
             selectedBlockId = blockId;
             const block = blocks.find(b => b.id === blockId);
             document.getElementById('selectedBlockInfo').textContent = `${block.type === 'text' ? 'Text' : 'Image'} Block`;
@@ -293,6 +329,14 @@
 
             if (block.type === 'text') {
                 controls.innerHTML = `
+                    <div class="control-group">
+                        <label class="control-label">Width (%)</label>
+                        <div class="slider-group">
+                            <input type="range" id="widthSlider" min="30" max="100" value="${block.width}"
+                                   oninput="updateWidth(this.value)">
+                            <span class="slider-value" id="widthValue">${block.width}%</span>
+                        </div>
+                    </div>
                     <div class="control-group">
                         <label class="control-label">Content</label>
                         <div class="quill-wrap"><div id="editor"></div></div>
@@ -312,12 +356,14 @@
                     </div>
                     <div class="control-group">
                         <label class="control-label">Font Size (px)</label>
-                        <input type="number" class="control-input" id="fontSize" value="${block.fontSize}" min="12" max="48">
-                        <button class="btn" style="width: 100%; margin-top: 8px;" onclick="updateFontSize()">Update</button>
+                        <div class="slider-group">
+                            <input type="range" id="fontSlider" min="12" max="48" value="${block.fontSize}"
+                                   oninput="updateFontSize(this.value)">
+                            <span class="slider-value" id="fontValue">${block.fontSize}px</span>
+                        </div>
                     </div>
                 `;
 
-                // Initialize Quill
                 setTimeout(() => {
                     const editor = new Quill('#editor', {
                         theme: 'snow',
@@ -330,7 +376,6 @@
                         }
                     });
                     editor.root.innerHTML = block.content;
-                    activeEditor = editor;
                     editor.on('text-change', () => {
                         block.content = editor.root.innerHTML;
                     });
@@ -338,21 +383,53 @@
             } else if (block.type === 'image') {
                 controls.innerHTML = `
                     <div class="control-group">
-                        <label class="control-label">Max Width (%)</label>
-                        <input type="number" class="control-input" id="imgWidth" value="${block.maxWidth}" min="20" max="100">
+                        <label class="control-label">Block Width (%)</label>
+                        <div class="slider-group">
+                            <input type="range" id="widthSlider" min="30" max="100" value="${block.width}"
+                                   oninput="updateWidth(this.value)">
+                            <span class="slider-value" id="widthValue">${block.width}%</span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Image Width (%)</label>
+                        <div class="slider-group">
+                            <input type="range" id="imgSlider" min="20" max="100" value="${block.maxWidth}"
+                                   oninput="updateImageWidth(this.value)">
+                            <span class="slider-value" id="imgValue">${block.maxWidth}%</span>
+                        </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label">Alignment</label>
                         <div class="align-buttons">
-                            <button class="align-btn" onclick="setImageAlign('left')">Left</button>
+                            <button class="align-btn ${block.align === 'left' ? 'active' : ''}" onclick="setImageAlign('left')">Left</button>
                             <button class="align-btn ${block.align === 'center' ? 'active' : ''}" onclick="setImageAlign('center')">Center</button>
-                            <button class="align-btn" onclick="setImageAlign('right')">Right</button>
+                            <button class="align-btn ${block.align === 'right' ? 'active' : ''}" onclick="setImageAlign('right')">Right</button>
                         </div>
                     </div>
-                    <button class="btn" style="width: 100%;" onclick="updateImage()">Update</button>
                 `;
             }
 
+            renderCanvas();
+        }
+
+        function updateWidth(val) {
+            const block = blocks.find(b => b.id === selectedBlockId);
+            block.width = parseInt(val);
+            document.getElementById('widthValue').textContent = val + '%';
+            renderCanvas();
+        }
+
+        function updateFontSize(val) {
+            const block = blocks.find(b => b.id === selectedBlockId);
+            block.fontSize = parseInt(val);
+            document.getElementById('fontValue').textContent = val + 'px';
+            renderCanvas();
+        }
+
+        function updateImageWidth(val) {
+            const block = blocks.find(b => b.id === selectedBlockId);
+            block.maxWidth = parseInt(val);
+            document.getElementById('imgValue').textContent = val + '%';
             renderCanvas();
         }
 
@@ -377,19 +454,8 @@
             renderCanvas();
         }
 
-        function updateFontSize() {
-            const block = blocks.find(b => b.id === selectedBlockId);
-            block.fontSize = parseInt(document.getElementById('fontSize').value);
-            renderCanvas();
-        }
-
-        function updateImage() {
-            const block = blocks.find(b => b.id === selectedBlockId);
-            block.maxWidth = parseInt(document.getElementById('imgWidth').value);
-            renderCanvas();
-        }
-
-        function deleteBlock(blockId) {
+        function deleteBlock(blockId, e) {
+            e.stopPropagation();
             blocks = blocks.filter(b => b.id !== blockId);
             selectedBlockId = null;
             renderCanvas();
