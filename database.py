@@ -1383,18 +1383,21 @@ class DatabaseManager:
         import datetime
         conn = self.get_connection()
         cursor = conn.cursor()
-        existing = self.get_blog_post_by_id(post_id)
-        published_at = existing.get('published_at') if existing else None
-        if status == 'published' and not published_at:
-            published_at = datetime.datetime.utcnow().isoformat()
-        # Keep existing pdf_url if not explicitly passed
-        if pdf_url is None and existing:
-            pdf_url = existing.get('pdf_url')
-        cursor.execute(self._prepare_query('''
-            UPDATE blog_posts
-            SET title=?, slug=?, excerpt=?, content=?, hero_image=?, pdf_url=?, template=?, status=?, published_at=?, updated_at=CURRENT_TIMESTAMP
-            WHERE id=?
-        '''), (title, slug, excerpt, content, hero_image, pdf_url, template, status, published_at, post_id))
+
+        # Determine published_at only when transitioning to published
+        if status == 'published':
+            # Use CASE to set published_at only if it's currently NULL
+            cursor.execute(self._prepare_query('''
+                UPDATE blog_posts
+                SET title=?, slug=?, excerpt=?, content=?, hero_image=?, pdf_url=COALESCE(?, pdf_url), template=?, status=?, published_at=COALESCE(published_at, ?), updated_at=CURRENT_TIMESTAMP
+                WHERE id=?
+            '''), (title, slug, excerpt, content, hero_image, pdf_url, template, status, datetime.datetime.utcnow().isoformat(), post_id))
+        else:
+            cursor.execute(self._prepare_query('''
+                UPDATE blog_posts
+                SET title=?, slug=?, excerpt=?, content=?, hero_image=?, pdf_url=COALESCE(?, pdf_url), template=?, status=?, updated_at=CURRENT_TIMESTAMP
+                WHERE id=?
+            '''), (title, slug, excerpt, content, hero_image, pdf_url, template, status, post_id))
         conn.commit()
         conn.close()
 

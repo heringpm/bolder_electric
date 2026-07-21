@@ -624,6 +624,11 @@
                 return;
             }
 
+            const saveBtn = document.querySelector('button[onclick="saveLayout()"]');
+            const originalText = saveBtn.textContent;
+            saveBtn.textContent = 'Saving...';
+            saveBtn.disabled = true;
+
             const html = blocks.map(block => {
                 if (block.type === 'text') {
                     return `<p style="text-align:${block.align};font-size:${block.fontSize}px;font-family:${block.fontFamily || 'inherit'};color:${block.color || '#f5f3ef'};margin-bottom:${block.marginBottom || 16}px;${block.bold ? 'font-weight:bold;' : ''}">${block.content}</p>`;
@@ -644,10 +649,19 @@
             fetch(`/admin/blog/${postId}/edit`, {
                 method: 'POST',
                 headers: { 'X-CSRF-Token': csrfToken, 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: formData
-            }).then(() => {
-                window.location.href = '/admin#blog';
-            }).catch(err => console.error('Error:', err));
+                body: formData,
+                timeout: 30000
+            }).then(response => {
+                if (!response.ok) throw new Error('Save failed');
+                setTimeout(() => {
+                    window.location.href = '/admin#blog';
+                }, 500);
+            }).catch(err => {
+                console.error('Error:', err);
+                alert('Error saving post. Please try again.');
+                saveBtn.textContent = originalText;
+                saveBtn.disabled = false;
+            });
         }
 
         function goBack() {
