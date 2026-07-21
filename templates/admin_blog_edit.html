@@ -319,6 +319,8 @@
                     {% if post %}
                     <button type="button" class="btn btn-draft" style="background:rgba(241,186,32,0.07);color:var(--gold);border:1px solid rgba(241,186,32,0.4);"
                             onclick="saveAndPreview()">Preview →</button>
+                    <button type="button" class="btn btn-draft" style="background:rgba(108,180,255,0.07);color:#6cb4ff;border:1px solid rgba(108,180,255,0.4);"
+                            onclick="editLayout()">Edit Layout →</button>
                     <hr class="sidebar-divider" style="margin:4px 0">
                     <form method="POST" action="{{ url_for('admin_blog_delete', post_id=post.id) }}" onsubmit="return confirm('Delete this post permanently?')">
                         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
@@ -530,6 +532,11 @@
                 }, 2000);
             }
         });
+
+        function editLayout() {
+            document.getElementById('content').value = getContent();
+            window.location.href = '/admin/blog/{{ post.id }}/edit-blocks';
+        }
 
     </script>
 </body>

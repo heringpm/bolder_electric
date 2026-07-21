@@ -55,8 +55,17 @@
         }
 
         .layout-block {
-            margin-bottom: 28px; position: relative; cursor: grab; padding: 16px;
+            margin-bottom: 12px; position: relative; cursor: grab; padding: 16px;
             border: 2px solid transparent; border-radius: 8px; transition: all 0.2s;
+        }
+        .layout-block.grouped-start {
+            border-bottom: none; border-bottom-left-radius: 0; border-bottom-right-radius: 0;
+        }
+        .layout-block.grouped-mid {
+            margin-bottom: 0; border-radius: 0;
+        }
+        .layout-block.grouped-end {
+            margin-bottom: 12px; border-top: none; border-top-left-radius: 0; border-top-right-radius: 0;
         }
         .layout-block:hover { border-color: rgba(241,186,32,0.3); background: rgba(241,186,32,0.03); }
         .layout-block.selected { border-color: var(--gold); background: rgba(241,186,32,0.08); }
@@ -221,7 +230,8 @@
                             fontSize: parseInt(node.style.fontSize) || 16,
                             align: node.style.textAlign || 'left',
                             bold: node.style.fontWeight === 'bold',
-                            width: 100
+                            width: 100,
+                            grouped: false
                         });
                     } else if (node.tagName === 'IMG') {
                         blocks.push({
@@ -230,7 +240,8 @@
                             alt: node.alt || 'Image',
                             maxWidth: parseInt(node.style.maxWidth) || 100,
                             align: 'center',
-                            width: 100
+                            width: 100,
+                            grouped: false
                         });
                     }
                 }
@@ -252,7 +263,18 @@
 
                 blockEl.draggable = true;
                 blockEl.style.maxWidth = block.width + '%';
-                blockEl.style.margin = block.align === 'center' ? '28px auto' : '28px 0';
+                const isLastOrGrouped = (blocks.indexOf(block) === blocks.length - 1) || blocks[blocks.indexOf(block) + 1]?.grouped;
+                blockEl.style.margin = block.align === 'center' ? (isLastOrGrouped ? '12px auto' : '0 auto') : (isLastOrGrouped ? '12px 0' : '0');
+
+                // Apply grouping classes
+                if (block.grouped) {
+                    const prevBlock = blocks[blocks.indexOf(block) - 1];
+                    if (prevBlock) {
+                        if (!prevBlock.grouped) blockEl.classList.add('grouped-start');
+                        else if (blocks[blocks.indexOf(block) + 1]?.grouped) blockEl.classList.add('grouped-mid');
+                        else blockEl.classList.add('grouped-end');
+                    }
+                }
 
                 const content = document.createElement('div');
                 content.className = 'block-content';
@@ -274,8 +296,11 @@
 
                 const overlay = document.createElement('div');
                 overlay.className = 'block-overlay';
+                const blockIdx = blocks.indexOf(block);
+                const hasNext = blockIdx < blocks.length - 1;
                 overlay.innerHTML = `
                     <button class="block-btn" onclick="selectBlock(${block.id}, event)">Edit</button>
+                    ${hasNext ? `<button class="block-btn" style="background:rgba(108,180,255,0.1);color:#6cb4ff;border-color:rgba(108,180,255,0.3);" onclick="combineBlocks(${block.id}, event)">Combine</button>` : ''}
                     <button class="block-btn delete" onclick="deleteBlock(${block.id}, event)">Remove</button>
                 `;
 
@@ -459,6 +484,15 @@
             blocks = blocks.filter(b => b.id !== blockId);
             selectedBlockId = null;
             renderCanvas();
+        }
+
+        function combineBlocks(blockId, e) {
+            e.stopPropagation();
+            const idx = blocks.findIndex(b => b.id === blockId);
+            if (idx < blocks.length - 1) {
+                blocks[idx + 1].grouped = true;
+                renderCanvas();
+            }
         }
 
         function saveLayout() {
