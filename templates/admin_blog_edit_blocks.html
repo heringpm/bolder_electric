@@ -361,47 +361,47 @@
                 const img = document.createElement('img');
                 img.src = block.src;
                 img.alt = block.alt;
-                img.style.width = '100%';
-                img.style.height = '100%';
-                img.style.objectFit = 'cover';
-                img.style.objectPosition = 'center';
+                img.style.maxWidth = block.maxWidth + '%';
+                img.style.height = block.height ? block.height + 'px' : 'auto';
                 img.style.display = 'block';
-
-                // Create a resize handle for the image
-                const resizeHandle = document.createElement('div');
-                resizeHandle.className = 'image-resize-handle';
-                resizeHandle.style.position = 'absolute';
-                resizeHandle.style.bottom = '0';
-                resizeHandle.style.right = '0';
-                resizeHandle.style.width = '20px';
-                resizeHandle.style.height = '20px';
-                resizeHandle.style.background = 'rgba(241,186,32,0.4)';
-                resizeHandle.style.cursor = 'se-resize';
-                resizeHandle.style.borderRadius = '0 0 8px 0';
-                resizeHandle.style.zIndex = '100';
-                resizeHandle.title = 'Drag to resize image height';
-
-                // Make content position relative for absolute positioning of handle, with fixed height
-                content.style.position = 'relative';
-                content.style.display = 'block';
-                content.style.width = (block.maxWidth || 100) + '%';
-                content.style.height = block.height ? block.height + 'px' : '200px';
-                content.style.overflow = 'hidden';
-                content.style.margin = block.align === 'center' ? '0 auto' : '0';
+                if (block.align === 'center') img.style.margin = '0 auto';
 
                 content.appendChild(img);
+
+                // Add resize handle
+                const resizeHandle = document.createElement('div');
+                resizeHandle.style.position = 'absolute';
+                resizeHandle.style.bottom = '4px';
+                resizeHandle.style.right = '4px';
+                resizeHandle.style.width = '16px';
+                resizeHandle.style.height = '16px';
+                resizeHandle.style.background = 'rgba(241,186,32,0.5)';
+                resizeHandle.style.cursor = 'se-resize';
+                resizeHandle.style.borderRadius = '2px';
+                resizeHandle.title = 'Drag to resize';
+
+                // Position content as relative for the resize handle
+                content.style.position = 'relative';
+                content.style.display = 'inline-block';
+                if (block.align === 'center') {
+                    content.style.display = 'block';
+                    content.style.width = block.maxWidth + '%';
+                    content.style.margin = '0 auto';
+                }
+
                 content.appendChild(resizeHandle);
 
-                // Store reference to content element on block for resize handler
+                // Store reference for resize handler
                 block._contentElement = content;
+                block._img = img;
 
-                // Add mousedown handler to start resize
+                // Mouse down on resize handle
                 resizeHandle.addEventListener('mousedown', (e) => {
                     e.preventDefault();
                     e.stopPropagation();
                     isResizingImage = true;
                     resizeStartY = e.clientY;
-                    resizeStartHeight = block.height || 200;
+                    resizeStartHeight = block.height || img.naturalHeight || 200;
                     resizeBlockId = block.id;
                     document.body.style.cursor = 'se-resize';
                 });
