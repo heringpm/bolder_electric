@@ -502,12 +502,14 @@
                 img.style.height = block.height ? block.height + 'px' : 'auto';
                 img.style.display = 'block';
                 img.style.margin = '0';
+                img.style.verticalAlign = 'top';
                 if (block.align === 'center') img.style.margin = '0 auto';
 
-                // Remove all spacing from image content
+                // Make content not grow and align image to top
                 content.style.margin = '0';
                 content.style.padding = '0';
                 content.style.lineHeight = '0';
+                content.style.flex = '0';
                 content.style.height = 'auto';
 
                 // Apply crop using clip-path if crop values are set
