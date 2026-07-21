@@ -414,6 +414,38 @@
             blockEl.draggable = true;
             blockEl.style.gridColumn = `span ${block.colSpan || 1}`;
 
+            // Set up drag listeners for all blocks
+            blockEl.addEventListener('dragstart', (e) => {
+                draggedId = block.id;
+                blockEl.classList.add('dragging');
+                e.dataTransfer.effectAllowed = 'move';
+            });
+
+            blockEl.addEventListener('dragend', () => blockEl.classList.remove('dragging'));
+            blockEl.addEventListener('dragover', (e) => e.preventDefault());
+
+            blockEl.addEventListener('drop', (e) => {
+                e.preventDefault();
+                if (draggedId === null || draggedId === block.id) return;
+
+                const draggedBlock = blocks.find(b => b.id === draggedId);
+                const targetRow = rows[rowIdx];
+                const draggedRow = rows.find(r => r.blocks.includes(draggedBlock));
+
+                if (draggedRow) {
+                    draggedRow.blocks = draggedRow.blocks.filter(b => b.id !== draggedId);
+                    if (draggedRow.blocks.length === 0) rows = rows.filter(r => r !== draggedRow);
+                }
+
+                const insertIdx = targetRow.blocks.indexOf(block);
+                if (insertIdx >= 0) targetRow.blocks.splice(insertIdx, 0, draggedBlock);
+                else targetRow.blocks.push(draggedBlock);
+
+                draggedId = null;
+                blocks = rows.flatMap(r => r.blocks);
+                renderCanvas();
+            });
+
             // For images, remove padding but keep flex layout
             if (block.type === 'image') {
                 blockEl.style.padding = '0';
@@ -527,38 +559,6 @@
             blockEl.appendChild(overlay);
 
             blockEl.addEventListener('click', () => selectBlock(block.id));
-
-            blockEl.addEventListener('dragstart', (e) => {
-                draggedId = block.id;
-                blockEl.classList.add('dragging');
-                e.dataTransfer.effectAllowed = 'move';
-            });
-
-            blockEl.addEventListener('dragend', () => blockEl.classList.remove('dragging'));
-            blockEl.addEventListener('dragover', (e) => e.preventDefault());
-
-            blockEl.addEventListener('drop', (e) => {
-                e.preventDefault();
-                if (draggedId === null || draggedId === block.id) return;
-
-                const draggedBlock = blocks.find(b => b.id === draggedId);
-                const targetRow = rows[rowIdx];
-                const draggedRow = rows.find(r => r.blocks.includes(draggedBlock));
-
-                if (draggedRow) {
-                    draggedRow.blocks = draggedRow.blocks.filter(b => b.id !== draggedId);
-                    if (draggedRow.blocks.length === 0) rows = rows.filter(r => r !== draggedRow);
-                }
-
-                const insertIdx = targetRow.blocks.indexOf(block);
-                if (insertIdx >= 0) targetRow.blocks.splice(insertIdx, 0, draggedBlock);
-                else targetRow.blocks.push(draggedBlock);
-
-                draggedId = null;
-                // Rebuild blocks array from updated rows to preserve drag order
-                blocks = rows.flatMap(r => r.blocks);
-                renderCanvas();
-            });
 
             return blockEl;
         }
