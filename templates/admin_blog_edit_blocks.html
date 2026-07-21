@@ -94,6 +94,10 @@
         .block-content {
             flex: 1; line-height: 1.6; word-wrap: break-word;
         }
+        .block-content:focus {
+            background: rgba(241,186,32,0.08);
+            border-radius: 4px;
+        }
         .block-content p { margin: 0 0 12px 0; }
         .block-content p:last-child { margin-bottom: 0; }
         .block-content img {
@@ -324,13 +328,25 @@
             content.className = 'block-content';
 
             if (block.type === 'text') {
+                content.contentEditable = true;
                 content.innerHTML = block.content;
                 content.style.fontSize = block.fontSize + 'px';
                 content.style.textAlign = block.align;
                 content.style.fontFamily = block.fontFamily || 'inherit';
                 content.style.color = block.color || '#f5f3ef';
                 content.style.marginBottom = (block.marginBottom || 16) + 'px';
+                content.style.cursor = 'text';
+                content.style.outline = 'none';
+                content.style.padding = '4px';
                 if (block.bold) content.style.fontWeight = 'bold';
+
+                // Track changes to contenteditable content
+                content.addEventListener('input', () => {
+                    block.content = content.innerHTML;
+                });
+                content.addEventListener('blur', () => {
+                    block.content = content.innerHTML;
+                });
             } else if (block.type === 'image') {
                 const img = document.createElement('img');
                 img.src = block.src;
@@ -411,8 +427,7 @@
             if (block.type === 'text') {
                 controls.innerHTML = `
                     <div class="control-group">
-                        <label class="control-label">Content (HTML)</label>
-                        <textarea id="textEditor" style="width:100%;height:150px;padding:10px;background:rgba(0,0,0,0.3);border:1px solid rgba(241,186,32,0.3);border-radius:6px;color:#f5f3ef;font-family:monospace;font-size:12px;resize:vertical;" placeholder="Edit text here...">${block.content}</textarea>
+                        <label class="control-label">Formatting Options</label>
                     </div>
                     <div class="control-group">
                         <label class="control-label">Font Size</label>
@@ -458,19 +473,8 @@
                 `;
 
                 setTimeout(() => {
-                    const textEditor = document.getElementById('textEditor');
                     const fontSlider = document.getElementById('fontSizeSlider');
                     const marginSlider = document.getElementById('marginSlider');
-
-                    if (textEditor) {
-                        textEditor.addEventListener('input', () => {
-                            block.content = textEditor.value;
-                        });
-                        textEditor.addEventListener('change', () => {
-                            block.content = textEditor.value;
-                        });
-                        textEditor.focus();
-                    }
 
                     if (fontSlider) {
                         fontSlider.addEventListener('input', (e) => {
