@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit PDF Blocks | Bolder Electric Admin</title>
+    <title>Layout Editor | Bolder Electric Admin</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
     <style>
@@ -13,84 +13,136 @@
             --text: #f5f3ef; --muted: rgba(245,243,239,0.6);
         }
         * { box-sizing: border-box; }
-        body { margin: 0; background: var(--bg); color: var(--text); font-family: "Barlow Condensed", Arial, sans-serif; font-size: 16px; }
+        body { margin: 0; background: var(--bg); color: var(--text); font-family: "Barlow Condensed", Arial, sans-serif; }
         a { color: inherit; text-decoration: none; }
+
+        .container {
+            display: flex; height: 100vh; flex-direction: column;
+        }
 
         .header {
             display: flex; align-items: center; justify-content: space-between;
             padding: 0 28px; height: 64px;
             background: var(--panel); border-bottom: 1px solid var(--line);
-            position: sticky; top: 0; z-index: 100;
+            z-index: 100;
         }
         .header-title {
             font-family: "Bebas Neue", Arial, sans-serif;
-            font-size: 22px; letter-spacing: 0.06em; color: var(--gold);
+            font-size: 20px; letter-spacing: 0.06em; color: var(--gold);
         }
 
-        .container {
-            max-width: 900px; margin: 24px auto; padding: 0 24px;
+        .editor-wrapper {
+            display: flex; flex: 1; overflow: hidden;
         }
 
-        .blocks-list {
-            display: flex; flex-direction: column; gap: 16px;
+        /* Left sidebar - blocks list */
+        .blocks-panel {
+            width: 280px; background: var(--panel2); border-right: 1px solid var(--line);
+            padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px;
+        }
+        .blocks-panel-title {
+            font-size: 13px; font-weight: bold; color: var(--gold); text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        .block-item {
+            padding: 12px; background: var(--panel); border: 1px solid var(--line);
+            border-radius: 6px; cursor: grab; user-select: none;
+            font-size: 14px; display: flex; justify-content: space-between; align-items: center;
+        }
+        .block-item:hover { border-color: rgba(241,186,32,0.5); background: var(--panel); }
+        .block-item.text { color: #87ceeb; }
+        .block-item.image { color: #90ee90; }
+        .block-badge {
+            font-size: 11px; padding: 2px 8px; background: rgba(241,186,32,0.15);
+            color: var(--gold); border-radius: 4px;
         }
 
-        .block {
-            padding: 16px; background: var(--panel); border: 1px solid var(--line);
-            border-radius: 8px; cursor: grab; transition: all 0.2s;
-        }
-        .block:hover { border-color: rgba(241,186,32,0.5); background: var(--panel2); }
-        .block.dragging { opacity: 0.5; }
-
-        .block-header {
-            display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;
-        }
-        .block-label {
-            font-size: 13px; color: var(--gold); font-weight: bold; text-transform: uppercase;
-        }
-        .block-controls {
-            display: flex; gap: 8px; align-items: center;
-        }
-        .btn-small {
-            padding: 4px 12px; border: 1px solid var(--line); background: transparent;
-            color: var(--muted); border-radius: 6px; cursor: pointer; font-size: 12px;
-        }
-        .btn-small:hover { color: var(--text); border-color: rgba(241,186,32,0.5); }
-        .btn-small.delete { color: #e05252; border-color: rgba(224, 82, 82, 0.3); }
-        .btn-small.delete:hover { border-color: #e05252; }
-
-        .text-block {
-            display: flex; flex-direction: column; gap: 8px;
-        }
-        .text-content {
-            padding: 12px; background: rgba(0,0,0,0.3); border: 1px solid var(--line);
-            border-radius: 6px; color: var(--text); font: inherit; resize: vertical; min-height: 60px;
-            font-family: "Barlow Condensed", Arial, sans-serif;
+        /* Main canvas */
+        .canvas-area {
+            flex: 1; display: flex; flex-direction: column;
         }
 
-        .text-options {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 13px;
+        .canvas-toolbar {
+            padding: 12px 20px; background: var(--panel); border-bottom: 1px solid var(--line);
+            display: flex; gap: 12px; align-items: center; font-size: 13px;
         }
-        .option-group label {
-            display: block; font-size: 12px; color: var(--muted); margin-bottom: 4px; text-transform: uppercase;
+        .canvas-toolbar button {
+            padding: 6px 14px; border-radius: 6px; border: 1px solid var(--line); background: transparent;
+            color: var(--muted); cursor: pointer; font-family: inherit;
         }
-        .option-group input {
-            width: 100%; padding: 6px 10px; background: rgba(0,0,0,0.3); border: 1px solid var(--line);
-            border-radius: 6px; color: var(--text); font: inherit;
+        .canvas-toolbar button:hover { color: var(--text); border-color: rgba(241,186,32,0.5); }
+
+        .canvas {
+            flex: 1; overflow: auto; padding: 40px; background: rgba(0,0,0,0.3);
         }
 
-        .image-block {
-            display: flex; flex-direction: column; gap: 12px;
-        }
-        .image-preview {
-            max-width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--line);
-        }
-        .image-options {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 13px;
+        .canvas-content {
+            max-width: 800px; margin: 0 auto; background: var(--panel); border-radius: 10px;
+            padding: 40px; min-height: 600px; box-shadow: 0 10px 40px rgba(0,0,0,0.5);
         }
 
-        .bottom-actions {
-            display: flex; gap: 12px; justify-content: center; margin-top: 32px;
+        .layout-row {
+            display: grid; gap: 20px; margin-bottom: 24px; min-height: 100px;
+            border: 2px dashed rgba(241,186,32,0.2); border-radius: 8px; padding: 16px;
+            position: relative;
+        }
+        .layout-row.cols-2 { grid-template-columns: 1fr 1fr; }
+        .layout-row.cols-1 { grid-template-columns: 1fr; }
+        .layout-row.no-content { display: flex; align-items: center; justify-content: center;
+            color: var(--muted); font-size: 14px; min-height: 80px;
+        }
+
+        .block-slot {
+            position: relative; background: rgba(241,186,32,0.05); border: 1px solid var(--line);
+            border-radius: 6px; padding: 12px; min-height: 60px; display: flex; flex-direction: column;
+            justify-content: space-between; cursor: grab;
+        }
+        .block-slot:hover { background: rgba(241,186,32,0.08); border-color: rgba(241,186,32,0.4); }
+        .block-slot.selected { background: rgba(241,186,32,0.12); border-color: var(--gold); }
+
+        .block-content {
+            flex: 1; overflow: hidden; word-wrap: break-word; line-height: 1.4;
+        }
+        .block-content img {
+            max-width: 100%; height: auto; border-radius: 6px; display: block;
+        }
+        .block-content p {
+            margin: 0; font-size: 16px; line-height: 1.5;
+        }
+
+        .block-toolbar {
+            display: flex; gap: 8px; margin-top: 8px; justify-content: space-between; font-size: 11px;
+        }
+        .block-btn {
+            padding: 3px 8px; background: rgba(241,186,32,0.1); color: var(--gold);
+            border: 1px solid rgba(241,186,32,0.3); border-radius: 4px; cursor: pointer;
+            font-family: inherit; font-size: 11px;
+        }
+        .block-btn:hover { background: rgba(241,186,32,0.15); }
+        .block-btn.delete { color: #e05252; border-color: rgba(224,82,82,0.3); background: rgba(224,82,82,0.05); }
+        .block-btn.delete:hover { background: rgba(224,82,82,0.1); }
+
+        .controls-panel {
+            width: 260px; background: var(--panel2); border-left: 1px solid var(--line);
+            padding: 16px; overflow-y: auto; font-size: 13px;
+        }
+        .control-group {
+            margin-bottom: 20px;
+        }
+        .control-label {
+            font-size: 11px; color: var(--gold); text-transform: uppercase; font-weight: bold;
+            margin-bottom: 8px; display: block;
+        }
+        .control-input {
+            width: 100%; padding: 8px 10px; background: rgba(0,0,0,0.3);
+            border: 1px solid var(--line); border-radius: 6px; color: var(--text);
+            font-family: inherit; font-size: 13px;
+        }
+        .control-input:focus { outline: none; border-color: var(--gold); }
+
+        .bottom-bar {
+            padding: 16px 28px; background: var(--panel); border-top: 1px solid var(--line);
+            display: flex; gap: 12px; justify-content: center;
         }
         .btn {
             padding: 12px 28px; border-radius: 8px; border: 1px solid var(--line);
@@ -102,21 +154,46 @@
     </style>
 </head>
 <body>
-    <header class="header">
-        <span class="header-title">Edit PDF Blocks</span>
-        <span style="font-size: 14px; color: var(--muted);">{{ post.title }}</span>
-    </header>
-
     <div class="container">
-        <p style="color: var(--muted); font-size: 14px; margin-bottom: 24px;">
-            Adjust spacing, font sizes, and reorder elements. Drag blocks to reorder.
-        </p>
+        <div class="header">
+            <span class="header-title">Layout Editor</span>
+            <span style="font-size: 14px; color: var(--muted);">{{ post.title }}</span>
+        </div>
 
-        <div class="blocks-list" id="blocksList"></div>
+        <div class="editor-wrapper">
+            <!-- Left: Blocks List -->
+            <div class="blocks-panel">
+                <div class="blocks-panel-title">Elements</div>
+                <div id="blocksList"></div>
+                <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--line);">
+                    <button class="btn" style="width: 100%; padding: 8px;" onclick="addRow('cols-1')">+ Full Width Row</button>
+                    <button class="btn" style="width: 100%; padding: 8px; margin-top: 8px;" onclick="addRow('cols-2')">+ 2-Column Row</button>
+                </div>
+            </div>
 
-        <div class="bottom-actions">
-            <button class="btn back" onclick="goBack()">← Back (Discard)</button>
-            <button class="btn" onclick="saveBlocks()">Done Editing →</button>
+            <!-- Center: Canvas -->
+            <div class="canvas-area">
+                <div class="canvas-toolbar">
+                    <span style="color: var(--muted);">Drag blocks from left, position in layout. Click to select and edit.</span>
+                </div>
+                <div class="canvas">
+                    <div class="canvas-content" id="canvas"></div>
+                </div>
+            </div>
+
+            <!-- Right: Controls -->
+            <div class="controls-panel">
+                <div class="control-group">
+                    <span class="control-label">Selected Block</span>
+                    <div id="selectedBlockInfo" style="color: var(--muted); font-size: 12px;">Click a block to edit</div>
+                </div>
+                <div id="editorControls"></div>
+            </div>
+        </div>
+
+        <div class="bottom-bar">
+            <button class="btn back" onclick="goBack()">← Cancel</button>
+            <button class="btn" onclick="saveLayout()">Save & Continue →</button>
         </div>
     </div>
 
@@ -125,134 +202,270 @@
         const postId = {{ post.id }};
         const postContent = `{{ post.content | safe }}`;
 
+        let selectedBlockId = null;
+        let blockIdCounter = 0;
+
         function parseHTML(html) {
             const div = document.createElement('div');
             div.innerHTML = html;
             const blocks = [];
 
             div.childNodes.forEach(node => {
-                if (node.nodeType === 3 && node.textContent.trim()) return; // Skip text nodes
-                if (node.tagName === 'P') {
-                    blocks.push({
-                        type: 'text',
-                        content: node.innerHTML,
-                        fontSize: 16,
-                        marginBottom: 16
-                    });
-                } else if (node.tagName === 'IMG') {
-                    blocks.push({
-                        type: 'image',
-                        src: node.src,
-                        alt: node.alt || 'Image',
-                        maxWidth: 100,
-                        marginBottom: 16
-                    });
+                if (node.nodeType === 3 && node.textContent.trim()) return;
+                if (node.tagName === 'P' || node.tagName === 'IMG') {
+                    const id = blockIdCounter++;
+                    if (node.tagName === 'P') {
+                        blocks.push({
+                            id, type: 'text', content: node.innerHTML,
+                            fontSize: node.style.fontSize || '16px',
+                            marginBottom: node.style.marginBottom || '16px'
+                        });
+                    } else if (node.tagName === 'IMG') {
+                        blocks.push({
+                            id, type: 'image', src: node.src, alt: node.alt || 'Image',
+                            maxWidth: node.style.maxWidth || '100%',
+                            marginBottom: node.style.marginBottom || '16px'
+                        });
+                    }
                 }
             });
             return blocks;
         }
 
-        function renderBlocks(blocks) {
+        let layout = [{ type: 'row', cols: 'cols-1', blocks: [] }];
+        let blocks = parseHTML(postContent);
+
+        function renderBlocksList() {
             const list = document.getElementById('blocksList');
             list.innerHTML = '';
+            blocks.forEach(block => {
+                const item = document.createElement('div');
+                item.className = `block-item ${block.type}`;
+                item.draggable = true;
+                item.innerHTML = `
+                    <span>${block.type === 'text' ? '📝' : '🖼'} ${block.type === 'text' ? 'Text' : 'Image'}</span>
+                    <span class="block-badge">#${block.id}</span>
+                `;
+                item.addEventListener('dragstart', (e) => {
+                    e.dataTransfer.effectAllowed = 'copy';
+                    e.dataTransfer.setData('blockId', block.id);
+                });
+                list.appendChild(item);
+            });
+        }
 
-            blocks.forEach((block, idx) => {
-                const blockEl = document.createElement('div');
-                blockEl.className = 'block';
-                blockEl.draggable = true;
-                blockEl.dataset.index = idx;
+        function renderCanvas() {
+            const canvas = document.getElementById('canvas');
+            canvas.innerHTML = '';
 
-                if (block.type === 'text') {
-                    blockEl.innerHTML = `
-                        <div class="block-header">
-                            <span class="block-label">Text Block ${idx + 1}</span>
-                            <div class="block-controls">
-                                <button class="btn-small delete" onclick="deleteBlock(${idx})">Delete</button>
-                            </div>
-                        </div>
-                        <div class="text-block">
-                            <textarea class="text-content" data-index="${idx}" onchange="updateBlock(${idx}, 'content', this.value)">${block.content}</textarea>
-                            <div class="text-options">
-                                <div class="option-group">
-                                    <label>Font Size (px)</label>
-                                    <input type="number" value="${block.fontSize}" onchange="updateBlock(${idx}, 'fontSize', this.value)" min="10" max="48">
-                                </div>
-                                <div class="option-group">
-                                    <label>Bottom Margin (px)</label>
-                                    <input type="number" value="${block.marginBottom}" onchange="updateBlock(${idx}, 'marginBottom', this.value)" min="0" max="60">
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                } else if (block.type === 'image') {
-                    blockEl.innerHTML = `
-                        <div class="block-header">
-                            <span class="block-label">Image ${idx + 1}</span>
-                            <div class="block-controls">
-                                <button class="btn-small delete" onclick="deleteBlock(${idx})">Delete</button>
-                            </div>
-                        </div>
-                        <div class="image-block">
-                            <img src="${block.src}" alt="${block.alt}" class="image-preview" style="max-width: ${block.maxWidth}%;">
-                            <div class="image-options">
-                                <div class="option-group">
-                                    <label>Max Width (%)</label>
-                                    <input type="number" value="${block.maxWidth}" onchange="updateBlock(${idx}, 'maxWidth', this.value)" min="20" max="100">
-                                </div>
-                                <div class="option-group">
-                                    <label>Bottom Margin (px)</label>
-                                    <input type="number" value="${block.marginBottom}" onchange="updateBlock(${idx}, 'marginBottom', this.value)" min="0" max="60">
-                                </div>
-                            </div>
-                        </div>
-                    `;
+            if (layout.length === 0) {
+                canvas.innerHTML = '<div style="text-align: center; color: var(--muted);">Add rows to start building</div>';
+                return;
+            }
+
+            layout.forEach((row, rowIdx) => {
+                const rowEl = document.createElement('div');
+                rowEl.className = `layout-row ${row.cols}`;
+                rowEl.dataset.rowIndex = rowIdx;
+
+                if (row.blocks.length === 0) {
+                    rowEl.classList.add('no-content');
+                    rowEl.innerHTML = `<div>Drag blocks here</div>`;
+                } else {
+                    row.cols === 'cols-2'
+                        ? renderTwoColRow(rowEl, row, rowIdx)
+                        : renderOneColRow(rowEl, row, rowIdx);
                 }
 
-                list.appendChild(blockEl);
+                rowEl.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'copy';
+                    rowEl.style.borderColor = 'rgba(241,186,32,0.6)';
+                });
+                rowEl.addEventListener('dragleave', () => {
+                    rowEl.style.borderColor = 'rgba(241,186,32,0.2)';
+                });
+                rowEl.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    rowEl.style.borderColor = 'rgba(241,186,32,0.2)';
+                    const blockId = parseInt(e.dataTransfer.getData('blockId'));
+                    addBlockToRow(rowIdx, blockId);
+                });
+
+                canvas.appendChild(rowEl);
+            });
+        }
+
+        function renderOneColRow(rowEl, row, rowIdx) {
+            row.blocks.forEach((blockId, colIdx) => {
+                const block = blocks.find(b => b.id === blockId);
+                if (!block) return;
+                const slot = renderBlockSlot(block, rowIdx, colIdx);
+                rowEl.appendChild(slot);
+            });
+            addRowControls(rowEl, rowIdx);
+        }
+
+        function renderTwoColRow(rowEl, row, rowIdx) {
+            const col1 = document.createElement('div');
+            const col2 = document.createElement('div');
+            if (row.blocks.length > 0) col1.appendChild(renderBlockSlot(blocks.find(b => b.id === row.blocks[0]), rowIdx, 0));
+            if (row.blocks.length > 1) col2.appendChild(renderBlockSlot(blocks.find(b => b.id === row.blocks[1]), rowIdx, 1));
+            rowEl.appendChild(col1);
+            rowEl.appendChild(col2);
+            addRowControls(rowEl, rowIdx);
+        }
+
+        function renderBlockSlot(block, rowIdx, colIdx) {
+            const slot = document.createElement('div');
+            slot.className = 'block-slot';
+            slot.dataset.blockId = block.id;
+            if (selectedBlockId === block.id) slot.classList.add('selected');
+
+            const content = document.createElement('div');
+            content.className = 'block-content';
+
+            if (block.type === 'text') {
+                content.innerHTML = block.content;
+                content.style.fontSize = block.fontSize;
+            } else {
+                const img = document.createElement('img');
+                img.src = block.src;
+                img.alt = block.alt;
+                img.style.maxWidth = block.maxWidth;
+                content.appendChild(img);
+            }
+
+            const toolbar = document.createElement('div');
+            toolbar.className = 'block-toolbar';
+            toolbar.innerHTML = `
+                <span>${block.type === 'text' ? 'Text' : 'Image'} #${block.id}</span>
+                <div>
+                    <button class="block-btn" onclick="selectBlock(${block.id}, ${rowIdx}, ${colIdx})">Edit</button>
+                    <button class="block-btn delete" onclick="removeBlock(${rowIdx}, ${colIdx})">Remove</button>
+                </div>
+            `;
+
+            slot.appendChild(content);
+            slot.appendChild(toolbar);
+            return slot;
+        }
+
+        function addRowControls(rowEl, rowIdx) {
+            const control = document.createElement('button');
+            control.className = 'block-btn'
+            control.style.position = 'absolute';
+            control.style.top = '-28px';
+            control.style.right = '0';
+            control.innerHTML = '×';
+            control.onclick = () => removeRow(rowIdx);
+            rowEl.style.position = 'relative';
+            rowEl.appendChild(control);
+        }
+
+        function selectBlock(blockId, rowIdx, colIdx) {
+            selectedBlockId = blockId;
+            const block = blocks.find(b => b.id === blockId);
+            document.getElementById('selectedBlockInfo').textContent = `${block.type === 'text' ? 'Text' : 'Image'} Block #${blockId}`;
+
+            const controls = document.getElementById('editorControls');
+            controls.innerHTML = '';
+
+            if (block.type === 'text') {
+                controls.innerHTML = `
+                    <div class="control-group">
+                        <label class="control-label">Content</label>
+                        <textarea class="control-input" style="height: 100px;" id="textContent">${block.content}</textarea>
+                        <button class="btn" style="width: 100%; margin-top: 8px;" onclick="updateTextBlock()">Update</button>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Font Size</label>
+                        <input type="text" class="control-input" id="fontSize" value="${block.fontSize}">
+                    </div>
+                `;
+            } else {
+                controls.innerHTML = `
+                    <div class="control-group">
+                        <label class="control-label">Max Width</label>
+                        <input type="text" class="control-input" id="maxWidth" value="${block.maxWidth}">
+                    </div>
+                    <button class="btn" style="width: 100%;" onclick="updateImageBlock()">Update</button>
+                `;
+            }
+            renderCanvas();
+        }
+
+        function updateTextBlock() {
+            const block = blocks.find(b => b.id === selectedBlockId);
+            block.content = document.getElementById('textContent').value;
+            block.fontSize = document.getElementById('fontSize').value;
+            renderCanvas();
+        }
+
+        function updateImageBlock() {
+            const block = blocks.find(b => b.id === selectedBlockId);
+            block.maxWidth = document.getElementById('maxWidth').value;
+            renderCanvas();
+        }
+
+        function addBlockToRow(rowIdx, blockId) {
+            if (!layout[rowIdx]) return;
+            if (layout[rowIdx].blocks.includes(blockId)) return;
+            if (layout[rowIdx].cols === 'cols-2' && layout[rowIdx].blocks.length >= 2) return;
+            layout[rowIdx].blocks.push(blockId);
+            renderCanvas();
+        }
+
+        function removeBlock(rowIdx, colIdx) {
+            if (layout[rowIdx]?.blocks[colIdx]) {
+                layout[rowIdx].blocks.splice(colIdx, 1);
+            }
+            selectedBlockId = null;
+            document.getElementById('editorControls').innerHTML = '';
+            renderCanvas();
+        }
+
+        function addRow(cols) {
+            layout.push({ type: 'row', cols, blocks: [] });
+            renderCanvas();
+        }
+
+        function removeRow(rowIdx) {
+            layout.splice(rowIdx, 1);
+            renderCanvas();
+        }
+
+        function saveLayout() {
+            const html = [];
+            layout.forEach(row => {
+                row.blocks.forEach(blockId => {
+                    const block = blocks.find(b => b.id === blockId);
+                    if (!block) return;
+                    if (block.type === 'text') {
+                        html.push(`<p style="font-size:${block.fontSize};margin-bottom:${block.marginBottom};">${block.content}</p>`);
+                    } else {
+                        html.push(`<img src="${block.src}" alt="${block.alt}" style="max-width:${block.maxWidth};height:auto;margin:0 0 ${block.marginBottom} 0;border-radius:8px;">`);
+                    }
+                });
             });
 
-            setupDragDrop();
-        }
-
-        let blocks = parseHTML(postContent);
-        renderBlocks(blocks);
-
-        function updateBlock(idx, prop, value) {
-            blocks[idx][prop] = isNaN(value) ? value : parseInt(value);
-        }
-
-        function deleteBlock(idx) {
-            blocks.splice(idx, 1);
-            renderBlocks(blocks);
-        }
-
-        function saveBlocks() {
-            const html = blocks.map(b => {
-                if (b.type === 'text') {
-                    return `<p style="font-size:${b.fontSize}px;margin-bottom:${b.marginBottom}px;">${b.content}</p>`;
-                } else if (b.type === 'image') {
-                    return `<img src="${b.src}" alt="${b.alt}" style="max-width:${b.maxWidth}%;height:auto;margin:0 0 ${b.marginBottom}px 0;border-radius:8px;" alt="${b.alt}">`;
-                }
-            }).join('\n');
+            const formData = new URLSearchParams({
+                title: '{{ post.title }}',
+                slug: '{{ post.slug }}',
+                excerpt: '{{ post.excerpt }}',
+                content: html.join('\n'),
+                hero_image: '{{ post.hero_image }}',
+                template: '{{ post.template }}',
+                status: '{{ post.status }}'
+            });
 
             fetch(`/admin/blog/${postId}/edit`, {
                 method: 'POST',
                 headers: { 'X-CSRF-Token': csrfToken, 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams({
-                    title: '{{ post.title }}',
-                    slug: '{{ post.slug }}',
-                    excerpt: '{{ post.excerpt }}',
-                    content: html,
-                    hero_image: '{{ post.hero_image }}',
-                    template: '{{ post.template }}',
-                    status: '{{ post.status }}'
-                })
+                body: formData
             }).then(() => {
                 window.location.href = `/admin/blog/${postId}/edit`;
-            }).catch(err => {
-                console.error('Error saving blocks:', err);
-                alert('Error saving. Please try again.');
-            });
+            }).catch(err => console.error('Error:', err));
         }
 
         function goBack() {
@@ -262,28 +475,8 @@
             }
         }
 
-        let draggedIdx = null;
-        function setupDragDrop() {
-            document.querySelectorAll('.block').forEach(el => {
-                el.addEventListener('dragstart', (e) => {
-                    draggedIdx = parseInt(e.target.closest('.block').dataset.index);
-                    e.target.closest('.block').classList.add('dragging');
-                });
-                el.addEventListener('dragend', () => {
-                    el.classList.remove('dragging');
-                });
-                el.addEventListener('dragover', (e) => e.preventDefault());
-                el.addEventListener('drop', (e) => {
-                    e.preventDefault();
-                    const targetIdx = parseInt(e.target.closest('.block').dataset.index);
-                    if (draggedIdx !== null && draggedIdx !== targetIdx) {
-                        const [moved] = blocks.splice(draggedIdx, 1);
-                        blocks.splice(targetIdx, 0, moved);
-                        renderBlocks(blocks);
-                    }
-                });
-            });
-        }
+        renderBlocksList();
+        renderCanvas();
     </script>
 </body>
 </html>
