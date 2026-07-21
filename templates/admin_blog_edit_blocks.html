@@ -335,13 +335,21 @@
 
             const overlay = document.createElement('div');
             overlay.className = 'block-overlay';
-            const hasNextInRow = colIdx < rows[rowIdx].blocks.length - 1;
-            const nextIsText = hasNextInRow && rows[rowIdx].blocks[colIdx + 1].type === 'text' && block.type === 'text';
+
+            // Check if there's a next text block anywhere in the layout
+            const currentBlockIdx = blocks.indexOf(block);
+            let hasNextText = false;
+            for (let i = currentBlockIdx + 1; i < blocks.length; i++) {
+                if (blocks[i].type === 'text') {
+                    hasNextText = true;
+                    break;
+                }
+            }
 
             overlay.innerHTML = `
                 <button class="block-btn" onclick="selectBlock(${block.id})">Edit</button>
                 ${block.colSpan < 2 ? `<button class="block-btn" onclick="resizeBlock(${block.id}, 2)">Widen</button>` : `<button class="block-btn" onclick="resizeBlock(${block.id}, 1)">Narrow</button>`}
-                ${nextIsText ? `<button class="block-btn" style="background:rgba(108,180,255,0.1);color:#6cb4ff;border-color:rgba(108,180,255,0.3);" onclick="combineBlocks(${rowIdx}, ${colIdx})">Merge</button>` : ''}
+                ${block.type === 'text' && hasNextText ? `<button class="block-btn" style="background:rgba(108,180,255,0.1);color:#6cb4ff;border-color:rgba(108,180,255,0.3);" onclick="mergeWithNext(${block.id})">Merge</button>` : ''}
                 <button class="block-btn delete" onclick="deleteBlock(${block.id})">Remove</button>
             `;
 
@@ -459,16 +467,37 @@
             renderCanvas();
         }
 
-        function combineBlocks(rowIdx, colIdx) {
-            const row = rows[rowIdx];
-            if (colIdx < row.blocks.length - 1) {
-                const current = row.blocks[colIdx];
-                const next = row.blocks[colIdx + 1];
-                current.content += '<br><br>' + next.content;
-                row.blocks.splice(colIdx + 1, 1);
-                blocks = blocks.filter(b => b.id !== next.id);
-                renderCanvas();
+        function mergeWithNext(blockId) {
+            const currentIdx = blocks.findIndex(b => b.id === blockId);
+            if (currentIdx === -1) return;
+
+            // Find next text block
+            let nextIdx = -1;
+            for (let i = currentIdx + 1; i < blocks.length; i++) {
+                if (blocks[i].type === 'text') {
+                    nextIdx = i;
+                    break;
+                }
             }
+
+            if (nextIdx === -1) return;
+
+            const current = blocks[currentIdx];
+            const next = blocks[nextIdx];
+
+            // Merge content
+            current.content += '<br><br>' + next.content;
+
+            // Remove next block from blocks array
+            blocks.splice(nextIdx, 1);
+
+            // Update rows
+            rows = rows.map(r => ({
+                blocks: r.blocks.filter(b => b.id !== next.id)
+            })).filter(r => r.blocks.length > 0);
+
+            selectedBlockId = null;
+            renderCanvas();
         }
 
         function updateFontSize(val) {
