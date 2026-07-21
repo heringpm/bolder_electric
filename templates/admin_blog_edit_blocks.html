@@ -931,10 +931,11 @@
             const cropLeftSlider = document.getElementById('cropLeftSlider');
             const cropRightSlider = document.getElementById('cropRightSlider');
             const previewImg = document.getElementById('previewImage');
+            const previewContainer = previewImg.parentElement;
 
             const height = heightSlider.value;
-            const cropTop = cropTopSlider.value;
-            const cropBottom = cropBottomSlider.value;
+            const cropTop = parseInt(cropTopSlider.value);
+            const cropBottom = parseInt(cropBottomSlider.value);
             const cropLeft = cropLeftSlider.value;
             const cropRight = cropRightSlider.value;
 
@@ -953,13 +954,15 @@
                 previewImg.style.clipPath = 'none';
             }
 
-            // Adjust preview container height to show cropped result without padding
-            const previewContainer = previewImg.parentElement;
+            // Adjust preview container to match visible content exactly
             if (cropTop || cropBottom) {
                 const visibleHeightPercent = 100 - cropTop - cropBottom;
-                previewContainer.style.height = (height * visibleHeightPercent / 100) + 'px';
+                const visibleHeight = height * visibleHeightPercent / 100;
+                previewContainer.style.height = visibleHeight + 'px';
+                previewContainer.style.aspectRatio = 'auto';
             } else {
                 previewContainer.style.height = 'auto';
+                previewContainer.style.aspectRatio = '16/9';
             }
         }
 
