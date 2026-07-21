@@ -459,6 +459,11 @@
             blockEl.draggable = true;
             blockEl.style.gridColumn = `span ${block.colSpan || 1}`;
 
+            // For images, align to top without centering
+            if (block.type === 'image') {
+                blockEl.style.alignItems = 'flex-start';
+            }
+
             const content = document.createElement('div');
             content.className = 'block-content';
 
