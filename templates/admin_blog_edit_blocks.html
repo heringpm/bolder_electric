@@ -905,17 +905,17 @@
             // Set up preview
             preview.src = block.src;
             document.getElementById('editorHeightSlider').value = block.height || 200;
-            document.getElementById('editorHeightValue').textContent = (block.height || 200) + 'px';
             document.getElementById('cropTopSlider').value = block.cropTop || 0;
-            document.getElementById('cropTopValue').textContent = (block.cropTop || 0) + '%';
             document.getElementById('cropBottomSlider').value = block.cropBottom || 0;
-            document.getElementById('cropBottomValue').textContent = (block.cropBottom || 0) + '%';
             document.getElementById('cropLeftSlider').value = block.cropLeft || 0;
-            document.getElementById('cropLeftValue').textContent = (block.cropLeft || 0) + '%';
             document.getElementById('cropRightSlider').value = block.cropRight || 0;
-            document.getElementById('cropRightValue').textContent = (block.cropRight || 0) + '%';
 
             modal.classList.add('active');
+
+            // Update preview to show current state
+            setTimeout(() => {
+                updateEditorPreview();
+            }, 50);
         }
 
         function closeImageEditor() {
@@ -925,11 +925,42 @@
         }
 
         function updateEditorPreview() {
-            document.getElementById('editorHeightValue').textContent = document.getElementById('editorHeightSlider').value + 'px';
-            document.getElementById('cropTopValue').textContent = document.getElementById('cropTopSlider').value + '%';
-            document.getElementById('cropBottomValue').textContent = document.getElementById('cropBottomSlider').value + '%';
-            document.getElementById('cropLeftValue').textContent = document.getElementById('cropLeftSlider').value + '%';
-            document.getElementById('cropRightValue').textContent = document.getElementById('cropRightSlider').value + '%';
+            const heightSlider = document.getElementById('editorHeightSlider');
+            const cropTopSlider = document.getElementById('cropTopSlider');
+            const cropBottomSlider = document.getElementById('cropBottomSlider');
+            const cropLeftSlider = document.getElementById('cropLeftSlider');
+            const cropRightSlider = document.getElementById('cropRightSlider');
+            const previewImg = document.getElementById('previewImage');
+
+            const height = heightSlider.value;
+            const cropTop = cropTopSlider.value;
+            const cropBottom = cropBottomSlider.value;
+            const cropLeft = cropLeftSlider.value;
+            const cropRight = cropRightSlider.value;
+
+            // Update value displays
+            document.getElementById('editorHeightValue').textContent = height + 'px';
+            document.getElementById('cropTopValue').textContent = cropTop + '%';
+            document.getElementById('cropBottomValue').textContent = cropBottom + '%';
+            document.getElementById('cropLeftValue').textContent = cropLeft + '%';
+            document.getElementById('cropRightValue').textContent = cropRight + '%';
+
+            // Apply preview styling to image
+            previewImg.style.height = height + 'px';
+            if (cropTop || cropBottom || cropLeft || cropRight) {
+                previewImg.style.clipPath = `inset(${cropTop}% ${cropRight}% ${cropBottom}% ${cropLeft}%)`;
+            } else {
+                previewImg.style.clipPath = 'none';
+            }
+
+            // Adjust preview container height to show cropped result without padding
+            const previewContainer = previewImg.parentElement;
+            if (cropTop || cropBottom) {
+                const visibleHeightPercent = 100 - cropTop - cropBottom;
+                previewContainer.style.height = (height * visibleHeightPercent / 100) + 'px';
+            } else {
+                previewContainer.style.height = 'auto';
+            }
         }
 
         function saveImageEdits() {
