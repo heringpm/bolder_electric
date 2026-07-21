@@ -167,6 +167,60 @@
         .slider-group {
             display: flex; gap: 8px; align-items: center;
         }
+
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: center;
+        }
+        .modal-overlay.active { display: flex; }
+
+        .image-editor-modal {
+            background: var(--panel); border: 1px solid var(--line); border-radius: 8px;
+            width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto; padding: 20px;
+        }
+        .image-editor-modal h2 {
+            margin: 0 0 20px 0; font-size: 18px; color: var(--gold);
+        }
+
+        .image-preview {
+            position: relative; background: rgba(0,0,0,0.3); border: 2px solid var(--line);
+            border-radius: 6px; overflow: hidden; margin-bottom: 20px; aspect-ratio: 16/9;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .image-preview img {
+            width: 100%; height: 100%; object-fit: contain;
+        }
+
+        .editor-controls {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;
+        }
+        .control-section {
+            border: 1px solid rgba(241,186,32,0.2); border-radius: 6px; padding: 12px;
+            background: rgba(241,186,32,0.03);
+        }
+        .control-section h3 {
+            margin: 0 0 12px 0; font-size: 13px; color: var(--gold); text-transform: uppercase; letter-spacing: 0.05em;
+        }
+        .control-section .control-group {
+            margin-bottom: 12px;
+        }
+        .control-section .control-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .modal-actions {
+            display: flex; gap: 8px; justify-content: flex-end;
+        }
+        .modal-actions button {
+            padding: 8px 16px; border-radius: 6px; border: 1px solid var(--line);
+            background: rgba(241,186,32,0.12); color: var(--gold); cursor: pointer;
+            font-family: "Bebas Neue", Arial, sans-serif; font-size: 12px;
+        }
+        .modal-actions button:hover { background: rgba(241,186,32,0.2); }
+        .modal-actions .btn-primary {
+            background: rgba(241,186,32,0.25); color: var(--gold);
+        }
+        .modal-actions .btn-primary:hover { background: rgba(241,186,32,0.35); }
         .slider-group input[type="range"] {
             flex: 1; height: 4px; background: rgba(241,186,32,0.2); border-radius: 2px;
             -webkit-appearance: none; appearance: none;
@@ -239,6 +293,67 @@
         </div>
     </div>
 
+    <!-- Image Editor Modal -->
+    <div class="modal-overlay" id="imageEditorModal">
+        <div class="image-editor-modal">
+            <h2>Edit Image</h2>
+
+            <div class="image-preview">
+                <img id="previewImage" src="" alt="Image preview">
+            </div>
+
+            <div class="editor-controls">
+                <div class="control-section">
+                    <h3>Scale</h3>
+                    <div class="control-group">
+                        <label class="control-label">Height (px)</label>
+                        <div class="slider-group">
+                            <input type="range" min="50" max="600" value="200" id="editorHeightSlider" oninput="updateEditorPreview()">
+                            <span class="slider-value" id="editorHeightValue">200px</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="control-section">
+                    <h3>Crop</h3>
+                    <div class="control-group">
+                        <label class="control-label">Top (%)</label>
+                        <div class="slider-group">
+                            <input type="range" min="0" max="50" value="0" id="cropTopSlider" oninput="updateEditorPreview()">
+                            <span class="slider-value" id="cropTopValue">0%</span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Bottom (%)</label>
+                        <div class="slider-group">
+                            <input type="range" min="0" max="50" value="0" id="cropBottomSlider" oninput="updateEditorPreview()">
+                            <span class="slider-value" id="cropBottomValue">0%</span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Left (%)</label>
+                        <div class="slider-group">
+                            <input type="range" min="0" max="50" value="0" id="cropLeftSlider" oninput="updateEditorPreview()">
+                            <span class="slider-value" id="cropLeftValue">0%</span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Right (%)</label>
+                        <div class="slider-group">
+                            <input type="range" min="0" max="50" value="0" id="cropRightSlider" oninput="updateEditorPreview()">
+                            <span class="slider-value" id="cropRightValue">0%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button onclick="closeImageEditor()">Cancel</button>
+                <button class="btn-primary" onclick="saveImageEdits()">Save</button>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
     <script>
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
@@ -254,6 +369,7 @@
         let resizeStartY = 0;
         let resizeStartHeight = 0;
         let resizeBlockId = null;
+        let editingImageBlockId = null;
 
         function parseHTML(html) {
             const div = document.createElement('div');
@@ -277,6 +393,19 @@
                             marginBottom: parseInt(node.style.marginBottom) || 16
                         });
                     } else if (node.tagName === 'IMG') {
+                        // Parse clip-path to extract crop values
+                        let cropTop = 0, cropRight = 0, cropBottom = 0, cropLeft = 0;
+                        const clipPath = node.style.clipPath;
+                        if (clipPath && clipPath.includes('inset')) {
+                            const match = clipPath.match(/inset\(([^)]+)\)/);
+                            if (match) {
+                                const values = match[1].split(/\s+/).map(v => parseInt(v));
+                                cropTop = values[0] || 0;
+                                cropRight = values[1] || 0;
+                                cropBottom = values[2] || 0;
+                                cropLeft = values[3] || 0;
+                            }
+                        }
                         blocks.push({
                             id, type: 'image',
                             src: node.src,
@@ -285,7 +414,8 @@
                             height: parseInt(node.style.height) || null,
                             align: 'center',
                             colSpan: 1,
-                            marginBottom: parseInt(node.style.marginBottom) || 16
+                            marginBottom: parseInt(node.style.marginBottom) || 16,
+                            cropTop, cropRight, cropBottom, cropLeft
                         });
                     }
                 }
@@ -366,6 +496,15 @@
                 img.style.display = 'block';
                 if (block.align === 'center') img.style.margin = '0 auto';
 
+                // Apply crop using clip-path if crop values are set
+                const cropTop = block.cropTop || 0;
+                const cropBottom = block.cropBottom || 0;
+                const cropLeft = block.cropLeft || 0;
+                const cropRight = block.cropRight || 0;
+                if (cropTop || cropBottom || cropLeft || cropRight) {
+                    img.style.clipPath = `inset(${cropTop}% ${cropRight}% ${cropBottom}% ${cropLeft}%)`;
+                }
+
                 content.appendChild(img);
 
                 // Add resize handle
@@ -421,7 +560,7 @@
             }
 
             overlay.innerHTML = `
-                <button class="block-btn" onclick="selectBlock(${block.id})">Edit</button>
+                ${block.type === 'image' ? `<button class="block-btn" style="background:rgba(108,180,255,0.1);color:#6cb4ff;border-color:rgba(108,180,255,0.3);" onclick="openImageEditor(${block.id})">Edit Image</button>` : `<button class="block-btn" onclick="selectBlock(${block.id})">Edit</button>`}
                 ${block.colSpan < 2 ? `<button class="block-btn" onclick="resizeBlock(${block.id}, 2)">Widen</button>` : `<button class="block-btn" onclick="resizeBlock(${block.id}, 1)">Narrow</button>`}
                 ${block.type === 'text' && hasNextText ? `<button class="block-btn" style="background:rgba(108,180,255,0.1);color:#6cb4ff;border-color:rgba(108,180,255,0.3);" onclick="mergeWithNext(${block.id})">Merge</button>` : ''}
                 <button class="block-btn delete" onclick="deleteBlock(${block.id})">Remove</button>
@@ -706,7 +845,12 @@
                 if (block.type === 'text') {
                     return `<p style="text-align:${block.align};font-size:${block.fontSize}px;font-family:${block.fontFamily || 'inherit'};color:${block.color || '#f5f3ef'};margin-bottom:${block.marginBottom || 16}px;${block.bold ? 'font-weight:bold;' : ''}">${block.content}</p>`;
                 } else {
-                    return `<img src="${block.src}" alt="${block.alt}" style="max-width:${block.maxWidth}%;${block.height ? 'height:' + block.height + 'px;' : 'height:auto;'}margin-bottom:${block.marginBottom || 16}px;${block.align === 'center' ? 'display:block;margin-left:auto;margin-right:auto;' : ''}border-radius:8px;">`;
+                    const cropTop = block.cropTop || 0;
+                    const cropRight = block.cropRight || 0;
+                    const cropBottom = block.cropBottom || 0;
+                    const cropLeft = block.cropLeft || 0;
+                    const clipPath = (cropTop || cropRight || cropBottom || cropLeft) ? `clip-path:inset(${cropTop}% ${cropRight}% ${cropBottom}% ${cropLeft}%);` : '';
+                    return `<img src="${block.src}" alt="${block.alt}" style="max-width:${block.maxWidth}%;${block.height ? 'height:' + block.height + 'px;' : 'height:auto;'}margin-bottom:${block.marginBottom || 16}px;${block.align === 'center' ? 'display:block;margin-left:auto;margin-right:auto;' : ''}border-radius:8px;${clipPath}">`;
                 }
             }).join('\n');
 
@@ -741,6 +885,59 @@
             if (confirm('Discard all changes?')) {
                 window.location.href = '/admin#blog';
             }
+        }
+
+        function openImageEditor(blockId) {
+            const block = blocks.find(b => b.id === blockId);
+            if (!block || block.type !== 'image') return;
+
+            editingImageBlockId = blockId;
+            const modal = document.getElementById('imageEditorModal');
+            const preview = document.getElementById('previewImage');
+
+            // Set up preview
+            preview.src = block.src;
+            document.getElementById('editorHeightSlider').value = block.height || 200;
+            document.getElementById('editorHeightValue').textContent = (block.height || 200) + 'px';
+            document.getElementById('cropTopSlider').value = block.cropTop || 0;
+            document.getElementById('cropTopValue').textContent = (block.cropTop || 0) + '%';
+            document.getElementById('cropBottomSlider').value = block.cropBottom || 0;
+            document.getElementById('cropBottomValue').textContent = (block.cropBottom || 0) + '%';
+            document.getElementById('cropLeftSlider').value = block.cropLeft || 0;
+            document.getElementById('cropLeftValue').textContent = (block.cropLeft || 0) + '%';
+            document.getElementById('cropRightSlider').value = block.cropRight || 0;
+            document.getElementById('cropRightValue').textContent = (block.cropRight || 0) + '%';
+
+            modal.classList.add('active');
+        }
+
+        function closeImageEditor() {
+            const modal = document.getElementById('imageEditorModal');
+            modal.classList.remove('active');
+            editingImageBlockId = null;
+        }
+
+        function updateEditorPreview() {
+            document.getElementById('editorHeightValue').textContent = document.getElementById('editorHeightSlider').value + 'px';
+            document.getElementById('cropTopValue').textContent = document.getElementById('cropTopSlider').value + '%';
+            document.getElementById('cropBottomValue').textContent = document.getElementById('cropBottomSlider').value + '%';
+            document.getElementById('cropLeftValue').textContent = document.getElementById('cropLeftSlider').value + '%';
+            document.getElementById('cropRightValue').textContent = document.getElementById('cropRightSlider').value + '%';
+        }
+
+        function saveImageEdits() {
+            if (editingImageBlockId === null) return;
+            const block = blocks.find(b => b.id === editingImageBlockId);
+            if (!block) return;
+
+            block.height = parseInt(document.getElementById('editorHeightSlider').value);
+            block.cropTop = parseInt(document.getElementById('cropTopSlider').value);
+            block.cropBottom = parseInt(document.getElementById('cropBottomSlider').value);
+            block.cropLeft = parseInt(document.getElementById('cropLeftSlider').value);
+            block.cropRight = parseInt(document.getElementById('cropRightSlider').value);
+
+            closeImageEditor();
+            renderCanvas();
         }
 
         // Set up global image resize handlers
