@@ -502,7 +502,10 @@
                 resizeHandle.style.borderRadius = '2px';
                 resizeHandle.title = 'Drag to resize';
 
+                // Remove padding and set flex start alignment for images
                 blockEl.style.position = 'relative';
+                blockEl.style.padding = '0';
+                blockEl.style.alignItems = 'flex-start';
                 blockEl.appendChild(img);
                 blockEl.appendChild(resizeHandle);
                 blockEl.appendChild(overlay);
