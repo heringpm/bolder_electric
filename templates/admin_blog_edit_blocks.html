@@ -464,6 +464,9 @@
                 blockEl.style.padding = '0';
             }
 
+            const overlay = document.createElement('div');
+            overlay.className = 'block-overlay';
+
             const content = document.createElement('div');
             content.className = 'block-content';
 
@@ -546,9 +549,6 @@
                     selectBlock(block.id);
                 });
             }
-
-            const overlay = document.createElement('div');
-            overlay.className = 'block-overlay';
 
             // Check if there's a next text block anywhere in the layout
             const currentBlockIdx = blocks.indexOf(block);
