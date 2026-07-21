@@ -469,6 +469,13 @@
                     document.body.style.cursor = 'se-resize';
                 });
 
+                // Set overlay buttons for image
+                overlay.innerHTML = `
+                    <button class="block-btn" style="background:rgba(108,180,255,0.1);color:#6cb4ff;border-color:rgba(108,180,255,0.3);" onclick="openImageEditor(${block.id})">Edit</button>
+                    ${block.colSpan < 2 ? `<button class="block-btn" onclick="resizeBlock(${block.id}, 2)">Widen</button>` : `<button class="block-btn" onclick="resizeBlock(${block.id}, 1)">Narrow</button>`}
+                    <button class="block-btn delete" onclick="deleteBlock(${block.id})">Remove</button>
+                `;
+
                 return blockEl;
             }
 
