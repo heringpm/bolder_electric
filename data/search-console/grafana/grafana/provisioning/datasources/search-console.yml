@@ -1,0 +1,18 @@
+apiVersion: 1
+
+datasources:
+  - name: Search Console Postgres
+    uid: search_console_postgres
+    type: postgres
+    access: proxy
+    url: postgres:5432
+    user: search_console
+    database: search_console
+    isDefault: true
+    editable: true
+    secureJsonData:
+      password: search_console
+    jsonData:
+      sslmode: disable
+      postgresVersion: 1600
+      timescaledb: false

@@ -1,0 +1,40 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: bolder-search-console-postgres
+    environment:
+      POSTGRES_DB: search_console
+      POSTGRES_USER: search_console
+      POSTGRES_PASSWORD: search_console
+    ports:
+      - "55432:5432"
+    volumes:
+      - search_console_postgres:/var/lib/postgresql/data
+      - ./data/search-console/grafana/postgres/init:/docker-entrypoint-initdb.d:ro
+      - ./data/search-console:/search-console:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U search_console -d search_console"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  grafana:
+    image: grafana/grafana-oss:11.5.2
+    container_name: bolder-search-console-grafana
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_USERS_DEFAULT_THEME: light
+    ports:
+      - "3001:3000"
+    volumes:
+      - search_console_grafana:/var/lib/grafana
+      - ./data/search-console/grafana/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./data/search-console/grafana/grafana/dashboards:/var/lib/grafana/dashboards:ro
+
+volumes:
+  search_console_postgres:
+  search_console_grafana:

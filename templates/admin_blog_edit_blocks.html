@@ -3,27 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog Editor | Bolder Electric Admin</title>
+    <title>Blog Editor - Bolder Electric</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+
+    <link rel="stylesheet" href="https://unpkg.com/grapesjs@latest/dist/css/grapes.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
-        :root {
-            --bg: #0a0a0a;
-            --panel: #111;
-            --gold: #f1ba20;
-            --text: #f5f3ef;
-            --muted: rgba(245,243,239,0.6);
-            --line: rgba(241,186,32,0.22);
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
 
-        * { box-sizing: border-box; }
-        body { margin: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; }
-
-        .container { display: flex; height: 100vh; flex-direction: column; }
-
-        .header {
-            background: var(--panel);
-            border-bottom: 1px solid var(--line);
+        .top-bar {
+            background: #111;
+            border-bottom: 1px solid rgba(241,186,32,0.22);
             padding: 16px 24px;
             display: flex;
             gap: 16px;
@@ -31,316 +24,195 @@
         }
 
         .title-input {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: bold;
             background: transparent;
             border: none;
-            color: var(--text);
+            color: #f5f3ef;
             flex: 1;
-            padding: 8px 0;
+            padding: 8px;
         }
 
-        .title-input:focus { outline: none; color: var(--gold); }
+        .title-input:focus { outline: none; color: #f1ba20; }
 
         .btn {
             padding: 8px 16px;
-            border: 1px solid var(--line);
+            border: 1px solid rgba(241,186,32,0.22);
             background: rgba(241,186,32,0.12);
-            color: var(--gold);
+            color: #f1ba20;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 12px;
             font-weight: bold;
-            white-space: nowrap;
+            font-size: 12px;
         }
 
         .btn:hover { background: rgba(241,186,32,0.2); }
         .btn.primary { background: rgba(241,186,32,0.25); }
 
-        .editor-area { display: flex; flex: 1; overflow: hidden; }
+        #editor { height: calc(100vh - 60px); }
 
-        .sidebar {
-            width: 220px;
-            background: rgba(0,0,0,0.3);
-            border-right: 1px solid var(--line);
-            padding: 20px 16px;
-            overflow-y: auto;
-        }
-
-        .sidebar-title {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--gold);
-            margin-bottom: 12px;
-            font-weight: bold;
-        }
-
-        .add-btn {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 8px;
-            background: rgba(241,186,32,0.15);
-            border: 1px solid rgba(241,186,32,0.3);
-            color: var(--gold);
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: bold;
-            transition: all 0.2s;
-        }
-
-        .add-btn:hover { background: rgba(241,186,32,0.25); border-color: rgba(241,186,32,0.5); }
-
-        .canvas {
-            flex: 1;
-            background: linear-gradient(135deg, rgba(241,186,32,0.02) 0%, transparent 100%);
-            overflow-y: auto;
-            padding: 40px;
-        }
-
-        .blocks-container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .block {
-            background: var(--panel);
-            border: 2px solid transparent;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            padding: 20px;
-            cursor: move;
-            transition: all 0.2s;
-            position: relative;
-            user-select: none;
-        }
-
-        .block:hover { border-color: var(--gold); background: rgba(241,186,32,0.08); }
-        .block.selected { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(241,186,32,0.3); }
-
-        .block-controls {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            display: flex;
-            gap: 4px;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-
-        .block:hover .block-controls { opacity: 1; }
-
-        .control-btn {
-            padding: 4px 8px;
-            background: rgba(241,186,32,0.2);
-            border: 1px solid rgba(241,186,32,0.3);
-            color: var(--gold);
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 11px;
-        }
-
-        .control-btn:hover { background: rgba(241,186,32,0.3); }
-        .control-btn.delete { color: #e05252; border-color: rgba(224,82,82,0.3); background: rgba(224,82,82,0.05); }
-        .control-btn.delete:hover { background: rgba(224,82,82,0.15); }
-
-        .text-block { min-height: 60px; }
-        .text-block p { margin: 0; line-height: 1.6; }
-        .text-block[contenteditable] { outline: none; }
-        .text-block[contenteditable]:focus { background: rgba(241,186,32,0.1); padding: 4px; border-radius: 4px; }
-
-        .image-block img { width: 100%; max-height: 500px; object-fit: cover; border-radius: 4px; }
-
-        .empty-state { text-align: center; padding: 60px 20px; color: var(--muted); }
-        .empty-state p { margin: 0; }
+        /* GrapesJS Theme */
+        .gjs-editor-cont { background: #0a0a0a !important; }
+        .gjs-panel__top { background: #111 !important; border-bottom: 1px solid rgba(241,186,32,0.22) !important; }
+        .gjs-pn-panel { background: #161616 !important; border-color: rgba(241,186,32,0.22) !important; }
+        .gjs-pn-btn { color: rgba(245,243,239,0.6) !important; }
+        .gjs-pn-btn:hover { background: rgba(241,186,32,0.1) !important; color: #f1ba20 !important; }
+        .gjs-pn-btn.gjs-pn-active { background: rgba(241,186,32,0.2) !important; color: #f1ba20 !important; }
+        .gjs-pn-input { background: rgba(0,0,0,0.3) !important; border: 1px solid rgba(241,186,32,0.22) !important; color: #f5f3ef !important; }
+        .gjs-pn-input:focus { border-color: #f1ba20 !important; }
+        .gjs-pn-label { color: rgba(245,243,239,0.6) !important; }
+        .gjs-block { background: rgba(241,186,32,0.1) !important; border: 1px solid rgba(241,186,32,0.2) !important; color: #f5f3ef !important; }
+        .gjs-block:hover { background: rgba(241,186,32,0.2) !important; }
+        .gjs-canvas { background: linear-gradient(135deg, rgba(241,186,32,0.02) 0%, transparent 100%) !important; }
+        .gjs-frame { background: #f5f3ef !important; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <input type="text" class="title-input" id="titleInput" placeholder="Post Title" value="{{ post.title or '' }}">
-            <button class="btn" onclick="goBack()">← Discard</button>
-            <button class="btn primary" onclick="savePost()">Save & Publish</button>
-        </div>
-
-        <div class="editor-area">
-            <div class="sidebar">
-                <div class="sidebar-title">Add Blocks</div>
-                <button class="add-btn" onclick="addTextBlock()">+ Text</button>
-                <button class="add-btn" onclick="addImageBlock()">+ Image</button>
-            </div>
-
-            <div class="canvas">
-                <div class="blocks-container" id="blocksContainer"></div>
-            </div>
-        </div>
+    <div class="top-bar">
+        <input type="text" class="title-input" id="titleInput" placeholder="Post Title" value="{{ post.title or '' }}">
+        <button class="btn" onclick="goBack()">← Discard</button>
+        <button class="btn primary" onclick="savePost()">Save & Publish</button>
     </div>
 
+    <div id="editor"></div>
+
+    <script src="https://unpkg.com/grapesjs@latest/dist/grapes.min.js"></script>
     <script>
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
         const postId = {{ post.id }};
         const postContent = `{{ post.content | safe }}`;
 
-        let blocks = [];
-        let blockIdCounter = 0;
-        let selectedBlockId = null;
-
-        class Block {
-            constructor(id, type, content = '') {
-                this.id = id;
-                this.type = type;
-                this.content = content;
-            }
-        }
-
-        function parseContent() {
-            if (!postContent || !postContent.trim()) return;
-
-            const div = document.createElement('div');
-            div.innerHTML = postContent;
-
-            div.querySelectorAll('*').forEach(el => {
-                if (el.tagName === 'P') {
-                    blocks.push(new Block(blockIdCounter++, 'text', el.innerHTML));
-                } else if (el.tagName === 'IMG') {
-                    blocks.push(new Block(blockIdCounter++, 'image', el.src));
+        // Wait for GrapesJS to load
+        if (typeof grapesjs === 'undefined') {
+            console.error('GrapesJS failed to load');
+            document.body.innerHTML = '<p style="color: red; padding: 20px;">Error: Failed to load editor library</p>';
+        } else {
+            // Initialize editor
+            const editor = grapesjs.init({
+                container: '#editor',
+                fromElement: false,
+                height: '100%',
+                storageManager: false,
+                undoManager: { trackChanges: true },
+                assetManager: {
+                    uploadText: 'Drop images here or click to upload'
+                },
+                blockManager: {
+                    blocks: [
+                        {
+                            id: 'text',
+                            label: 'Text',
+                            content: '<p>Add your text here</p>',
+                            category: 'Basic',
+                            attributes: { class: 'fa fa-text-width' }
+                        },
+                        {
+                            id: 'image',
+                            label: 'Image',
+                            content: '<img src="https://via.placeholder.com/600x400" style="width:100%">',
+                            category: 'Basic',
+                            attributes: { class: 'fa fa-image' }
+                        },
+                        {
+                            id: 'section',
+                            label: 'Section',
+                            content: '<section style="padding:20px; background:#f0f0f0;"><h2>Section Title</h2><p>Add your content here</p></section>',
+                            category: 'Layout',
+                            attributes: { class: 'fa fa-object-group' }
+                        }
+                    ]
+                },
+                styleManager: {
+                    sectors: [
+                        {
+                            name: 'General',
+                            open: false,
+                            buildProps: ['float', 'display', 'position', 'top', 'right', 'bottom', 'left']
+                        },
+                        {
+                            name: 'Flex',
+                            open: false,
+                            buildProps: ['flex-direction', 'flex-wrap', 'justify-content', 'align-items', 'gap']
+                        },
+                        {
+                            name: 'Dimension',
+                            open: false,
+                            buildProps: ['margin', 'padding', 'width', 'height', 'max-width', 'min-height']
+                        },
+                        {
+                            name: 'Typography',
+                            open: false,
+                            buildProps: ['font-family', 'font-size', 'font-weight', 'letter-spacing', 'color', 'line-height', 'text-align']
+                        },
+                        {
+                            name: 'Decorations',
+                            open: false,
+                            buildProps: ['background-color', 'border-radius', 'border', 'box-shadow']
+                        }
+                    ]
+                },
+                traitManager: {
+                    autoOpen: false
                 }
             });
-        }
 
-        function render() {
-            const container = document.getElementById('blocksContainer');
-
-            if (blocks.length === 0) {
-                container.innerHTML = '<div class="empty-state"><p>Click + Text or + Image to get started</p></div>';
-                return;
+            // Load existing content
+            if (postContent && postContent.trim()) {
+                try {
+                    editor.setComponents(postContent);
+                } catch (e) {
+                    console.log('Could not parse existing content, starting fresh');
+                }
             }
 
-            container.innerHTML = blocks.map(block => {
-                const isSelected = block.id === selectedBlockId;
-                return `
-                    <div class="block ${isSelected ? 'selected' : ''}" data-id="${block.id}" onclick="selectBlock(${block.id})">
-                        <div class="block-controls">
-                            <button class="control-btn delete" onclick="deleteBlock(${block.id}); return false;">Delete</button>
-                        </div>
-                        ${block.type === 'text' ? `
-                            <p class="text-block" contenteditable="true" onblur="updateBlockContent(${block.id}, this.innerHTML)" onkeydown="handleEnter(event, ${block.id})">${block.content}</p>
-                        ` : `
-                            <div class="image-block">
-                                <img src="${block.content}" alt="Block image" style="width: 100%; border-radius: 4px;">
-                            </div>
-                        `}
-                    </div>
-                `;
-            }).join('');
-        }
+            // Custom save command
+            editor.Commands.add('save-post', {
+                run() { savePost(); }
+            });
 
-        function selectBlock(id) {
-            selectedBlockId = id;
-            render();
-        }
+            window.savePost = function() {
+                const title = document.getElementById('titleInput').value.trim();
+                if (!title) {
+                    alert('Please enter a title');
+                    return;
+                }
 
-        function addTextBlock() {
-            blocks.push(new Block(blockIdCounter++, 'text', '<p>Add your text here</p>'));
-            render();
-            setTimeout(() => {
-                const p = document.querySelector('[data-id="' + (blockIdCounter - 1) + '"] p');
-                if (p) p.focus();
-            }, 0);
-        }
+                const html = editor.getHtml();
+                const css = editor.getCss();
 
-        function addImageBlock() {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = 'image/*';
-            input.onchange = (e) => {
-                const file = e.target.files[0];
-                if (!file) return;
+                const formData = new URLSearchParams({
+                    title,
+                    slug: title.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+                    excerpt: '{{ post.excerpt or '' }}',
+                    content: html,
+                    hero_image: '{{ post.hero_image or '' }}',
+                    template: '{{ post.template or 1 }}',
+                    status: 'published'
+                });
 
-                const formData = new FormData();
-                formData.append('file', file);
+                const endpoint = postId === 0 ? '/admin/blog/new' : `/admin/blog/${postId}/edit`;
 
-                fetch('/admin/blog/upload-image', {
+                fetch(endpoint, {
                     method: 'POST',
-                    headers: { 'X-CSRF-Token': csrfToken },
+                    headers: {
+                        'X-CSRF-Token': csrfToken,
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
                     body: formData
                 })
-                .then(res => res.json())
-                .then(data => {
-                    blocks.push(new Block(blockIdCounter++, 'image', data.url));
-                    render();
+                .then(res => {
+                    if (!res.ok) throw new Error('Save failed');
+                    window.location.href = '/admin#blog';
                 })
-                .catch(err => alert('Error uploading image'));
+                .catch(err => alert('Error: ' + err.message));
             };
-            input.click();
-        }
 
-        function deleteBlock(id) {
-            blocks = blocks.filter(b => b.id !== id);
-            selectedBlockId = null;
-            render();
-        }
-
-        function updateBlockContent(id, content) {
-            const block = blocks.find(b => b.id === id);
-            if (block) block.content = content;
-        }
-
-        function handleEnter(e, id) {
-            // Let default enter behavior work
-        }
-
-        function goBack() {
-            if (confirm('Discard all changes?')) {
-                window.location.href = '/admin#blog';
-            }
-        }
-
-        function savePost() {
-            const title = document.getElementById('titleInput').value.trim();
-            if (!title) {
-                alert('Please enter a title');
-                return;
-            }
-
-            const html = blocks.map(block => {
-                if (block.type === 'text') {
-                    return `<p>${block.content}</p>`;
-                } else {
-                    return `<img src="${block.content}" alt="Image" style="width: 100%; border-radius: 4px;">`;
+            window.goBack = function() {
+                if (confirm('Discard all changes?')) {
+                    window.location.href = '/admin#blog';
                 }
-            }).join('\n');
-
-            const formData = new URLSearchParams({
-                title,
-                slug: title.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-                excerpt: '{{ post.excerpt or '' }}',
-                content: html,
-                hero_image: '{{ post.hero_image or '' }}',
-                template: '{{ post.template or 1 }}',
-                status: 'published'
-            });
-
-            const endpoint = postId === 0 ? '/admin/blog/new' : `/admin/blog/${postId}/edit`;
-
-            fetch(endpoint, {
-                method: 'POST',
-                headers: { 'X-CSRF-Token': csrfToken, 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: formData
-            })
-            .then(response => {
-                if (!response.ok) throw new Error('Save failed');
-                window.location.href = '/admin#blog';
-            })
-            .catch(err => {
-                alert('Error saving post: ' + err.message);
-            });
+            };
         }
-
-        // Initialize
-        parseContent();
-        render();
     </script>
 </body>
 </html>
