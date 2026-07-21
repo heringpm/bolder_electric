@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit PDF Blocks | Bolder Electric Admin</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+    <style>
+        :root {
+            --bg: #0a0a0a; --panel: #111; --panel2: #161616;
+            --line: rgba(241,186,32,0.22); --gold: #f1ba20;
+            --text: #f5f3ef; --muted: rgba(245,243,239,0.6);
+        }
+        * { box-sizing: border-box; }
+        body { margin: 0; background: var(--bg); color: var(--text); font-family: "Barlow Condensed", Arial, sans-serif; font-size: 16px; }
+        a { color: inherit; text-decoration: none; }
+
+        .header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 28px; height: 64px;
+            background: var(--panel); border-bottom: 1px solid var(--line);
+            position: sticky; top: 0; z-index: 100;
+        }
+        .header-title {
+            font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: 22px; letter-spacing: 0.06em; color: var(--gold);
+        }
+
+        .container {
+            max-width: 900px; margin: 24px auto; padding: 0 24px;
+        }
+
+        .blocks-list {
+            display: flex; flex-direction: column; gap: 16px;
+        }
+
+        .block {
+            padding: 16px; background: var(--panel); border: 1px solid var(--line);
+            border-radius: 8px; cursor: grab; transition: all 0.2s;
+        }
+        .block:hover { border-color: rgba(241,186,32,0.5); background: var(--panel2); }
+        .block.dragging { opacity: 0.5; }
+
+        .block-header {
+            display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;
+        }
+        .block-label {
+            font-size: 13px; color: var(--gold); font-weight: bold; text-transform: uppercase;
+        }
+        .block-controls {
+            display: flex; gap: 8px; align-items: center;
+        }
+        .btn-small {
+            padding: 4px 12px; border: 1px solid var(--line); background: transparent;
+            color: var(--muted); border-radius: 6px; cursor: pointer; font-size: 12px;
+        }
+        .btn-small:hover { color: var(--text); border-color: rgba(241,186,32,0.5); }
+        .btn-small.delete { color: #e05252; border-color: rgba(224, 82, 82, 0.3); }
+        .btn-small.delete:hover { border-color: #e05252; }
+
+        .text-block {
+            display: flex; flex-direction: column; gap: 8px;
+        }
+        .text-content {
+            padding: 12px; background: rgba(0,0,0,0.3); border: 1px solid var(--line);
+            border-radius: 6px; color: var(--text); font: inherit; resize: vertical; min-height: 60px;
+            font-family: "Barlow Condensed", Arial, sans-serif;
+        }
+
+        .text-options {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 13px;
+        }
+        .option-group label {
+            display: block; font-size: 12px; color: var(--muted); margin-bottom: 4px; text-transform: uppercase;
+        }
+        .option-group input {
+            width: 100%; padding: 6px 10px; background: rgba(0,0,0,0.3); border: 1px solid var(--line);
+            border-radius: 6px; color: var(--text); font: inherit;
+        }
+
+        .image-block {
+            display: flex; flex-direction: column; gap: 12px;
+        }
+        .image-preview {
+            max-width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--line);
+        }
+        .image-options {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 13px;
+        }
+
+        .bottom-actions {
+            display: flex; gap: 12px; justify-content: center; margin-top: 32px;
+        }
+        .btn {
+            padding: 12px 28px; border-radius: 8px; border: 1px solid var(--line);
+            background: rgba(241,186,32,0.12); color: var(--gold); font-family: "Bebas Neue", Arial, sans-serif;
+            font-size: 16px; letter-spacing: 0.06em; cursor: pointer;
+        }
+        .btn:hover { border-color: rgba(241,186,32,0.5); background: rgba(241,186,32,0.18); }
+        .btn.back { background: var(--panel2); color: var(--text); border-color: var(--line); }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <span class="header-title">Edit PDF Blocks</span>
+        <span style="font-size: 14px; color: var(--muted);">{{ post.title }}</span>
+    </header>
+
+    <div class="container">
+        <p style="color: var(--muted); font-size: 14px; margin-bottom: 24px;">
+            Adjust spacing, font sizes, and reorder elements. Drag blocks to reorder.
+        </p>
+
+        <div class="blocks-list" id="blocksList"></div>
+
+        <div class="bottom-actions">
+            <button class="btn back" onclick="goBack()">← Back (Discard)</button>
+            <button class="btn" onclick="saveBlocks()">Done Editing →</button>
+        </div>
+    </div>
+
+    <script>
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+        const postId = {{ post.id }};
+        const postContent = `{{ post.content | safe }}`;
+
+        function parseHTML(html) {
+            const div = document.createElement('div');
+            div.innerHTML = html;
+            const blocks = [];
+
+            div.childNodes.forEach(node => {
+                if (node.nodeType === 3 && node.textContent.trim()) return; // Skip text nodes
+                if (node.tagName === 'P') {
+                    blocks.push({
+                        type: 'text',
+                        content: node.innerHTML,
+                        fontSize: 16,
+                        marginBottom: 16
+                    });
+                } else if (node.tagName === 'IMG') {
+                    blocks.push({
+                        type: 'image',
+                        src: node.src,
+                        alt: node.alt || 'Image',
+                        maxWidth: 100,
+                        marginBottom: 16
+                    });
+                }
+            });
+            return blocks;
+        }
+
+        function renderBlocks(blocks) {
+            const list = document.getElementById('blocksList');
+            list.innerHTML = '';
+
+            blocks.forEach((block, idx) => {
+                const blockEl = document.createElement('div');
+                blockEl.className = 'block';
+                blockEl.draggable = true;
+                blockEl.dataset.index = idx;
+
+                if (block.type === 'text') {
+                    blockEl.innerHTML = `
+                        <div class="block-header">
+                            <span class="block-label">Text Block ${idx + 1}</span>
+                            <div class="block-controls">
+                                <button class="btn-small delete" onclick="deleteBlock(${idx})">Delete</button>
+                            </div>
+                        </div>
+                        <div class="text-block">
+                            <textarea class="text-content" data-index="${idx}" onchange="updateBlock(${idx}, 'content', this.value)">${block.content}</textarea>
+                            <div class="text-options">
+                                <div class="option-group">
+                                    <label>Font Size (px)</label>
+                                    <input type="number" value="${block.fontSize}" onchange="updateBlock(${idx}, 'fontSize', this.value)" min="10" max="48">
+                                </div>
+                                <div class="option-group">
+                                    <label>Bottom Margin (px)</label>
+                                    <input type="number" value="${block.marginBottom}" onchange="updateBlock(${idx}, 'marginBottom', this.value)" min="0" max="60">
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (block.type === 'image') {
+                    blockEl.innerHTML = `
+                        <div class="block-header">
+                            <span class="block-label">Image ${idx + 1}</span>
+                            <div class="block-controls">
+                                <button class="btn-small delete" onclick="deleteBlock(${idx})">Delete</button>
+                            </div>
+                        </div>
+                        <div class="image-block">
+                            <img src="${block.src}" alt="${block.alt}" class="image-preview" style="max-width: ${block.maxWidth}%;">
+                            <div class="image-options">
+                                <div class="option-group">
+                                    <label>Max Width (%)</label>
+                                    <input type="number" value="${block.maxWidth}" onchange="updateBlock(${idx}, 'maxWidth', this.value)" min="20" max="100">
+                                </div>
+                                <div class="option-group">
+                                    <label>Bottom Margin (px)</label>
+                                    <input type="number" value="${block.marginBottom}" onchange="updateBlock(${idx}, 'marginBottom', this.value)" min="0" max="60">
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                list.appendChild(blockEl);
+            });
+
+            setupDragDrop();
+        }
+
+        let blocks = parseHTML(postContent);
+        renderBlocks(blocks);
+
+        function updateBlock(idx, prop, value) {
+            blocks[idx][prop] = isNaN(value) ? value : parseInt(value);
+        }
+
+        function deleteBlock(idx) {
+            blocks.splice(idx, 1);
+            renderBlocks(blocks);
+        }
+
+        function saveBlocks() {
+            const html = blocks.map(b => {
+                if (b.type === 'text') {
+                    return `<p style="font-size:${b.fontSize}px;margin-bottom:${b.marginBottom}px;">${b.content}</p>`;
+                } else if (b.type === 'image') {
+                    return `<img src="${b.src}" alt="${b.alt}" style="max-width:${b.maxWidth}%;height:auto;margin:0 0 ${b.marginBottom}px 0;border-radius:8px;" alt="${b.alt}">`;
+                }
+            }).join('\n');
+
+            fetch(`/admin/blog/${postId}/edit`, {
+                method: 'POST',
+                headers: { 'X-CSRF-Token': csrfToken, 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({
+                    title: '{{ post.title }}',
+                    slug: '{{ post.slug }}',
+                    excerpt: '{{ post.excerpt }}',
+                    content: html,
+                    hero_image: '{{ post.hero_image }}',
+                    template: '{{ post.template }}',
+                    status: '{{ post.status }}'
+                })
+            }).then(() => {
+                window.location.href = `/admin/blog/${postId}/edit`;
+            }).catch(err => {
+                console.error('Error saving blocks:', err);
+                alert('Error saving. Please try again.');
+            });
+        }
+
+        function goBack() {
+            if (confirm('Discard all changes?')) {
+                fetch(`/admin/blog/${postId}/delete`, { method: 'POST', headers: { 'X-CSRF-Token': csrfToken } })
+                    .then(() => window.location.href = '/admin#blog');
+            }
+        }
+
+        let draggedIdx = null;
+        function setupDragDrop() {
+            document.querySelectorAll('.block').forEach(el => {
+                el.addEventListener('dragstart', (e) => {
+                    draggedIdx = parseInt(e.target.closest('.block').dataset.index);
+                    e.target.closest('.block').classList.add('dragging');
+                });
+                el.addEventListener('dragend', () => {
+                    el.classList.remove('dragging');
+                });
+                el.addEventListener('dragover', (e) => e.preventDefault());
+                el.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    const targetIdx = parseInt(e.target.closest('.block').dataset.index);
+                    if (draggedIdx !== null && draggedIdx !== targetIdx) {
+                        const [moved] = blocks.splice(draggedIdx, 1);
+                        blocks.splice(targetIdx, 0, moved);
+                        renderBlocks(blocks);
+                    }
+                });
+            });
+        }
+    </script>
+</body>
+</html>

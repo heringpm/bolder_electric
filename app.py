@@ -1266,6 +1266,14 @@ def admin_blog_new():
         return redirect(url_for('admin_blog_edit', post_id=post_id) + '?saved=1')
     return render_template('admin_blog_edit.html', post=None)
 
+@app.route('/admin/blog/<int:post_id>/edit-blocks')
+@login_required
+def admin_blog_edit_blocks(post_id):
+    post = db.get_blog_post_by_id(post_id)
+    if not post:
+        abort(404)
+    return render_template('admin_blog_edit_blocks.html', post=post)
+
 @app.route('/admin/blog/<int:post_id>/edit', methods=['GET', 'POST'])
 @login_required
 def admin_blog_edit(post_id):
@@ -1379,8 +1387,9 @@ def admin_blog_upload_pdf():
         return redirect(url_for('admin_blog_new'))
 
     slug = re.sub(r'[^a-z0-9]+', '-', raw_title.lower()).strip('-') + f'-{ts}'
+    # Store with a marker to show block editor first
     post_id = db.create_blog_post(raw_title, slug, '', content_html, '', 1, 'draft')
-    return redirect(url_for('admin_blog_edit', post_id=post_id))
+    return redirect(url_for('admin_blog_edit_blocks', post_id=post_id))
 
 @app.route('/gallery')
 def gallery():
