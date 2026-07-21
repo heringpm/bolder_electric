@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Layout Editor | Bolder Electric Admin</title>
+    <title>Blog Editor | Bolder Electric Admin</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
     <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
@@ -17,22 +17,48 @@
         body { margin: 0; background: var(--bg); color: var(--text); font-family: "Barlow Condensed", Arial, sans-serif; }
         a { color: inherit; text-decoration: none; }
 
-        .container {
-            display: flex; height: 100vh; flex-direction: column;
+        .top-bar {
+            padding: 16px 28px; background: var(--panel); border-bottom: 1px solid var(--line);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .title-area {
+            flex: 1;
+        }
+        .title-input {
+            font-size: 24px; font-weight: bold; background: transparent; border: none;
+            color: var(--text); font-family: "Bebas Neue", Arial, sans-serif; letter-spacing: 0.06em;
+            margin-bottom: 8px; width: 100%;
+        }
+        .title-input:focus { outline: none; color: var(--gold); }
+        .slug-input {
+            font-size: 13px; background: transparent; border: 1px solid var(--line);
+            color: var(--muted); padding: 6px 8px; border-radius: 4px; width: 300px;
+            font-family: monospace;
+        }
+        .slug-input:focus { outline: none; border-color: var(--gold); color: var(--text); }
+
+        .top-actions {
+            display: flex; gap: 12px; align-items: center;
+        }
+        .btn-small {
+            padding: 8px 16px; border-radius: 6px; border: 1px solid var(--line);
+            background: rgba(241,186,32,0.12); color: var(--gold); cursor: pointer;
+            font-family: "Bebas Neue", Arial, sans-serif; font-size: 13px;
+        }
+        .btn-small:hover { border-color: rgba(241,186,32,0.5); }
+        .status-toggle {
+            display: flex; gap: 8px; border: 1px solid var(--line); border-radius: 6px;
+            padding: 4px; background: rgba(0,0,0,0.2);
+        }
+        .status-btn {
+            padding: 6px 12px; border: none; background: transparent; color: var(--muted);
+            cursor: pointer; font-size: 12px; border-radius: 4px; font-family: inherit;
+        }
+        .status-btn.active {
+            background: rgba(241,186,32,0.15); color: var(--gold);
         }
 
-        .header {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 0 28px; height: 64px;
-            background: var(--panel); border-bottom: 1px solid var(--line);
-            z-index: 100;
-        }
-        .header-title {
-            font-family: "Bebas Neue", Arial, sans-serif;
-            font-size: 20px; letter-spacing: 0.06em; color: var(--gold);
-        }
-
-        .editor-wrapper {
+        .main-content {
             display: flex; flex: 1; overflow: hidden;
         }
 
@@ -40,17 +66,12 @@
             flex: 1; display: flex; flex-direction: column; overflow: hidden;
         }
 
-        .canvas-toolbar {
-            padding: 12px 20px; background: var(--panel); border-bottom: 1px solid var(--line);
-            font-size: 13px; color: var(--muted);
-        }
-
         .canvas {
             flex: 1; overflow-y: auto; padding: 40px 20px; background: rgba(0,0,0,0.3);
         }
 
         .canvas-content {
-            max-width: 800px; margin: 0 auto; background: var(--panel); border-radius: 10px;
+            max-width: 900px; margin: 0 auto; background: var(--panel); border-radius: 10px;
             padding: 40px; box-shadow: 0 10px 40px rgba(0,0,0,0.5);
         }
 
@@ -64,10 +85,11 @@
             position: relative; cursor: grab; padding: 16px;
             border: 2px solid transparent; border-radius: 8px; transition: all 0.2s;
             min-height: 60px; display: flex; flex-direction: column;
+            background: rgba(241,186,32,0.03);
         }
-        .layout-block:hover { border-color: rgba(241,186,32,0.3); background: rgba(241,186,32,0.03); }
-        .layout-block.selected { border-color: var(--gold); background: rgba(241,186,32,0.08); }
-        .layout-block.dragging { opacity: 0.6; background: rgba(241,186,32,0.15); }
+        .layout-block:hover { border-color: rgba(241,186,32,0.3); background: rgba(241,186,32,0.06); }
+        .layout-block.selected { border-color: var(--gold); background: rgba(241,186,32,0.1); }
+        .layout-block.dragging { opacity: 0.5; }
 
         .block-content {
             flex: 1; line-height: 1.6; word-wrap: break-word;
@@ -92,10 +114,11 @@
         .block-btn.delete { color: #e05252; border-color: rgba(224,82,82,0.3); background: rgba(224,82,82,0.05); }
         .block-btn.delete:hover { background: rgba(224,82,82,0.1); }
 
-        .controls-panel {
-            width: 320px; background: var(--panel2); border-left: 1px solid var(--line);
+        .editor-panel {
+            width: 380px; background: var(--panel2); border-left: 1px solid var(--line);
             padding: 20px; overflow-y: auto; font-size: 13px;
         }
+
         .control-group {
             margin-bottom: 24px;
         }
@@ -110,35 +133,23 @@
         }
         .control-input:focus { outline: none; border-color: var(--gold); }
 
-        .slider-group {
-            display: flex; gap: 8px; align-items: center;
+        .quill-wrap {
+            background: rgba(0,0,0,0.2); border-radius: 6px; overflow: hidden;
+            max-height: 400px;
         }
-        .slider-group input[type="range"] {
-            flex: 1; height: 4px; background: rgba(241,186,32,0.2);
-            border-radius: 2px; -webkit-appearance: none; appearance: none;
-        }
-        .slider-group input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none; width: 16px; height: 16px;
-            border-radius: 50%; background: var(--gold); cursor: pointer;
-        }
-        .slider-group input[type="range"]::-moz-range-thumb {
-            width: 16px; height: 16px; border-radius: 50%;
-            background: var(--gold); cursor: pointer; border: none;
-        }
-        .slider-value {
-            min-width: 40px; text-align: right; color: var(--gold);
-        }
+        .ql-toolbar { background: var(--panel2); border: 1px solid var(--line); }
+        .ql-container { background: rgba(0,0,0,0.2); border: 1px solid var(--line); border-top: none; }
+        .ql-editor { color: var(--text); font-family: inherit; }
 
-        .format-toolbar {
+        .format-buttons {
             display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
         }
-        .format-btn {
-            padding: 8px; background: rgba(241,186,32,0.1); border: 1px solid rgba(241,186,32,0.3);
-            border-radius: 6px; color: var(--gold); cursor: pointer; font-family: inherit;
-            font-size: 12px; font-weight: bold;
+        .fmt-btn {
+            padding: 6px; background: rgba(241,186,32,0.1); border: 1px solid rgba(241,186,32,0.3);
+            border-radius: 4px; color: var(--gold); cursor: pointer; font-size: 12px; font-weight: bold;
         }
-        .format-btn:hover { background: rgba(241,186,32,0.15); }
-        .format-btn.active { background: rgba(241,186,32,0.25); }
+        .fmt-btn:hover { background: rgba(241,186,32,0.15); }
+        .fmt-btn.active { background: rgba(241,186,32,0.25); }
 
         .align-buttons {
             display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px;
@@ -149,10 +160,24 @@
         }
         .align-btn.active { background: rgba(241,186,32,0.25); color: var(--gold); }
 
-        .quill-wrap { background: rgba(0,0,0,0.2); border-radius: 6px; overflow: hidden; }
-        .ql-toolbar { background: var(--panel2); border: 1px solid var(--line); }
-        .ql-container { background: rgba(0,0,0,0.2); border: 1px solid var(--line); border-top: none; }
-        .ql-editor { color: var(--text); min-height: 100px; }
+        .slider-group {
+            display: flex; gap: 8px; align-items: center;
+        }
+        .slider-group input[type="range"] {
+            flex: 1; height: 4px; background: rgba(241,186,32,0.2); border-radius: 2px;
+            -webkit-appearance: none; appearance: none;
+        }
+        .slider-group input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%;
+            background: var(--gold); cursor: pointer;
+        }
+        .slider-group input[type="range"]::-moz-range-thumb {
+            width: 16px; height: 16px; border-radius: 50%; background: var(--gold);
+            cursor: pointer; border: none;
+        }
+        .slider-value {
+            min-width: 40px; text-align: right; color: var(--gold); font-size: 12px;
+        }
 
         .bottom-bar {
             padding: 16px 28px; background: var(--panel); border-top: 1px solid var(--line);
@@ -168,34 +193,45 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <span class="header-title">Layout Editor</span>
-            <span style="font-size: 14px; color: var(--muted);">{{ post.title }}</span>
+    <div style="display: flex; flex-direction: column; height: 100vh;">
+        <!-- Top bar with title and controls -->
+        <div class="top-bar">
+            <div class="title-area">
+                <input type="text" class="title-input" id="titleInput" placeholder="Post Title" value="{{ post.title }}">
+                <input type="text" class="slug-input" id="slugInput" placeholder="URL slug" value="{{ post.slug }}">
+            </div>
+            <div class="top-actions">
+                <div class="status-toggle">
+                    <button class="status-btn {{ 'active' if post.status == 'draft' else '' }}" onclick="setStatus('draft')">Draft</button>
+                    <button class="status-btn {{ 'active' if post.status == 'published' else '' }}" onclick="setStatus('published')">Published</button>
+                </div>
+                <span id="statusDisplay" style="color: var(--muted); font-size: 12px;">{{ post.status | capitalize }}</span>
+            </div>
         </div>
 
-        <div class="editor-wrapper">
+        <!-- Main content area -->
+        <div class="main-content">
+            <!-- Canvas -->
             <div class="canvas-area">
-                <div class="canvas-toolbar">
-                    Drag blocks to reorder. Resize blocks to sit side-by-side. Combine text blocks to merge content.
-                </div>
                 <div class="canvas">
                     <div class="canvas-content" id="canvas"></div>
                 </div>
             </div>
 
-            <div class="controls-panel">
+            <!-- Editor panel -->
+            <div class="editor-panel">
                 <div class="control-group">
-                    <span class="control-label">Selected Block</span>
-                    <div id="selectedBlockInfo" style="color: var(--muted); font-size: 12px;">Click an element to edit</div>
+                    <span class="control-label">Click a block to edit</span>
+                    <div id="selectedBlockInfo" style="color: var(--muted); font-size: 12px;">Text or Image</div>
                 </div>
                 <div id="editorControls"></div>
             </div>
         </div>
 
+        <!-- Bottom action bar -->
         <div class="bottom-bar">
-            <button class="btn back" onclick="goBack()">← Cancel</button>
-            <button class="btn" onclick="saveLayout()">Save & Continue →</button>
+            <button class="btn back" onclick="goBack()">← Discard</button>
+            <button class="btn" onclick="saveLayout()">Save & Publish</button>
         </div>
     </div>
 
@@ -209,6 +245,7 @@
         let blockIdCounter = 0;
         let draggedId = null;
         let rows = [];
+        let currentStatus = '{{ post.status }}';
 
         function parseHTML(html) {
             const div = document.createElement('div');
@@ -244,7 +281,6 @@
         }
 
         let blocks = parseHTML(postContent);
-        initializeRows();
 
         function initializeRows() {
             rows = [];
@@ -261,7 +297,6 @@
                 const rowEl = document.createElement('div');
                 const colCount = row.blocks.reduce((sum, b) => sum + (b.colSpan || 1), 0);
                 rowEl.className = `layout-row cols-${Math.min(colCount, 2)}`;
-                rowEl.dataset.rowIndex = rowIdx;
 
                 row.blocks.forEach((block, colIdx) => {
                     const blockEl = createBlockElement(block, rowIdx, colIdx);
@@ -304,18 +339,16 @@
             const nextIsText = hasNextInRow && rows[rowIdx].blocks[colIdx + 1].type === 'text' && block.type === 'text';
 
             overlay.innerHTML = `
-                <button class="block-btn" onclick="selectBlock(${block.id}, event)">Edit</button>
+                <button class="block-btn" onclick="selectBlock(${block.id})">Edit</button>
                 ${block.colSpan < 2 ? `<button class="block-btn" onclick="resizeBlock(${block.id}, 2)">Widen</button>` : `<button class="block-btn" onclick="resizeBlock(${block.id}, 1)">Narrow</button>`}
                 ${nextIsText ? `<button class="block-btn" style="background:rgba(108,180,255,0.1);color:#6cb4ff;border-color:rgba(108,180,255,0.3);" onclick="combineBlocks(${rowIdx}, ${colIdx})">Merge</button>` : ''}
-                <button class="block-btn delete" onclick="deleteBlock(${block.id}, event)">Remove</button>
+                <button class="block-btn delete" onclick="deleteBlock(${block.id})">Remove</button>
             `;
 
             blockEl.appendChild(content);
             blockEl.appendChild(overlay);
 
-            blockEl.addEventListener('click', (e) => {
-                if (!e.target.closest('.block-overlay')) selectBlock(block.id, e);
-            });
+            blockEl.addEventListener('click', () => selectBlock(block.id));
 
             blockEl.addEventListener('dragstart', (e) => {
                 draggedId = block.id;
@@ -323,14 +356,8 @@
                 e.dataTransfer.effectAllowed = 'move';
             });
 
-            blockEl.addEventListener('dragend', () => {
-                blockEl.classList.remove('dragging');
-            });
-
-            blockEl.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                e.dataTransfer.dropEffect = 'move';
-            });
+            blockEl.addEventListener('dragend', () => blockEl.classList.remove('dragging'));
+            blockEl.addEventListener('dragover', (e) => e.preventDefault());
 
             blockEl.addEventListener('drop', (e) => {
                 e.preventDefault();
@@ -342,17 +369,12 @@
 
                 if (draggedRow) {
                     draggedRow.blocks = draggedRow.blocks.filter(b => b.id !== draggedId);
-                    if (draggedRow.blocks.length === 0) {
-                        rows = rows.filter(r => r !== draggedRow);
-                    }
+                    if (draggedRow.blocks.length === 0) rows = rows.filter(r => r !== draggedRow);
                 }
 
                 const insertIdx = targetRow.blocks.indexOf(block);
-                if (insertIdx >= 0) {
-                    targetRow.blocks.splice(insertIdx, 0, draggedBlock);
-                } else {
-                    targetRow.blocks.push(draggedBlock);
-                }
+                if (insertIdx >= 0) targetRow.blocks.splice(insertIdx, 0, draggedBlock);
+                else targetRow.blocks.push(draggedBlock);
 
                 draggedId = null;
                 renderCanvas();
@@ -361,8 +383,7 @@
             return blockEl;
         }
 
-        function selectBlock(blockId, e) {
-            if (e) e.stopPropagation();
+        function selectBlock(blockId) {
             selectedBlockId = blockId;
             const block = blocks.find(b => b.id === blockId);
             document.getElementById('selectedBlockInfo').textContent = `${block.type === 'text' ? 'Text' : 'Image'} Block`;
@@ -378,8 +399,8 @@
                     </div>
                     <div class="control-group">
                         <label class="control-label">Formatting</label>
-                        <div class="format-toolbar">
-                            <button class="format-btn ${block.bold ? 'active' : ''}" onclick="toggleBold()"><strong>Bold</strong></button>
+                        <div class="format-buttons">
+                            <button class="fmt-btn ${block.bold ? 'active' : ''}" onclick="toggleBold()"><strong>Bold</strong></button>
                         </div>
                         <label class="control-label" style="margin-top: 12px;">Alignment</label>
                         <div class="align-buttons">
@@ -389,11 +410,10 @@
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label">Font Size (px)</label>
+                        <label class="control-label">Font Size</label>
                         <div class="slider-group">
-                            <input type="range" min="12" max="48" value="${block.fontSize}"
-                                   oninput="updateFontSize(this.value)">
-                            <span class="slider-value" id="fontValue">${block.fontSize}px</span>
+                            <input type="range" min="12" max="48" value="${block.fontSize}" oninput="updateFontSize(this.value)">
+                            <span class="slider-value">${block.fontSize}px</span>
                         </div>
                     </div>
                 `;
@@ -403,8 +423,9 @@
                         theme: 'snow',
                         modules: {
                             toolbar: [
+                                [{ 'header': [2, 3, false] }],
                                 ['bold', 'italic', 'underline'],
-                                ['link', 'image'],
+                                ['blockquote', 'link', 'image'],
                                 ['clean']
                             ]
                         }
@@ -417,11 +438,10 @@
             } else if (block.type === 'image') {
                 controls.innerHTML = `
                     <div class="control-group">
-                        <label class="control-label">Image Width (%)</label>
+                        <label class="control-label">Image Width</label>
                         <div class="slider-group">
-                            <input type="range" min="20" max="100" value="${block.maxWidth}"
-                                   oninput="updateImageWidth(this.value)">
-                            <span class="slider-value" id="imgValue">${block.maxWidth}%</span>
+                            <input type="range" min="20" max="100" value="${block.maxWidth}" oninput="updateImageWidth(this.value)">
+                            <span class="slider-value">${block.maxWidth}%</span>
                         </div>
                     </div>
                     <div class="control-group">
@@ -459,14 +479,12 @@
         function updateFontSize(val) {
             const block = blocks.find(b => b.id === selectedBlockId);
             block.fontSize = parseInt(val);
-            document.getElementById('fontValue').textContent = val + 'px';
             renderCanvas();
         }
 
         function updateImageWidth(val) {
             const block = blocks.find(b => b.id === selectedBlockId);
             block.maxWidth = parseInt(val);
-            document.getElementById('imgValue').textContent = val + '%';
             renderCanvas();
         }
 
@@ -491,16 +509,29 @@
             renderCanvas();
         }
 
-        function deleteBlock(blockId, e) {
-            e.stopPropagation();
+        function setStatus(status) {
+            currentStatus = status;
+            document.querySelectorAll('.status-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById('statusDisplay').textContent = status.charAt(0).toUpperCase() + status.slice(1);
+        }
+
+        function deleteBlock(blockId) {
             blocks = blocks.filter(b => b.id !== blockId);
-            rows = rows.map(r => ({ blocks: r.blocks.filter(b => b.id !== blockId) }))
-                       .filter(r => r.blocks.length > 0);
+            rows = rows.map(r => ({ blocks: r.blocks.filter(b => b.id !== blockId) })).filter(r => r.blocks.length > 0);
             selectedBlockId = null;
             renderCanvas();
         }
 
         function saveLayout() {
+            const title = document.getElementById('titleInput').value.trim();
+            const slug = document.getElementById('slugInput').value.trim();
+
+            if (!title) {
+                alert('Please enter a title');
+                return;
+            }
+
             const html = blocks.map(block => {
                 if (block.type === 'text') {
                     return `<p style="text-align:${block.align};font-size:${block.fontSize}px;${block.bold ? 'font-weight:bold;' : ''}">${block.content}</p>`;
@@ -510,13 +541,12 @@
             }).join('\n');
 
             const formData = new URLSearchParams({
-                title: '{{ post.title }}',
-                slug: '{{ post.slug }}',
+                title, slug,
                 excerpt: '{{ post.excerpt }}',
                 content: html,
                 hero_image: '{{ post.hero_image }}',
                 template: '{{ post.template }}',
-                status: '{{ post.status }}'
+                status: currentStatus
             });
 
             fetch(`/admin/blog/${postId}/edit`, {
@@ -524,17 +554,17 @@
                 headers: { 'X-CSRF-Token': csrfToken, 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: formData
             }).then(() => {
-                window.location.href = `/admin/blog/${postId}/edit`;
+                window.location.href = '/admin#blog';
             }).catch(err => console.error('Error:', err));
         }
 
         function goBack() {
             if (confirm('Discard all changes?')) {
-                fetch(`/admin/blog/${postId}/delete`, { method: 'POST', headers: { 'X-CSRF-Token': csrfToken } })
-                    .then(() => window.location.href = '/admin#blog');
+                window.location.href = '/admin#blog';
             }
         }
 
+        initializeRows();
         renderCanvas();
     </script>
 </body>
