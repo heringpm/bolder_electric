@@ -459,11 +459,11 @@
             blockEl.draggable = true;
             blockEl.style.gridColumn = `span ${block.colSpan || 1}`;
 
-            // For images, align to top without centering or padding
+            // For images, use block display without flex to avoid spacing issues
             if (block.type === 'image') {
-                blockEl.style.alignItems = 'flex-start';
+                blockEl.style.display = 'block';
                 blockEl.style.padding = '0';
-                blockEl.style.minHeight = '0';
+                blockEl.style.position = 'relative';
             }
 
             const content = document.createElement('div');
