@@ -394,8 +394,8 @@
             if (block.type === 'text') {
                 controls.innerHTML = `
                     <div class="control-group">
-                        <label class="control-label">Content</label>
-                        <div class="quill-wrap"><div id="editor"></div></div>
+                        <label class="control-label">Content (HTML)</label>
+                        <textarea id="textEditor" style="width:100%;height:200px;padding:10px;background:rgba(0,0,0,0.3);border:1px solid rgba(241,186,32,0.3);border-radius:6px;color:#f5f3ef;font-family:monospace;font-size:12px;resize:vertical;" placeholder="Edit text here...">${block.content}</textarea>
                     </div>
                     <div class="control-group">
                         <label class="control-label">Formatting</label>
@@ -419,37 +419,17 @@
                 `;
 
                 setTimeout(() => {
-                    const editorDiv = document.getElementById('editor');
-                    if (!editorDiv) return;
-
-                    const editor = new Quill('#editor', {
-                        theme: 'snow',
-                        placeholder: 'Start typing...',
-                        modules: {
-                            toolbar: [
-                                [{ 'header': [2, 3, false] }],
-                                ['bold', 'italic', 'underline'],
-                                ['blockquote', 'link', 'image'],
-                                ['clean']
-                            ]
-                        }
-                    });
-
-                    // Set initial content
-                    setTimeout(() => {
-                        editor.root.innerHTML = block.content;
-                    }, 50);
-
-                    // Track changes
-                    editor.on('text-change', () => {
-                        block.content = editor.root.innerHTML;
-                    });
-
-                    // Also save when editor loses focus
-                    editor.root.addEventListener('blur', () => {
-                        block.content = editor.root.innerHTML;
-                    }, true);
-                }, 100);
+                    const textEditor = document.getElementById('textEditor');
+                    if (textEditor) {
+                        textEditor.addEventListener('input', () => {
+                            block.content = textEditor.value;
+                        });
+                        textEditor.addEventListener('change', () => {
+                            block.content = textEditor.value;
+                        });
+                        textEditor.focus();
+                    }
+                }, 50);
             } else if (block.type === 'image') {
                 controls.innerHTML = `
                     <div class="control-group">
