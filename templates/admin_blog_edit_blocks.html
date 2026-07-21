@@ -382,9 +382,30 @@
 
         function initializeRows() {
             rows = [];
+            let currentRow = { blocks: [] };
+            let currentColCount = 0;
+
             blocks.forEach(block => {
-                rows.push({ blocks: [block] });
+                const blockColSpan = block.colSpan || 1;
+
+                // If this block would overflow the row, start a new row
+                if (currentColCount + blockColSpan > 2) {
+                    if (currentRow.blocks.length > 0) {
+                        rows.push(currentRow);
+                    }
+                    currentRow = { blocks: [block] };
+                    currentColCount = blockColSpan;
+                } else {
+                    // Add to current row
+                    currentRow.blocks.push(block);
+                    currentColCount += blockColSpan;
+                }
             });
+
+            // Add the last row if it has blocks
+            if (currentRow.blocks.length > 0) {
+                rows.push(currentRow);
+            }
         }
 
         function renderCanvas() {
@@ -677,6 +698,7 @@
         function resizeBlock(blockId, newColSpan) {
             const block = blocks.find(b => b.id === blockId);
             block.colSpan = newColSpan;
+            initializeRows();
             renderCanvas();
         }
 
