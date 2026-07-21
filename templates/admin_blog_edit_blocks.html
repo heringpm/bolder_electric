@@ -463,6 +463,7 @@
             if (block.type === 'image') {
                 blockEl.style.alignItems = 'flex-start';
                 blockEl.style.padding = '0';
+                blockEl.style.minHeight = '0';
             }
 
             const content = document.createElement('div');
@@ -507,7 +508,6 @@
                 content.style.margin = '0';
                 content.style.padding = '0';
                 content.style.lineHeight = '0';
-                content.style.flex = 'none';
 
                 // Apply crop using clip-path if crop values are set
                 const cropTop = block.cropTop || 0;
