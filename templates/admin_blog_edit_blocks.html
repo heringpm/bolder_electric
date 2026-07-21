@@ -747,12 +747,12 @@
         document.addEventListener('mousemove', (e) => {
             if (!isResizingImage || resizeBlockId === null) return;
             const block = blocks.find(b => b.id === resizeBlockId);
-            if (!block || !block._contentElement) return;
+            if (!block || !block._img) return;
 
             const deltaY = e.clientY - resizeStartY;
             const newHeight = Math.max(50, resizeStartHeight + deltaY);
             block.height = newHeight;
-            block._contentElement.style.height = newHeight + 'px';
+            block._img.style.height = newHeight + 'px';
         });
 
         document.addEventListener('mouseup', () => {
