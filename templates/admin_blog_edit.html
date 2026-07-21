@@ -180,15 +180,21 @@
     <div style="max-width:900px;margin:24px auto 0;padding:0 24px;">
         <div style="padding:16px 20px;background:rgba(241,186,32,0.06);border:1px solid rgba(241,186,32,0.25);border-radius:10px;">
             <div style="font-family:'Bebas Neue',Arial,sans-serif;font-size:17px;letter-spacing:0.08em;color:#f1ba20;margin-bottom:10px;">UPLOAD A PDF INSTEAD OF WRITING</div>
-            <form method="POST" action="{{ url_for('admin_blog_upload_pdf') }}" enctype="multipart/form-data" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                <input type="file" name="file" accept=".pdf" required
+            <div id="pdf-upload-form" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                <input type="file" id="pdf-file-input" accept=".pdf"
                     style="flex:1;min-width:200px;padding:8px 10px;background:rgba(0,0,0,0.3);border:1px solid rgba(241,186,32,0.3);border-radius:6px;color:rgba(245,243,239,0.8);font:inherit;font-size:14px;">
-                <button type="submit"
+                <button type="button" id="pdf-upload-btn"
                     style="white-space:nowrap;padding:9px 22px;border-radius:8px;border:1px solid rgba(241,186,32,0.7);background:rgba(241,186,32,0.12);color:#f1ba20;font-family:'Bebas Neue',Arial,sans-serif;font-size:17px;letter-spacing:0.06em;cursor:pointer;">
                     Upload &amp; Create Draft
                 </button>
-            </form>
+            </div>
+            <div id="pdf-progress-container" style="display:none;margin-top:12px;">
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <progress id="pdf-progress-bar" value="0" max="100" style="flex:1;height:6px;border-radius:3px;background:rgba(241,186,32,0.2);"></progress>
+                    <span id="pdf-progress-text" style="font-size:13px;color:#f1ba20;min-width:40px;text-align:right;">0%</span>
+                </div>
+                <div id="pdf-status-text" style="font-size:12px;color:rgba(245,243,239,0.5);margin-top:6px;">Parsing PDF…</div>
+            </div>
             <div style="margin-top:8px;font-size:13px;color:rgba(245,243,239,0.45);">Saves the PDF and opens a draft — add title, excerpt, then publish.</div>
         </div>
         <div style="text-align:center;margin:16px 0 0;font-size:13px;color:rgba(245,243,239,0.35);letter-spacing:0.06em;">— OR WRITE A POST BELOW —</div>
@@ -431,6 +437,97 @@
                 preview.innerHTML = `<img src="${url}" alt="Hero image" style="max-width:100%;border-radius:8px;margin-top:8px;">`;
             } else {
                 preview.innerHTML = '';
+            }
+        });
+
+        // PDF upload with progress
+        document.getElementById('pdf-upload-btn').addEventListener('click', async function() {
+            const fileInput = document.getElementById('pdf-file-input');
+            const file = fileInput.files[0];
+            if (!file) {
+                alert('Please select a PDF file');
+                return;
+            }
+            if (!file.name.toLowerCase().endsWith('.pdf')) {
+                alert('Please select a PDF file');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('csrf_token', csrfToken);
+
+            const container = document.getElementById('pdf-upload-form');
+            const progressContainer = document.getElementById('pdf-progress-container');
+            const progressBar = document.getElementById('pdf-progress-bar');
+            const progressText = document.getElementById('pdf-progress-text');
+            const statusText = document.getElementById('pdf-status-text');
+
+            container.style.display = 'none';
+            progressContainer.style.display = 'block';
+            progressBar.value = 0;
+            progressText.textContent = '0%';
+            statusText.textContent = 'Uploading PDF…';
+
+            try {
+                const xhr = new XMLHttpRequest();
+
+                // Track upload progress
+                xhr.upload.addEventListener('progress', (e) => {
+                    if (e.lengthComputable) {
+                        const percentComplete = (e.loaded / e.total) * 50; // 0-50% for upload
+                        progressBar.value = percentComplete;
+                        progressText.textContent = Math.round(percentComplete) + '%';
+                    }
+                });
+
+                xhr.addEventListener('load', () => {
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        progressBar.value = 50;
+                        progressText.textContent = '50%';
+                        statusText.textContent = 'Parsing PDF (this may take a moment)…';
+                        // Polling for actual completion
+                        let checkCount = 0;
+                        const checkInterval = setInterval(() => {
+                            checkCount++;
+                            const step = Math.min(50 + (checkCount * 3), 95);
+                            progressBar.value = step;
+                            progressText.textContent = Math.round(step) + '%';
+                            if (checkCount > 15) {
+                                clearInterval(checkInterval);
+                                progressBar.value = 100;
+                                progressText.textContent = '100%';
+                                statusText.textContent = 'Redirecting…';
+                                window.location.href = xhr.responseURL || '{{ url_for("admin_blog_new") }}';
+                            }
+                        }, 200);
+                    } else {
+                        statusText.textContent = 'Upload failed';
+                        setTimeout(() => {
+                            container.style.display = 'flex';
+                            progressContainer.style.display = 'none';
+                        }, 2000);
+                    }
+                });
+
+                xhr.addEventListener('error', () => {
+                    statusText.textContent = 'Upload error';
+                    setTimeout(() => {
+                        container.style.display = 'flex';
+                        progressContainer.style.display = 'none';
+                    }, 2000);
+                });
+
+                xhr.open('POST', '{{ url_for("admin_blog_upload_pdf") }}');
+                xhr.setRequestHeader('X-CSRF-Token', csrfToken);
+                xhr.send(formData);
+            } catch (error) {
+                console.error('Upload error:', error);
+                statusText.textContent = 'Error uploading PDF';
+                setTimeout(() => {
+                    container.style.display = 'flex';
+                    progressContainer.style.display = 'none';
+                }, 2000);
             }
         });
 

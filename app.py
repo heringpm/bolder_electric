@@ -1309,7 +1309,7 @@ def admin_blog_upload_image():
 @app.route('/admin/blog/upload-pdf', methods=['POST'])
 @login_required
 def admin_blog_upload_pdf():
-    import os, re, time, tempfile
+    import os, re, time, base64
     import fitz  # PyMuPDF
     from werkzeug.utils import secure_filename
 
@@ -1321,7 +1321,7 @@ def admin_blog_upload_pdf():
     base_name = secure_filename(os.path.splitext(file.filename)[0])
     ts = str(int(time.time()))
 
-    # Parse PDF into HTML content
+    # Parse PDF into HTML content with images embedded
     pdf_bytes = file.read()
     content_html = ''
     raw_title = base_name.replace('-', ' ').replace('_', ' ').title()
@@ -1333,17 +1333,45 @@ def admin_blog_upload_pdf():
             if lines:
                 raw_title = lines[0]
 
-            paragraphs = []
-            for page in doc:
-                blocks = page.get_text('blocks')
-                for block in blocks:
-                    text = block[4].strip()
-                    if text:
-                        # Each block becomes a paragraph; preserve line breaks within
-                        inner = '<br>'.join(l.strip() for l in text.splitlines() if l.strip())
-                        paragraphs.append(f'<p>{inner}</p>')
+            content_parts = []
+            for page_num, page in enumerate(doc):
+                # Extract images first, map by their bboxes
+                image_map = {}
+                for img_index, img_ref in enumerate(page.get_images()):
+                    try:
+                        xref = img_ref[0]
+                        pix = fitz.Pixmap(doc, xref)
+                        img_data = pix.tobytes('png')
+                        b64 = base64.b64encode(img_data).decode()
+                        # Store with img_ref for reference
+                        image_map[xref] = f'data:image/png;base64,{b64}'
+                    except Exception as e:
+                        app.logger.warning(f'Could not extract image: {e}')
 
-            content_html = '\n'.join(paragraphs)
+                # Get blocks sorted by position (top to bottom, left to right)
+                blocks = sorted(page.get_text('blocks'), key=lambda b: (b[1], b[0]))
+
+                for block in blocks:
+                    # block format: (x0, y0, x1, y1, text, block_no, block_type)
+                    if len(block) < 5:
+                        continue
+
+                    block_type = block[6] if len(block) > 6 else 0
+                    text = block[4].strip()
+
+                    # Handle image blocks
+                    if block_type == 1:  # Image block
+                        if text:  # text contains image reference
+                            for xref, b64_url in image_map.items():
+                                content_parts.append(f'<img src="{b64_url}" style="max-width:100%;height:auto;margin:16px 0;border-radius:8px;" alt="Document image">')
+                                break
+                    # Handle text blocks
+                    elif text and block_type == 0:
+                        # Preserve line breaks within blocks
+                        inner = '<br>'.join(l.strip() for l in text.splitlines() if l.strip())
+                        content_parts.append(f'<p>{inner}</p>')
+
+            content_html = '\n'.join(content_parts)
     except Exception as e:
         app.logger.error(f'PDF parse error: {e}')
         flash('Could not parse the PDF — please copy and paste the content manually.', 'error')
