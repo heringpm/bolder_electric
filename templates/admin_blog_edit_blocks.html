@@ -250,6 +250,10 @@
         let draggedId = null;
         let rows = [];
         let currentStatus = '{{ post.status }}';
+        let isResizingImage = false;
+        let resizeStartY = 0;
+        let resizeStartHeight = 0;
+        let resizeBlockId = null;
 
         function parseHTML(html) {
             const div = document.createElement('div');
@@ -361,6 +365,7 @@
                 img.style.height = '100%';
                 img.style.objectFit = 'cover';
                 img.style.objectPosition = 'center';
+                img.style.display = 'block';
 
                 // Create a resize handle for the image
                 const resizeHandle = document.createElement('div');
@@ -373,6 +378,7 @@
                 resizeHandle.style.background = 'rgba(241,186,32,0.4)';
                 resizeHandle.style.cursor = 'se-resize';
                 resizeHandle.style.borderRadius = '0 0 8px 0';
+                resizeHandle.style.zIndex = '100';
                 resizeHandle.title = 'Drag to resize image height';
 
                 // Make content position relative for absolute positioning of handle, with fixed height
@@ -386,33 +392,18 @@
                 content.appendChild(img);
                 content.appendChild(resizeHandle);
 
-                // Add resize drag handler
-                let isResizing = false;
-                let startY = 0;
-                let startHeight = block.height || 200;
+                // Store reference to content element on block for resize handler
+                block._contentElement = content;
 
+                // Add mousedown handler to start resize
                 resizeHandle.addEventListener('mousedown', (e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    isResizing = true;
-                    startY = e.clientY;
-                    startHeight = block.height || 200;
+                    isResizingImage = true;
+                    resizeStartY = e.clientY;
+                    resizeStartHeight = block.height || 200;
+                    resizeBlockId = block.id;
                     document.body.style.cursor = 'se-resize';
-                });
-
-                document.addEventListener('mousemove', (e) => {
-                    if (!isResizing || selectedBlockId !== block.id) return;
-                    const deltaY = e.clientY - startY;
-                    const newHeight = Math.max(50, startHeight + deltaY);
-                    block.height = newHeight;
-                    content.style.height = newHeight + 'px';
-                });
-
-                document.addEventListener('mouseup', () => {
-                    if (isResizing) {
-                        isResizing = false;
-                        document.body.style.cursor = 'default';
-                    }
                 });
             }
 
@@ -751,6 +742,26 @@
                 window.location.href = '/admin#blog';
             }
         }
+
+        // Set up global image resize handlers
+        document.addEventListener('mousemove', (e) => {
+            if (!isResizingImage || resizeBlockId === null) return;
+            const block = blocks.find(b => b.id === resizeBlockId);
+            if (!block || !block._contentElement) return;
+
+            const deltaY = e.clientY - resizeStartY;
+            const newHeight = Math.max(50, resizeStartHeight + deltaY);
+            block.height = newHeight;
+            block._contentElement.style.height = newHeight + 'px';
+        });
+
+        document.addEventListener('mouseup', () => {
+            if (isResizingImage) {
+                isResizingImage = false;
+                resizeBlockId = null;
+                document.body.style.cursor = 'default';
+            }
+        });
 
         initializeRows();
         renderCanvas();
