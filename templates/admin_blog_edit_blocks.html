@@ -504,8 +504,11 @@
                 img.style.margin = '0';
                 if (block.align === 'center') img.style.margin = '0 auto';
 
-                // Make content div block-level with no spacing or growth
-                content.style.display = 'block';
+                // Position image content at the very top
+                content.style.position = 'absolute';
+                content.style.top = '0';
+                content.style.left = '0';
+                content.style.right = '0';
                 content.style.margin = '0';
                 content.style.padding = '0';
                 content.style.lineHeight = '0';
