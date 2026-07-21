@@ -142,37 +142,34 @@
             container: '#editor',
             fromElement: false,
             height: '100%',
-            showOffsets: true,
-            noticeOnUnload: false,
+            showOffsets: 1,
+            noticeOnUnload: 0,
             storageManager: false,
             canvas: {
                 styles: [
                     'https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap'
                 ]
             },
-            blockManager: {
-                appendTo: '.gjs-pm-open-btn',
-                blocks: [
-                    {
-                        id: 'section-text',
-                        label: 'Text Section',
-                        content: '<div style="padding: 20px; background: #f5f3ef; color: #0a0a0a; border-radius: 4px;"><p>Add your text here</p></div>',
-                        category: 'Basic'
-                    },
-                    {
-                        id: 'section-image',
-                        label: 'Image Section',
-                        content: '<img src="https://via.placeholder.com/600x400" alt="Image" style="width: 100%; border-radius: 4px; display: block;">',
-                        category: 'Basic'
-                    },
-                    {
-                        id: 'section-two-col',
-                        label: 'Two Column',
-                        content: '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;"><div style="padding: 20px; background: #f5f3ef; color: #0a0a0a; border-radius: 4px;"><p>Column 1</p></div><div style="padding: 20px; background: #f5f3ef; color: #0a0a0a; border-radius: 4px;"><p>Column 2</p></div></div>',
-                        category: 'Layout'
-                    }
-                ]
-            },
+            blocks: [
+                {
+                    id: 'section-text',
+                    label: 'Text Section',
+                    content: '<div style="padding: 20px; background: #f5f3ef; color: #0a0a0a; border-radius: 4px;"><p>Add your text here</p></div>',
+                    category: 'Basic'
+                },
+                {
+                    id: 'section-image',
+                    label: 'Image Section',
+                    content: '<img src="https://via.placeholder.com/600x400" alt="Image" style="width: 100%; border-radius: 4px; display: block;">',
+                    category: 'Basic'
+                },
+                {
+                    id: 'section-two-col',
+                    label: 'Two Column',
+                    content: '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;"><div style="padding: 20px; background: #f5f3ef; color: #0a0a0a; border-radius: 4px;"><p>Column 1</p></div><div style="padding: 20px; background: #f5f3ef; color: #0a0a0a; border-radius: 4px;"><p>Column 2</p></div></div>',
+                    category: 'Layout'
+                }
+            ],
             styleManager: {
                 sectors: [
                     {
@@ -207,51 +204,6 @@
                         ]
                     }
                 ]
-            },
-            panels: {
-                defaults: [
-                    {
-                        id: 'layers',
-                        el: '.gjs-panel__top',
-                        resizable: {
-                            maxDim: 350,
-                            minDim: 200,
-                            tc: 'w',
-                            autoOpen: 1
-                        },
-                        buttons: [],
-                        label: 'Layers'
-                    },
-                    {
-                        id: 'basic-actions',
-                        el: '.gjs-panel__top',
-                        buttons: [
-                            {
-                                id: 'visibility',
-                                active: true,
-                                className: 'fa fa-eye',
-                                command: 'sw-visibility',
-                                title: 'View'
-                            },
-                            {
-                                id: 'export',
-                                className: 'fa fa-code',
-                                command: 'export-template',
-                                title: 'Export'
-                            },
-                            {
-                                id: 'show-json',
-                                className: 'fa fa-database',
-                                active: false,
-                                command: 'show-json',
-                                title: 'JSON'
-                            }
-                        ]
-                    }
-                ]
-            },
-            traitManager: {
-                autoOpen: true
             }
         });
 
