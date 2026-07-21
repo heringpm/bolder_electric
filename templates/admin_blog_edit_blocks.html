@@ -459,11 +459,9 @@
             blockEl.draggable = true;
             blockEl.style.gridColumn = `span ${block.colSpan || 1}`;
 
-            // For images, align to top with no padding or minimum height
+            // For images, remove padding but keep flex layout
             if (block.type === 'image') {
                 blockEl.style.padding = '0';
-                blockEl.style.minHeight = 'auto';
-                blockEl.style.justifyContent = 'flex-start';
             }
 
             const content = document.createElement('div');
@@ -505,12 +503,9 @@
                 img.style.verticalAlign = 'top';
                 if (block.align === 'center') img.style.margin = '0 auto';
 
-                // Make content not grow and align image to top
+                // Minimal styling for image content
                 content.style.margin = '0';
                 content.style.padding = '0';
-                content.style.lineHeight = '0';
-                content.style.flex = '0';
-                content.style.height = 'auto';
 
                 // Apply crop using clip-path if crop values are set
                 const cropTop = block.cropTop || 0;
