@@ -500,7 +500,14 @@
                 img.style.maxWidth = block.maxWidth + '%';
                 img.style.height = block.height ? block.height + 'px' : 'auto';
                 img.style.display = 'block';
+                img.style.margin = '0';
                 if (block.align === 'center') img.style.margin = '0 auto';
+
+                // Remove default spacing from content container for images
+                content.style.margin = '0';
+                content.style.padding = '0';
+                content.style.lineHeight = '0';
+                content.style.flex = 'none';
 
                 // Apply crop using clip-path if crop values are set
                 const cropTop = block.cropTop || 0;
