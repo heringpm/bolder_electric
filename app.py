@@ -1327,49 +1327,50 @@ def admin_blog_upload_pdf():
     raw_title = base_name.replace('-', ' ').replace('_', ' ').title()
     try:
         with fitz.open(stream=pdf_bytes, filetype='pdf') as doc:
-            # Use first page's first non-empty line as title if available
-            first_page_text = doc[0].get_text() if len(doc) > 0 else ''
-            lines = [l.strip() for l in first_page_text.splitlines() if l.strip()]
-            if lines:
-                raw_title = lines[0]
+            # Find title: look for largest text block on first page (usually the header)
+            if len(doc) > 0:
+                first_page = doc[0]
+                blocks = first_page.get_text('blocks')
+                # Sort by y position, then by height (descending) to find largest text block
+                text_blocks = [(b, b[3] - b[1]) for b in blocks if len(b) > 4 and isinstance(b[4], str) and b[4].strip()]
+                if text_blocks:
+                    # Get the text block with largest height (usually the title)
+                    largest = sorted(text_blocks, key=lambda x: (-x[1], x[0][1]))[0]
+                    title_text = largest[0][4].strip().split('\n')[0]  # First line of largest block
+                    if title_text and len(title_text) > 3:  # Only use if reasonable length
+                        raw_title = title_text
 
             content_parts = []
             for page_num, page in enumerate(doc):
-                # Extract images first, map by their bboxes
+                # Extract all images from page
                 image_map = {}
-                for img_index, img_ref in enumerate(page.get_images()):
+                image_rects = {}
+                for img_ref in page.get_images():
                     try:
                         xref = img_ref[0]
                         pix = fitz.Pixmap(doc, xref)
+                        # Convert to RGB if needed
+                        if pix.n - pix.alpha > 3:
+                            pix = fitz.Pixmap(fitz.csRGB, pix)
                         img_data = pix.tobytes('png')
                         b64 = base64.b64encode(img_data).decode()
-                        # Store with img_ref for reference
                         image_map[xref] = f'data:image/png;base64,{b64}'
+                        pix = None
                     except Exception as e:
-                        app.logger.warning(f'Could not extract image: {e}')
+                        app.logger.warning(f'Could not extract image {img_ref}: {e}')
 
-                # Get blocks sorted by position (top to bottom, left to right)
-                blocks = sorted(page.get_text('blocks'), key=lambda b: (b[1], b[0]))
+                # Get text blocks sorted by position
+                text_blocks = sorted(page.get_text('blocks'), key=lambda b: (b[1], b[0]))
 
-                for block in blocks:
-                    # block format: (x0, y0, x1, y1, text, block_no, block_type)
-                    if len(block) < 5:
-                        continue
-
-                    block_type = block[6] if len(block) > 6 else 0
-                    text = block[4].strip()
-
-                    # Handle image blocks
-                    if block_type == 1:  # Image block
-                        if text:  # text contains image reference
-                            for xref, b64_url in image_map.items():
-                                content_parts.append(f'<img src="{b64_url}" style="max-width:100%;height:auto;margin:16px 0;border-radius:8px;" alt="Document image">')
-                                break
-                    # Handle text blocks
-                    elif text and block_type == 0:
-                        # Preserve line breaks within blocks
+                for block in text_blocks:
+                    text = block[4].strip() if len(block) > 4 else ''
+                    if text:
                         inner = '<br>'.join(l.strip() for l in text.splitlines() if l.strip())
                         content_parts.append(f'<p>{inner}</p>')
+
+                # Add all extracted images at the end of each page
+                for xref, b64_url in image_map.items():
+                    content_parts.append(f'<img src="{b64_url}" style="max-width:100%;height:auto;margin:16px 0;border-radius:8px;" alt="Document image">')
 
             content_html = '\n'.join(content_parts)
     except Exception as e:
