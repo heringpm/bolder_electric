@@ -347,6 +347,11 @@
                 content.addEventListener('blur', () => {
                     block.content = content.innerHTML;
                 });
+                // Prevent click on content from triggering selectBlock (which rerenders)
+                content.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    selectBlock(block.id);
+                });
             } else if (block.type === 'image') {
                 const img = document.createElement('img');
                 img.src = block.src;
@@ -419,6 +424,8 @@
         function selectBlock(blockId) {
             selectedBlockId = blockId;
             const block = blocks.find(b => b.id === blockId);
+            if (!block) return;
+
             document.getElementById('selectedBlockInfo').textContent = `${block.type === 'text' ? 'Text' : 'Image'} Block`;
 
             const controls = document.getElementById('editorControls');
@@ -507,8 +514,6 @@
                     </div>
                 `;
             }
-
-            renderCanvas();
         }
 
         function resizeBlock(blockId, newColSpan) {
