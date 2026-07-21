@@ -503,6 +503,12 @@
                 const cropRight = block.cropRight || 0;
                 if (cropTop || cropBottom || cropLeft || cropRight) {
                     img.style.clipPath = `inset(${cropTop}% ${cropRight}% ${cropBottom}% ${cropLeft}%)`;
+
+                    // Adjust container height to hide the padding from cropped areas
+                    if (block.height) {
+                        const visibleHeightPercent = 100 - cropTop - cropBottom;
+                        content.style.height = (block.height * visibleHeightPercent / 100) + 'px';
+                    }
                 }
 
                 content.appendChild(img);
@@ -519,9 +525,10 @@
                 resizeHandle.style.borderRadius = '2px';
                 resizeHandle.title = 'Drag to resize';
 
-                // Position content as relative for the resize handle
+                // Position content as relative for the resize handle, with overflow hidden
                 content.style.position = 'relative';
                 content.style.display = 'inline-block';
+                content.style.overflow = 'hidden';
                 if (block.align === 'center') {
                     content.style.display = 'block';
                     content.style.width = block.maxWidth + '%';
