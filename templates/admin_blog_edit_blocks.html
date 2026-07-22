@@ -316,9 +316,23 @@
                 // Load existing content
                 if (postContent && postContent.trim()) {
                     try {
-                        editor.setComponents(postContent);
+                        // Extract CSS from saved content
+                        const styleMatch = postContent.match(/<style[^>]*>([\s\S]*?)<\/style>/i);
+                        const css = styleMatch ? styleMatch[1] : '';
+
+                        // Remove style tag from HTML before loading components
+                        const htmlWithoutStyle = postContent.replace(/<style[^>]*>[\s\S]*?<\/style>/i, '');
+
+                        // Load components
+                        editor.setComponents(htmlWithoutStyle);
+
+                        // Apply saved CSS
+                        if (css) {
+                            editor.setStyle(css);
+                            console.log('Loaded saved CSS:', css.substring(0, 100));
+                        }
                     } catch (e) {
-                        console.log('Could not parse existing content');
+                        console.log('Could not parse existing content:', e);
                     }
                 }
 
