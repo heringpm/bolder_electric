@@ -344,6 +344,15 @@
             // Get components and styles
             const components = editor.getComponents();
             const css = editor.getCss();
+
+            console.log('Number of components:', components.length);
+            components.forEach((comp, i) => {
+                console.log(`Component ${i}:`, comp.getName(), 'HTML:', comp.toHTML().substring(0, 100));
+            });
+
+            console.log('CSS from editor.getCss():', css);
+            console.log('CSS length:', css ? css.length : 0);
+
             let html = '';
 
             // Render components to HTML
@@ -356,9 +365,8 @@
                 html += '<style>' + css + '</style>';
             }
 
-            console.log('HTML from GrapesJS components:', html);
-            console.log('CSS:', css);
-            console.log('HTML length:', html ? html.length : 0);
+            console.log('Final HTML being saved:', html.substring(0, 200));
+            console.log('Total HTML length:', html ? html.length : 0);
 
             const formData = new URLSearchParams({
                 title,
