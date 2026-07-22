@@ -103,7 +103,11 @@
             try {
                 editor = grapesjs.init({
                     container: '#editor',
-                    fromElement: false
+                    fromElement: false,
+                    blockManager: { appendTo: false },
+                    styleManager: { appendTo: false },
+                    layerManager: { appendTo: false },
+                    traitManager: { appendTo: false }
                 });
 
                 // Load existing content
