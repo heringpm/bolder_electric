@@ -9,6 +9,9 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename='js/grapes.min.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Open+Sans:wght@400;600;700&family=Lato:wght@400;700&family=Playfair+Display:wght@600;700&family=Merriweather:wght@400;700&family=Montserrat:wght@500;600;700&family=Poppins:wght@400;500;600&family=Inter:wght@400;500;600&family=Raleway:wght@400;600;700&family=Crimson+Text:wght@400;600&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -176,6 +179,27 @@
                     layerManager: true,
                     styleManager: true,
                     traitManager: true,
+                    fontManager: {
+                        fonts: [
+                            'Arial',
+                            'Helvetica',
+                            'Times New Roman',
+                            'Courier New',
+                            'Georgia',
+                            'Verdana',
+                            'Roboto',
+                            'Open Sans',
+                            'Lato',
+                            'Playfair Display',
+                            'Merriweather',
+                            'Montserrat',
+                            'Poppins',
+                            'Inter',
+                            'Raleway',
+                            'Crimson Text',
+                            'IBM Plex Mono'
+                        ]
+                    },
                     blockManager: {
                         blocks: [
                             { id: 'header', label: '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z"></path></svg>Header', content: '<header style="background: #333; color: white; padding: 20px; text-align: center;"><h1 style="margin: 0;">Header Title</h1></header>', category: 'Basic' },
