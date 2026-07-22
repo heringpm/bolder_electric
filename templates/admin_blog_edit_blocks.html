@@ -160,10 +160,6 @@
             <button class="btn" onclick="redo()" title="Redo (Ctrl+Y)"><i class="fas fa-redo"></i></button>
         </div>
         <input type="text" class="title-input" id="titleInput" placeholder="Post Title" value="{{ post.title or '' }}">
-        <div style="display: flex; gap: 8px; align-items: center; border-left: 1px solid rgba(241,186,32,0.22); padding-left: 20px;">
-            <label style="color: rgba(245,243,239,0.6); font-size: 11px;">Page BG:</label>
-            <input type="color" id="pageBgColor" value="#ffffff" title="Page/Canvas Background Color" style="width: 40px; height: 28px; border: 1px solid rgba(241,186,32,0.22); cursor: pointer;" onchange="setPageBackground()">
-        </div>
         <button class="btn" onclick="saveDraft()">Save as Draft</button>
         <button class="btn primary" onclick="publishPost()">Save & Publish</button>
     </div>
@@ -330,14 +326,6 @@
                             if (styleMatch) {
                                 const css = styleMatch[1];
 
-                                // Extract page background color from CSS
-                                const bgMatch = css.match(/body\s*{\s*background-color:\s*([^;]+)/i);
-                                if (bgMatch) {
-                                    const bgColor = bgMatch[1].trim().replace(/!important;?/, '').trim();
-                                    document.getElementById('pageBgColor').value = bgColor;
-                                    console.log('Loaded page background:', bgColor);
-                                }
-
                                 // Get the editor's iframe and inject the CSS
                                 const frame = document.querySelector('iframe[data-gjs]') || document.querySelector('iframe.gjs-frame');
                                 if (frame && frame.contentDocument) {
@@ -382,12 +370,19 @@
             const components = editor.getComponents();
             let css = editor.getCss();
 
-            // Add page background color to CSS
-            const pageBgColor = document.getElementById('pageBgColor').value;
-            css += `body { background-color: ${pageBgColor} !important; }`;
+            // Also capture body styles directly from the frame
+            const frame = document.querySelector('iframe.gjs-frame');
+            if (frame && frame.contentDocument && frame.contentDocument.body) {
+                const bodyBg = frame.contentDocument.body.style.backgroundColor;
+                if (bodyBg) {
+                    // Only add if not already in CSS
+                    if (!css.includes('body') || !css.includes('background-color')) {
+                        css += `body { background-color: ${bodyBg}; }`;
+                    }
+                }
+            }
 
             console.log('Number of components:', components.length);
-            console.log('Page background color:', pageBgColor);
             components.forEach((comp, i) => {
                 console.log(`Component ${i}:`, comp.getName(), 'HTML:', comp.toHTML().substring(0, 100));
             });
@@ -497,18 +492,6 @@
         function redo() {
             if (editor) {
                 editor.UndoManager.redo();
-            }
-        }
-
-        function setPageBackground() {
-            const color = document.getElementById('pageBgColor').value;
-            if (editor) {
-                // Apply to the frame body
-                const frame = document.querySelector('iframe.gjs-frame');
-                if (frame && frame.contentDocument) {
-                    frame.contentDocument.body.style.backgroundColor = color;
-                }
-                console.log('Page background set to:', color);
             }
         }
 
