@@ -1278,6 +1278,7 @@ def admin_blog_edit_blocks(post_id):
 @app.route('/admin/blog/<int:post_id>/edit', methods=['GET', 'POST'])
 @login_required
 def admin_blog_edit(post_id):
+    print(f'[ADMIN_BLOG_EDIT] Route called, method: {request.method}')
     post = db.get_blog_post_by_id(post_id)
     if not post:
         abort(404)
