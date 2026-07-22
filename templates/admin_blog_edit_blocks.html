@@ -189,7 +189,11 @@
                         sectors: [{
                             name: 'General',
                             open: true,
-                            buildProps: ['display', 'position', 'width', 'height', 'margin', 'padding', 'text-align', 'justify-content', 'align-items', 'flex-direction', 'gap']
+                            buildProps: ['display', 'position', 'text-align', 'justify-content', 'align-items', 'flex-direction', 'gap']
+                        }, {
+                            name: 'Dimensions',
+                            open: false,
+                            buildProps: ['width', 'height', 'margin', 'padding', 'min-width', 'min-height', 'max-width', 'max-height']
                         }, {
                             name: 'Decoration',
                             open: false,
