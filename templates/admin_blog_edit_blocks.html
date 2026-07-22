@@ -273,25 +273,22 @@
                     ];
 
                     try {
-                        const sm = editor.StyleManager;
-                        if (sm && sm.addSector) {
-                            const fontProperty = {
-                                name: 'font-family',
-                                property: 'font-family',
-                                type: 'select',
-                                defaults: 'Arial',
-                                options: fonts.map(f => ({ id: f, label: f }))
-                            };
-                            console.log('Adding font property to style manager');
-                        }
-
-                        // Also try to add fonts directly through FontManager
-                        if (editor.FontManager && editor.FontManager.add) {
-                            fonts.forEach(font => editor.FontManager.add(font));
-                            console.log('Fonts added via FontManager');
+                        // Try FontManager approach
+                        if (editor.FontManager) {
+                            console.log('FontManager exists, current fonts:', editor.FontManager.getAll());
+                            fonts.forEach(font => {
+                                try {
+                                    editor.FontManager.add(font);
+                                } catch(e) {
+                                    console.log('Error adding font ' + font + ':', e.message);
+                                }
+                            });
+                            console.log('Fonts added, updated list:', editor.FontManager.getAll());
+                        } else {
+                            console.log('FontManager not available');
                         }
                     } catch(e) {
-                        console.log('Error setting up fonts:', e);
+                        console.log('Error setting up fonts:', e.message);
                     }
                 }, 500);
 
