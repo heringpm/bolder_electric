@@ -111,99 +111,38 @@
                     pageManager: {},
                     blockManager: {
                         blocks: [
-                            {
-                                id: 'heading1',
-                                label: '<i class="fas fa-heading"></i> H1',
-                                content: '<h1 style="font-size: 36px; font-weight: bold; margin: 20px 0;">Heading 1</h1>',
-                                category: 'Typography'
-                            },
-                            {
-                                id: 'heading2',
-                                label: '<i class="fas fa-heading"></i> H2',
-                                content: '<h2 style="font-size: 28px; font-weight: bold; margin: 16px 0;">Heading 2</h2>',
-                                category: 'Typography'
-                            },
-                            {
-                                id: 'heading3',
-                                label: '<i class="fas fa-heading"></i> H3',
-                                content: '<h3 style="font-size: 22px; font-weight: bold; margin: 12px 0;">Heading 3</h3>',
-                                category: 'Typography'
-                            },
-                            {
-                                id: 'text',
-                                label: '<i class="fas fa-paragraph"></i> Text',
-                                content: '<p style="font-size: 16px; line-height: 1.6; margin: 12px 0;">Add your text content here.</p>',
-                                category: 'Basic'
-                            },
-                            {
-                                id: 'image',
-                                label: '<i class="fas fa-image"></i> Image',
-                                content: '<img src="https://via.placeholder.com/600x400" style="width:100%; border-radius: 8px;">',
-                                category: 'Media'
-                            },
-                            {
-                                id: 'button',
-                                label: '<i class="fas fa-mouse"></i> Button',
-                                content: '<a href="#" style="display: inline-block; background: #f1ba20; color: #0a0a0a; padding: 12px 30px; border-radius: 4px; text-decoration: none; font-weight: bold; margin: 10px 0;">Learn More</a>',
-                                category: 'Interactive'
-                            },
-                            {
-                                id: 'video',
-                                label: '<i class="fas fa-video"></i> Video',
-                                content: '<iframe width="100%" height="400" style="border-radius: 8px;" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>',
-                                category: 'Media'
-                            },
-                            {
-                                id: 'quote',
-                                label: '<i class="fas fa-quote-left"></i> Quote',
-                                content: '<blockquote style="border-left: 4px solid #f1ba20; padding-left: 20px; margin: 20px 0; font-style: italic; color: #666;"><p>"Your inspiring quote goes here"</p><p style="font-size: 14px;">— Attribution</p></blockquote>',
-                                category: 'Typography'
-                            },
-                            {
-                                id: 'divider',
-                                label: '<i class="fas fa-minus"></i> Divider',
-                                content: '<hr style="margin: 40px 0; border: none; border-top: 1px solid #ddd;">',
-                                category: 'Layout'
-                            },
-                            {
-                                id: 'spacer',
-                                label: '<i class="fas fa-arrows-alt-v"></i> Spacer',
-                                content: '<div style="height: 40px;"></div>',
-                                category: 'Layout'
-                            },
-                            {
-                                id: 'section-two-col',
-                                label: '<i class="fas fa-columns"></i> 2 Columns',
-                                content: '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 20px 0;"><div style="padding: 20px;"><p>Column 1</p></div><div style="padding: 20px;"><p>Column 2</p></div></div>',
-                                category: 'Layout'
-                            },
-                            {
-                                id: 'section-three-col',
-                                label: '<i class="fas fa-th"></i> 3 Columns',
-                                content: '<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin: 20px 0;"><div style="padding: 15px;"><p>Col 1</p></div><div style="padding: 15px;"><p>Col 2</p></div><div style="padding: 15px;"><p>Col 3</p></div></div>',
-                                category: 'Layout'
-                            },
-                            {
-                                id: 'card',
-                                label: '<i class="fas fa-rectangle-landscape"></i> Card',
-                                content: '<div style="background: white; border: 1px solid #ddd; border-radius: 8px; padding: 30px; margin: 20px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"><h3 style="margin-top: 0; margin-bottom: 10px;">Card Title</h3><p style="color: #666; margin: 0;">Card content goes here.</p></div>',
-                                category: 'Layout'
-                            },
-                            {
-                                id: 'list',
-                                label: '<i class="fas fa-list"></i> List',
-                                content: '<ul style="margin: 12px 0; padding-left: 20px;"><li>Item 1</li><li>Item 2</li><li>Item 3</li></ul>',
-                                category: 'Basic'
-                            }
+                            { id: 'section-one-col', label: '1 Column', content: '<div style="display: grid; grid-template-columns: 1fr; gap: 30px; margin: 20px 0;"><div style="padding: 20px;"><p>Column content</p></div></div>', category: 'Basic' },
+                            { id: 'section-two-col', label: '2 Columns', content: '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 20px 0;"><div style="padding: 20px;"><p>Column 1</p></div><div style="padding: 20px;"><p>Column 2</p></div></div>', category: 'Basic' },
+                            { id: 'section-three-col', label: '3 Columns', content: '<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin: 20px 0;"><div style="padding: 15px;"><p>Col 1</p></div><div style="padding: 15px;"><p>Col 2</p></div><div style="padding: 15px;"><p>Col 3</p></div></div>', category: 'Basic' },
+                            { id: 'section-two-col-37', label: '2 Columns 3/7', content: '<div style="display: grid; grid-template-columns: 3fr 7fr; gap: 30px; margin: 20px 0;"><div style="padding: 20px;"><p>30%</p></div><div style="padding: 20px;"><p>70%</p></div></div>', category: 'Basic' },
+                            { id: 'text', label: 'Text', content: '<p style="font-size: 16px; line-height: 1.6; margin: 12px 0;">Add your text content here.</p>', category: 'Basic' },
+                            { id: 'link', label: 'Link', content: '<a href="#">Link text</a>', category: 'Basic' },
+                            { id: 'image', label: 'Image', content: '<img src="https://via.placeholder.com/600x400" style="width:100%; height: auto;" />', category: 'Basic' },
+                            { id: 'video', label: 'Video', content: '<iframe width="100%" height="400" style="border-radius: 8px;" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>', category: 'Basic' },
+                            { id: 'map', label: 'Map', content: '<iframe width="100%" height="400" style="border: 1px solid #ccc;" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3024.1234567890!2d-74.00601234567890!3d40.71278901234567!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDDCsDQyJzQ2LjIiTiA3NMKwMDAnMjEuNiJX!5e0!3m2!1sen!2sus!4v1234567890" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>', category: 'Basic' },
+                            { id: 'link-block', label: 'Link Block', content: '<a href="#" style="display: block; padding: 20px; background: #f5f5f5; border-radius: 8px; text-decoration: none; color: #333;">Link block with full area clickable</a>', category: 'Basic' },
+                            { id: 'quote', label: 'Quote', content: '<blockquote style="border-left: 4px solid #f1ba20; padding-left: 20px; margin: 20px 0; font-style: italic; color: #666;"><p>"Your inspiring quote goes here"</p><p style="font-size: 14px;">— Attribution</p></blockquote>', category: 'Basic' },
+                            { id: 'text-section', label: 'Text section', content: '<section style="padding: 40px; background: #f9f9f9;"><h2 style="margin-bottom: 20px;">Section Title</h2><p style="line-height: 1.6; color: #333;">Section content with multiple lines of text can go here.</p></section>', category: 'Basic' },
+                            { id: 'form', label: 'Form', content: '<form style="max-width: 500px;"><div style="margin-bottom: 15px;"><input type="text" placeholder="Name" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;" /></div><div style="margin-bottom: 15px;"><input type="email" placeholder="Email" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;" /></div><button type="submit" style="padding: 10px 20px; background: #f1ba20; color: #000; border: none; border-radius: 4px; cursor: pointer;">Submit</button></form>', category: 'Forms' },
+                            { id: 'input', label: 'Input', content: '<input type="text" placeholder="Input field" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;" />', category: 'Forms' },
+                            { id: 'textarea', label: 'Textarea', content: '<textarea placeholder="Message" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; min-height: 120px;"></textarea>', category: 'Forms' },
+                            { id: 'select', label: 'Select', content: '<select style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px;"><option>Choose an option</option><option>Option 1</option><option>Option 2</option></select>', category: 'Forms' },
+                            { id: 'button', label: 'Button', content: '<button style="padding: 12px 30px; background: #f1ba20; color: #000; border: none; border-radius: 4px; font-weight: bold; cursor: pointer;">Click me</button>', category: 'Forms' },
+                            { id: 'label', label: 'Label', content: '<label style="display: block; margin-bottom: 10px; font-weight: bold;">Label text</label>', category: 'Forms' },
+                            { id: 'checkbox', label: 'Checkbox', content: '<div style="margin: 10px 0;"><input type="checkbox" id="cb1" /><label for="cb1" style="margin-left: 8px; display: inline;">Checkbox option</label></div>', category: 'Forms' },
+                            { id: 'radio', label: 'Radio', content: '<div style="margin: 10px 0;"><input type="radio" id="r1" name="radio-group" /><label for="r1" style="margin-left: 8px; display: inline;">Radio option</label></div>', category: 'Forms' },
+                            { id: 'countdown', label: 'Countdown', content: '<div style="display: inline-block; padding: 20px; background: #f1ba20; border-radius: 8px; text-align: center; font-size: 24px; font-weight: bold;">00:00:00</div>', category: 'Extra' },
+                            { id: 'tabs', label: 'Tabs', content: '<div><div style="display: flex; border-bottom: 2px solid #ddd; margin-bottom: 20px;"><button style="padding: 10px 20px; background: none; border: none; font-weight: bold; cursor: pointer; border-bottom: 3px solid #f1ba20;">Tab 1</button><button style="padding: 10px 20px; background: none; border: none; cursor: pointer;">Tab 2</button></div><div>Tab 1 content</div></div>', category: 'Extra' },
+                            { id: 'custom-code', label: 'Custom Code', content: '<div style="background: #f5f5f5; padding: 20px; border-radius: 4px; font-family: monospace;"><code>&lt;div&gt;Custom HTML code&lt;/div&gt;</code></div>', category: 'Extra' },
+                            { id: 'tooltip', label: 'Tooltip', content: '<span style="position: relative; cursor: help; text-decoration: underline; border-bottom: 1px dotted #666;">Hover me<span style="position: absolute; background: #333; color: white; padding: 8px 12px; border-radius: 4px; white-space: nowrap; bottom: 125%; left: 50%; transform: translateX(-50%); display: none; font-size: 12px;">Tooltip text</span></span>', category: 'Extra' },
+                            { id: 'typed', label: 'Typed', content: '<h2 style="font-size: 32px; font-weight: bold;">Typed text animation</h2><p style="color: #666;">This text will be typed out letter by letter.</p>', category: 'Extra' }
                         ]
                     },
                     categoryLabel: 'Categories',
                     categories: [
-                        { id: 'Typography', label: 'Typography', open: true },
                         { id: 'Basic', label: 'Basic', open: true },
-                        { id: 'Media', label: 'Media', open: false },
-                        { id: 'Interactive', label: 'Interactive', open: false },
-                        { id: 'Layout', label: 'Layout', open: false }
+                        { id: 'Forms', label: 'Forms', open: true },
+                        { id: 'Extra', label: 'Extra', open: false }
                     ],
                     deviceManager: {
                         devices: [
