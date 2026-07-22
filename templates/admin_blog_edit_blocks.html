@@ -458,6 +458,10 @@
                 }
             }
 
+            const bgColorSave = css.match(/background-color:\s*rgb\([^)]+\)/)?.[0] || 'none';
+            console.log('💾 SAVE: Background color in CSS:', bgColorSave);
+            console.log('💾 SAVE: HTML content length:', html.length);
+
             const formData = new URLSearchParams({
                 title,
                 slug: title.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
