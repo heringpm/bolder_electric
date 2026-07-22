@@ -370,19 +370,28 @@
             const components = editor.getComponents();
             let css = editor.getCss();
 
-            // Also capture body styles directly from the frame
+            // Capture ALL CSS from the frame, including body styles
             const frame = document.querySelector('iframe.gjs-frame');
-            if (frame && frame.contentDocument && frame.contentDocument.body) {
-                const bodyBg = frame.contentDocument.body.style.backgroundColor;
-                if (bodyBg) {
-                    // Only add if not already in CSS
-                    if (!css.includes('body') || !css.includes('background-color')) {
-                        css += `body { background-color: ${bodyBg}; }`;
+            if (frame && frame.contentDocument) {
+                // Get all stylesheets from the frame
+                const styles = frame.contentDocument.querySelectorAll('style');
+                styles.forEach(style => {
+                    if (style.textContent && !css.includes(style.textContent)) {
+                        css += style.textContent;
+                    }
+                });
+
+                // Also capture inline body styles
+                if (frame.contentDocument.body) {
+                    const bodyBg = frame.contentDocument.body.style.backgroundColor;
+                    if (bodyBg && !css.includes('background-color')) {
+                        css += `body { background-color: ${bodyBg} !important; }`;
                     }
                 }
             }
 
             console.log('Number of components:', components.length);
+            console.log('CSS includes body background:', css.includes('body') && css.includes('background-color'));
             components.forEach((comp, i) => {
                 console.log(`Component ${i}:`, comp.getName(), 'HTML:', comp.toHTML().substring(0, 100));
             });
