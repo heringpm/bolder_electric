@@ -394,7 +394,13 @@
 
             // Render components to HTML
             components.forEach(comp => {
-                html += comp.toHTML();
+                let compHtml = comp.toHTML();
+
+                // Remove base64 encoded images to reduce file size
+                // They'll be replaced with empty src but actual uploaded images with URLs are preserved
+                compHtml = compHtml.replace(/src="data:image\/[^;]+;base64,[^"]*"/g, 'src=""');
+
+                html += compHtml;
             });
 
             // Add styles
@@ -434,7 +440,11 @@
             console.log('Form data keys:', Array.from(formData.keys()));
 
             console.log('Sending fetch request to:', endpoint);
-            console.log('Form data (URLSearchParams):', formData.toString().substring(0, 200) + '...');
+            console.log('Content size:', html.length, 'bytes');
+            console.log('Total form data size:', formData.toString().length, 'bytes');
+
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 second timeout
 
             fetch(endpoint, {
                 method: 'POST',
@@ -442,28 +452,31 @@
                     'X-CSRF-Token': csrfToken,
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
-                body: formData.toString()
+                body: formData.toString(),
+                signal: controller.signal
             })
             .then(res => {
+                clearTimeout(timeoutId);
                 console.log('Fetch response received! Status:', res.status);
-                console.log('Response headers:', res.headers);
                 if (!res.ok) {
-                    console.error('Response not OK');
                     return res.text().then(text => {
-                        console.error('Response body:', text);
-                        throw new Error(`Save failed (${res.status}): ${text}`);
+                        throw new Error(`Save failed (${res.status}): ${text.substring(0, 200)}`);
                     });
                 }
                 return res.text();
             })
-            .then((body) => {
-                console.log('Response body:', body);
+            .then(() => {
                 console.log('Save successful, redirecting...');
                 window.location.href = '/admin#blog';
             })
             .catch(err => {
+                clearTimeout(timeoutId);
                 console.error('Fetch error:', err);
-                alert('Error: ' + err.message);
+                if (err.name === 'AbortError') {
+                    alert('Save took too long and timed out. Content may be too large.');
+                } else {
+                    alert('Error: ' + err.message);
+                }
             });
         }
 
