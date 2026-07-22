@@ -239,6 +239,58 @@
                 }
 
                 console.log('Editor initialized');
+
+                // Add commands
+                editor.Commands.add('delete-component', {
+                    run(ed) {
+                        ed.getSelected()?.remove();
+                    }
+                });
+
+                editor.Commands.add('import-html', {
+                    run(ed) {
+                        const html = prompt('Paste your HTML code:');
+                        if (html) {
+                            ed.setComponents(html);
+                        }
+                    }
+                });
+
+                // Add buttons to the default panel
+                const pn = editor.Panels;
+                let topPanel = pn.getPanel('options');
+
+                if (!topPanel) {
+                    topPanel = pn.addPanel({ id: 'options' });
+                }
+
+                topPanel.set('buttons', [
+                    {
+                        id: 'undo',
+                        className: 'fa fa-undo',
+                        command: 'core:undo',
+                        attributes: { title: 'Undo (Ctrl+Z)' }
+                    },
+                    {
+                        id: 'redo',
+                        className: 'fa fa-redo',
+                        command: 'core:redo',
+                        attributes: { title: 'Redo (Ctrl+Y)' }
+                    },
+                    {
+                        id: 'delete',
+                        className: 'fa fa-trash',
+                        command: 'delete-component',
+                        attributes: { title: 'Delete' }
+                    },
+                    {
+                        id: 'import',
+                        className: 'fa fa-download',
+                        command: 'import-html',
+                        attributes: { title: 'Import HTML' }
+                    }
+                ]);
+
             } catch (e) {
                 console.error('Error initializing editor:', e);
             }
