@@ -370,37 +370,38 @@
             const components = editor.getComponents();
             let css = editor.getCss();
 
-            // Get root component (body) styles directly
-            const root = editor.getSelected() && editor.getSelected().isRoot ? editor.getSelected() : null;
-            if (root) {
-                const rootStyle = root.getStyle();
-                if (rootStyle && Object.keys(rootStyle).length > 0) {
-                    let rootCss = 'body { ';
-                    for (const [key, value] of Object.entries(rootStyle)) {
-                        rootCss += `${key}: ${value}; `;
-                    }
-                    rootCss += '}';
-                    css += rootCss;
-                    console.log('Added root/body styles:', rootCss);
+            console.log('Number of components:', components.length);
+
+            // Log all components to find the body
+            components.forEach((comp, i) => {
+                console.log(`Component ${i}: name=${comp.getName()}, isRoot=${comp.isRoot}, type=${comp.get('type')}`);
+                const style = comp.getStyle();
+                if (style && Object.keys(style).length > 0) {
+                    console.log(`  Styles:`, style);
                 }
-            } else {
-                // Try to find body component another way
-                const bodyComponent = editor.getComponents().find(c => c.getName() === 'body' || c.isRoot && c.getName() === 'wrapper');
-                if (bodyComponent) {
-                    const bodyStyle = bodyComponent.getStyle();
-                    if (bodyStyle && Object.keys(bodyStyle).length > 0) {
+            });
+
+            // Try to get body/wrapper element styles
+            let bodyStylesFound = false;
+            components.forEach(comp => {
+                if (comp.isRoot || comp.getName() === 'body' || comp.getName() === 'wrapper') {
+                    const style = comp.getStyle();
+                    if (style && Object.keys(style).length > 0) {
                         let bodyCss = 'body { ';
-                        for (const [key, value] of Object.entries(bodyStyle)) {
+                        for (const [key, value] of Object.entries(style)) {
                             bodyCss += `${key}: ${value}; `;
                         }
                         bodyCss += '}';
                         css += bodyCss;
-                        console.log('Added body component styles:', bodyCss);
+                        bodyStylesFound = true;
+                        console.log('Found and added body styles:', bodyCss);
                     }
                 }
-            }
+            });
 
-            console.log('Number of components:', components.length);
+            if (!bodyStylesFound) {
+                console.log('No body component styles found');
+            }
             components.forEach((comp, i) => {
                 console.log(`Component ${i}:`, comp.getName(), 'HTML:', comp.toHTML().substring(0, 100));
             });
