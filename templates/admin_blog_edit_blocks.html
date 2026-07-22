@@ -340,13 +340,21 @@
                                     frame.contentDocument.head.appendChild(styleEl);
 
                                     // Also apply body background directly to ensure it sticks
-                                    console.log('DEBUG LOAD: Extracted CSS:', css.substring(0, 200));
                                     const bodyBgMatch = css.match(/body\s*{[^}]*background-color:\s*([^;!}]+)/i);
-                                    console.log('DEBUG LOAD: bodyBgMatch:', bodyBgMatch);
                                     if (bodyBgMatch && bodyBgMatch[1]) {
                                         const bgColor = bodyBgMatch[1].trim();
+                                        console.log('DEBUG LOAD: Before setting - body bg:', window.getComputedStyle(frame.contentDocument.body).backgroundColor);
                                         frame.contentDocument.body.style.backgroundColor = bgColor;
+                                        frame.contentDocument.body.style.backgroundImage = 'none';
+                                        console.log('DEBUG LOAD: After setting - body bg:', window.getComputedStyle(frame.contentDocument.body).backgroundColor);
                                         console.log('✓ Applied body background color on load:', bgColor);
+
+                                        // Also check wrapper
+                                        const wrapper = frame.contentDocument.body.querySelector('[data-gjs-type="wrapper"]');
+                                        if (wrapper) {
+                                            const wrapperBg = window.getComputedStyle(wrapper).backgroundColor;
+                                            console.log('DEBUG LOAD: Wrapper background:', wrapperBg);
+                                        }
                                     } else {
                                         console.log('✗ No body background color found in CSS during load');
                                     }
