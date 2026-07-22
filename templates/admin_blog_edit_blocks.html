@@ -362,29 +362,36 @@
             console.log('CSRF Token:', csrfToken ? 'present' : 'missing');
             console.log('Form data keys:', Array.from(formData.keys()));
 
+            console.log('Sending fetch request to:', endpoint);
+            console.log('Form data (URLSearchParams):', formData.toString().substring(0, 200) + '...');
+
             fetch(endpoint, {
                 method: 'POST',
                 headers: {
                     'X-CSRF-Token': csrfToken,
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
-                body: formData
+                body: formData.toString()
             })
             .then(res => {
-                console.log('Response status:', res.status);
+                console.log('Fetch response received! Status:', res.status);
+                console.log('Response headers:', res.headers);
                 if (!res.ok) {
+                    console.error('Response not OK');
                     return res.text().then(text => {
+                        console.error('Response body:', text);
                         throw new Error(`Save failed (${res.status}): ${text}`);
                     });
                 }
                 return res.text();
             })
-            .then(() => {
+            .then((body) => {
+                console.log('Response body:', body);
                 console.log('Save successful, redirecting...');
                 window.location.href = '/admin#blog';
             })
             .catch(err => {
-                console.error('Save error:', err);
+                console.error('Fetch error:', err);
                 alert('Error: ' + err.message);
             });
         }
