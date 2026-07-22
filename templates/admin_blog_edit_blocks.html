@@ -103,8 +103,19 @@
                 height: '100%',
                 storageManager: false,
                 undoManager: { trackChanges: true },
-                assetManager: {
-                    uploadText: 'Drop images here or click to upload'
+                panels: {
+                    defaults: [
+                        {
+                            id: 'layers',
+                            el: '.gjs-pm-open',
+                            buttons: [{ id: 'open-layers', active: true, label: 'Layers', command: 'open-layers' }]
+                        },
+                        {
+                            id: 'devices',
+                            el: '.gjs-pm-open',
+                            buttons: [{ id: 'device-desktop', active: true, label: 'Desktop', command: 'set-device-desktop' }]
+                        }
+                    ]
                 },
                 blockManager: {
                     blocks: [
@@ -112,22 +123,19 @@
                             id: 'text',
                             label: 'Text',
                             content: '<p>Add your text here</p>',
-                            category: 'Basic',
-                            attributes: { class: 'fa fa-text-width' }
+                            category: 'Basic'
                         },
                         {
                             id: 'image',
                             label: 'Image',
-                            content: '<img src="https://via.placeholder.com/600x400" style="width:100%">',
-                            category: 'Basic',
-                            attributes: { class: 'fa fa-image' }
+                            content: '<img src="https://via.placeholder.com/600x400" style="width:100%;">',
+                            category: 'Basic'
                         },
                         {
                             id: 'section',
                             label: 'Section',
                             content: '<section style="padding:20px; background:#f0f0f0;"><h2>Section Title</h2><p>Add your content here</p></section>',
-                            category: 'Layout',
-                            attributes: { class: 'fa fa-object-group' }
+                            category: 'Layout'
                         }
                     ]
                 },
@@ -136,27 +144,17 @@
                         {
                             name: 'General',
                             open: false,
-                            buildProps: ['float', 'display', 'position', 'top', 'right', 'bottom', 'left']
-                        },
-                        {
-                            name: 'Flex',
-                            open: false,
-                            buildProps: ['flex-direction', 'flex-wrap', 'justify-content', 'align-items', 'gap']
+                            buildProps: ['float', 'display', 'position']
                         },
                         {
                             name: 'Dimension',
                             open: false,
-                            buildProps: ['margin', 'padding', 'width', 'height', 'max-width', 'min-height']
+                            buildProps: ['margin', 'padding', 'width', 'height']
                         },
                         {
                             name: 'Typography',
                             open: false,
-                            buildProps: ['font-family', 'font-size', 'font-weight', 'letter-spacing', 'color', 'line-height', 'text-align']
-                        },
-                        {
-                            name: 'Decorations',
-                            open: false,
-                            buildProps: ['background-color', 'border-radius', 'border', 'box-shadow']
+                            buildProps: ['font-family', 'font-size', 'font-weight', 'color']
                         }
                     ]
                 },
