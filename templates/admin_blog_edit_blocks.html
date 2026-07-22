@@ -235,6 +235,54 @@
                 }
 
                 console.log('Editor initialized');
+
+                // Add custom commands and toolbar buttons
+                editor.Commands.add('core:delete', {
+                    run(ed) {
+                        ed.getSelected()?.remove();
+                    }
+                });
+
+                editor.Commands.add('core:import', {
+                    run(ed) {
+                        const html = prompt('Paste your HTML code:');
+                        if (html) {
+                            ed.setComponents(html);
+                        }
+                    }
+                });
+
+                // Add toolbar buttons
+                const pn = editor.Panels;
+                const commands = pn.addPanel({ id: 'commands' });
+
+                commands.set('buttons', [
+                    {
+                        id: 'undo',
+                        className: 'fa fa-undo',
+                        command: 'core:undo',
+                        attributes: { title: 'Undo' }
+                    },
+                    {
+                        id: 'redo',
+                        className: 'fa fa-redo',
+                        command: 'core:redo',
+                        attributes: { title: 'Redo' }
+                    },
+                    {
+                        id: 'delete',
+                        className: 'fa fa-trash',
+                        command: 'core:delete',
+                        attributes: { title: 'Delete' }
+                    },
+                    {
+                        id: 'import',
+                        className: 'fa fa-download',
+                        command: 'core:import',
+                        attributes: { title: 'Import' }
+                    }
+                ]);
+
             } catch (e) {
                 console.error('Error initializing editor:', e);
             }
