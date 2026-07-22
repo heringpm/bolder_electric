@@ -1140,12 +1140,6 @@ def _build_home_context():
             'service_area': contact_info[3],
             'business_hours': contact_info[4]
         }
-        # Fix: ensure correct email is used (temporary workaround for PostgreSQL update)
-        if contact_data['email'] == 'info@bolderelectric.com':
-            contact_data['email'] = 'support@bolderelectric.com'
-        print(f"DEBUG: Using DB contact_data = {contact_data}", flush=True)
-    else:
-        print(f"DEBUG: contact_info is None/empty, using defaults", flush=True)
     
     services = db.get_services()
     service_descriptions = {
