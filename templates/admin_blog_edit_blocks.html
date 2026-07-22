@@ -393,18 +393,31 @@
             // Move wrapper background color to body rule
             // GrapesJS renders wrapper as div with unique ID. We capture its background-color
             // and apply it to the body element for persistence across page reloads
+            console.log('DEBUG: Attempting to extract wrapper background color from CSS');
             const bgColorMatch = css.match(/background-color:\s*([^;}]+)/);
+            console.log('DEBUG: bgColorMatch:', bgColorMatch);
             if (bgColorMatch && bgColorMatch[1]) {
                 const bgColor = bgColorMatch[1].trim();
+                console.log('DEBUG: Found background color:', bgColor);
                 // Replace the body rule's closing brace with the background color property
+                const oldCss = css;
                 css = css.replace(/body\s*\{([^}]*)\}/, (match) => {
+                    console.log('DEBUG: Replacing body rule, match:', match);
                     // If it already has background-color, replace it; otherwise add it
                     if (/background-color/i.test(match)) {
-                        return match.replace(/background-color:\s*[^;]+/i, `background-color: ${bgColor}`);
+                        const result = match.replace(/background-color:\s*[^;]+/i, `background-color: ${bgColor}`);
+                        console.log('DEBUG: Body already had background-color, replaced:', result);
+                        return result;
                     } else {
-                        return match.replace(/}/, `background-color: ${bgColor}; }`);
+                        const result = match.replace(/}/, `background-color: ${bgColor}; }`);
+                        console.log('DEBUG: Added background-color to body:', result);
+                        return result;
                     }
                 });
+                console.log('DEBUG: CSS before:', oldCss.substring(0, 200));
+                console.log('DEBUG: CSS after:', css.substring(0, 200));
+            } else {
+                console.log('DEBUG: No background-color found in CSS');
             }
             components.forEach((comp, i) => {
                 console.log(`Component ${i}:`, comp.getName(), 'HTML:', comp.toHTML().substring(0, 100));
