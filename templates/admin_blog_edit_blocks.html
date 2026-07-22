@@ -141,32 +141,6 @@
         .gjs-cv-canvas {
             background: white;
         }
-
-        .gjs-pn-panel {
-            min-width: 250px;
-            position: relative;
-        }
-
-        .gjs-pn-panel::after {
-            content: '';
-            position: absolute;
-            right: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: linear-gradient(to right, transparent, #ccc);
-            cursor: col-resize;
-            transition: background 0.2s;
-        }
-
-        .gjs-pn-panel:hover::after {
-            background: linear-gradient(to right, transparent, #999);
-        }
-
-        .gjs-pn-buttons {
-            display: flex;
-            gap: 4px;
-        }
     </style>
 </head>
 <body>
@@ -211,19 +185,6 @@
                     height: '100%',
                     width: 'auto',
                     storageManager: false,
-                    panels: {
-                        defaults: [{
-                            id: 'layers',
-                            active: true,
-                            visible: true,
-                            width: 280
-                        }, {
-                            id: 'styles',
-                            active: true,
-                            visible: true,
-                            width: 350
-                        }]
-                    },
                     styleManager: {
                         sectors: [{
                             name: 'General',
@@ -303,41 +264,6 @@
                         frame.contentDocument.head.appendChild(fontsLink);
                     }
                 });
-
-                setTimeout(() => {
-                    const rightPanel = document.querySelector('.gjs-pn-panel.gjs-pn-views-container');
-                    if (rightPanel) {
-                        let isResizing = false;
-                        let startX = 0;
-                        let startWidth = 0;
-
-                        const startResize = (e) => {
-                            isResizing = true;
-                            startX = e.clientX;
-                            startWidth = rightPanel.offsetWidth;
-                            document.body.style.cursor = 'col-resize';
-                            document.body.style.userSelect = 'none';
-                        };
-
-                        const doResize = (e) => {
-                            if (!isResizing) return;
-                            const newWidth = startWidth + (startX - e.clientX);
-                            if (newWidth > 250 && newWidth < window.innerWidth - 300) {
-                                rightPanel.style.width = newWidth + 'px';
-                            }
-                        };
-
-                        const stopResize = () => {
-                            isResizing = false;
-                            document.body.style.cursor = 'default';
-                            document.body.style.userSelect = 'auto';
-                        };
-
-                        rightPanel.addEventListener('mousedown', startResize);
-                        document.addEventListener('mousemove', doResize);
-                        document.addEventListener('mouseup', stopResize);
-                    }
-                }, 500);
 
                 setTimeout(() => {
                     const systemFonts = ['Arial', 'Helvetica', 'Times New Roman', 'Courier New', 'Georgia', 'Verdana', 'Comic Sans MS', 'Trebuchet MS'];
