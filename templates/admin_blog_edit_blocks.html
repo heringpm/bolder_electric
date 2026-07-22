@@ -177,30 +177,7 @@
                     pageManager: true,
                     showOffsets: true,
                     layerManager: true,
-                    styleManager: {
-                        sectors: [{
-                            name: 'General',
-                            open: true,
-                            properties: [
-                                'display', 'position', 'top', 'left', 'width', 'height',
-                                'background', 'background-color', 'background-image',
-                                'padding', 'padding-top', 'padding-right', 'padding-bottom', 'padding-left',
-                                'margin', 'margin-top', 'margin-right', 'margin-bottom', 'margin-left',
-                                'border', 'border-color', 'border-width', 'border-radius',
-                                'opacity', 'z-index'
-                            ]
-                        }, {
-                            name: 'Typography',
-                            properties: [
-                                'font-family', 'font-size', 'font-weight', 'line-height',
-                                'letter-spacing', 'color', 'text-align', 'text-transform',
-                                'text-decoration', 'text-indent'
-                            ]
-                        }, {
-                            name: 'Effects',
-                            properties: ['box-shadow', 'text-shadow', 'transform', 'transition']
-                        }]
-                    },
+                    styleManager: true,
                     traitManager: true,
                     fontManager: {
                         fonts: [
@@ -296,6 +273,18 @@
                     }
                 }
 
+                const fontManager = editor.FontManager;
+                if (fontManager) {
+                    const allFonts = [
+                        'Arial', 'Helvetica', 'Times New Roman', 'Courier New', 'Georgia', 'Verdana',
+                        'Roboto', 'Open Sans', 'Lato', 'Playfair Display', 'Merriweather',
+                        'Montserrat', 'Poppins', 'Inter', 'Raleway', 'Crimson Text', 'IBM Plex Mono'
+                    ];
+                    allFonts.forEach(font => {
+                        fontManager.add(font);
+                    });
+                    console.log('Fonts loaded:', fontManager.getAll());
+                }
                 console.log('Editor initialized');
             } catch (e) {
                 console.error('Error initializing editor:', e);
