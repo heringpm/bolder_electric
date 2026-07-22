@@ -244,14 +244,17 @@
                 });
 
                 setTimeout(() => {
+                    const systemFonts = ['Arial', 'Helvetica', 'Times New Roman', 'Courier New', 'Georgia', 'Verdana', 'Comic Sans MS', 'Trebuchet MS'];
+
                     const injectFonts = () => {
                         document.querySelectorAll('select').forEach(select => {
-                            const hasCustomFonts = customFontsList.some(font =>
-                                Array.from(select.options).some(o => o.value === font)
-                            );
-                            if (!hasCustomFonts) {
+                            const options = Array.from(select.options).map(o => o.value);
+                            const hasSystemFonts = systemFonts.some(font => options.includes(font));
+                            const hasCustomFonts = customFontsList.some(font => options.includes(font));
+
+                            if (hasSystemFonts && !hasCustomFonts) {
                                 customFontsList.forEach(font => {
-                                    if (!Array.from(select.options).some(o => o.value === font)) {
+                                    if (!options.includes(font)) {
                                         const option = document.createElement('option');
                                         option.value = font;
                                         option.textContent = font;
