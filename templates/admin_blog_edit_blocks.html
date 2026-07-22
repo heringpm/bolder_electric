@@ -57,46 +57,59 @@
             gap: 0;
         }
 
-        .panels-container {
-            display: flex;
-            width: 100%;
-        }
-
-        .left-panel {
-            width: 200px;
-            background: #f9f9f9;
-            border-right: 1px solid #ddd;
-            overflow-y: auto;
-            flex-shrink: 0;
-        }
-
         .editor-canvas {
             flex: 1;
-            display: flex;
-            flex-direction: column;
             background: #fff;
-            min-width: 400px;
+        }
+
+        #editor {
+            width: 100%;
+            height: 100%;
         }
 
         .right-panel {
-            width: 250px;
+            width: 300px;
             background: #f9f9f9;
             border-left: 1px solid #ddd;
-            overflow-y: auto;
+            overflow: hidden;
             flex-shrink: 0;
             display: flex;
             flex-direction: column;
         }
 
-        #layers-panel {
+        .left-panel {
             flex: 1;
+            background: #f9f9f9;
             border-bottom: 1px solid #ddd;
             overflow-y: auto;
+            padding: 10px;
+        }
+
+        .left-panel .gjs-title {
+            padding: 8px 0;
+            background: transparent;
+            font-weight: bold;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .left-panel .gjs-blocks-c {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        #layers-panel {
+            flex: 0 0 30%;
+            border-bottom: 1px solid #ddd;
+            overflow-y: auto;
+            padding: 10px;
         }
 
         #styles-panel {
-            flex: 1;
+            flex: 0 0 70%;
             overflow-y: auto;
+            padding: 10px;
         }
 
         .gjs-blocks-cs {
@@ -178,11 +191,11 @@
     </div>
 
     <div class="editor-container">
-        <div class="left-panel" id="blocks-panel"></div>
         <div class="editor-canvas">
             <div id="editor"></div>
         </div>
         <div class="right-panel">
+            <div class="left-panel" id="blocks-panel"></div>
             <div id="layers-panel"></div>
             <div id="styles-panel"></div>
         </div>
