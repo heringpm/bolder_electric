@@ -154,8 +154,12 @@
 </head>
 <body>
     <div class="top-bar">
+        <button class="btn" onclick="goBack()">← Back to Admin</button>
+        <div style="margin-left: 20px; display: flex; gap: 8px; border-left: 1px solid rgba(241,186,32,0.22); padding-left: 20px;">
+            <button class="btn" onclick="undo()" title="Undo (Ctrl+Z)"><i class="fas fa-undo"></i></button>
+            <button class="btn" onclick="redo()" title="Redo (Ctrl+Y)"><i class="fas fa-redo"></i></button>
+        </div>
         <input type="text" class="title-input" id="titleInput" placeholder="Post Title" value="{{ post.title or '' }}">
-        <button class="btn" onclick="goBack()">← Discard</button>
         <button class="btn" onclick="saveDraft()">Save as Draft</button>
         <button class="btn primary" onclick="publishPost()">Save & Publish</button>
     </div>
@@ -377,8 +381,18 @@
         }
 
         function goBack() {
-            if (confirm('Discard all changes?')) {
-                window.location.href = '/admin#blog';
+            window.location.href = '/admin#blog';
+        }
+
+        function undo() {
+            if (editor) {
+                editor.UndoManager.undo();
+            }
+        }
+
+        function redo() {
+            if (editor) {
+                editor.UndoManager.redo();
             }
         }
 
