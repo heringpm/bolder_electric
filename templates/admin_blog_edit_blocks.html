@@ -338,6 +338,15 @@
                                     styleEl.setAttribute('data-custom-styles', 'true');
                                     styleEl.textContent = css;
                                     frame.contentDocument.head.appendChild(styleEl);
+
+                                    // Also apply body background directly to ensure it sticks
+                                    const bodyBgMatch = css.match(/body\s*{[^}]*background-color:\s*([^;]+)/i);
+                                    if (bodyBgMatch) {
+                                        const bgColor = bodyBgMatch[1].trim();
+                                        frame.contentDocument.body.style.backgroundColor = bgColor;
+                                        console.log('Applied body background color:', bgColor);
+                                    }
+
                                     console.log('Injected CSS into frame, CSS length:', css.length);
                                 }
                             }
