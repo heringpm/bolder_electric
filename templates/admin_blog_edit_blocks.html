@@ -17,6 +17,19 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
 
+        /* Preload Google Fonts for GrapesJS */
+        .gjs-font-roboto { font-family: 'Roboto', sans-serif; }
+        .gjs-font-open-sans { font-family: 'Open Sans', sans-serif; }
+        .gjs-font-lato { font-family: 'Lato', sans-serif; }
+        .gjs-font-playfair { font-family: 'Playfair Display', serif; }
+        .gjs-font-merriweather { font-family: 'Merriweather', serif; }
+        .gjs-font-montserrat { font-family: 'Montserrat', sans-serif; }
+        .gjs-font-poppins { font-family: 'Poppins', sans-serif; }
+        .gjs-font-inter { font-family: 'Inter', sans-serif; }
+        .gjs-font-raleway { font-family: 'Raleway', sans-serif; }
+        .gjs-font-crimson { font-family: 'Crimson Text', serif; }
+        .gjs-font-ibm { font-family: 'IBM Plex Mono', monospace; }
+
         .top-bar {
             background: #111;
             border-bottom: 1px solid rgba(241,186,32,0.22);
@@ -179,27 +192,6 @@
                     layerManager: true,
                     styleManager: true,
                     traitManager: true,
-                    fontManager: {
-                        fonts: [
-                            'Arial',
-                            'Helvetica',
-                            'Times New Roman',
-                            'Courier New',
-                            'Georgia',
-                            'Verdana',
-                            'Roboto',
-                            'Open Sans',
-                            'Lato',
-                            'Playfair Display',
-                            'Merriweather',
-                            'Montserrat',
-                            'Poppins',
-                            'Inter',
-                            'Raleway',
-                            'Crimson Text',
-                            'IBM Plex Mono'
-                        ]
-                    },
                     blockManager: {
                         blocks: [
                             { id: 'header', label: '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z"></path></svg>Header', content: '<header style="background: #333; color: white; padding: 20px; text-align: center;"><h1 style="margin: 0;">Header Title</h1></header>', category: 'Basic' },
@@ -273,18 +265,6 @@
                     }
                 }
 
-                const fontManager = editor.FontManager;
-                if (fontManager) {
-                    const allFonts = [
-                        'Arial', 'Helvetica', 'Times New Roman', 'Courier New', 'Georgia', 'Verdana',
-                        'Roboto', 'Open Sans', 'Lato', 'Playfair Display', 'Merriweather',
-                        'Montserrat', 'Poppins', 'Inter', 'Raleway', 'Crimson Text', 'IBM Plex Mono'
-                    ];
-                    allFonts.forEach(font => {
-                        fontManager.add(font);
-                    });
-                    console.log('Fonts loaded:', fontManager.getAll());
-                }
                 console.log('Editor initialized');
             } catch (e) {
                 console.error('Error initializing editor:', e);
