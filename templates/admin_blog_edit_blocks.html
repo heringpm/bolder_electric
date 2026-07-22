@@ -326,15 +326,21 @@
                             if (styleMatch) {
                                 const css = styleMatch[1];
                                 // Get the editor's iframe and inject the CSS
-                                const frame = document.querySelector('[data-gjs-type="frame"]');
+                                const frame = document.querySelector('iframe[data-gjs]') || document.querySelector('iframe.gjs-frame');
                                 if (frame && frame.contentDocument) {
+                                    // Remove old style tag to avoid duplicates
+                                    const oldStyle = frame.contentDocument.querySelector('style[data-custom-styles]');
+                                    if (oldStyle) oldStyle.remove();
+
+                                    // Add new style tag with saved CSS
                                     const styleEl = frame.contentDocument.createElement('style');
+                                    styleEl.setAttribute('data-custom-styles', 'true');
                                     styleEl.textContent = css;
                                     frame.contentDocument.head.appendChild(styleEl);
-                                    console.log('Injected CSS into frame');
+                                    console.log('Injected CSS into frame, CSS length:', css.length);
                                 }
                             }
-                        }, 100);
+                        }, 200);
                     } catch (e) {
                         console.log('Could not parse existing content:', e);
                     }
