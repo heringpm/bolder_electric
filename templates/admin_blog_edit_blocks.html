@@ -394,13 +394,7 @@
 
             // Render components to HTML
             components.forEach(comp => {
-                let compHtml = comp.toHTML();
-
-                // Remove base64 encoded images to reduce file size
-                // They'll be replaced with empty src but actual uploaded images with URLs are preserved
-                compHtml = compHtml.replace(/src="data:image\/[^;]+;base64,[^"]*"/g, 'src=""');
-
-                html += compHtml;
+                html += comp.toHTML();
             });
 
             // Add styles
