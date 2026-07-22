@@ -390,10 +390,13 @@
                 }
             });
 
-            // Try to get body/wrapper element styles
+            // Try to get wrapper element styles and apply to body
             let bodyStylesFound = false;
             components.forEach(comp => {
-                if (comp.isRoot || comp.getName() === 'body' || comp.getName() === 'wrapper') {
+                const compType = comp.get('type');
+                const compName = comp.getName();
+                // Look for wrapper type or body/wrapper named components
+                if (comp.isRoot || compName === 'body' || compName === 'Body' || compType === 'wrapper') {
                     const style = comp.getStyle();
                     if (style && Object.keys(style).length > 0) {
                         let bodyCss = 'body { ';
@@ -403,13 +406,13 @@
                         bodyCss += '}';
                         css += bodyCss;
                         bodyStylesFound = true;
-                        console.log('Found and added body styles:', bodyCss);
+                        console.log('Found wrapper styles and added as body CSS:', bodyCss);
                     }
                 }
             });
 
             if (!bodyStylesFound) {
-                console.log('No body component styles found');
+                console.log('No wrapper/body component styles found');
             }
             components.forEach((comp, i) => {
                 console.log(`Component ${i}:`, comp.getName(), 'HTML:', comp.toHTML().substring(0, 100));
