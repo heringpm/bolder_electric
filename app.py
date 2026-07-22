@@ -1123,6 +1123,7 @@ def home():
 def _build_home_context():
     # Get contact info for display
     contact_info = db.get_contact_info()
+    print(f"DEBUG: contact_info from DB = {contact_info}", flush=True)
     contact_data = {
         'phone': '(951) 397-4025',
         'address': '30019 Buck Tail Drive, Menifee, CA 92587',
@@ -1130,15 +1131,18 @@ def _build_home_context():
         'service_area': 'Riverside County & Southern California',
         'business_hours': 'Mon-Fri: 8AM-6PM, Emergency: 24/7'
     }
-    
+
     if contact_info:
         contact_data = {
             'phone': contact_info[0],
-            'email': contact_info[1], 
+            'email': contact_info[1],
             'address': contact_info[2],
             'service_area': contact_info[3],
             'business_hours': contact_info[4]
         }
+        print(f"DEBUG: Using DB contact_data = {contact_data}", flush=True)
+    else:
+        print(f"DEBUG: contact_info is None/empty, using defaults", flush=True)
     
     services = db.get_services()
     service_descriptions = {
