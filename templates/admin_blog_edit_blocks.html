@@ -160,6 +160,7 @@
     </div>
 
     <script src="{{ url_for('static', filename='js/grapes.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/grapesjs-fonts@0.1.7"></script>
     <script>
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
         const postId = {{ post.id }};
@@ -192,6 +193,16 @@
                     layerManager: true,
                     styleManager: true,
                     traitManager: true,
+                    plugins: ['grapesjs-fonts'],
+                    pluginsOpts: {
+                        'grapesjs-fonts': {
+                            fonts: [
+                                'Arial', 'Helvetica', 'Times New Roman', 'Courier New', 'Georgia', 'Verdana',
+                                'Roboto', 'Open Sans', 'Lato', 'Playfair Display', 'Merriweather',
+                                'Montserrat', 'Poppins', 'Inter', 'Raleway', 'Crimson Text', 'IBM Plex Mono'
+                            ]
+                        }
+                    },
                     blockManager: {
                         blocks: [
                             { id: 'header', label: '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z"></path></svg>Header', content: '<header style="background: #333; color: white; padding: 20px; text-align: center;"><h1 style="margin: 0;">Header Title</h1></header>', category: 'Basic' },
@@ -265,23 +276,7 @@
                     }
                 }
 
-                setTimeout(() => {
-                    const fonts = [
-                        'Arial', 'Helvetica', 'Times New Roman', 'Courier New', 'Georgia', 'Verdana',
-                        'Roboto', 'Open Sans', 'Lato', 'Playfair Display', 'Merriweather',
-                        'Montserrat', 'Poppins', 'Inter', 'Raleway', 'Crimson Text', 'IBM Plex Mono'
-                    ];
-
-                    fonts.forEach(font => {
-                        if (editor.FontManager) {
-                            editor.FontManager.add(font);
-                        }
-                    });
-
-                    console.log('Fonts added to FontManager');
-                }, 300);
-
-                console.log('Editor initialized');
+                console.log('Editor initialized with grapesjs-fonts plugin');
             } catch (e) {
                 console.error('Error initializing editor:', e);
             }
