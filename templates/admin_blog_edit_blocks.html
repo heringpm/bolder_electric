@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='js/grapes.min.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/grapesjs@latest/dist/css/grapes.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -159,7 +159,7 @@
         <div id="editor"></div>
     </div>
 
-    <script src="{{ url_for('static', filename='js/grapes.min.js') }}"></script>
+    <script src="https://unpkg.com/grapesjs@latest/dist/grapes.min.js"></script>
     <script>
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
         const postId = {{ post.id }};
@@ -192,6 +192,7 @@
                     layerManager: true,
                     styleManager: true,
                     traitManager: true,
+                    licenseKey: 'dedc7bdf319b4bb48bda571926f31ef1a504fe148e5f45f7a3ce64a20976e98c',
                     blockManager: {
                         blocks: [
                             { id: 'header', label: '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z"></path></svg>Header', content: '<header style="background: #333; color: white; padding: 20px; text-align: center;"><h1 style="margin: 0;">Header Title</h1></header>', category: 'Basic' },
@@ -273,26 +274,16 @@
                     ];
 
                     try {
-                        // Try FontManager approach
                         if (editor.FontManager) {
-                            console.log('FontManager exists, current fonts:', editor.FontManager.getAll());
-                            fonts.forEach(font => {
-                                try {
-                                    editor.FontManager.add(font);
-                                } catch(e) {
-                                    console.log('Error adding font ' + font + ':', e.message);
-                                }
-                            });
-                            console.log('Fonts added, updated list:', editor.FontManager.getAll());
-                        } else {
-                            console.log('FontManager not available');
+                            fonts.forEach(font => editor.FontManager.add(font));
+                            console.log('Fonts added to FontManager:', editor.FontManager.getAll());
                         }
                     } catch(e) {
                         console.log('Error setting up fonts:', e.message);
                     }
                 }, 500);
 
-                console.log('Editor initialized');
+                console.log('Editor initialized with license key');
             } catch (e) {
                 console.error('Error initializing editor:', e);
             }
