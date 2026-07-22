@@ -392,6 +392,16 @@
             console.log('Final HTML being saved:', html.substring(0, 200));
             console.log('Total HTML length:', html ? html.length : 0);
 
+            // Debug: Check for body background in CSS
+            if (css) {
+                const bodyBgMatch = css.match(/body\s*{[^}]*background[^}]*}/i);
+                if (bodyBgMatch) {
+                    console.log('Found body background CSS:', bodyBgMatch[0]);
+                } else {
+                    console.log('No body background found in CSS');
+                }
+            }
+
             const formData = new URLSearchParams({
                 title,
                 slug: title.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
