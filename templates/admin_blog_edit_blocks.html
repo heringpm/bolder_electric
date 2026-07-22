@@ -48,7 +48,31 @@
         .btn:hover { background: rgba(241,186,32,0.2); }
         .btn.primary { background: rgba(241,186,32,0.25); }
 
-        #editor { height: calc(100vh - 60px); }
+        #editor {
+            height: calc(100vh - 60px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .gjs-editor-cont {
+            display: flex !important;
+            flex-direction: row !important;
+        }
+
+        .gjs-viewport {
+            flex: 1 !important;
+            background: white !important;
+        }
+
+        .gjs-pn-panel.gjs-pn-left {
+            min-width: 200px;
+            flex: 0 0 220px;
+        }
+
+        .gjs-pn-panel.gjs-pn-right {
+            min-width: 200px;
+            flex: 0 0 250px;
+        }
 
         /* GrapesJS Theme */
         .gjs-editor-cont { background: #0a0a0a !important; }
