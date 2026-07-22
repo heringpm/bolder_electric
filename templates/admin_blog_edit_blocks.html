@@ -260,36 +260,38 @@
                 const pn = editor.Panels;
                 let topPanel = pn.getPanel('options');
 
-                if (!topPanel) {
-                    topPanel = pn.addPanel({ id: 'options' });
-                }
+                if (topPanel) {
+                    // Get existing buttons and add new ones
+                    const existingButtons = topPanel.get('buttons') || [];
+                    const newButtons = [
+                        {
+                            id: 'undo',
+                            className: 'fa fa-undo',
+                            command: 'core:undo',
+                            attributes: { title: 'Undo (Ctrl+Z)' }
+                        },
+                        {
+                            id: 'redo',
+                            className: 'fa fa-redo',
+                            command: 'core:redo',
+                            attributes: { title: 'Redo (Ctrl+Y)' }
+                        },
+                        {
+                            id: 'delete',
+                            className: 'fa fa-trash',
+                            command: 'delete-component',
+                            attributes: { title: 'Delete' }
+                        },
+                        {
+                            id: 'import',
+                            className: 'fa fa-download',
+                            command: 'import-html',
+                            attributes: { title: 'Import HTML' }
+                        }
+                    ];
 
-                topPanel.set('buttons', [
-                    {
-                        id: 'undo',
-                        className: 'fa fa-undo',
-                        command: 'core:undo',
-                        attributes: { title: 'Undo (Ctrl+Z)' }
-                    },
-                    {
-                        id: 'redo',
-                        className: 'fa fa-redo',
-                        command: 'core:redo',
-                        attributes: { title: 'Redo (Ctrl+Y)' }
-                    },
-                    {
-                        id: 'delete',
-                        className: 'fa fa-trash',
-                        command: 'delete-component',
-                        attributes: { title: 'Delete' }
-                    },
-                    {
-                        id: 'import',
-                        className: 'fa fa-download',
-                        command: 'import-html',
-                        attributes: { title: 'Import HTML' }
-                    }
-                ]);
+                    topPanel.set('buttons', [...newButtons, ...existingButtons]);
+                }
 
             } catch (e) {
                 console.error('Error initializing editor:', e);
