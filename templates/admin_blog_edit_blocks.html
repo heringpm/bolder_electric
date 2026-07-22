@@ -390,39 +390,21 @@
                 }
             });
 
-            // Extract wrapper ID from CSS and extract its background color
-            // The wrapper div gets a unique ID and is styled separately with #ID { background-color: ... }
-            // We need to find that ID and extract the color to apply to body
-            let wrapperBgColor = null;
-
-            console.log('DEBUG: Starting wrapper extraction from CSS');
-            console.log('DEBUG: CSS content:', css);
-
-            // Parse CSS to find wrapper ID (it should be in a rule like #itr7{background-color:#c6acac;})
-            // The wrapper is typically the first ID with a background-color (not counting other elements)
-            const wrapperIdMatch = css.match(/#([a-z0-9]+)\s*\{[^}]*background-color:\s*([^;}]+)/i);
-            console.log('DEBUG: wrapperIdMatch result:', wrapperIdMatch);
-
-            if (wrapperIdMatch) {
-                const wrapperId = wrapperIdMatch[1];
-                wrapperBgColor = wrapperIdMatch[2].trim();
-                console.log('Found wrapper ID in CSS:', wrapperId, 'with color:', wrapperBgColor);
-            } else {
-                console.log('No wrapper ID/background found in CSS');
-            }
-
-            // If we found a wrapper background color, update the body CSS to include it
-            if (wrapperBgColor) {
-                // Find the body rule and add the background-color
-                const bodyRuleMatch = css.match(/body\s*\{[^}]*\}/);
-                console.log('DEBUG: bodyRuleMatch:', bodyRuleMatch);
-                if (bodyRuleMatch) {
-                    const oldBodyRule = bodyRuleMatch[0];
-                    // Create new body rule with background-color
-                    const newBodyRule = oldBodyRule.replace(/}/, `background-color: ${wrapperBgColor}; }`);
-                    css = css.replace(oldBodyRule, newBodyRule);
-                    console.log('Updated body CSS with wrapper background color:', newBodyRule);
-                }
+            // Move wrapper background color to body rule
+            // GrapesJS renders wrapper as div with unique ID. We capture its background-color
+            // and apply it to the body element for persistence across page reloads
+            const bgColorMatch = css.match(/background-color:\s*([^;}]+)/);
+            if (bgColorMatch && bgColorMatch[1]) {
+                const bgColor = bgColorMatch[1].trim();
+                // Replace the body rule's closing brace with the background color property
+                css = css.replace(/body\s*\{([^}]*)\}/, (match) => {
+                    // If it already has background-color, replace it; otherwise add it
+                    if (/background-color/i.test(match)) {
+                        return match.replace(/background-color:\s*[^;]+/i, `background-color: ${bgColor}`);
+                    } else {
+                        return match.replace(/}/, `background-color: ${bgColor}; }`);
+                    }
+                });
             }
             components.forEach((comp, i) => {
                 console.log(`Component ${i}:`, comp.getName(), 'HTML:', comp.toHTML().substring(0, 100));
