@@ -236,10 +236,12 @@
                 });
 
                 setTimeout(() => {
-                    const observer = new MutationObserver(() => {
-                        const fontSelects = document.querySelectorAll('select[data-gjs-type="select"]');
-                        fontSelects.forEach(select => {
-                            if (!select.dataset.fontsAdded) {
+                    const injectFonts = () => {
+                        document.querySelectorAll('select').forEach(select => {
+                            const hasCustomFonts = customFontsList.some(font =>
+                                Array.from(select.options).some(o => o.value === font)
+                            );
+                            if (!hasCustomFonts) {
                                 customFontsList.forEach(font => {
                                     if (!Array.from(select.options).some(o => o.value === font)) {
                                         const option = document.createElement('option');
@@ -248,26 +250,14 @@
                                         select.appendChild(option);
                                     }
                                 });
-                                select.dataset.fontsAdded = 'true';
                             }
                         });
+                    };
 
-                        document.querySelectorAll('[data-gjs="font-family"] input, [data-prop="font-family"] input').forEach(input => {
-                            if (!input.dataset.fontsAdded && input.className.includes('select')) {
-                                customFontsList.forEach(font => {
-                                    if (input.value && !input.list.querySelector(`[value="${font}"]`)) {
-                                        const option = document.createElement('option');
-                                        option.value = font;
-                                        input.list.appendChild(option);
-                                    }
-                                });
-                                input.dataset.fontsAdded = 'true';
-                            }
-                        });
-                    });
-
+                    injectFonts();
+                    const observer = new MutationObserver(injectFonts);
                     observer.observe(document.body, { childList: true, subtree: true });
-                }, 500);
+                }, 300);
 
                 if (postContent && postContent.trim()) {
                     try {
