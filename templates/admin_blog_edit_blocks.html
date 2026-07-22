@@ -260,11 +260,40 @@
             let css = editor.getCss();
             let html = '';
 
+            // Capture body/wrapper background color
+            const wrapper = editor.getSelected();
+            let wrapperBgColor = null;
+
+            if (wrapper && (wrapper.getName() === 'Body' || wrapper.get('type') === 'wrapper')) {
+                const wrapperStyle = wrapper.getStyle();
+                if (wrapperStyle && wrapperStyle['background-color']) {
+                    wrapperBgColor = wrapperStyle['background-color'];
+                }
+            }
+
+            // Fallback: search CSS for background color
+            if (!wrapperBgColor && css) {
+                const matches = css.match(/body\s*{[^}]*background-color:\s*([^;!}]+)/i);
+                if (matches && matches[1]) {
+                    wrapperBgColor = matches[1].trim();
+                }
+            }
+
             components.forEach(comp => {
                 html += comp.toHTML();
             });
 
             if (css) {
+                // Ensure body background color is in the CSS
+                if (wrapperBgColor) {
+                    css = css.replace(/body\s*{[^}]*}/g, (match) => {
+                        if (/background-color/i.test(match)) {
+                            return match.replace(/background-color:\s*[^;!}]+[!;]?/i, `background-color: ${wrapperBgColor}`);
+                        } else {
+                            return match.replace(/}/, `background-color: ${wrapperBgColor}; }`);
+                        }
+                    });
+                }
                 html += '<style>' + css + '</style>';
             }
 
