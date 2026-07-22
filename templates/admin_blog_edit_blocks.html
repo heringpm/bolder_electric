@@ -370,28 +370,37 @@
             const components = editor.getComponents();
             let css = editor.getCss();
 
-            // Capture ALL CSS from the frame, including body styles
-            const frame = document.querySelector('iframe.gjs-frame');
-            if (frame && frame.contentDocument) {
-                // Get all stylesheets from the frame
-                const styles = frame.contentDocument.querySelectorAll('style');
-                styles.forEach(style => {
-                    if (style.textContent && !css.includes(style.textContent)) {
-                        css += style.textContent;
+            // Get root component (body) styles directly
+            const root = editor.getSelected() && editor.getSelected().isRoot ? editor.getSelected() : null;
+            if (root) {
+                const rootStyle = root.getStyle();
+                if (rootStyle && Object.keys(rootStyle).length > 0) {
+                    let rootCss = 'body { ';
+                    for (const [key, value] of Object.entries(rootStyle)) {
+                        rootCss += `${key}: ${value}; `;
                     }
-                });
-
-                // Also capture inline body styles
-                if (frame.contentDocument.body) {
-                    const bodyBg = frame.contentDocument.body.style.backgroundColor;
-                    if (bodyBg && !css.includes('background-color')) {
-                        css += `body { background-color: ${bodyBg} !important; }`;
+                    rootCss += '}';
+                    css += rootCss;
+                    console.log('Added root/body styles:', rootCss);
+                }
+            } else {
+                // Try to find body component another way
+                const bodyComponent = editor.getComponents().find(c => c.getName() === 'body' || c.isRoot && c.getName() === 'wrapper');
+                if (bodyComponent) {
+                    const bodyStyle = bodyComponent.getStyle();
+                    if (bodyStyle && Object.keys(bodyStyle).length > 0) {
+                        let bodyCss = 'body { ';
+                        for (const [key, value] of Object.entries(bodyStyle)) {
+                            bodyCss += `${key}: ${value}; `;
+                        }
+                        bodyCss += '}';
+                        css += bodyCss;
+                        console.log('Added body component styles:', bodyCss);
                     }
                 }
             }
 
             console.log('Number of components:', components.length);
-            console.log('CSS includes body background:', css.includes('body') && css.includes('background-color'));
             components.forEach((comp, i) => {
                 console.log(`Component ${i}:`, comp.getName(), 'HTML:', comp.toHTML().substring(0, 100));
             });
