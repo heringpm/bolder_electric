@@ -395,8 +395,14 @@
             // We need to find that ID and extract the color to apply to body
             let wrapperBgColor = null;
 
+            console.log('DEBUG: Starting wrapper extraction from CSS');
+            console.log('DEBUG: CSS content:', css);
+
             // Parse CSS to find wrapper ID (it should be in a rule like #itr7{background-color:#c6acac;})
-            const wrapperIdMatch = css.match(/#([a-z0-9]+)\s*{[^}]*background-color:\s*([^;!]+)/i);
+            // The wrapper is typically the first ID with a background-color (not counting other elements)
+            const wrapperIdMatch = css.match(/#([a-z0-9]+)\s*\{[^}]*background-color:\s*([^;}]+)/i);
+            console.log('DEBUG: wrapperIdMatch result:', wrapperIdMatch);
+
             if (wrapperIdMatch) {
                 const wrapperId = wrapperIdMatch[1];
                 wrapperBgColor = wrapperIdMatch[2].trim();
@@ -408,7 +414,8 @@
             // If we found a wrapper background color, update the body CSS to include it
             if (wrapperBgColor) {
                 // Find the body rule and add the background-color
-                const bodyRuleMatch = css.match(/body\s*{[^}]*}/);
+                const bodyRuleMatch = css.match(/body\s*\{[^}]*\}/);
+                console.log('DEBUG: bodyRuleMatch:', bodyRuleMatch);
                 if (bodyRuleMatch) {
                     const oldBodyRule = bodyRuleMatch[0];
                     // Create new body rule with background-color
