@@ -459,7 +459,7 @@ class DatabaseManager:
                     VALUES (1, ?, ?, ?, ?, ?)
                 '''), (
                     '(951) 397-4025',
-                    'info@bolderelectric.com',
+                    'support@bolderelectric.com',
                     '30019 Buck Tail Drive, Menifee, CA 92587',
                     'Riverside County & Surrounding Areas',
                     'Mon-Fri: 8AM-6PM, Emergency: 24/7'
@@ -468,7 +468,7 @@ class DatabaseManager:
 
             # Seed notification routing settings.
             default_contact_notify = 'support@bolderelectric.com'
-            default_booking_notify = os.environ.get('BOOKING_NOTIFICATION_EMAIL', 'info@bolderelectric.com')
+            default_booking_notify = os.environ.get('BOOKING_NOTIFICATION_EMAIL', 'support@bolderelectric.com')
             settings_to_seed = [
                 ('contact_notification_email', default_contact_notify),
                 ('booking_notification_email', default_booking_notify)

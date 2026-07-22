@@ -1042,7 +1042,7 @@ This email was sent from the Bolder Electric contact form.
 def send_booking_notification_email(booking_data, service_name):
     """Send booking notification email."""
     try:
-        env_fallback = os.environ.get('BOOKING_NOTIFICATION_EMAIL', 'info@bolderelectric.com')
+        env_fallback = os.environ.get('BOOKING_NOTIFICATION_EMAIL', 'support@bolderelectric.com')
         recipient_email = db.get_site_setting('booking_notification_email', env_fallback)
         if not recipient_email:
             recipient_email = env_fallback
@@ -2167,7 +2167,7 @@ def update_contact():
 def get_notification_settings():
     contact_info = db.get_contact_info()
     contact_fallback = contact_info[1] if contact_info else 'support@bolderelectric.com'
-    booking_fallback = os.environ.get('BOOKING_NOTIFICATION_EMAIL', 'info@bolderelectric.com')
+    booking_fallback = os.environ.get('BOOKING_NOTIFICATION_EMAIL', 'support@bolderelectric.com')
     return jsonify({
         'contact_notification_email': db.get_site_setting('contact_notification_email', contact_fallback),
         'booking_notification_email': db.get_site_setting('booking_notification_email', booking_fallback)
