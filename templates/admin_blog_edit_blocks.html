@@ -390,42 +390,32 @@
                 }
             });
 
-            // Extract wrapper styles from CSS and apply to body
-            // The wrapper is rendered as a div with a unique ID and styled separately
-            // We need to find the wrapper's ID and extract its background-color for the body
+            // Extract wrapper ID from CSS and extract its background color
+            // The wrapper div gets a unique ID and is styled separately with #ID { background-color: ... }
+            // We need to find that ID and extract the color to apply to body
             let wrapperBgColor = null;
 
-            // Find the frame's wrapper element (it's the one inside the body with class gjs-selected or similar)
-            const frame = document.querySelector('iframe[data-gjs]') || document.querySelector('iframe.gjs-frame');
-            if (frame && frame.contentDocument) {
-                const wrapperEl = frame.contentDocument.body.querySelector('[data-gjs-type="wrapper"]');
-                if (wrapperEl) {
-                    const wrapperId = wrapperEl.id;
-                    console.log('Found wrapper element with ID:', wrapperId);
-
-                    // Extract wrapper's CSS rule
-                    const wrapperCssRegex = new RegExp(`#${wrapperId}\\s*{[^}]*background-color:\\s*([^;!]+)[^}]*}`, 'i');
-                    const wrapperMatch = css.match(wrapperCssRegex);
-                    if (wrapperMatch) {
-                        wrapperBgColor = wrapperMatch[1].trim();
-                        console.log('Extracted wrapper background color:', wrapperBgColor);
-                    }
-                }
+            // Parse CSS to find wrapper ID (it should be in a rule like #itr7{background-color:#c6acac;})
+            const wrapperIdMatch = css.match(/#([a-z0-9]+)\s*{[^}]*background-color:\s*([^;!]+)/i);
+            if (wrapperIdMatch) {
+                const wrapperId = wrapperIdMatch[1];
+                wrapperBgColor = wrapperIdMatch[2].trim();
+                console.log('Found wrapper ID in CSS:', wrapperId, 'with color:', wrapperBgColor);
+            } else {
+                console.log('No wrapper ID/background found in CSS');
             }
 
             // If we found a wrapper background color, update the body CSS to include it
             if (wrapperBgColor) {
-                // Remove existing body background-color if present and add the wrapper's color
-                css = css.replace(/body\s*{[^}]*}/, (match) => {
-                    // Remove old background-color and add new one
-                    let newBodyRule = match.replace(/background-color:[^;]+;?/i, '');
-                    // Remove trailing semicolon before closing brace
-                    newBodyRule = newBodyRule.replace(/;\s*}/, ' }');
-                    // Add the wrapper's background color before closing brace
-                    newBodyRule = newBodyRule.replace(/\s*}/, `background-color: ${wrapperBgColor} !important; }`);
-                    return newBodyRule;
-                });
-                console.log('Updated body CSS with wrapper background color');
+                // Find the body rule and add the background-color
+                const bodyRuleMatch = css.match(/body\s*{[^}]*}/);
+                if (bodyRuleMatch) {
+                    const oldBodyRule = bodyRuleMatch[0];
+                    // Create new body rule with background-color
+                    const newBodyRule = oldBodyRule.replace(/}/, `background-color: ${wrapperBgColor}; }`);
+                    css = css.replace(oldBodyRule, newBodyRule);
+                    console.log('Updated body CSS with wrapper background color:', newBodyRule);
+                }
             }
             components.forEach((comp, i) => {
                 console.log(`Component ${i}:`, comp.getName(), 'HTML:', comp.toHTML().substring(0, 100));
