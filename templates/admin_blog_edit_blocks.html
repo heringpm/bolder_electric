@@ -104,10 +104,30 @@
                 editor = grapesjs.init({
                     container: '#editor',
                     fromElement: false,
-                    blockManager: { appendTo: false },
-                    styleManager: { appendTo: false },
-                    layerManager: { appendTo: false },
-                    traitManager: { appendTo: false }
+                    height: '100%',
+                    width: '100%',
+                    storageManager: false,
+                    undoManager: { trackChanges: true },
+                    pageManager: {},
+                    blockManager: {
+                        blocks: [
+                            { id: 'h1', label: 'H1', content: '<h1>Heading 1</h1>' },
+                            { id: 'h2', label: 'H2', content: '<h2>Heading 2</h2>' },
+                            { id: 'h3', label: 'H3', content: '<h3>Heading 3</h3>' },
+                            { id: 'text', label: 'Text', content: '<p>Text content</p>' },
+                            { id: 'image', label: 'Image', content: '<img src="https://via.placeholder.com/600x400" />' },
+                            { id: 'quote', label: 'Quote', content: '<blockquote><p>Quote here</p></blockquote>' },
+                            { id: 'button', label: 'Button', content: '<button>Click me</button>' },
+                            { id: 'list', label: 'List', content: '<ul><li>Item 1</li><li>Item 2</li></ul>' }
+                        ]
+                    },
+                    deviceManager: {
+                        devices: [
+                            { name: 'Desktop', width: '' },
+                            { name: 'Tablet', width: '768px', widthMedia: '768px' },
+                            { name: 'Mobile', width: '375px', widthMedia: '375px' }
+                        ]
+                    }
                 });
 
                 // Load existing content
