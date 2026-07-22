@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
 
-    <link rel="stylesheet" href="https://unpkg.com/@grapesjs/studio-sdk@latest/dist/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/grapesjs@0.21.13/dist/css/grapes.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -159,7 +159,7 @@
         <div id="editor"></div>
     </div>
 
-    <script src="https://unpkg.com/@grapesjs/studio-sdk@latest/dist/index.umd.js"></script>
+    <script src="https://unpkg.com/grapesjs@0.21.13"></script>
     <script>
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
         const postId = {{ post.id }};
@@ -170,7 +170,7 @@
         const startTime = Date.now();
 
         function initEditor() {
-            if (typeof window.GrapesJsStudioSDK === 'undefined' || !window.GrapesJsStudioSDK.createStudioEditor) {
+            if (typeof grapesjs === 'undefined') {
                 if (Date.now() - startTime < maxWaitTime) {
                     setTimeout(initEditor, 100);
                     return;
@@ -180,33 +180,11 @@
             }
 
             try {
-                editor = window.GrapesJsStudioSDK.createStudioEditor({
+                editor = grapesjs.init({
                     container: '#editor',
-                    licenseKey: 'dedc7bdf319b4bb48bda571926f31ef1a504fe148e5f45f7a3ce64a20976e98c',
-                    fonts: {
-                        enableFontManager: true,
-                        default: ({ baseDefault }) => [
-                            { family: 'Roboto', variants: { regular: { source: 'https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Mu4mxKKTU1Kg.woff2' } } },
-                            { family: 'Open Sans', variants: { regular: { source: 'https://fonts.gstatic.com/s/opensans/v35/memSYaGs126MiZpBA-UvWbX5ZZdhS6sgeyTGVrQc4AAHQ.woff2' } } },
-                            { family: 'Lato', variants: { regular: { source: 'https://fonts.gstatic.com/s/lato/v24/S6uyw4BMUTPHjx4wXg.woff2' } } },
-                            { family: 'Playfair Display', variants: { regular: { source: 'https://fonts.gstatic.com/s/playfairdisplay/v28/nuFvD-vgNJwFy_I8aTrauFtXRa8TVwTIOUnqwEjVaEFVrA.woff2' } } },
-                            { family: 'Merriweather', variants: { regular: { source: 'https://fonts.gstatic.com/s/merriweather/v30/u-440qyriQwlOrhSvowK_l5-cVxoGoMnoxZeog-T68w7Uy02d4htHqVH5eCd-N0ZXuom.woff2' } } },
-                            { family: 'Montserrat', variants: { regular: { source: 'https://fonts.gstatic.com/s/montserrat/v25/JTUHjIg1_i6t8kCJqq0.woff2' } } },
-                            { family: 'Poppins', variants: { regular: { source: 'https://fonts.gstatic.com/s/poppins/v20/pxiGyqcV3NVrSfwUAlC-lVxydu3jOq6-lQ.woff2' } } },
-                            { family: 'Inter', variants: { regular: { source: 'https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KSvqNyU.woff2' } } },
-                            { family: 'Raleway', variants: { regular: { source: 'https://fonts.gstatic.com/s/raleway/v28/Jua0_c6cinM8jR7FcgR.woff2' } } },
-                            { family: 'Crimson Text', variants: { regular: { source: 'https://fonts.gstatic.com/s/crimsontext/v13/wlp_gwzYd_hfV5tJEH5zN0j3O0wI76I-zfr4QFW_Xpc.woff2' } } },
-                            { family: 'IBM Plex Mono', variants: { regular: { source: 'https://fonts.gstatic.com/s/ibmplexmono/v19/VdGvJxc5XfDQcs9dU3_3_KpLpJIIceqVpT8c17EbW-w.woff2' } } }
-                        ]
-                    },
-                    project: {
-                        default: {
-                            pages: [{
-                                name: 'Page',
-                                component: ''
-                            }]
-                        }
-                    },
+                    height: '100%',
+                    width: 'auto',
+                    storageManager: false,
                     blockManager: {
                         blocks: [
                             { id: 'header', label: '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z"></path></svg>Header', content: '<header style="background: #333; color: white; padding: 20px; text-align: center;"><h1 style="margin: 0;">Header Title</h1></header>', category: 'Basic' },
@@ -245,7 +223,7 @@
                     }
                 });
 
-                setTimeout(() => {
+                editor.on('load', () => {
                     const frame = document.querySelector('iframe[data-gjs]') || document.querySelector('iframe.gjs-frame');
                     if (frame && frame.contentDocument) {
                         const fontsLink = frame.contentDocument.createElement('link');
@@ -253,7 +231,24 @@
                         fontsLink.href = 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Open+Sans:wght@400;600;700&family=Lato:wght@400;700&family=Playfair+Display:wght@600;700&family=Merriweather:wght@400;700&family=Montserrat:wght@500;600;700&family=Poppins:wght@400;500;600&family=Inter:wght@400;500;600&family=Raleway:wght@400;600;700&family=Crimson+Text:wght@400;600&family=IBM+Plex+Mono:wght@400;600&display=swap';
                         frame.contentDocument.head.appendChild(fontsLink);
                     }
-                }, 100);
+
+                    const fontManager = editor.FontManager;
+                    if (fontManager) {
+                        fontManager.add([
+                            { name: 'Roboto' },
+                            { name: 'Open Sans' },
+                            { name: 'Lato' },
+                            { name: 'Playfair Display' },
+                            { name: 'Merriweather' },
+                            { name: 'Montserrat' },
+                            { name: 'Poppins' },
+                            { name: 'Inter' },
+                            { name: 'Raleway' },
+                            { name: 'Crimson Text' },
+                            { name: 'IBM Plex Mono' }
+                        ]);
+                    }
+                });
 
                 if (postContent && postContent.trim()) {
                     try {
