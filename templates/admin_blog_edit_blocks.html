@@ -3,9 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate" />
-    <meta http-equiv="pragma" content="no-cache" />
-    <meta http-equiv="expires" content="0" />
     <title>Blog Editor - Bolder Electric</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
@@ -346,20 +343,8 @@
                                     const bodyBgMatch = css.match(/body\s*{[^}]*background-color:\s*([^;!}]+)/i);
                                     if (bodyBgMatch && bodyBgMatch[1]) {
                                         const bgColor = bodyBgMatch[1].trim();
-                                        console.log('DEBUG LOAD: Before setting - body bg:', window.getComputedStyle(frame.contentDocument.body).backgroundColor);
                                         frame.contentDocument.body.style.backgroundColor = bgColor;
                                         frame.contentDocument.body.style.backgroundImage = 'none';
-                                        console.log('DEBUG LOAD: After setting - body bg:', window.getComputedStyle(frame.contentDocument.body).backgroundColor);
-                                        console.log('✓ Applied body background color on load:', bgColor);
-
-                                        // Also check wrapper
-                                        const wrapper = frame.contentDocument.body.querySelector('[data-gjs-type="wrapper"]');
-                                        if (wrapper) {
-                                            const wrapperBg = window.getComputedStyle(wrapper).backgroundColor;
-                                            console.log('DEBUG LOAD: Wrapper background:', wrapperBg);
-                                        }
-                                    } else {
-                                        console.log('✗ No body background color found in CSS during load');
                                     }
 
                                     console.log('Injected CSS into frame, CSS length:', css.length);
@@ -394,16 +379,6 @@
             const components = editor.getComponents();
             let css = editor.getCss();
 
-            console.log('Number of components:', components.length);
-
-            // Log all components to find the body
-            components.forEach((comp, i) => {
-                console.log(`Component ${i}: name=${comp.getName()}, isRoot=${comp.isRoot}, type=${comp.get('type')}`);
-                const style = comp.getStyle();
-                if (style && Object.keys(style).length > 0) {
-                    console.log(`  Styles:`, style);
-                }
-            });
 
             // Move wrapper background color to body rule
             // GrapesJS renders wrapper as div with unique ID. Get the color directly from the wrapper element,
@@ -415,20 +390,15 @@
                 const wrapperStyle = wrapper.getStyle();
                 if (wrapperStyle && wrapperStyle['background-color']) {
                     wrapperBgColor = wrapperStyle['background-color'];
-                    console.log('DEBUG: Got wrapper background color from selected element:', wrapperBgColor);
-                } else {
-                    console.log('DEBUG: Selected element is wrapper but has no background-color in style');
                 }
             }
 
-            // Fallback: if wrapper isn't selected, try to extract from CSS (for consistency)
+            // Fallback: if wrapper isn't selected, try to extract from CSS
             if (!wrapperBgColor) {
-                // Find the last background-color since newer CSS comes later
                 const matches = css.match(/background-color:\s*([^;}]+)/g);
                 if (matches && matches.length > 0) {
                     const lastMatch = matches[matches.length - 1];
                     wrapperBgColor = lastMatch.split(':')[1].trim();
-                    console.log('DEBUG: Extracted background color from CSS:', wrapperBgColor);
                 }
             }
 
@@ -441,16 +411,7 @@
                         return match.replace(/}/, `background-color: ${wrapperBgColor}; }`);
                     }
                 });
-                console.log('DEBUG: Updated body CSS with color:', wrapperBgColor);
-            } else {
-                console.log('DEBUG: No wrapper background color found');
             }
-            components.forEach((comp, i) => {
-                console.log(`Component ${i}:`, comp.getName(), 'HTML:', comp.toHTML().substring(0, 100));
-            });
-
-            console.log('CSS from editor.getCss():', css);
-            console.log('CSS length:', css ? css.length : 0);
 
             let html = '';
 
@@ -464,22 +425,6 @@
                 html += '<style>' + css + '</style>';
             }
 
-            console.log('Final HTML being saved:', html.substring(0, 200));
-            console.log('Total HTML length:', html ? html.length : 0);
-
-            // Debug: Check for body background in CSS
-            if (css) {
-                const bodyBgMatch = css.match(/body\s*{[^}]*background[^}]*}/i);
-                if (bodyBgMatch) {
-                    console.log('Found body background CSS:', bodyBgMatch[0]);
-                } else {
-                    console.log('No body background found in CSS');
-                }
-            }
-
-            const bgColorSave = css.match(/background-color:\s*rgb\([^)]+\)/)?.[0] || 'none';
-            console.log('💾 SAVE: Background color in CSS:', bgColorSave);
-            console.log('💾 SAVE: HTML content length:', html.length);
 
             const formData = new URLSearchParams({
                 title,
@@ -493,15 +438,6 @@
 
             const endpoint = postId === 0 ? '/admin/blog/new' : `/admin/blog/${postId}/edit`;
 
-            console.log('Saving to:', endpoint);
-            console.log('Title:', title);
-            console.log('Status:', status);
-            console.log('CSRF Token:', csrfToken ? 'present' : 'missing');
-            console.log('Form data keys:', Array.from(formData.keys()));
-
-            console.log('Sending fetch request to:', endpoint);
-            console.log('Content size:', html.length, 'bytes');
-            console.log('Total form data size:', formData.toString().length, 'bytes');
 
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 60000); // 60 second timeout
@@ -517,7 +453,6 @@
             })
             .then(res => {
                 clearTimeout(timeoutId);
-                console.log('Fetch response received! Status:', res.status);
                 if (!res.ok) {
                     return res.text().then(text => {
                         throw new Error(`Save failed (${res.status}): ${text.substring(0, 200)}`);
@@ -526,7 +461,6 @@
                 return res.text();
             })
             .then(() => {
-                console.log('Save successful, redirecting...');
                 window.location.href = '/admin#blog';
             })
             .catch(err => {
