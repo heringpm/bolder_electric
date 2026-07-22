@@ -156,7 +156,8 @@
     <div class="top-bar">
         <input type="text" class="title-input" id="titleInput" placeholder="Post Title" value="{{ post.title or '' }}">
         <button class="btn" onclick="goBack()">← Discard</button>
-        <button class="btn primary" onclick="savePost()">Save & Publish</button>
+        <button class="btn" onclick="saveDraft()">Save as Draft</button>
+        <button class="btn primary" onclick="publishPost()">Save & Publish</button>
     </div>
 
     <div class="editor-wrapper">
@@ -323,7 +324,7 @@
             }
         }
 
-        function savePost() {
+        function saveContent(status) {
             const title = document.getElementById('titleInput').value.trim();
             if (!title) {
                 alert('Please enter a title');
@@ -343,7 +344,7 @@
                 content: html,
                 hero_image: '{{ post.hero_image or '' }}',
                 template: '{{ post.template or 1 }}',
-                status: 'published'
+                status: status
             });
 
             const endpoint = postId === 0 ? '/admin/blog/new' : `/admin/blog/${postId}/edit`;
@@ -361,6 +362,18 @@
                 window.location.href = '/admin#blog';
             })
             .catch(err => alert('Error: ' + err.message));
+        }
+
+        function saveDraft() {
+            saveContent('draft');
+        }
+
+        function publishPost() {
+            saveContent('published');
+        }
+
+        function savePost() {
+            publishPost();
         }
 
         function goBack() {
