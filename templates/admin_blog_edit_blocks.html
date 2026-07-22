@@ -141,6 +141,22 @@
         .gjs-cv-canvas {
             background: white;
         }
+
+        .gjs-pn-right {
+            width: 320px !important;
+            position: relative;
+        }
+
+        .gjs-pn-right::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: #d0d0d0;
+            cursor: col-resize;
+        }
     </style>
 </head>
 <body>
@@ -264,6 +280,40 @@
                         frame.contentDocument.head.appendChild(fontsLink);
                     }
                 });
+
+                setTimeout(() => {
+                    const rightPanel = document.querySelector('.gjs-pn-right');
+                    if (rightPanel) {
+                        let isResizing = false;
+                        let startX = 0;
+                        let startWidth = 0;
+
+                        const onMouseDown = (e) => {
+                            if (e.offsetX < 5) {
+                                isResizing = true;
+                                startX = e.clientX;
+                                startWidth = rightPanel.offsetWidth;
+                            }
+                        };
+
+                        const onMouseMove = (e) => {
+                            if (!isResizing) return;
+                            const diff = startX - e.clientX;
+                            const newWidth = startWidth + diff;
+                            if (newWidth > 250 && newWidth < 600) {
+                                rightPanel.style.width = newWidth + 'px';
+                            }
+                        };
+
+                        const onMouseUp = () => {
+                            isResizing = false;
+                        };
+
+                        rightPanel.addEventListener('mousedown', onMouseDown);
+                        document.addEventListener('mousemove', onMouseMove);
+                        document.addEventListener('mouseup', onMouseUp);
+                    }
+                }, 300);
 
                 setTimeout(() => {
                     const systemFonts = ['Arial', 'Helvetica', 'Times New Roman', 'Courier New', 'Georgia', 'Verdana', 'Comic Sans MS', 'Trebuchet MS'];
