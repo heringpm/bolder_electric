@@ -238,6 +238,16 @@
                     }
                 });
 
+                setTimeout(() => {
+                    const frame = document.querySelector('iframe[data-gjs]') || document.querySelector('iframe.gjs-frame');
+                    if (frame && frame.contentDocument) {
+                        const fontsLink = frame.contentDocument.createElement('link');
+                        fontsLink.rel = 'stylesheet';
+                        fontsLink.href = 'https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Open+Sans:wght@400;600;700&family=Lato:wght@400;700&family=Playfair+Display:wght@600;700&family=Merriweather:wght@400;700&family=Montserrat:wght@500;600;700&family=Poppins:wght@400;500;600&family=Inter:wght@400;500;600&family=Raleway:wght@400;600;700&family=Crimson+Text:wght@400;600&family=IBM+Plex+Mono:wght@400;600&display=swap';
+                        frame.contentDocument.head.appendChild(fontsLink);
+                    }
+                }, 100);
+
                 if (postContent && postContent.trim()) {
                     try {
                         editor.setComponents(postContent);
