@@ -185,6 +185,21 @@
                     height: '100%',
                     width: 'auto',
                     storageManager: false,
+                    styleManager: {
+                        sectors: [{
+                            name: 'General',
+                            open: true,
+                            buildProps: ['display', 'position', 'width', 'height', 'margin', 'padding', 'text-align', 'justify-content', 'align-items', 'flex-direction', 'gap']
+                        }, {
+                            name: 'Decoration',
+                            open: false,
+                            buildProps: ['background-color', 'border', 'border-radius', 'box-shadow', 'opacity']
+                        }, {
+                            name: 'Typography',
+                            open: false,
+                            buildProps: ['font-family', 'font-size', 'font-weight', 'line-height', 'color', 'text-decoration']
+                        }]
+                    },
                     blockManager: {
                         blocks: [
                             { id: 'header', label: '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h16v2H4v-2z"></path></svg>Header', content: '<header style="background: #333; color: white; padding: 20px; text-align: center;"><h1 style="margin: 0;">Header Title</h1></header>', category: 'Basic' },
