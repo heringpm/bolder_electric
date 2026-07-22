@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
 
-    <link rel="stylesheet" href="https://unpkg.com/grapesjs@latest/dist/css/grapes.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/grapesjs@0.21.13/dist/css/grapes.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
@@ -76,17 +76,27 @@
 
     <div id="editor"></div>
 
-    <script src="https://unpkg.com/grapesjs@latest/dist/grapes.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/grapesjs@0.21.13/dist/grapes.min.js"></script>
     <script>
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
         const postId = {{ post.id }};
         const postContent = `{{ post.content | safe }}`;
 
-        // Wait for GrapesJS to load
-        if (typeof grapesjs === 'undefined') {
-            console.error('GrapesJS failed to load');
-            document.body.innerHTML = '<p style="color: red; padding: 20px;">Error: Failed to load editor library</p>';
-        } else {
+        // Wait for GrapesJS to load with timeout
+        const maxWaitTime = 5000;
+        const startTime = Date.now();
+
+        function initEditor() {
+            if (typeof grapesjs === 'undefined') {
+                if (Date.now() - startTime < maxWaitTime) {
+                    setTimeout(initEditor, 100);
+                    return;
+                }
+                console.error('GrapesJS failed to load after timeout');
+                document.getElementById('editor').innerHTML = '<p style="color: red; padding: 40px; text-align: center;">Error: Failed to load editor library. Please refresh the page.</p>';
+                return;
+            }
+
             // Initialize editor
             const editor = grapesjs.init({
                 container: '#editor',
@@ -212,6 +222,13 @@
                     window.location.href = '/admin#blog';
                 }
             };
+        }
+
+        // Initialize when page loads
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initEditor);
+        } else {
+            initEditor();
         }
     </script>
 </body>
