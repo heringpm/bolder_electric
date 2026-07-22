@@ -11,7 +11,7 @@
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+        html, body { height: 100%; }
 
         .top-bar {
             background: #111;
@@ -20,6 +20,7 @@
             display: flex;
             gap: 16px;
             align-items: center;
+            z-index: 1000;
         }
 
         .title-input {
@@ -50,44 +51,7 @@
 
         #editor {
             height: calc(100vh - 60px);
-            display: flex;
-            flex-direction: column;
         }
-
-        .gjs-editor-cont {
-            display: flex !important;
-            flex-direction: row !important;
-        }
-
-        .gjs-viewport {
-            flex: 1 !important;
-            background: white !important;
-        }
-
-        .gjs-pn-panel.gjs-pn-left {
-            min-width: 200px;
-            flex: 0 0 220px;
-        }
-
-        .gjs-pn-panel.gjs-pn-right {
-            min-width: 200px;
-            flex: 0 0 250px;
-        }
-
-        /* GrapesJS Theme */
-        .gjs-editor-cont { background: #0a0a0a !important; }
-        .gjs-panel__top { background: #111 !important; border-bottom: 1px solid rgba(241,186,32,0.22) !important; }
-        .gjs-pn-panel { background: #161616 !important; border-color: rgba(241,186,32,0.22) !important; }
-        .gjs-pn-btn { color: rgba(245,243,239,0.6) !important; }
-        .gjs-pn-btn:hover { background: rgba(241,186,32,0.1) !important; color: #f1ba20 !important; }
-        .gjs-pn-btn.gjs-pn-active { background: rgba(241,186,32,0.2) !important; color: #f1ba20 !important; }
-        .gjs-pn-input { background: rgba(0,0,0,0.3) !important; border: 1px solid rgba(241,186,32,0.22) !important; color: #f5f3ef !important; }
-        .gjs-pn-input:focus { border-color: #f1ba20 !important; }
-        .gjs-pn-label { color: rgba(245,243,239,0.6) !important; }
-        .gjs-block { background: rgba(241,186,32,0.1) !important; border: 1px solid rgba(241,186,32,0.2) !important; color: #f5f3ef !important; }
-        .gjs-block:hover { background: rgba(241,186,32,0.2) !important; }
-        .gjs-canvas { background: linear-gradient(135deg, rgba(241,186,32,0.02) 0%, transparent 100%) !important; }
-        .gjs-frame { background: #f5f3ef !important; }
     </style>
 </head>
 <body>
@@ -105,7 +69,7 @@
         const postId = {{ post.id }};
         const postContent = `{{ post.content | safe }}`;
 
-        // Wait for GrapesJS to load with timeout
+        let editor = null;
         const maxWaitTime = 5000;
         const startTime = Date.now();
 
@@ -115,137 +79,99 @@
                     setTimeout(initEditor, 100);
                     return;
                 }
-                console.error('GrapesJS failed to load after timeout');
-                document.getElementById('editor').innerHTML = '<p style="color: red; padding: 40px; text-align: center;">Error: Failed to load editor library. Please refresh the page.</p>';
+                document.getElementById('editor').innerHTML = '<p style="color: red; padding: 40px;">Error: Failed to load editor library.</p>';
                 return;
             }
 
-            // Initialize editor
-            const editor = grapesjs.init({
-                container: '#editor',
-                fromElement: false,
-                height: '100%',
-                storageManager: false,
-                undoManager: { trackChanges: true },
-                panels: {
-                    defaults: [
-                        {
-                            id: 'layers',
-                            el: '.gjs-pm-open',
-                            buttons: [{ id: 'open-layers', active: true, label: 'Layers', command: 'open-layers' }]
-                        },
-                        {
-                            id: 'devices',
-                            el: '.gjs-pm-open',
-                            buttons: [{ id: 'device-desktop', active: true, label: 'Desktop', command: 'set-device-desktop' }]
-                        }
-                    ]
-                },
-                blockManager: {
-                    blocks: [
-                        {
-                            id: 'text',
-                            label: 'Text',
-                            content: '<p>Add your text here</p>',
-                            category: 'Basic'
-                        },
-                        {
-                            id: 'image',
-                            label: 'Image',
-                            content: '<img src="https://via.placeholder.com/600x400" style="width:100%;">',
-                            category: 'Basic'
-                        },
-                        {
-                            id: 'section',
-                            label: 'Section',
-                            content: '<section style="padding:20px; background:#f0f0f0;"><h2>Section Title</h2><p>Add your content here</p></section>',
-                            category: 'Layout'
-                        }
-                    ]
-                },
-                styleManager: {
-                    sectors: [
-                        {
-                            name: 'General',
-                            open: false,
-                            buildProps: ['float', 'display', 'position']
-                        },
-                        {
-                            name: 'Dimension',
-                            open: false,
-                            buildProps: ['margin', 'padding', 'width', 'height']
-                        },
-                        {
-                            name: 'Typography',
-                            open: false,
-                            buildProps: ['font-family', 'font-size', 'font-weight', 'color']
-                        }
-                    ]
-                },
-                traitManager: {
-                    autoOpen: false
-                }
-            });
-
-            // Load existing content
-            if (postContent && postContent.trim()) {
-                try {
-                    editor.setComponents(postContent);
-                } catch (e) {
-                    console.log('Could not parse existing content, starting fresh');
-                }
-            }
-
-            // Custom save command
-            editor.Commands.add('save-post', {
-                run() { savePost(); }
-            });
-
-            window.savePost = function() {
-                const title = document.getElementById('titleInput').value.trim();
-                if (!title) {
-                    alert('Please enter a title');
-                    return;
-                }
-
-                const html = editor.getHtml();
-                const css = editor.getCss();
-
-                const formData = new URLSearchParams({
-                    title,
-                    slug: title.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-                    excerpt: '{{ post.excerpt or '' }}',
-                    content: html,
-                    hero_image: '{{ post.hero_image or '' }}',
-                    template: '{{ post.template or 1 }}',
-                    status: 'published'
+            try {
+                editor = grapesjs.init({
+                    container: '#editor',
+                    fromElement: false,
+                    height: '100%',
+                    width: '100%',
+                    storageManager: false,
+                    undoManager: { trackChanges: true },
+                    blockManager: {
+                        blocks: [
+                            {
+                                id: 'text',
+                                label: 'Text',
+                                content: '<p>Add your text here</p>',
+                                category: 'Basic'
+                            },
+                            {
+                                id: 'image',
+                                label: 'Image',
+                                content: '<img src="https://via.placeholder.com/600x400" style="width:100%;">',
+                                category: 'Basic'
+                            }
+                        ]
+                    }
                 });
 
-                const endpoint = postId === 0 ? '/admin/blog/new' : `/admin/blog/${postId}/edit`;
-
-                fetch(endpoint, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-Token': csrfToken,
-                        'Content-Type': 'application/x-www-form-urlencoded'
-                    },
-                    body: formData
-                })
-                .then(res => {
-                    if (!res.ok) throw new Error('Save failed');
-                    window.location.href = '/admin#blog';
-                })
-                .catch(err => alert('Error: ' + err.message));
-            };
-
-            window.goBack = function() {
-                if (confirm('Discard all changes?')) {
-                    window.location.href = '/admin#blog';
+                // Load existing content
+                if (postContent && postContent.trim()) {
+                    try {
+                        editor.setComponents(postContent);
+                    } catch (e) {
+                        console.log('Could not parse existing content');
+                    }
                 }
-            };
+
+                console.log('Editor initialized successfully');
+            } catch (e) {
+                console.error('Error initializing editor:', e);
+                document.getElementById('editor').innerHTML = '<p style="color: red; padding: 40px;">Error: ' + e.message + '</p>';
+            }
         }
 
-        // Initialize when page loads
+        function savePost() {
+            const title = document.getElementById('titleInput').value.trim();
+            if (!title) {
+                alert('Please enter a title');
+                return;
+            }
+
+            if (!editor) {
+                alert('Editor not initialized');
+                return;
+            }
+
+            const html = editor.getHtml();
+            const formData = new URLSearchParams({
+                title,
+                slug: title.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+                excerpt: '{{ post.excerpt or '' }}',
+                content: html,
+                hero_image: '{{ post.hero_image or '' }}',
+                template: '{{ post.template or 1 }}',
+                status: 'published'
+            });
+
+            const endpoint = postId === 0 ? '/admin/blog/new' : `/admin/blog/${postId}/edit`;
+
+            fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-Token': csrfToken,
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: formData
+            })
+            .then(res => {
+                if (!res.ok) throw new Error('Save failed');
+                window.location.href = '/admin#blog';
+            })
+            .catch(err => alert('Error: ' + err.message));
+        }
+
+        function goBack() {
+            if (confirm('Discard all changes?')) {
+                window.location.href = '/admin#blog';
+            }
+        }
+
+        // Start initialization
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', initEditor);
         } else {
