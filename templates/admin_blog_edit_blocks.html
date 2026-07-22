@@ -170,7 +170,7 @@
         const startTime = Date.now();
 
         function initEditor() {
-            if (typeof createStudioEditor === 'undefined') {
+            if (typeof window.GrapesJsStudioSDK === 'undefined' || !window.GrapesJsStudioSDK.createStudioEditor) {
                 if (Date.now() - startTime < maxWaitTime) {
                     setTimeout(initEditor, 100);
                     return;
@@ -180,7 +180,7 @@
             }
 
             try {
-                editor = createStudioEditor({
+                editor = window.GrapesJsStudioSDK.createStudioEditor({
                     container: '#editor',
                     licenseKey: 'dedc7bdf319b4bb48bda571926f31ef1a504fe148e5f45f7a3ce64a20976e98c',
                     fonts: {
