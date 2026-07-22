@@ -403,28 +403,44 @@
             });
 
             // Move wrapper background color to body rule
-            // GrapesJS renders wrapper as div with unique ID. We capture its background-color
-            // and apply it to the body element for persistence across page reloads
-            console.log('DEBUG: Attempting to extract wrapper background color from CSS');
-            const bgColorMatch = css.match(/background-color:\s*([^;}]+)/);
-            console.log('DEBUG: bgColorMatch:', bgColorMatch);
-            if (bgColorMatch && bgColorMatch[1]) {
-                const bgColor = bgColorMatch[1].trim();
-                console.log('DEBUG: Found background color:', bgColor);
+            // GrapesJS renders wrapper as div with unique ID. Get the color directly from the wrapper element,
+            // not from the CSS (which may contain old colors from previously loaded content)
+            const wrapper = editor.getSelected();
+            let wrapperBgColor = null;
+
+            if (wrapper && (wrapper.getName() === 'Body' || wrapper.get('type') === 'wrapper')) {
+                const wrapperStyle = wrapper.getStyle();
+                if (wrapperStyle && wrapperStyle['background-color']) {
+                    wrapperBgColor = wrapperStyle['background-color'];
+                    console.log('DEBUG: Got wrapper background color from selected element:', wrapperBgColor);
+                } else {
+                    console.log('DEBUG: Selected element is wrapper but has no background-color in style');
+                }
+            }
+
+            // Fallback: if wrapper isn't selected, try to extract from CSS (for consistency)
+            if (!wrapperBgColor) {
+                // Find the last background-color since newer CSS comes later
+                const matches = css.match(/background-color:\s*([^;}]+)/g);
+                if (matches && matches.length > 0) {
+                    const lastMatch = matches[matches.length - 1];
+                    wrapperBgColor = lastMatch.split(':')[1].trim();
+                    console.log('DEBUG: Extracted background color from CSS:', wrapperBgColor);
+                }
+            }
+
+            if (wrapperBgColor) {
                 // Replace ALL body rules to ensure the color is applied
-                const oldCss = css;
                 css = css.replace(/body\s*\{[^}]*\}/g, (match) => {
-                    // If it already has background-color, replace it; otherwise add it
                     if (/background-color/i.test(match)) {
-                        const result = match.replace(/background-color:\s*[^;!]+[!;]?/i, `background-color: ${bgColor}`);
-                        return result;
+                        return match.replace(/background-color:\s*[^;!]+[!;]?/i, `background-color: ${wrapperBgColor}`);
                     } else {
-                        return match.replace(/}/, `background-color: ${bgColor}; }`);
+                        return match.replace(/}/, `background-color: ${wrapperBgColor}; }`);
                     }
                 });
-                console.log('DEBUG: CSS after replacement:', css.substring(0, 300));
+                console.log('DEBUG: Updated body CSS with color:', wrapperBgColor);
             } else {
-                console.log('DEBUG: No background-color found in CSS');
+                console.log('DEBUG: No wrapper background color found');
             }
             components.forEach((comp, i) => {
                 console.log(`Component ${i}:`, comp.getName(), 'HTML:', comp.toHTML().substring(0, 100));
