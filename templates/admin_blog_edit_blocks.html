@@ -341,8 +341,9 @@
                 return;
             }
 
-            // Get only the canvas content, not the full page
+            // Get components and styles
             const components = editor.getComponents();
+            const css = editor.getCss();
             let html = '';
 
             // Render components to HTML
@@ -350,7 +351,13 @@
                 html += comp.toHTML();
             });
 
+            // Add styles
+            if (css) {
+                html += '<style>' + css + '</style>';
+            }
+
             console.log('HTML from GrapesJS components:', html);
+            console.log('CSS:', css);
             console.log('HTML length:', html ? html.length : 0);
 
             const formData = new URLSearchParams({
