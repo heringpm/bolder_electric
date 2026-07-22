@@ -196,6 +196,7 @@
                     width: '100%',
                     storageManager: false,
                     undoManager: { trackChanges: true },
+                    pageManager: {},
                     deviceManager: {
                         devices: [
                             {
@@ -340,8 +341,16 @@
                 return;
             }
 
-            const html = editor.getHtml();
-            console.log('HTML from GrapesJS:', html);
+            // Get only the canvas content, not the full page
+            const components = editor.getComponents();
+            let html = '';
+
+            // Render components to HTML
+            components.forEach(comp => {
+                html += comp.toHTML();
+            });
+
+            console.log('HTML from GrapesJS components:', html);
             console.log('HTML length:', html ? html.length : 0);
 
             const formData = new URLSearchParams({
