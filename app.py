@@ -1289,7 +1289,20 @@ def admin_blog_edit(post_id):
         hero_image = request.form.get('hero_image', '').strip()
         template = int(request.form.get('template', 1))
         status = request.form.get('status', 'draft')
-        db.update_blog_post(post_id, title, slug, excerpt, content, hero_image, template, status)
+
+        print(f'[BLOG_EDIT] Updating post {post_id}')
+        print(f'[BLOG_EDIT] Title: {title[:50] if title else "EMPTY"}...')
+        print(f'[BLOG_EDIT] Status: {status}')
+        print(f'[BLOG_EDIT] Content length: {len(content) if content else 0}')
+        print(f'[BLOG_EDIT] Content preview: {content[:100] if content else "EMPTY"}...')
+
+        try:
+            db.update_blog_post(post_id, title, slug, excerpt, content, hero_image, template, status)
+            print(f'[BLOG_EDIT] Successfully saved post {post_id}')
+        except Exception as e:
+            print(f'[BLOG_EDIT] Error saving post: {e}')
+            raise
+
         return redirect(url_for('admin_blog_edit', post_id=post_id) + '?saved=1')
     return render_template('admin_blog_edit_blocks.html', post=post)
 
