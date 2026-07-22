@@ -340,11 +340,15 @@
                                     frame.contentDocument.head.appendChild(styleEl);
 
                                     // Also apply body background directly to ensure it sticks
-                                    const bodyBgMatch = css.match(/body\s*{[^}]*background-color:\s*([^;]+)/i);
-                                    if (bodyBgMatch) {
+                                    console.log('DEBUG LOAD: Extracted CSS:', css.substring(0, 200));
+                                    const bodyBgMatch = css.match(/body\s*{[^}]*background-color:\s*([^;!}]+)/i);
+                                    console.log('DEBUG LOAD: bodyBgMatch:', bodyBgMatch);
+                                    if (bodyBgMatch && bodyBgMatch[1]) {
                                         const bgColor = bodyBgMatch[1].trim();
                                         frame.contentDocument.body.style.backgroundColor = bgColor;
-                                        console.log('Applied body background color:', bgColor);
+                                        console.log('✓ Applied body background color on load:', bgColor);
+                                    } else {
+                                        console.log('✗ No body background color found in CSS during load');
                                     }
 
                                     console.log('Injected CSS into frame, CSS length:', css.length);
