@@ -108,7 +108,10 @@
                     width: '100%',
                     storageManager: false,
                     undoManager: { trackChanges: true },
-                    blockManager: {},
+                    blockManager: { appendTo: '.gjs-blocks' },
+                    styleManager: { appendTo: '.gjs-sm-properties' },
+                    layerManager: { appendTo: '.gjs-layers' },
+                    traitManager: { appendTo: '.gjs-tm-properties' },
                     deviceManager: {
                         devices: [
                             {
