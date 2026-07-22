@@ -341,6 +341,9 @@
             }
 
             const html = editor.getHtml();
+            console.log('HTML from GrapesJS:', html);
+            console.log('HTML length:', html ? html.length : 0);
+
             const formData = new URLSearchParams({
                 title,
                 slug: title.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
@@ -354,8 +357,10 @@
             const endpoint = postId === 0 ? '/admin/blog/new' : `/admin/blog/${postId}/edit`;
 
             console.log('Saving to:', endpoint);
+            console.log('Title:', title);
             console.log('Status:', status);
             console.log('CSRF Token:', csrfToken ? 'present' : 'missing');
+            console.log('Form data keys:', Array.from(formData.keys()));
 
             fetch(endpoint, {
                 method: 'POST',
