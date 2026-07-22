@@ -172,6 +172,23 @@
                     storageManager: false,
                     undoManager: { trackChanges: true },
                     pageManager: {},
+                    panels: {
+                        defaults: [
+                            {
+                                id: 'options',
+                                el: '.gjs-pn-options',
+                                buttons: [
+                                    { id: 'preview', className: 'gjs-pn-btn', label: '<i class="fa fa-eye"></i>', command: 'preview', attributes: { title: 'Preview' } },
+                                    { id: 'fullscreen', className: 'gjs-pn-btn', label: '<i class="fa fa-arrows-alt"></i>', command: 'fullscreen', attributes: { title: 'Fullscreen' } },
+                                    { id: 'export', className: 'gjs-pn-btn', label: '<i class="fa fa-code"></i>', command: 'export-template', attributes: { title: 'Code' } },
+                                    { id: 'undo', className: 'gjs-pn-btn', label: '<i class="fa fa-undo"></i>', command: 'core:undo', attributes: { title: 'Undo' } },
+                                    { id: 'redo', className: 'gjs-pn-btn', label: '<i class="fa fa-redo"></i>', command: 'core:redo', attributes: { title: 'Redo' } },
+                                    { id: 'delete', className: 'gjs-pn-btn', label: '<i class="fa fa-trash"></i>', command: 'core:delete', attributes: { title: 'Delete' } },
+                                    { id: 'settings', className: 'gjs-pn-btn', label: '<i class="fa fa-cog"></i>', command: 'open-tm-panel', attributes: { title: 'Settings' } }
+                                ]
+                            }
+                        ]
+                    },
                     blockManager: {
                         blocks: [
                             { id: 'section-one-col', label: '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M2 20h20V4H2v16Zm-1 0V4a1 1 0 0 1 1-1h20a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1Z"></path></svg>1 Column', content: '<div style="display: grid; grid-template-columns: 1fr; gap: 30px; margin: 20px 0;"><div style="padding: 20px;"><p>Column content</p></div></div>', category: 'Basic' },
