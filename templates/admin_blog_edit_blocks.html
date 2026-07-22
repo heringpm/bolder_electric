@@ -103,33 +103,7 @@
             try {
                 editor = grapesjs.init({
                     container: '#editor',
-                    fromElement: false,
-                    height: '100%',
-                    width: '100%',
-                    storageManager: false,
-                    undoManager: { trackChanges: true },
-                    blockManager: { appendTo: '.gjs-blocks' },
-                    styleManager: { appendTo: '.gjs-sm-properties' },
-                    layerManager: { appendTo: '.gjs-layers' },
-                    traitManager: { appendTo: '.gjs-tm-properties' },
-                    deviceManager: {
-                        devices: [
-                            {
-                                name: 'Desktop',
-                                width: ''
-                            },
-                            {
-                                name: 'Tablet',
-                                width: '768px',
-                                widthMedia: '768px'
-                            },
-                            {
-                                name: 'Mobile',
-                                width: '375px',
-                                widthMedia: '375px'
-                            }
-                        ]
-                    },
+                    fromElement: false
                 });
 
                 // Load existing content
