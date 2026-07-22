@@ -399,23 +399,18 @@
             if (bgColorMatch && bgColorMatch[1]) {
                 const bgColor = bgColorMatch[1].trim();
                 console.log('DEBUG: Found background color:', bgColor);
-                // Replace the body rule's closing brace with the background color property
+                // Replace ALL body rules to ensure the color is applied
                 const oldCss = css;
-                css = css.replace(/body\s*\{([^}]*)\}/, (match) => {
-                    console.log('DEBUG: Replacing body rule, match:', match);
+                css = css.replace(/body\s*\{[^}]*\}/g, (match) => {
                     // If it already has background-color, replace it; otherwise add it
                     if (/background-color/i.test(match)) {
-                        const result = match.replace(/background-color:\s*[^;]+/i, `background-color: ${bgColor}`);
-                        console.log('DEBUG: Body already had background-color, replaced:', result);
+                        const result = match.replace(/background-color:\s*[^;!]+[!;]?/i, `background-color: ${bgColor}`);
                         return result;
                     } else {
-                        const result = match.replace(/}/, `background-color: ${bgColor}; }`);
-                        console.log('DEBUG: Added background-color to body:', result);
-                        return result;
+                        return match.replace(/}/, `background-color: ${bgColor}; }`);
                     }
                 });
-                console.log('DEBUG: CSS before:', oldCss.substring(0, 200));
-                console.log('DEBUG: CSS after:', css.substring(0, 200));
+                console.log('DEBUG: CSS after replacement:', css.substring(0, 300));
             } else {
                 console.log('DEBUG: No background-color found in CSS');
             }
