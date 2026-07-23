@@ -142,12 +142,9 @@
             background: white;
         }
 
-        .gjs-pn {
-            cursor: default;
-        }
-
-        .gjs-pn:hover {
-            --hover-near-edge: 0;
+        .gjs-pn-right {
+            min-width: 300px;
+            width: 300px;
         }
     </style>
 </head>
@@ -272,58 +269,6 @@
                         frame.contentDocument.head.appendChild(fontsLink);
                     }
                 });
-
-                setTimeout(() => {
-                    const setupPanelResize = () => {
-                        const allPanels = document.querySelectorAll('.gjs-pn');
-                        let isResizing = false;
-                        let startX = 0;
-                        let startWidth = 0;
-                        let currentPanel = null;
-
-                        allPanels.forEach(panel => {
-                            panel.addEventListener('mousemove', (e) => {
-                                if (isResizing) return;
-                                const rect = panel.getBoundingClientRect();
-                                const distFromLeft = e.clientX - rect.left;
-                                if (distFromLeft < 8 && panel.offsetWidth > 0) {
-                                    panel.style.cursor = 'col-resize';
-                                } else {
-                                    panel.style.cursor = 'default';
-                                }
-                            });
-
-                            panel.addEventListener('mousedown', (e) => {
-                                const rect = panel.getBoundingClientRect();
-                                const distFromLeft = e.clientX - rect.left;
-                                if (distFromLeft < 8 && panel.offsetWidth > 0) {
-                                    isResizing = true;
-                                    startX = e.clientX;
-                                    startWidth = panel.offsetWidth;
-                                    currentPanel = panel;
-                                    document.body.style.userSelect = 'none';
-                                }
-                            });
-                        });
-
-                        document.addEventListener('mousemove', (e) => {
-                            if (!isResizing || !currentPanel) return;
-                            const diff = startX - e.clientX;
-                            const newWidth = startWidth + diff;
-                            if (newWidth > 200 && newWidth < window.innerWidth * 0.6) {
-                                currentPanel.style.width = newWidth + 'px';
-                            }
-                        });
-
-                        document.addEventListener('mouseup', () => {
-                            isResizing = false;
-                            currentPanel = null;
-                            document.body.style.userSelect = 'auto';
-                        });
-                    };
-
-                    setupPanelResize();
-                }, 500);
 
                 setTimeout(() => {
                     const systemFonts = ['Arial', 'Helvetica', 'Times New Roman', 'Courier New', 'Georgia', 'Verdana', 'Comic Sans MS', 'Trebuchet MS'];
