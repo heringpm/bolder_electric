@@ -3915,9 +3915,16 @@
                 formMessage.style.display = 'none';
 
                 try {
-                    if (typeof grecaptcha !== 'undefined') {
-                        const token = await grecaptcha.execute('{{ recaptcha_site_key }}', { action: 'contact' });
-                        document.getElementById('g-recaptcha-response').value = token;
+                    // Get reCAPTCHA token if available
+                    if (typeof grecaptcha !== 'undefined' && '{{ recaptcha_site_key }}' !== '') {
+                        try {
+                            const token = await grecaptcha.execute('{{ recaptcha_site_key }}', { action: 'contact' });
+                            if (token) {
+                                document.getElementById('g-recaptcha-response').value = token;
+                            }
+                        } catch (e) {
+                            console.error('reCAPTCHA execute error:', e);
+                        }
                     }
 
                     const response = await fetch('/contact-submit', {
@@ -3932,7 +3939,8 @@
                     } else {
                         formMessage.innerHTML = `<div style="color:#ffb0b0;padding:12px 14px;border:1px solid rgba(255,124,124,0.32);border-radius:12px;background:rgba(91,22,22,0.22);">${result.message || 'Unable to submit request.'}</div>`;
                     }
-                } catch {
+                } catch (e) {
+                    console.error('Form submission error:', e);
                     formMessage.style.display = 'block';
                     formMessage.innerHTML = '<div style="color:#ffb0b0;padding:12px 14px;border:1px solid rgba(255,124,124,0.32);border-radius:12px;background:rgba(91,22,22,0.22);">An error occurred. Please try again or call us directly.</div>';
                 } finally {
