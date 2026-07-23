@@ -26,7 +26,13 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/privacy-notice.css') }}" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="{{ url_for('static', filename='css/privacy-notice.css') }}"></noscript>
     <script defer src="{{ url_for('static', filename='js/privacy-notice.js') }}" data-ga-measurement-id="G-HPSXGKK99R"></script>
-    <script src="https://www.google.com/recaptcha/api.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit"></script>
+    <script>
+        window.onRecaptchaLoad = function() {
+            console.log('reCAPTCHA script loaded');
+            window.recaptchaReady = true;
+        };
+    </script>
     <style>
         :root {
             --bg: #060606;
@@ -3917,19 +3923,25 @@
                 try {
                     // Get reCAPTCHA token if available
                     const siteKey = '{{ recaptcha_site_key }}';
-                    if (typeof grecaptcha !== 'undefined' && siteKey && siteKey.length > 0) {
+                    if (window.recaptchaReady && siteKey && siteKey.length > 0 && typeof grecaptcha !== 'undefined') {
                         try {
-                            console.log('Attempting grecaptcha.execute with key:', siteKey);
+                            console.log('Attempting grecaptcha.execute with key:', siteKey.substring(0, 10) + '...');
                             const token = await grecaptcha.execute(siteKey, { action: 'contact' });
-                            console.log('reCAPTCHA token received:', token ? 'yes' : 'no');
+                            console.log('reCAPTCHA token received:', token ? 'yes (length: ' + token.length + ')' : 'no');
                             if (token) {
                                 document.getElementById('g-recaptcha-response').value = token;
+                            } else {
+                                console.warn('reCAPTCHA execute returned empty token');
                             }
                         } catch (e) {
-                            console.error('reCAPTCHA execute error:', e);
+                            console.error('reCAPTCHA execute error:', e.message || e);
                         }
                     } else {
-                        console.warn('grecaptcha not ready. grecaptcha:', typeof grecaptcha, 'siteKey:', siteKey);
+                        console.warn('reCAPTCHA not available:', {
+                            recaptchaReady: window.recaptchaReady,
+                            siteKey: siteKey ? 'present' : 'missing',
+                            grecaptcha: typeof grecaptcha
+                        });
                     }
 
                     const response = await fetch('/contact-submit', {

@@ -1506,35 +1506,38 @@ def contact_submit():
                 'message': 'Submission blocked. Please try again.'
             }), 400
 
-        # Validate reCAPTCHA v3 token if present
+        # Validate reCAPTCHA v3 token
         recaptcha_secret = os.environ.get('RECAPTCHA_SECRET_KEY', '6LesN2ItAAAAAHO1wYIFm9YSDEB5hQkxglXkG-f4')
-        if recaptcha_token:
-            try:
-                import requests
-                recaptcha_response = requests.post(
-                    'https://www.google.com/recaptcha/api/siteverify',
-                    data={'secret': recaptcha_secret, 'response': recaptcha_token},
-                    timeout=5
-                )
-                recaptcha_data = recaptcha_response.json()
-                print(f'reCAPTCHA response: {recaptcha_data}', flush=True)
+        if not recaptcha_token:
+            return jsonify({
+                'success': False,
+                'message': 'Please verify that you are not a robot.'
+            }), 400
 
-                if not recaptcha_data.get('success') or recaptcha_data.get('score', 0) < 0.5:
-                    print(f'reCAPTCHA check failed: success={recaptcha_data.get("success")}, score={recaptcha_data.get("score")}', flush=True)
-                    return jsonify({
-                        'success': False,
-                        'message': 'Captcha verification failed. Please try again.'
-                    }), 400
-            except Exception as e:
-                print(f'reCAPTCHA verification error: {type(e).__name__}: {e}', flush=True)
-                import traceback
-                traceback.print_exc()
+        try:
+            import requests
+            recaptcha_response = requests.post(
+                'https://www.google.com/recaptcha/api/siteverify',
+                data={'secret': recaptcha_secret, 'response': recaptcha_token},
+                timeout=5
+            )
+            recaptcha_data = recaptcha_response.json()
+            print(f'reCAPTCHA response: {recaptcha_data}', flush=True)
+
+            if not recaptcha_data.get('success') or recaptcha_data.get('score', 0) < 0.5:
+                print(f'reCAPTCHA check failed: success={recaptcha_data.get("success")}, score={recaptcha_data.get("score")}', flush=True)
                 return jsonify({
                     'success': False,
-                    'message': 'Captcha verification error. Please try again.'
+                    'message': 'Captcha verification failed. Please try again.'
                 }), 400
-        else:
-            print(f'[CONTACT-SUBMIT] No reCAPTCHA token provided (proceeding without verification)', flush=True)
+        except Exception as e:
+            print(f'reCAPTCHA verification error: {type(e).__name__}: {e}', flush=True)
+            import traceback
+            traceback.print_exc()
+            return jsonify({
+                'success': False,
+                'message': 'Captcha verification error. Please try again.'
+            }), 400
 
         ip_address = get_client_ip()
         user_agent = request.headers.get('User-Agent', '')
