@@ -1213,10 +1213,17 @@ def _build_home_context():
     
     latest_posts = db.get_blog_posts(status='published', limit=3)
 
+    # Generate simple math CAPTCHA
+    captcha_left = random.randint(2, 9)
+    captcha_right = random.randint(1, 8)
+    session['contact_captcha_answer'] = str(captcha_left + captcha_right)
+    session['contact_captcha_issued_at'] = int(time.time())
+
     return {
         'contact': contact_data,
         'service_descriptions': service_descriptions,
         'service_prices': service_prices,
+        'contact_captcha_question': f'{captcha_left} + {captcha_right}',
         'latest_posts': latest_posts,
     }
 
@@ -1488,6 +1495,9 @@ def contact_submit():
         message = request.form.get('message')
         website_field = (request.form.get('website') or '').strip()
 
+        # Get form data
+        captcha_answer = (request.form.get('captcha_answer') or '').strip()
+
         # Validate required fields
         if not all([name, email, phone, service_type, message]):
             return jsonify({
@@ -1501,6 +1511,25 @@ def contact_submit():
                 'success': False,
                 'message': 'Submission blocked. Please try again.'
             }), 400
+
+        # Validate math CAPTCHA
+        expected_captcha = (session.get('contact_captcha_answer') or '').strip()
+        issued_at = int(session.get('contact_captcha_issued_at') or 0)
+        captcha_ttl_seconds = 15 * 60
+        if not expected_captcha or not captcha_answer or captcha_answer != expected_captcha:
+            return jsonify({
+                'success': False,
+                'message': 'Captcha verification failed. Please refresh and try again.'
+            }), 400
+        if issued_at and int(time.time()) - issued_at > captcha_ttl_seconds:
+            return jsonify({
+                'success': False,
+                'message': 'Captcha expired. Please refresh and try again.'
+            }), 400
+
+        # One-time captcha token usage.
+        session.pop('contact_captcha_answer', None)
+        session.pop('contact_captcha_issued_at', None)
 
 
         ip_address = get_client_ip()

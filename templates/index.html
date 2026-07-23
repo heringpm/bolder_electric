@@ -3814,6 +3814,10 @@
                                     <option value="other">Other</option>
                                 </select>
                                 <textarea name="message" rows="5" placeholder="Tell us about your electrical project or emergency..." required></textarea>
+                                <div class="captcha-row">
+                                    <div class="captcha-prompt">Captcha: {{ contact_captcha_question }} =</div>
+                                    <input type="number" name="captcha_answer" placeholder="Answer" required>
+                                </div>
                                 <div class="hp" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off"></div>
                                 <div class="btn-row">
                                     <button type="submit" class="btn btn-primary">Send Message</button>
