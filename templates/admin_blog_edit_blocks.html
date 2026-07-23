@@ -142,10 +142,6 @@
             background: white;
         }
 
-        .gjs-pn-right {
-            min-width: 300px;
-            width: 300px;
-        }
     </style>
 </head>
 <body>
@@ -269,6 +265,15 @@
                         frame.contentDocument.head.appendChild(fontsLink);
                     }
                 });
+
+                setTimeout(() => {
+                    const rightPanel = document.querySelector('[class*="views-container"]') ||
+                                     document.querySelector('[class*="pn-right"]') ||
+                                     Array.from(document.querySelectorAll('.gjs-pn')).find(el => el.style.right !== undefined || el.offsetLeft > window.innerWidth * 0.5);
+                    if (rightPanel) {
+                        rightPanel.style.width = '320px';
+                    }
+                }, 400);
 
                 setTimeout(() => {
                     const systemFonts = ['Arial', 'Helvetica', 'Times New Roman', 'Courier New', 'Georgia', 'Verdana', 'Comic Sans MS', 'Trebuchet MS'];
