@@ -843,9 +843,9 @@ def add_security_headers(response):
     response.headers.setdefault(
         'Content-Security-Policy',
         "default-src 'self'; img-src 'self' data: https: blob:; "
-        "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://cdn.jsdelivr.net https://unpkg.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://unpkg.com; "
-        "font-src 'self' data: https://cdnjs.cloudflare.com https://fonts.gstatic.com; connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://analytics.google.com https://unpkg.com https://app.grapesjs.com; media-src 'self' data: blob:; "
-        "base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+        "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://cdn.jsdelivr.net https://unpkg.com https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://unpkg.com; "
+        "font-src 'self' data: https://cdnjs.cloudflare.com https://fonts.gstatic.com; connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://analytics.google.com https://unpkg.com https://app.grapesjs.com https://www.google.com/recaptcha/api/siteverify; media-src 'self' data: blob:; "
+        "base-uri 'self'; form-action 'self'; frame-ancestors 'none'; frame-src https://www.google.com/recaptcha/ https://recaptcha.google.com/"
     )
     if _is_secure_request():
         response.headers.setdefault('Strict-Transport-Security', 'max-age=31536000; includeSubDomains')
