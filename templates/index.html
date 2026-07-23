@@ -3917,19 +3917,19 @@
                 try {
                     // Get reCAPTCHA token if available
                     const siteKey = '{{ recaptcha_site_key }}';
-                    if (typeof grecaptcha !== 'undefined' && siteKey && siteKey !== '{{ recaptcha_site_key }}') {
+                    if (typeof grecaptcha !== 'undefined' && siteKey && siteKey.length > 0) {
                         try {
-                            const token = await new Promise((resolve, reject) => {
-                                grecaptcha.execute(siteKey, { action: 'contact' })
-                                    .then(token => resolve(token))
-                                    .catch(err => reject(err));
-                            });
+                            console.log('Attempting grecaptcha.execute with key:', siteKey);
+                            const token = await grecaptcha.execute(siteKey, { action: 'contact' });
+                            console.log('reCAPTCHA token received:', token ? 'yes' : 'no');
                             if (token) {
                                 document.getElementById('g-recaptcha-response').value = token;
                             }
                         } catch (e) {
                             console.error('reCAPTCHA execute error:', e);
                         }
+                    } else {
+                        console.warn('grecaptcha not ready. grecaptcha:', typeof grecaptcha, 'siteKey:', siteKey);
                     }
 
                     const response = await fetch('/contact-submit', {
