@@ -142,23 +142,12 @@
             background: white;
         }
 
-        .gjs-pn-right {
-            width: 320px !important;
-            position: relative;
-            border-left: 4px solid #f1ba20 !important;
+        .gjs-pn {
+            cursor: default;
         }
 
-        .gjs-pn-right::before {
-            content: '⋮⋮';
-            position: absolute;
-            left: -8px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #f1ba20;
-            font-size: 12px;
-            cursor: col-resize;
-            user-select: none;
-            font-weight: bold;
+        .gjs-pn:hover {
+            --hover-near-edge: 0;
         }
     </style>
 </head>
@@ -285,38 +274,56 @@
                 });
 
                 setTimeout(() => {
-                    const rightPanel = document.querySelector('.gjs-pn-right');
-                    if (rightPanel) {
+                    const setupPanelResize = () => {
+                        const allPanels = document.querySelectorAll('.gjs-pn');
                         let isResizing = false;
                         let startX = 0;
                         let startWidth = 0;
+                        let currentPanel = null;
 
-                        const onMouseDown = (e) => {
-                            if (e.offsetX < 5) {
-                                isResizing = true;
-                                startX = e.clientX;
-                                startWidth = rightPanel.offsetWidth;
-                            }
-                        };
+                        allPanels.forEach(panel => {
+                            panel.addEventListener('mousemove', (e) => {
+                                if (isResizing) return;
+                                const rect = panel.getBoundingClientRect();
+                                const distFromLeft = e.clientX - rect.left;
+                                if (distFromLeft < 8 && panel.offsetWidth > 0) {
+                                    panel.style.cursor = 'col-resize';
+                                } else {
+                                    panel.style.cursor = 'default';
+                                }
+                            });
 
-                        const onMouseMove = (e) => {
-                            if (!isResizing) return;
+                            panel.addEventListener('mousedown', (e) => {
+                                const rect = panel.getBoundingClientRect();
+                                const distFromLeft = e.clientX - rect.left;
+                                if (distFromLeft < 8 && panel.offsetWidth > 0) {
+                                    isResizing = true;
+                                    startX = e.clientX;
+                                    startWidth = panel.offsetWidth;
+                                    currentPanel = panel;
+                                    document.body.style.userSelect = 'none';
+                                }
+                            });
+                        });
+
+                        document.addEventListener('mousemove', (e) => {
+                            if (!isResizing || !currentPanel) return;
                             const diff = startX - e.clientX;
                             const newWidth = startWidth + diff;
-                            if (newWidth > 250 && newWidth < 600) {
-                                rightPanel.style.width = newWidth + 'px';
+                            if (newWidth > 200 && newWidth < window.innerWidth * 0.6) {
+                                currentPanel.style.width = newWidth + 'px';
                             }
-                        };
+                        });
 
-                        const onMouseUp = () => {
+                        document.addEventListener('mouseup', () => {
                             isResizing = false;
-                        };
+                            currentPanel = null;
+                            document.body.style.userSelect = 'auto';
+                        });
+                    };
 
-                        rightPanel.addEventListener('mousedown', onMouseDown);
-                        document.addEventListener('mousemove', onMouseMove);
-                        document.addEventListener('mouseup', onMouseUp);
-                    }
-                }, 300);
+                    setupPanelResize();
+                }, 500);
 
                 setTimeout(() => {
                     const systemFonts = ['Arial', 'Helvetica', 'Times New Roman', 'Courier New', 'Georgia', 'Verdana', 'Comic Sans MS', 'Trebuchet MS'];
