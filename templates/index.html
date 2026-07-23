@@ -26,13 +26,6 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/privacy-notice.css') }}" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="{{ url_for('static', filename='css/privacy-notice.css') }}"></noscript>
     <script defer src="{{ url_for('static', filename='js/privacy-notice.js') }}" data-ga-measurement-id="G-HPSXGKK99R"></script>
-    <script src="https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit"></script>
-    <script>
-        window.onRecaptchaLoad = function() {
-            console.log('reCAPTCHA script loaded');
-            window.recaptchaReady = true;
-        };
-    </script>
     <style>
         :root {
             --bg: #060606;
@@ -3821,7 +3814,6 @@
                                     <option value="other">Other</option>
                                 </select>
                                 <textarea name="message" rows="5" placeholder="Tell us about your electrical project or emergency..." required></textarea>
-                                <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
                                 <div class="hp" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off"></div>
                                 <div class="btn-row">
                                     <button type="submit" class="btn btn-primary">Send Message</button>
@@ -3921,29 +3913,6 @@
                 formMessage.style.display = 'none';
 
                 try {
-                    // Get reCAPTCHA token if available
-                    const siteKey = '{{ recaptcha_site_key }}';
-                    if (window.recaptchaReady && siteKey && siteKey.length > 0 && typeof grecaptcha !== 'undefined') {
-                        try {
-                            console.log('Attempting grecaptcha.execute with key:', siteKey.substring(0, 10) + '...');
-                            const token = await grecaptcha.execute(siteKey, { action: 'contact' });
-                            console.log('reCAPTCHA token received:', token ? 'yes (length: ' + token.length + ')' : 'no');
-                            if (token) {
-                                document.getElementById('g-recaptcha-response').value = token;
-                            } else {
-                                console.warn('reCAPTCHA execute returned empty token');
-                            }
-                        } catch (e) {
-                            console.error('reCAPTCHA execute error:', e.message || e);
-                        }
-                    } else {
-                        console.warn('reCAPTCHA not available:', {
-                            recaptchaReady: window.recaptchaReady,
-                            siteKey: siteKey ? 'present' : 'missing',
-                            grecaptcha: typeof grecaptcha
-                        });
-                    }
-
                     const response = await fetch('/contact-submit', {
                         method: 'POST',
                         body: new FormData(form)
@@ -3957,7 +3926,6 @@
                         formMessage.innerHTML = `<div style="color:#ffb0b0;padding:12px 14px;border:1px solid rgba(255,124,124,0.32);border-radius:12px;background:rgba(91,22,22,0.22);">${result.message || 'Unable to submit request.'}</div>`;
                     }
                 } catch (e) {
-                    console.error('Form submission error:', e);
                     formMessage.style.display = 'block';
                     formMessage.innerHTML = '<div style="color:#ffb0b0;padding:12px 14px;border:1px solid rgba(255,124,124,0.32);border-radius:12px;background:rgba(91,22,22,0.22);">An error occurred. Please try again or call us directly.</div>';
                 } finally {
