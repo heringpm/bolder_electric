@@ -142,24 +142,23 @@
             background: white;
         }
 
-        .gjs-pn-views-container {
+        .gjs-pn-right {
             width: 320px !important;
-            border-left: 5px solid #f1ba20 !important;
             position: relative;
+            border-left: 4px solid #f1ba20 !important;
         }
 
-        .gjs-pn-views-container::before {
+        .gjs-pn-right::before {
             content: '⋮⋮';
             position: absolute;
-            left: -10px;
+            left: -8px;
             top: 50%;
             transform: translateY(-50%);
             color: #f1ba20;
-            font-size: 16px;
+            font-size: 12px;
             cursor: col-resize;
             user-select: none;
             font-weight: bold;
-            z-index: 100;
         }
     </style>
 </head>
