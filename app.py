@@ -1480,6 +1480,7 @@ def service_landing(slug):
 @app.route('/contact-submit', methods=['POST'])
 def contact_submit():
     """Handle contact form submission"""
+    print(f'[CONTACT-SUBMIT] Form submission received', flush=True)
     try:
         # Get form data
         name = request.form.get('name')
@@ -1489,6 +1490,7 @@ def contact_submit():
         message = request.form.get('message')
         recaptcha_token = (request.form.get('g-recaptcha-response') or '').strip()
         website_field = (request.form.get('website') or '').strip()
+        print(f'[CONTACT-SUBMIT] Token present: {bool(recaptcha_token)}, Token length: {len(recaptcha_token)}', flush=True)
 
         # Validate required fields
         if not all([name, email, phone, service_type, message]):
