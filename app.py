@@ -1217,7 +1217,7 @@ def _build_home_context():
         'contact': contact_data,
         'service_descriptions': service_descriptions,
         'service_prices': service_prices,
-        'recaptcha_site_key': os.environ.get('RECAPTCHA_SITE_KEY', '6LesN2ItAAAAAGHFUtnAFEGU0b0XOSx4WaryM9f0'),
+        'recaptcha_site_key': os.environ.get('RECAPTCHA_SITE_KEY', '6LeALWItAAAAAIfCMqNEfU3U3nGkdvwNHfsv9gLv'),
         'latest_posts': latest_posts,
     }
 
@@ -1507,7 +1507,7 @@ def contact_submit():
             }), 400
 
         # Validate reCAPTCHA v3 token
-        recaptcha_secret = os.environ.get('RECAPTCHA_SECRET_KEY', '6LesN2ItAAAAAHO1wYIFm9YSDEB5hQkxglXkG-f4')
+        recaptcha_secret = os.environ.get('RECAPTCHA_SECRET_KEY', '6LeALWItAAAAAE7J57t6h9uxcgFCBJq4uraiwbBw')
         if not recaptcha_token:
             return jsonify({
                 'success': False,
