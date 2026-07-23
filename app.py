@@ -1520,14 +1520,18 @@ def contact_submit():
                 timeout=5
             )
             recaptcha_data = recaptcha_response.json()
+            print(f'reCAPTCHA response: {recaptcha_data}', flush=True)
 
             if not recaptcha_data.get('success') or recaptcha_data.get('score', 0) < 0.5:
+                print(f'reCAPTCHA check failed: success={recaptcha_data.get("success")}, score={recaptcha_data.get("score")}', flush=True)
                 return jsonify({
                     'success': False,
                     'message': 'Captcha verification failed. Please try again.'
                 }), 400
         except Exception as e:
-            print(f'reCAPTCHA verification error: {e}')
+            print(f'reCAPTCHA verification error: {type(e).__name__}: {e}', flush=True)
+            import traceback
+            traceback.print_exc()
             return jsonify({
                 'success': False,
                 'message': 'Captcha verification error. Please try again.'
