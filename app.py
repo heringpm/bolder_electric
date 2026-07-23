@@ -1211,18 +1211,13 @@ def _build_home_context():
                 service_descriptions['safety'] = description
             service_prices['safety'] = float(base_price) if base_price is not None else service_prices['safety']
     
-    captcha_left = random.randint(2, 9)
-    captcha_right = random.randint(1, 8)
-    session['contact_captcha_answer'] = str(captcha_left + captcha_right)
-    session['contact_captcha_issued_at'] = int(time.time())
-
     latest_posts = db.get_blog_posts(status='published', limit=3)
 
     return {
         'contact': contact_data,
         'service_descriptions': service_descriptions,
         'service_prices': service_prices,
-        'contact_captcha_question': f'{captcha_left} + {captcha_right}',
+        'recaptcha_site_key': os.environ.get('RECAPTCHA_SITE_KEY', '6LesN2ItAAAAAGHFUtnAFEGU0b0XOSx4WaryM9f0'),
         'latest_posts': latest_posts,
     }
 
@@ -1492,9 +1487,9 @@ def contact_submit():
         phone = request.form.get('phone')
         service_type = request.form.get('service_type')
         message = request.form.get('message')
-        captcha_answer = (request.form.get('captcha_answer') or '').strip()
+        recaptcha_token = (request.form.get('g-recaptcha-response') or '').strip()
         website_field = (request.form.get('website') or '').strip()
-        
+
         # Validate required fields
         if not all([name, email, phone, service_type, message]):
             return jsonify({
@@ -1509,23 +1504,34 @@ def contact_submit():
                 'message': 'Submission blocked. Please try again.'
             }), 400
 
-        expected_captcha = (session.get('contact_captcha_answer') or '').strip()
-        issued_at = int(session.get('contact_captcha_issued_at') or 0)
-        captcha_ttl_seconds = 15 * 60
-        if not expected_captcha or not captcha_answer or captcha_answer != expected_captcha:
+        # Validate reCAPTCHA v3 token
+        recaptcha_secret = os.environ.get('RECAPTCHA_SECRET_KEY', '6LesN2ItAAAAAHO1wYIFm9YSDEB5hQkxglXkG-f4')
+        if not recaptcha_token:
             return jsonify({
                 'success': False,
-                'message': 'Captcha verification failed. Please refresh and try again.'
-            }), 400
-        if issued_at and int(time.time()) - issued_at > captcha_ttl_seconds:
-            return jsonify({
-                'success': False,
-                'message': 'Captcha expired. Please refresh and try again.'
+                'message': 'Please verify that you are not a robot.'
             }), 400
 
-        # One-time captcha token usage.
-        session.pop('contact_captcha_answer', None)
-        session.pop('contact_captcha_issued_at', None)
+        try:
+            import requests
+            recaptcha_response = requests.post(
+                'https://www.google.com/recaptcha/api/siteverify',
+                data={'secret': recaptcha_secret, 'response': recaptcha_token},
+                timeout=5
+            )
+            recaptcha_data = recaptcha_response.json()
+
+            if not recaptcha_data.get('success') or recaptcha_data.get('score', 0) < 0.5:
+                return jsonify({
+                    'success': False,
+                    'message': 'Captcha verification failed. Please try again.'
+                }), 400
+        except Exception as e:
+            print(f'reCAPTCHA verification error: {e}')
+            return jsonify({
+                'success': False,
+                'message': 'Captcha verification error. Please try again.'
+            }), 400
 
         ip_address = get_client_ip()
         user_agent = request.headers.get('User-Agent', '')
