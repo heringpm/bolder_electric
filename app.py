@@ -227,7 +227,7 @@ CITY_LANDING_PAGES = {
         'state': 'CA',
         'slug': 'lake-elsinore-ca',
         'title': 'Electrician in Lake Elsinore, CA | Electrical Service, Contractor & Panel Upgrades',
-        'description': 'Bolder Electric provides dependable electrician services in Lake Elsinore, CA including electrical service, electrical contractor support, commercial electrical services, residential electrician work, and electrical panel upgrades.',
+        'description': "Expand to 155-160 characters with stronger CTA and emphasis on 'near me' variations",
         'keywords': 'electrician lake elsinore, electrician lake elsinore ca, lake elsinore electrician, electricians in lake elsinore ca, electrical panel upgrades lake elsinore ca, electrical service lake elsinore, electrical contractor in lake elsinore',
         'hero_title': 'Lake Elsinore Electrician for Electrical Service, Contractor Work & Panel Upgrades',
         'hero_text': 'We provide electrician services in Lake Elsinore for commercial facilities and homes, including diagnostics, electrical service, electrical contractor support, electrical panel upgrades, code corrections, and emergency repairs for customers searching for an electrician in Lake Elsinore.',
