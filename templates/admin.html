@@ -17,6 +17,35 @@
         .admin-header {
             text-align: center;
             margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .btn-logout {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: transparent;
+            color: var(--primary-black);
+            border: 2px solid var(--primary-black);
+            padding: 0.6rem 1.2rem;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-logout:hover {
+            background: var(--primary-black);
+            color: #fff;
+        }
+
+        @media (max-width: 640px) {
+            .btn-logout {
+                position: static;
+                display: inline-block;
+                margin-top: 1rem;
+            }
         }
 
         .admin-title {
@@ -520,6 +549,7 @@
                 <ul class="nav-menu">
                     <li><a href="{{ url_for('home') }}" class="nav-link">Home</a></li>
                     <li><a href="{{ url_for('admin') }}" class="nav-link" style="color: var(--primary-gold);">Admin</a></li>
+                    <li><a href="{{ url_for('logout') }}" class="nav-link">Logout</a></li>
                 </ul>
                 <div class="hamburger">
                     <span></span>
@@ -532,6 +562,7 @@
 
     <div class="admin-container">
         <div class="admin-header">
+            <a href="{{ url_for('logout') }}" class="btn-logout">Logout</a>
             <h1 class="admin-title">Admin Panel</h1>
             <p>Manage services, prices, availability, and account settings</p>
         </div>
