@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, send_from_directory, jsonify, session, redirect, url_for, Response
 from flask_compress import Compress
+import requests
 import os
 import base64
 import io
@@ -66,6 +67,10 @@ def _build_secret_key():
     print('WARNING: SECRET_KEY is not set. Using a temporary runtime key; sessions will reset on restart.')
     return fallback
 
+
+RECAPTCHA_SITE_KEY = os.environ.get('RECAPTCHA_SITE_KEY', '6Le2R2ItAAAAAOF6wvNk19PJRhAtpZqf7OkvPEOk')
+RECAPTCHA_PROJECT_ID = os.environ.get('RECAPTCHA_PROJECT_ID', 'auto-seo-497904')
+RECAPTCHA_API_KEY = os.environ.get('RECAPTCHA_API_KEY', 'AIzaSyBG51QA36WM1REUM1kTIRvbi93x39wxho4')
 
 app = Flask(__name__)
 app.secret_key = _build_secret_key()
@@ -844,7 +849,7 @@ def add_security_headers(response):
         'Content-Security-Policy',
         "default-src 'self'; img-src 'self' data: https: blob:; "
         "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://cdn.jsdelivr.net https://unpkg.com https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://unpkg.com; "
-        "font-src 'self' data: https://cdnjs.cloudflare.com https://fonts.gstatic.com; connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://analytics.google.com https://unpkg.com https://app.grapesjs.com https://www.google.com/recaptcha/api/siteverify; media-src 'self' data: blob:; "
+        "font-src 'self' data: https://cdnjs.cloudflare.com https://fonts.gstatic.com; connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://analytics.google.com https://unpkg.com https://app.grapesjs.com https://www.google.com/recaptcha/api/siteverify https://recaptchaenterprise.googleapis.com; media-src 'self' data: blob:; "
         "base-uri 'self'; form-action 'self'; frame-ancestors 'none'; frame-src https://www.google.com/recaptcha/ https://recaptcha.google.com/"
     )
     if _is_secure_request():
@@ -1213,17 +1218,11 @@ def _build_home_context():
     
     latest_posts = db.get_blog_posts(status='published', limit=3)
 
-    # Generate simple math CAPTCHA
-    captcha_left = random.randint(2, 9)
-    captcha_right = random.randint(1, 8)
-    session['contact_captcha_answer'] = str(captcha_left + captcha_right)
-    session['contact_captcha_issued_at'] = int(time.time())
-
     return {
         'contact': contact_data,
         'service_descriptions': service_descriptions,
         'service_prices': service_prices,
-        'contact_captcha_question': f'{captcha_left} + {captcha_right}',
+        'recaptcha_site_key': RECAPTCHA_SITE_KEY,
         'latest_posts': latest_posts,
     }
 
@@ -1494,9 +1493,7 @@ def contact_submit():
         service_type = request.form.get('service_type')
         message = request.form.get('message')
         website_field = (request.form.get('website') or '').strip()
-
-        # Get form data
-        captcha_answer = (request.form.get('captcha_answer') or '').strip()
+        recaptcha_token = (request.form.get('g-recaptcha-response') or '').strip()
 
         # Validate required fields
         if not all([name, email, phone, service_type, message]):
@@ -1512,25 +1509,45 @@ def contact_submit():
                 'message': 'Submission blocked. Please try again.'
             }), 400
 
-        # Validate math CAPTCHA
-        expected_captcha = (session.get('contact_captcha_answer') or '').strip()
-        issued_at = int(session.get('contact_captcha_issued_at') or 0)
-        captcha_ttl_seconds = 15 * 60
-        if not expected_captcha or not captcha_answer or captcha_answer != expected_captcha:
+        # Validate reCAPTCHA Enterprise token via createAssessment
+        if not recaptcha_token:
             return jsonify({
                 'success': False,
-                'message': 'Captcha verification failed. Please refresh and try again.'
+                'message': 'Please verify that you are not a robot.'
             }), 400
-        if issued_at and int(time.time()) - issued_at > captcha_ttl_seconds:
+
+        try:
+            assessment_response = requests.post(
+                f'https://recaptchaenterprise.googleapis.com/v1/projects/{RECAPTCHA_PROJECT_ID}/assessments'
+                f'?key={RECAPTCHA_API_KEY}',
+                json={
+                    'event': {
+                        'token': recaptcha_token,
+                        'siteKey': RECAPTCHA_SITE_KEY,
+                        'expectedAction': 'contact'
+                    }
+                },
+                timeout=5
+            )
+            assessment_data = assessment_response.json()
+            print(f'reCAPTCHA Enterprise assessment: {assessment_data}', flush=True)
+
+            token_valid = assessment_data.get('tokenProperties', {}).get('valid', False)
+            risk_score = assessment_data.get('riskAnalysis', {}).get('score', 0)
+
+            if not token_valid or risk_score < 0.5:
+                invalid_reason = assessment_data.get('tokenProperties', {}).get('invalidReason', '')
+                print(f'reCAPTCHA check failed: valid={token_valid}, score={risk_score}, reason={invalid_reason}', flush=True)
+                return jsonify({
+                    'success': False,
+                    'message': 'Captcha verification failed. Please try again.'
+                }), 400
+        except Exception as e:
+            print(f'reCAPTCHA Enterprise verification error: {type(e).__name__}: {e}', flush=True)
             return jsonify({
                 'success': False,
-                'message': 'Captcha expired. Please refresh and try again.'
+                'message': 'Captcha verification error. Please try again.'
             }), 400
-
-        # One-time captcha token usage.
-        session.pop('contact_captcha_answer', None)
-        session.pop('contact_captcha_issued_at', None)
-
 
         ip_address = get_client_ip()
         user_agent = request.headers.get('User-Agent', '')

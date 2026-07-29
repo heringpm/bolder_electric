@@ -26,6 +26,9 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/privacy-notice.css') }}" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="{{ url_for('static', filename='css/privacy-notice.css') }}"></noscript>
     <script defer src="{{ url_for('static', filename='js/privacy-notice.js') }}" data-ga-measurement-id="G-HPSXGKK99R"></script>
+    {% if recaptcha_site_key %}
+    <script src="https://www.google.com/recaptcha/enterprise.js?render={{ recaptcha_site_key }}" async defer></script>
+    {% endif %}
     <style>
         :root {
             --bg: #060606;
@@ -3814,10 +3817,7 @@
                                     <option value="other">Other</option>
                                 </select>
                                 <textarea name="message" rows="5" placeholder="Tell us about your electrical project or emergency..." required></textarea>
-                                <div class="captcha-row">
-                                    <div class="captcha-prompt">Captcha: {{ contact_captcha_question }} =</div>
-                                    <input type="number" name="captcha_answer" placeholder="Answer" required>
-                                </div>
+                                <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
                                 <div class="hp" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off"></div>
                                 <div class="btn-row">
                                     <button type="submit" class="btn btn-primary">Send Message</button>
@@ -3917,6 +3917,18 @@
                 formMessage.style.display = 'none';
 
                 try {
+                    const siteKey = '{{ recaptcha_site_key }}';
+                    if (siteKey && typeof grecaptcha !== 'undefined' && grecaptcha.enterprise) {
+                        const token = await new Promise(resolve => {
+                            grecaptcha.enterprise.ready(() => {
+                                grecaptcha.enterprise.execute(siteKey, { action: 'contact' })
+                                    .then(resolve)
+                                    .catch(err => { console.error('reCAPTCHA execute error:', err); resolve(''); });
+                            });
+                        });
+                        document.getElementById('g-recaptcha-response').value = token || '';
+                    }
+
                     const response = await fetch('/contact-submit', {
                         method: 'POST',
                         body: new FormData(form)
