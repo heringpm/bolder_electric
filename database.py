@@ -201,6 +201,7 @@ class DatabaseManager:
                         excerpt TEXT,
                         content TEXT,
                         hero_image TEXT,
+                        hero_image_position TEXT DEFAULT '50% 50%',
                         pdf_url TEXT,
                         template INTEGER DEFAULT 1,
                         status TEXT DEFAULT 'draft',
@@ -361,6 +362,7 @@ class DatabaseManager:
                         excerpt TEXT,
                         content TEXT,
                         hero_image TEXT,
+                        hero_image_position TEXT DEFAULT '50% 50%',
                         pdf_url TEXT,
                         template INTEGER DEFAULT 1,
                         status TEXT DEFAULT 'draft',
@@ -372,6 +374,7 @@ class DatabaseManager:
 
             self._ensure_admin_user_security_columns(cursor)
             self._ensure_contact_submission_columns(cursor)
+            self._ensure_blog_post_columns(cursor)
             conn.commit()
         except Exception as e:
             if conn:
@@ -425,6 +428,20 @@ class DatabaseManager:
             if 'acknowledged_at' not in columns:
                 try:
                     cursor.execute('ALTER TABLE contact_submissions ADD COLUMN acknowledged_at TIMESTAMP')
+                except sqlite3.OperationalError as e:
+                    if 'duplicate column name' not in str(e).lower():
+                        raise
+
+    def _ensure_blog_post_columns(self, cursor):
+        """Ensure blog_posts supports a custom hero image focal point."""
+        if self.use_postgres:
+            cursor.execute("ALTER TABLE blog_posts ADD COLUMN IF NOT EXISTS hero_image_position TEXT DEFAULT '50% 50%'")
+        else:
+            cursor.execute('PRAGMA table_info(blog_posts)')
+            columns = [row[1] for row in cursor.fetchall()]
+            if 'hero_image_position' not in columns:
+                try:
+                    cursor.execute("ALTER TABLE blog_posts ADD COLUMN hero_image_position TEXT DEFAULT '50% 50%'")
                 except sqlite3.OperationalError as e:
                     if 'duplicate column name' not in str(e).lower():
                         raise
@@ -1358,28 +1375,28 @@ class DatabaseManager:
         conn.close()
         return result
 
-    def create_blog_post(self, title, slug, excerpt, content, hero_image, template, status, pdf_url=None):
+    def create_blog_post(self, title, slug, excerpt, content, hero_image, template, status, pdf_url=None, hero_image_position='50% 50%'):
         import datetime
         conn = self.get_connection()
         cursor = conn.cursor()
         published_at = datetime.datetime.utcnow().isoformat() if status == 'published' else None
         if self.use_postgres:
             cursor.execute('''
-                INSERT INTO blog_posts (title, slug, excerpt, content, hero_image, pdf_url, template, status, published_at)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id
-            ''', (title, slug, excerpt, content, hero_image, pdf_url, template, status, published_at))
+                INSERT INTO blog_posts (title, slug, excerpt, content, hero_image, hero_image_position, pdf_url, template, status, published_at)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id
+            ''', (title, slug, excerpt, content, hero_image, hero_image_position, pdf_url, template, status, published_at))
             post_id = cursor.fetchone()[0]
         else:
             cursor.execute('''
-                INSERT INTO blog_posts (title, slug, excerpt, content, hero_image, pdf_url, template, status, published_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ''', (title, slug, excerpt, content, hero_image, pdf_url, template, status, published_at))
+                INSERT INTO blog_posts (title, slug, excerpt, content, hero_image, hero_image_position, pdf_url, template, status, published_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ''', (title, slug, excerpt, content, hero_image, hero_image_position, pdf_url, template, status, published_at))
             post_id = cursor.lastrowid
         conn.commit()
         conn.close()
         return post_id
 
-    def update_blog_post(self, post_id, title, slug, excerpt, content, hero_image, template, status, pdf_url=None):
+    def update_blog_post(self, post_id, title, slug, excerpt, content, hero_image, template, status, pdf_url=None, hero_image_position='50% 50%'):
         import datetime
         conn = self.get_connection()
         cursor = conn.cursor()
@@ -1389,15 +1406,15 @@ class DatabaseManager:
             # Use CASE to set published_at only if it's currently NULL
             cursor.execute(self._prepare_query('''
                 UPDATE blog_posts
-                SET title=?, slug=?, excerpt=?, content=?, hero_image=?, pdf_url=COALESCE(?, pdf_url), template=?, status=?, published_at=COALESCE(published_at, ?), updated_at=CURRENT_TIMESTAMP
+                SET title=?, slug=?, excerpt=?, content=?, hero_image=?, hero_image_position=?, pdf_url=COALESCE(?, pdf_url), template=?, status=?, published_at=COALESCE(published_at, ?), updated_at=CURRENT_TIMESTAMP
                 WHERE id=?
-            '''), (title, slug, excerpt, content, hero_image, pdf_url, template, status, datetime.datetime.utcnow().isoformat(), post_id))
+            '''), (title, slug, excerpt, content, hero_image, hero_image_position, pdf_url, template, status, datetime.datetime.utcnow().isoformat(), post_id))
         else:
             cursor.execute(self._prepare_query('''
                 UPDATE blog_posts
-                SET title=?, slug=?, excerpt=?, content=?, hero_image=?, pdf_url=COALESCE(?, pdf_url), template=?, status=?, updated_at=CURRENT_TIMESTAMP
+                SET title=?, slug=?, excerpt=?, content=?, hero_image=?, hero_image_position=?, pdf_url=COALESCE(?, pdf_url), template=?, status=?, updated_at=CURRENT_TIMESTAMP
                 WHERE id=?
-            '''), (title, slug, excerpt, content, hero_image, pdf_url, template, status, post_id))
+            '''), (title, slug, excerpt, content, hero_image, hero_image_position, pdf_url, template, status, post_id))
         conn.commit()
         conn.close()
 

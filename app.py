@@ -1258,14 +1258,15 @@ def admin_blog_new():
         excerpt = request.form.get('excerpt', '').strip()
         content = request.form.get('content', '').strip()
         hero_image = request.form.get('hero_image', '').strip()
+        hero_image_position = request.form.get('hero_image_position', '').strip() or '50% 50%'
         template = int(request.form.get('template', 1))
         status = request.form.get('status', 'draft')
         if not slug:
             import re
             slug = re.sub(r'[^a-z0-9]+', '-', title.lower()).strip('-')
-        post_id = db.create_blog_post(title, slug, excerpt, content, hero_image, template, status)
+        post_id = db.create_blog_post(title, slug, excerpt, content, hero_image, template, status, hero_image_position=hero_image_position)
         return redirect(url_for('admin_blog_edit_blocks', post_id=post_id) + '?saved=1')
-    empty_post = {'id': 0, 'title': '', 'slug': '', 'excerpt': '', 'content': '', 'hero_image': '', 'template': 1, 'status': 'draft'}
+    empty_post = {'id': 0, 'title': '', 'slug': '', 'excerpt': '', 'content': '', 'hero_image': '', 'hero_image_position': '50% 50%', 'template': 1, 'status': 'draft'}
     return render_template('admin_blog_edit_blocks.html', post=empty_post)
 
 @app.route('/admin/blog/<int:post_id>/edit-blocks')
@@ -1289,6 +1290,7 @@ def admin_blog_edit(post_id):
         excerpt = request.form.get('excerpt', '').strip()
         content = request.form.get('content', '').strip()
         hero_image = request.form.get('hero_image', '').strip()
+        hero_image_position = request.form.get('hero_image_position', '').strip() or '50% 50%'
         template = int(request.form.get('template', 1))
         status = request.form.get('status', 'draft')
 
@@ -1299,7 +1301,7 @@ def admin_blog_edit(post_id):
         print(f'[BLOG_EDIT] Content preview: {content[:100] if content else "EMPTY"}...')
 
         try:
-            db.update_blog_post(post_id, title, slug, excerpt, content, hero_image, template, status)
+            db.update_blog_post(post_id, title, slug, excerpt, content, hero_image, template, status, hero_image_position=hero_image_position)
             print(f'[BLOG_EDIT] Successfully saved post {post_id}')
         except Exception as e:
             print(f'[BLOG_EDIT] Error saving post: {e}')

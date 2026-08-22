@@ -155,8 +155,9 @@
         </div>
         <input type="text" class="title-input" id="titleInput" placeholder="Post Title" value="{{ post.title or '' }}">
         <div class="hero-image-control" style="display:flex;align-items:center;gap:8px;border-left:1px solid rgba(241,186,32,0.22);padding-left:20px;">
-            <div id="heroImagePreview" style="width:36px;height:36px;border-radius:4px;background:#222 center/cover no-repeat;border:1px solid rgba(241,186,32,0.3);flex-shrink:0;{% if post.hero_image %}background-image:url('{{ post.hero_image }}');{% endif %}"></div>
+            <div id="heroImagePreview" style="width:36px;height:36px;border-radius:4px;background:#222 {{ post.hero_image_position or '50% 50%' }}/cover no-repeat;border:1px solid rgba(241,186,32,0.3);flex-shrink:0;{% if post.hero_image %}background-image:url('{{ post.hero_image }}');{% endif %}"></div>
             <button class="btn" type="button" onclick="document.getElementById('heroImageInput').click()">Featured Image</button>
+            <button class="btn" type="button" id="heroImageFocusBtn" onclick="openFocusModal()" style="{% if not post.hero_image %}display:none;{% endif %}" title="Adjust image focus point"><i class="fas fa-crosshairs"></i> Focus</button>
             <button class="btn" type="button" id="heroImageClearBtn" onclick="clearHeroImage()" style="{% if not post.hero_image %}display:none;{% endif %}" title="Remove featured image"><i class="fas fa-times"></i></button>
             <input type="file" id="heroImageInput" accept="image/*" style="display:none;" onchange="uploadHeroImage(this.files[0])">
         </div>
@@ -168,12 +169,63 @@
         <div id="editor"></div>
     </div>
 
+    <div id="focusModalOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:9999;align-items:center;justify-content:center;">
+        <div style="background:#151515;border:1px solid rgba(241,186,32,0.3);border-radius:8px;padding:20px;max-width:90vw;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                <h3 style="margin:0;color:#f1ba20;font-size:16px;">Click the image to set its focus point</h3>
+                <button class="btn" type="button" onclick="closeFocusModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div id="focusImageWrap" style="position:relative;cursor:crosshair;max-width:800px;max-height:70vh;overflow:hidden;">
+                <img id="focusImage" src="" style="display:block;max-width:100%;max-height:70vh;">
+                <div id="focusMarker" style="position:absolute;width:20px;height:20px;border:2px solid #f1ba20;border-radius:50%;background:rgba(241,186,32,0.35);transform:translate(-50%,-50%);pointer-events:none;"></div>
+            </div>
+            <div style="margin-top:12px;text-align:right;">
+                <button class="btn primary" type="button" onclick="closeFocusModal()">Done</button>
+            </div>
+        </div>
+    </div>
+
     <script src="https://unpkg.com/grapesjs@0.21.13"></script>
     <script>
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
         const postId = {{ post.id }};
         const postContent = `{{ post.content | safe }}`;
         let currentHeroImage = {{ (post.hero_image or '') | tojson }};
+        let currentHeroImagePosition = {{ (post.hero_image_position or '50% 50%') | tojson }};
+
+        function applyHeroPreviewPosition() {
+            document.getElementById('heroImagePreview').style.backgroundPosition = currentHeroImagePosition;
+        }
+
+        function openFocusModal() {
+            if (!currentHeroImage) return;
+            const img = document.getElementById('focusImage');
+            img.src = currentHeroImage;
+            updateFocusMarker();
+            document.getElementById('focusModalOverlay').style.display = 'flex';
+        }
+
+        function closeFocusModal() {
+            document.getElementById('focusModalOverlay').style.display = 'none';
+        }
+
+        function updateFocusMarker() {
+            const parts = currentHeroImagePosition.split(' ');
+            const xPct = parseFloat(parts[0]) || 50;
+            const yPct = parseFloat(parts[1]) || 50;
+            const marker = document.getElementById('focusMarker');
+            marker.style.left = xPct + '%';
+            marker.style.top = yPct + '%';
+        }
+
+        document.getElementById('focusImageWrap').addEventListener('click', (e) => {
+            const rect = e.currentTarget.getBoundingClientRect();
+            const xPct = Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100));
+            const yPct = Math.max(0, Math.min(100, ((e.clientY - rect.top) / rect.height) * 100));
+            currentHeroImagePosition = `${xPct.toFixed(1)}% ${yPct.toFixed(1)}%`;
+            updateFocusMarker();
+            applyHeroPreviewPosition();
+        });
 
         function uploadHeroImage(file) {
             if (!file) return;
@@ -191,9 +243,12 @@
             })
             .then(data => {
                 currentHeroImage = data.url;
+                currentHeroImagePosition = '50% 50%';
                 const preview = document.getElementById('heroImagePreview');
                 preview.style.backgroundImage = `url('${data.url}')`;
+                applyHeroPreviewPosition();
                 document.getElementById('heroImageClearBtn').style.display = '';
+                document.getElementById('heroImageFocusBtn').style.display = '';
             })
             .catch(err => {
                 console.error('Hero image upload error:', err);
@@ -203,8 +258,10 @@
 
         function clearHeroImage() {
             currentHeroImage = '';
+            currentHeroImagePosition = '50% 50%';
             document.getElementById('heroImagePreview').style.backgroundImage = '';
             document.getElementById('heroImageClearBtn').style.display = 'none';
+            document.getElementById('heroImageFocusBtn').style.display = 'none';
             document.getElementById('heroImageInput').value = '';
         }
 
@@ -485,6 +542,7 @@
                 excerpt: '{{ post.excerpt or '' }}',
                 content: html,
                 hero_image: currentHeroImage,
+                hero_image_position: currentHeroImagePosition,
                 template: '{{ post.template or 1 }}',
                 status: status
             });

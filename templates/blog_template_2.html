@@ -249,7 +249,7 @@
     <main>
         {% if post.hero_image %}
         <div class="post-hero-image">
-            <img src="{{ post.hero_image }}" alt="{{ post.title }}" width="1280" height="560">
+            <img src="{{ post.hero_image }}" alt="{{ post.title }}" width="1280" height="560" style="object-position: {{ post.hero_image_position or '50% 50%' }};">
         </div>
         {% endif %}
 
