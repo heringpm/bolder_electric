@@ -131,7 +131,7 @@
         /* Content (centered, readable width) */
         .post-body { padding: 0 0 88px; }
         .post-content {
-            max-width: 1000px; margin: 0 auto;
+            width: 100%;
             font-size: 19px; line-height: 1.7;
             color: rgba(245,243,239,0.87);
         }
@@ -159,7 +159,8 @@
             font-size: 22px; font-style: italic; color: rgba(245,243,239,0.82);
         }
         .post-content img {
-            width: 100%; border-radius: 10px; margin: 32px 0;
+            width: 100% !important; height: auto !important; max-width: 100%;
+            border-radius: 10px; margin: 32px 0;
             border: 1px solid rgba(241,186,32,0.14);
         }
         .post-content hr { border: none; border-top: 1px solid rgba(241,186,32,0.18); margin: 40px 0; }
