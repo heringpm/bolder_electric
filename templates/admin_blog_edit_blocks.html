@@ -154,6 +154,12 @@
             <button class="btn" onclick="redo()" title="Redo"><i class="fas fa-redo"></i></button>
         </div>
         <input type="text" class="title-input" id="titleInput" placeholder="Post Title" value="{{ post.title or '' }}">
+        <div class="hero-image-control" style="display:flex;align-items:center;gap:8px;border-left:1px solid rgba(241,186,32,0.22);padding-left:20px;">
+            <div id="heroImagePreview" style="width:36px;height:36px;border-radius:4px;background:#222 center/cover no-repeat;border:1px solid rgba(241,186,32,0.3);flex-shrink:0;{% if post.hero_image %}background-image:url('{{ post.hero_image }}');{% endif %}"></div>
+            <button class="btn" type="button" onclick="document.getElementById('heroImageInput').click()">Featured Image</button>
+            <button class="btn" type="button" id="heroImageClearBtn" onclick="clearHeroImage()" style="{% if not post.hero_image %}display:none;{% endif %}" title="Remove featured image"><i class="fas fa-times"></i></button>
+            <input type="file" id="heroImageInput" accept="image/*" style="display:none;" onchange="uploadHeroImage(this.files[0])">
+        </div>
         <button class="btn" onclick="saveDraft()">Save Draft</button>
         <button class="btn primary" onclick="publishPost()">Publish</button>
     </div>
@@ -167,6 +173,40 @@
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
         const postId = {{ post.id }};
         const postContent = `{{ post.content | safe }}`;
+        let currentHeroImage = {{ (post.hero_image or '') | tojson }};
+
+        function uploadHeroImage(file) {
+            if (!file) return;
+            const formData = new FormData();
+            formData.append('file', file);
+
+            fetch('/admin/blog/upload-image', {
+                method: 'POST',
+                headers: { 'X-CSRF-Token': csrfToken },
+                body: formData
+            })
+            .then(res => {
+                if (!res.ok) throw new Error('Upload failed');
+                return res.json();
+            })
+            .then(data => {
+                currentHeroImage = data.url;
+                const preview = document.getElementById('heroImagePreview');
+                preview.style.backgroundImage = `url('${data.url}')`;
+                document.getElementById('heroImageClearBtn').style.display = '';
+            })
+            .catch(err => {
+                console.error('Hero image upload error:', err);
+                alert('Failed to upload image: ' + err.message);
+            });
+        }
+
+        function clearHeroImage() {
+            currentHeroImage = '';
+            document.getElementById('heroImagePreview').style.backgroundImage = '';
+            document.getElementById('heroImageClearBtn').style.display = 'none';
+            document.getElementById('heroImageInput').value = '';
+        }
 
         let editor = null;
         const maxWaitTime = 5000;
@@ -444,7 +484,7 @@
                 slug: title.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
                 excerpt: '{{ post.excerpt or '' }}',
                 content: html,
-                hero_image: '{{ post.hero_image or '' }}',
+                hero_image: currentHeroImage,
                 template: '{{ post.template or 1 }}',
                 status: status
             });
