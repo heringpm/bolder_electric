@@ -192,6 +192,7 @@
         const postContent = `{{ post.content | safe }}`;
         let currentHeroImage = {{ (post.hero_image or '') | tojson }};
         let currentHeroImagePosition = {{ (post.hero_image_position or '50% 50%') | tojson }};
+        let preservedCustomCss = '';
 
         function applyHeroPreviewPosition() {
             document.getElementById('heroImagePreview').style.backgroundPosition = currentHeroImagePosition;
@@ -461,6 +462,7 @@
                             const styleMatch = postContent.match(/<style[^>]*>([\s\S]*?)<\/style>/i);
                             if (styleMatch) {
                                 const css = styleMatch[1];
+                                preservedCustomCss = css;
                                 const frame = document.querySelector('iframe[data-gjs]') || document.querySelector('iframe.gjs-frame');
                                 if (frame && frame.contentDocument) {
                                     const oldStyle = frame.contentDocument.querySelector('style[data-custom-styles]');
@@ -497,6 +499,15 @@
 
             const components = editor.getComponents();
             let css = editor.getCss();
+            // Always carry forward any custom CSS that was baked into the original
+            // content's <style> block. GrapesJS only tracks styles applied through
+            // its own Style Manager UI in getCss() — a raw <style> block loaded from
+            // saved content is injected into the preview iframe for display only and
+            // is never registered with the editor, so it must be preserved manually
+            // or it silently disappears on the next save.
+            if (preservedCustomCss) {
+                css = css ? (preservedCustomCss + '\n' + css) : preservedCustomCss;
+            }
             let html = '';
 
             // Capture body/wrapper background color
